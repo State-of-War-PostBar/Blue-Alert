@@ -1,0 +1,13 @@
+*.exe
+*.bat
+*.sh
+*.cmd
+*.log
+*.gch
+
+/.vscode/
+/inc/
+/lib/
+
+# I use this folder's .c files for implementations of libraries.  -- Taxerap
+/vendor/*.c
