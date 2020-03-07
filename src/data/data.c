@@ -28,20 +28,19 @@
 // Temporary "implementation".
 // Will change!
 sowr_HashVal
-sowr_GetStrHash(const char *str)
+sowr_GetStrHash(const char *str, size_t len)
 {
     sowr_HashVal res = 0;
-    size_t len = strlen(str);
 
     int i = 0;
     for (i = 0; i < len / 4; i++)
         res += (str[i] * str[i] >> 1) * 0x1070601686fULL;
     for (i = len / 4; i < len / 2; i++)
-        res += (str[i] * str[i] >> 1) * 0x405236496fULL;
+        res += (str[i] * str[i] << 1) * 0x405236496fULL;
     for (i = len / 2; i < len * 3 / 4; i++)
         res += (str[i] * str[i] >> 1) * 0x1966822847fULL;
     for (i = len * 3 / 4; i < len; i++)
-        res += (str[i] * str[i] >> 1) * 0x732464301fULL;
+        res += (str[i] * str[i] << 1) * 0x732464301fULL;
 
     res = res * 0x666666666ULL / 0233333333ULL;
 

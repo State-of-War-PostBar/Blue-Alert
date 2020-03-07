@@ -25,6 +25,7 @@
 
 #include <pch.h>
 
+#include "alg/container/vector.h"
 #include "common/log.h"
 #include "common/profile.h"
 #include "data/data.h"
@@ -42,7 +43,7 @@ main(int argc, char *argv[])
     SOWR_LOG_INFO("Starting...");
 
     SOWR_START_PROFILE();
-    SOWR_LOG_INFO("%zu %zu %zu", sowr_GetStrHash("Credits:"), sowr_GetStrHash("Taxerap"), sowr_GetStrHash("DragoonKiller"));
+    SOWR_LOG_INFO("%zu %zu %zu", sowr_GetStrHash("Credits:", strlen("Credits:")), sowr_GetStrHash("Taxerap", strlen("Taxerap")), sowr_GetStrHash("DragoonKiller", strlen("DragoonKiller")));
     SOWR_STOP_PROFILE();
     SOWR_LOG_INFO("What a shit hash function!");
 
