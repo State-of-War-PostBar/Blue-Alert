@@ -40,7 +40,9 @@ typedef struct sowr_Vector_##type_name##_t                                      
     size_t elem_size;                                                                            \
     type_name *ptr;                                                                              \
     sowr_VecFreeFunc_t free_func;                                                                \
-    unsigned char __align__16__[sizeof(sowr_Vector_##type_name) % 16];                           \
+    unsigned char __align__16__[(3 * sizeof(size_t) +                                            \
+                                 sizeof(type_name *) +                                           \
+                                 sizeof(sowr_VecFreeFunc_t)) % 16];                              \
 } sowr_Vector_##type_name
 
 #define SOWR_VECTOR_INIT(type_name, var_name, free_func_)                                        \
