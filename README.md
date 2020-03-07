@@ -6,9 +6,9 @@ Also link opengl32, if nessesssasdewaegrgrejtetry on Windows (I can never rememb
 
 ## Used libraries
 
-- [OpenGL](https://www.opengl.org/)
+- [OpenGL](https://www.opengl.org)
 - [Glad](https://github.com/Dav1dde/glad)
-- [Glfw](https://www.glfw.org/)
+- [Glfw](https://www.glfw.org)
 - [Log.c](https://github.com/rxi/log.c)
 
 ---
