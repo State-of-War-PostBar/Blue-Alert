@@ -28,9 +28,10 @@
 
 #include <pch.h>
 
+#include "../../memory/heap_memory.h"
+
 typedef void (*sowr_VecFreeFunc_t)(void *);
 
-// It's good enough that on most machines, the size of this struct is aligned (to 8).  -- Taxerap
 #define SOWR_DEF_VECTOR_OF_TYPE(type_name)                                                       \
 typedef struct sowr_Vector_##type_name##_t                                                       \
 {                                                                                                \
@@ -39,6 +40,7 @@ typedef struct sowr_Vector_##type_name##_t                                      
     size_t elem_size;                                                                            \
     type_name *ptr;                                                                              \
     sowr_VecFreeFunc_t free_func;                                                                \
+    unsigned char __align__16__[sizeof(sowr_Vector_##type_name) % 16];                           \
 } sowr_Vector_##type_name
 
 #define SOWR_VECTOR_INIT(type_name, var_name, free_func_)                                        \
@@ -56,12 +58,12 @@ sowr_Vector_##type_name var_name =                                              
     if (!v.capacity)                                                                             \
     {                                                                                            \
         v.capacity = 1;                                                                          \
-        v.ptr = malloc(v.elem_size * v.capacity);                                                \
+        v.ptr = sowr_HeapAlloc(v.elem_size * v.capacity);                                        \
     }                                                                                            \
     else                                                                                         \
     {                                                                                            \
         v.capacity *= 2;                                                                         \
-        v.ptr = realloc(v.ptr, v.elem_size * v.capacity);                                        \
+        v.ptr = sowr_ReAlloc(v.ptr, v.elem_size * v.capacity);                                   \
     }                                                                                            \
 }
 
@@ -71,7 +73,7 @@ sowr_Vector_##type_name var_name =                                              
 #define SOWR_VECTOR_WALK(v, f)                                                                   \
 {                                                                                                \
     for (char *ptr = (char *)v.ptr; ptr != (char *)SOWR_VECTOR_BACK(v); ptr += v.elem_size)      \
-        (f)((void *)ptr);                                                                        \
+        f((void *)ptr);                                                                          \
 }
 
 #define SOWR_VECTOR_GET(v, i)    &(v.ptr[i])
@@ -134,7 +136,7 @@ sowr_Vector_##type_name var_name =                                              
 {                                                                                                \
     if (v.capacity > v.length)                                                                   \
     {                                                                                            \
-        v.ptr = realloc(v.ptr, v.length * v.elem_size);                                          \
+        v.ptr = sowr_ReAlloc(v.ptr, v.length * v.elem_size);                                     \
         v.capacity = v.length;                                                                   \
     }                                                                                            \
 }
@@ -145,7 +147,7 @@ sowr_Vector_##type_name var_name =                                              
     {                                                                                            \
         SOWR_VECTOR_WALK(v, v.free_func);                                                        \
     }                                                                                            \
-    free(v.ptr);                                                                                 \
+    sowr_HeapFree(v.ptr);                                                                        \
 }
 
 #endif

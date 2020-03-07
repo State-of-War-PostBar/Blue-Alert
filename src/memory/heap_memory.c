@@ -23,67 +23,69 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_PCH_H_
-#define _SOWR_PCH_H_
+#include "heap_memory.h"
 
-#if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
-    #define SOWR_TARGET_WINDOWS
-#elif defined __MACH__ && defined __APPLE__
-    #define SOWR_TARGET_MACOSX
-    #define SOWR_TARGET_POSIX
-#else
-    #define SOWR_TARGET_NIX
-    #define SOWR_TARGET_POSIX
-#endif
+#include "../common/log.h"
 
-#ifdef _DEBUG
-    #define SOWR_BUILD_DEBUG
-#else
-    #define SOWR_BUILD_RELEASE
-#endif
+inline
+void *
+sowr_HeapAlloc(size_t size)
+{
+    void *ptr = malloc(size);
+    if (!ptr)
+    {
+        SOWR_LOG_FATAL("Failed to allocate %zu bytes of memory, program failing.", size);
+        abort();
+    }
+    return ptr;
+}
 
-#if ((-1) >> 1) == (-1)
-    #define SOWR_ARCH_RSHIFT_RESERVE_SIGN
-#endif
-
-#include <assert.h>
-#include <complex.h>
-#include <ctype.h>
-#include <errno.h>
-#include <fenv.h>
-#include <float.h>
-#include <inttypes.h>
-#include <iso646.h>
-#include <limits.h>
-#include <locale.h>
-#include <math.h>
-#include <setjmp.h>
-#include <signal.h>
-#include <stdalign.h>
-#include <stdarg.h>
-#include <stdatomic.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdnoreturn.h>
-#include <string.h>
-#include <tgmath.h>
-
-// #include <threads.h>
-// Yeah why don't they have it in MingW, I can't use glibc here QWQ.
-// And WinAPI sucks, so I have no choice but use pthread.             -- Taxerap
-#undef  thread_local
-#define thread_local _Thread_local
-
-#include <time.h>
-#include <uchar.h>
-#include <wchar.h>
-#include <wctype.h>
-
+inline
+void *
+sowr_AlignedAlloc(size_t size, size_t alignment)
+{
 #ifdef SOWR_TARGET_WINDOWS
-    #include <windows.h>
+    void *ptr = _aligned_malloc(size, alignment);
+#else
+    void *ptr = aligned_malloc(alignment, size);
 #endif
+    if (!ptr)
+    {
+        SOWR_LOG_FATAL("Failed to aligned allocating %zu bytes of memory, program failing.", size);
+        abort();
+    }
+    return ptr;
+}
 
-#endif //! _SOWR_PCH_H_
+inline
+void
+sowr_HeapFree(void *ptr)
+{
+    free(ptr);
+}
+
+inline
+void *
+sowr_ReAlloc(void *ptr, size_t size)
+{
+    void *new = realloc(ptr, size);
+    if (!new)
+    {
+        SOWR_LOG_FATAL("Failed to reallocate %zu bytes of memory at %p, program failing.", ptr, size);
+        abort();
+    }
+    return new;
+}
+
+inline
+void *
+sowr_ZeroAlloc(size_t size)
+{
+    void *ptr = calloc(1, size);
+    if (!ptr)
+    {
+        SOWR_LOG_FATAL("Failed to initialize allocate %zu bytes of memory, program failing.", size);
+        abort();
+    }
+    return ptr;
+}
