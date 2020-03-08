@@ -25,7 +25,6 @@
 
 #include <pch.h>
 
-#include "alg/container/vector.h"
 #include "common/log.h"
 #include "common/profile.h"
 #include "data/data.h"

@@ -40,9 +40,6 @@ typedef struct sowr_Vector_##type_name##_t                                      
     size_t elem_size;                                                                            \
     type_name *ptr;                                                                              \
     sowr_VecFreeFunc_t free_func;                                                                \
-    unsigned char __align__16__[(3 * sizeof(size_t) +                                            \
-                                 sizeof(type_name *) +                                           \
-                                 sizeof(sowr_VecFreeFunc_t)) % 16];                              \
 } sowr_Vector_##type_name
 
 #define SOWR_VECTOR_INIT(type_name, var_name, free_func_)                                        \
@@ -84,7 +81,9 @@ sowr_Vector_##type_name var_name =                                              
 #define SOWR_VECTOR_CLEAR(v)                                                                     \
 {                                                                                                \
     if (v.free_func)                                                                             \
+    {                                                                                            \
         SOWR_VECTOR_WALK(v, v.free_func);                                                        \
+    }                                                                                            \
     v.length = 0;                                                                                \
 }
 
@@ -106,6 +105,24 @@ sowr_Vector_##type_name var_name =                                              
     }                                                                                            \
 }
 
+#define SOWR_VECTOR_INSERT_CPY(v, ptr_element, i)                                                \
+{                                                                                                \
+    if (i >= v.length)                                                                           \
+    {                                                                                            \
+        SOWR_VECTOR_PUSH_CPY(v, ptr_element);                                                    \
+    }                                                                                            \
+    else                                                                                         \
+    {                                                                                            \
+        SOWR_VECTOR_EXPAND_UNTIL(v, v.length + 1);                                               \
+        void *ptr_inserting = &(v.ptr[i]);                                                       \
+        void *ptr_shifting = &(v.ptr[i + 1]);                                                    \
+        size_t bytes_to_shift = v.elem_size * (v.length - i);                                    \
+        memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                     \
+        memcpy(ptr_inserting, ptr_element, v.elem_size);                                         \
+        v.length++;                                                                              \
+    }                                                                                            \
+}
+
 #define SOWR_VECTOR_DELETE(v, i)                                                                 \
 {                                                                                                \
     if (v.free_func)                                                                             \
@@ -114,9 +131,26 @@ sowr_Vector_##type_name var_name =                                              
     }                                                                                            \
     void *ptr_shifting = &(v.ptr[i]);                                                            \
     void *ptr_data = &(v.ptr[i + 1]);                                                            \
-    size_t bytes_to_shift = v.elem_size * (v.length - i);                                        \
+    size_t bytes_to_shift = v.elem_size * (v.length - i - 1);                                    \
     memmove(ptr_shifting, ptr_data, bytes_to_shift);                                             \
     v.length--;                                                                                  \
+}
+
+#define SOWR_VECTOR_TAKE(v, i, ptr_retrieve)                                                     \
+{                                                                                                \
+    if (i >= v.length)                                                                           \
+    {                                                                                            \
+        SOWR_VECTOR_POP(v, ptr_retrieve);                                                        \
+    }                                                                                            \
+    else                                                                                         \
+    {                                                                                            \
+        void *ptr_shifting = SOWR_VECTOR_GET(v, i);                                              \
+        void *ptr_data = SOWR_VECTOR_GET(v, i + 1);                                              \
+        size_t bytes_to_shift = v.elem_size * (v.length - i - 1);                                \
+        memmove(ptr_retrieve, ptr_shifting, v.elem_size);                                        \
+        memmove(ptr_shifting, ptr_data, bytes_to_shift);                                         \
+        v.length--;                                                                              \
+    }                                                                                            \
 }
 
 #define SOWR_VECTOR_PUSH(v, ptr_element)                                                         \
@@ -127,10 +161,20 @@ sowr_Vector_##type_name var_name =                                              
     v.length++;                                                                                  \
 }
 
+#define SOWR_VECTOR_PUSH_CPY(v, ptr_element)                                                     \
+{                                                                                                \
+    SOWR_VECTOR_EXPAND_UNTIL(v, v.length + 1);                                                   \
+    void *ptr = &(v.ptr[v.length]);                                                              \
+    memcpy(ptr, ptr_element, v.elem_size);                                                       \
+    v.length++;                                                                                  \
+}
+
 #define SOWR_VECTOR_POP(v, ptr_retrieve)                                                         \
 {                                                                                                \
     if (ptr_retrieve)                                                                            \
+    {                                                                                            \
         memmove(ptr_retrieve, &(v.ptr[v.length - 1]), v.elem_size);                              \
+    }                                                                                            \
     v.length--;                                                                                  \
 }
 
@@ -148,8 +192,8 @@ sowr_Vector_##type_name var_name =                                              
     if (v.free_func)                                                                             \
     {                                                                                            \
         SOWR_VECTOR_WALK(v, v.free_func);                                                        \
-    }                                                                                            \
     sowr_HeapFree(v.ptr);                                                                        \
+    }                                                                                            \
 }
 
 #endif
