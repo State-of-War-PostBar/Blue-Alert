@@ -204,7 +204,7 @@ void
 sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
-    ReleaseSRWLockExclusive(rwl);
+    ReleaseSRWLockShared(rwl);
 #elif defined SOWR_TARGET_POSIX
     pthread_rwlock_unlock(rwl);
 #endif
