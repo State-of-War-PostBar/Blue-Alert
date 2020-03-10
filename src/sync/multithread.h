@@ -29,6 +29,7 @@
 #include <pch.h>
 
 #ifdef SOWR_TARGET_WINDOWS
+    #include <synchapi.h>
     typedef HANDLE sowr_Thread;
 
     typedef HANDLE sowr_Mutex;
