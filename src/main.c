@@ -40,7 +40,6 @@ main(int argc, char *argv[])
     sowr_InitLogger();
     sowr_InitProfiler();
     SOWR_LOG_INFO("Starting...");
-    SOWR_LOG_INFO("Really starting...");
 
     sowr_WindowCreateInfo info =
     {
