@@ -131,22 +131,6 @@ sowr_List_##type_name##_GetLastInList(const sowr_List_##type_name node)         
 }                                                                                                \
                                                                                                  \
 size_t                                                                                           \
-sowr_List_##type_name##_GetListSizeAfter(const sowr_List_##type_name node)                       \
-{                                                                                                \
-    if (!node)                                                                                   \
-    {                                                                                            \
-        return 0;                                                                                \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        size_t result = 0;                                                                       \
-        for (sowr_List_##type_name iter = node; iter; iter = iter->next)                         \
-            result++;                                                                            \
-        return result - 1;                                                                       \
-    }                                                                                            \
-}                                                                                                \
-                                                                                                 \
-size_t                                                                                           \
 sowr_List_##type_name##_GetListSizeBefore(const sowr_List_##type_name node)                      \
 {                                                                                                \
     if (!node)                                                                                   \
@@ -157,6 +141,22 @@ sowr_List_##type_name##_GetListSizeBefore(const sowr_List_##type_name node)     
     {                                                                                            \
         size_t result = 0;                                                                       \
         for (sowr_List_##type_name iter = node; iter; iter = iter->before)                       \
+            result++;                                                                            \
+        return result - 1;                                                                       \
+    }                                                                                            \
+}                                                                                                \
+                                                                                                 \
+size_t                                                                                           \
+sowr_List_##type_name##_GetListSizeAfter(const sowr_List_##type_name node)                       \
+{                                                                                                \
+    if (!node)                                                                                   \
+    {                                                                                            \
+        return 0;                                                                                \
+    }                                                                                            \
+    else                                                                                         \
+    {                                                                                            \
+        size_t result = 0;                                                                       \
+        for (sowr_List_##type_name iter = node; iter; iter = iter->next)                         \
             result++;                                                                            \
         return result - 1;                                                                       \
     }                                                                                            \
