@@ -29,8 +29,9 @@
 #include <pch.h>
 
 #include "../../memory/heap_memory.h"
+#include "../../sync/multithread.h"
 
-typedef void (*sowr_VecFreeFunc_t)(void *);
+typedef void (*sowr_VecFreeFunc)(void *);
 
 #define SOWR_DEF_VECTOR_OF_TYPE(type_name)                                                       \
 typedef struct sowr_Vector_##type_name##_t                                                       \
@@ -39,161 +40,196 @@ typedef struct sowr_Vector_##type_name##_t                                      
     size_t capacity;                                                                             \
     size_t elem_size;                                                                            \
     type_name *ptr;                                                                              \
-    sowr_VecFreeFunc_t free_func;                                                                \
+    sowr_VecFreeFunc free_func;                                                                  \
+    sowr_CriticalSection *mtx;                                                                   \
 } sowr_Vector_##type_name
 
-#define SOWR_VECTOR_INIT(type_name, var_name, free_func_)                                        \
-sowr_Vector_##type_name var_name =                                                               \
+#define SOWR_VECTOR_INIT(type_name, pv, free_func_)                                              \
 {                                                                                                \
-    .length = 0,                                                                                 \
-    .capacity = 0,                                                                               \
-    .elem_size = sizeof(type_name),                                                              \
-    .ptr = NULL,                                                                                 \
-    .free_func = free_func_                                                                      \
+    pv = sowr_HeapAlloc(sizeof(sowr_Vector_##type_name));                                        \
+    pv->length = 0;                                                                              \
+    pv->capacity = 0;                                                                            \
+    pv->elem_size = sizeof(type_name);                                                           \
+    pv->ptr = NULL;                                                                              \
+    pv->free_func = free_func_;                                                                  \
+    sowr_CriticalSection *mtx = sowr_HeapAlloc(sizeof(sowr_CriticalSection));                    \
+    sowr_InitCriticalSection(mtx);                                                               \
+    pv->mtx = mtx;                                                                               \
 }
 
-#define SOWR_VECTOR_EXPAND(v)                                                                    \
+#define SOWR_VECTOR_EXPAND(pv)                                                                   \
 {                                                                                                \
-    if (!v.capacity)                                                                             \
+    if (!pv->capacity)                                                                           \
     {                                                                                            \
-        v.capacity = 1;                                                                          \
-        v.ptr = sowr_HeapAlloc(v.elem_size * v.capacity);                                        \
+        pv->capacity = 1;                                                                        \
+        pv->ptr = sowr_HeapAlloc(pv->elem_size * pv->capacity);                                  \
     }                                                                                            \
     else                                                                                         \
     {                                                                                            \
-        v.capacity *= 2;                                                                         \
-        v.ptr = sowr_ReAlloc(v.ptr, v.elem_size * v.capacity);                                   \
+        pv->capacity *= 2;                                                                       \
+        pv->ptr = sowr_ReAlloc(pv->ptr, pv->elem_size * pv->capacity);                           \
     }                                                                                            \
 }
 
-#define SOWR_VECTOR_EXPAND_UNTIL(v, i)                                                           \
-    while (v.capacity < i) SOWR_VECTOR_EXPAND(v);
-
-#define SOWR_VECTOR_WALK(v, f)                                                                   \
+#define SOWR_VECTOR_EXPAND_UNTIL(pv, i)                                                          \
 {                                                                                                \
-    for (char *ptr = (char *)v.ptr; ptr != (char *)SOWR_VECTOR_BACK(v); ptr += v.elem_size)      \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    while (pv->capacity < i) SOWR_VECTOR_EXPAND(pv)                                              \
+        ;                                                                                        \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
+}
+
+#define SOWR_VECTOR_WALK(pv, f)                                                                  \
+{                                                                                                \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    for (char *ptr = (char *)pv->ptr; ptr != (char *)SOWR_VECTOR_BACK(pv); ptr += pv->elem_size) \
         f((void *)ptr);                                                                          \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_GET(v, i)    &(v.ptr[i])
-#define SOWR_VECTOR_BACK(v)      &(v.ptr[v.length])
+#define SOWR_VECTOR_GET(pv, i)    &(pv->ptr[i])
+#define SOWR_VECTOR_FRONT(pv)     pv->ptr
+#define SOWR_VECTOR_BACK(pv)      &(pv->ptr[pv->length])
 
-#define SOWR_VECTOR_CLEAR(v)                                                                     \
+#define SOWR_VECTOR_CLEAR(pv)                                                                    \
 {                                                                                                \
-    if (v.free_func)                                                                             \
+    if (pv->free_func)                                                                           \
     {                                                                                            \
-        SOWR_VECTOR_WALK(v, v.free_func);                                                        \
+        SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
     }                                                                                            \
-    v.length = 0;                                                                                \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    pv->length = 0;                                                                              \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_INSERT(v, ptr_element, i)                                                    \
+#define SOWR_VECTOR_INSERT(pv, ptr_element, i)                                                   \
 {                                                                                                \
-    if (i >= v.length)                                                                           \
+    if (i >= pv->length)                                                                         \
     {                                                                                            \
-        SOWR_VECTOR_PUSH(v, ptr_element);                                                        \
+        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
     }                                                                                            \
     else                                                                                         \
     {                                                                                            \
-        SOWR_VECTOR_EXPAND_UNTIL(v, v.length + 1);                                               \
-        void *ptr_inserting = &(v.ptr[i]);                                                       \
-        void *ptr_shifting = &(v.ptr[i + 1]);                                                    \
-        size_t bytes_to_shift = v.elem_size * (v.length - i);                                    \
+        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
+        sowr_EnterCriticalSection(pv->mtx);                                                      \
+        void *ptr_inserting = &(pv->ptr[i]);                                                     \
+        void *ptr_shifting = &(pv->ptr[i + 1]);                                                  \
+        size_t bytes_to_shift = pv->elem_size * (pv->length - i);                                \
         memmove(ptr_shifting, ptr_inserting, bytes_to_shift);                                    \
-        memmove(ptr_inserting, ptr_element, v.elem_size);                                        \
-        v.length++;                                                                              \
+        memmove(ptr_inserting, ptr_element, pv->elem_size);                                      \
+        pv->length++;                                                                            \
+        sowr_LeaveCriticalSection(pv->mtx);                                                      \
     }                                                                                            \
 }
 
-#define SOWR_VECTOR_INSERT_CPY(v, ptr_element, i)                                                \
+#define SOWR_VECTOR_INSERT_CPY(pv, ptr_element, i)                                               \
 {                                                                                                \
-    if (i >= v.length)                                                                           \
+    if (i >= pv->length)                                                                         \
     {                                                                                            \
-        SOWR_VECTOR_PUSH_CPY(v, ptr_element);                                                    \
+        SOWR_VECTOR_PUSH_CPY(pv, ptr_element);                                                   \
     }                                                                                            \
     else                                                                                         \
     {                                                                                            \
-        SOWR_VECTOR_EXPAND_UNTIL(v, v.length + 1);                                               \
-        void *ptr_inserting = &(v.ptr[i]);                                                       \
-        void *ptr_shifting = &(v.ptr[i + 1]);                                                    \
-        size_t bytes_to_shift = v.elem_size * (v.length - i);                                    \
+        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
+        sowr_EnterCriticalSection(pv->mtx);                                                      \
+        void *ptr_inserting = &(pv->ptr[i]);                                                     \
+        void *ptr_shifting = &(pv->ptr[i + 1]);                                                  \
+        size_t bytes_to_shift = pv->elem_size * (pv->length - i);                                \
         memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                     \
-        memcpy(ptr_inserting, ptr_element, v.elem_size);                                         \
-        v.length++;                                                                              \
+        memcpy(ptr_inserting, ptr_element, pv->elem_size);                                       \
+        pv->length++;                                                                            \
+        sowr_LeaveCriticalSection(pv->mtx);                                                      \
     }                                                                                            \
 }
 
-#define SOWR_VECTOR_DELETE(v, i)                                                                 \
+#define SOWR_VECTOR_DELETE(pv, i)                                                                \
 {                                                                                                \
-    if (v.free_func)                                                                             \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    if (pv->free_func)                                                                           \
     {                                                                                            \
-        v.free_func((void *)&(v.ptr[i]));                                                        \
+        pv->free_func((void *)&(pv->ptr[i]));                                                    \
     }                                                                                            \
-    void *ptr_shifting = &(v.ptr[i]);                                                            \
-    void *ptr_data = &(v.ptr[i + 1]);                                                            \
-    size_t bytes_to_shift = v.elem_size * (v.length - i - 1);                                    \
+    void *ptr_shifting = &(pv->ptr[i]);                                                          \
+    void *ptr_data = &(pv->ptr[i + 1]);                                                          \
+    size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                                \
     memmove(ptr_shifting, ptr_data, bytes_to_shift);                                             \
-    v.length--;                                                                                  \
+    pv->length--;                                                                                \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_TAKE(v, i, ptr_retrieve)                                                     \
+#define SOWR_VECTOR_TAKE(pv, i, ptr_retrieve)                                                    \
 {                                                                                                \
-    if (i >= v.length)                                                                           \
+    if (i >= pv->length)                                                                         \
     {                                                                                            \
-        SOWR_VECTOR_POP(v, ptr_retrieve);                                                        \
+        SOWR_VECTOR_POP(pv, ptr_retrieve);                                                       \
     }                                                                                            \
     else                                                                                         \
     {                                                                                            \
-        void *ptr_shifting = SOWR_VECTOR_GET(v, i);                                              \
-        void *ptr_data = SOWR_VECTOR_GET(v, i + 1);                                              \
-        size_t bytes_to_shift = v.elem_size * (v.length - i - 1);                                \
-        memmove(ptr_retrieve, ptr_shifting, v.elem_size);                                        \
+        sowr_EnterCriticalSection(pv->mtx);                                                      \
+        void *ptr_shifting = SOWR_VECTOR_GET(pv, i);                                             \
+        void *ptr_data = SOWR_VECTOR_GET(pv, i + 1);                                             \
+        size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                            \
+        memmove(ptr_retrieve, ptr_shifting, pv->elem_size);                                      \
         memmove(ptr_shifting, ptr_data, bytes_to_shift);                                         \
-        v.length--;                                                                              \
+        pv->length--;                                                                            \
+        sowr_LeaveCriticalSection(pv->mtx);                                                      \
     }                                                                                            \
 }
 
-#define SOWR_VECTOR_PUSH(v, ptr_element)                                                         \
+#define SOWR_VECTOR_PUSH(pv, ptr_element)                                                        \
 {                                                                                                \
-    SOWR_VECTOR_EXPAND_UNTIL(v, v.length + 1);                                                   \
-    void *ptr = &(v.ptr[v.length]);                                                              \
-    memmove(ptr, ptr_element, v.elem_size);                                                      \
-    v.length++;                                                                                  \
+    SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                                \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    void *ptr = &(pv->ptr[pv->length]);                                                          \
+    memmove(ptr, ptr_element, pv->elem_size);                                                    \
+    pv->length++;                                                                                \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_PUSH_CPY(v, ptr_element)                                                     \
+#define SOWR_VECTOR_PUSH_CPY(pv, ptr_element)                                                    \
 {                                                                                                \
-    SOWR_VECTOR_EXPAND_UNTIL(v, v.length + 1);                                                   \
-    void *ptr = &(v.ptr[v.length]);                                                              \
-    memcpy(ptr, ptr_element, v.elem_size);                                                       \
-    v.length++;                                                                                  \
+    SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                                \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    void *ptr = &(pv->ptr[pv->length]);                                                          \
+    memcpy(ptr, ptr_element, pv->elem_size);                                                     \
+    pv->length++;                                                                                \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_POP(v, ptr_retrieve)                                                         \
+#define SOWR_VECTOR_POP(pv, ptr_retrieve)                                                        \
 {                                                                                                \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
     if (ptr_retrieve)                                                                            \
     {                                                                                            \
-        memmove(ptr_retrieve, &(v.ptr[v.length - 1]), v.elem_size);                              \
+        memmove(ptr_retrieve, &(pv->ptr[pv->length - 1]), pv->elem_size);                        \
     }                                                                                            \
-    v.length--;                                                                                  \
+    pv->length--;                                                                                \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_SHRINK_TO_FIT(v)                                                             \
+#define SOWR_VECTOR_SHRINK_TO_FIT(pv)                                                            \
 {                                                                                                \
-    if (v.capacity > v.length)                                                                   \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    if (pv->capacity > pv->length && pv->length)                                                 \
     {                                                                                            \
-        v.ptr = sowr_ReAlloc(v.ptr, v.length * v.elem_size);                                     \
-        v.capacity = v.length;                                                                   \
+        pv->ptr = sowr_ReAlloc(pv->ptr, pv->length * pv->elem_size);                             \
+        pv->capacity = pv->length;                                                               \
     }                                                                                            \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
 }
 
-#define SOWR_VECTOR_DESTROY(v)                                                                   \
+#define SOWR_VECTOR_DESTROY(pv)                                                                  \
 {                                                                                                \
-    if (v.free_func)                                                                             \
+    if (pv->free_func)                                                                           \
     {                                                                                            \
-        SOWR_VECTOR_WALK(v, v.free_func);                                                        \
-    sowr_HeapFree(v.ptr);                                                                        \
+        SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
     }                                                                                            \
+    sowr_EnterCriticalSection(pv->mtx);                                                          \
+    sowr_HeapFree(pv->ptr);                                                                      \
+    sowr_LeaveCriticalSection(pv->mtx);                                                          \
+    sowr_DestroyCriticalSection(pv->mtx);                                                        \
+    sowr_HeapFree(pv->mtx);                                                                      \
+    sowr_HeapFree(pv);                                                                           \
 }
 
 #endif
