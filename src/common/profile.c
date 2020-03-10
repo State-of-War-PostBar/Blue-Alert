@@ -57,8 +57,8 @@ sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_li
 
     if (first_called)
     {
-        QueryPerformanceCounter(&start);
         start_line = called_line;
+        QueryPerformanceCounter(&start);
     }
     else
     {
