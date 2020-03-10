@@ -56,7 +56,7 @@ const unsigned int SOWR_DEFAULT_PORT          = 23333;
 #ifdef SOWR_BUILD_DEBUG
     static bool sowr_log_available;
     static FILE *sowr_log_file;
-    static sowr_Mutex sowr_log_file_mtx;
+    static sowr_CriticalSection sowr_log_file_mtx;
 #endif
 
 // I can actually remove the gap here, but it looks ugly so yeah.  -- Taxerap
@@ -67,9 +67,9 @@ void
 sowr_LockLogFile(void *_, int lock)
 {
     lock ?
-        sowr_LockMutex(&sowr_log_file_mtx)
+        sowr_EnterCriticalSection(&sowr_log_file_mtx)
     :
-        sowr_UnlockMutex(&sowr_log_file_mtx);
+        sowr_LeaveCriticalSection(&sowr_log_file_mtx);
 }
 #endif
 
@@ -84,7 +84,7 @@ sowr_InitLogger()
         return;
     }
 
-    sowr_InitMutex(&sowr_log_file_mtx, NULL);
+    sowr_InitCriticalSection(&sowr_log_file_mtx);
     log_set_fp(sowr_log_file);
     log_set_level(SOWR_LOG_LEVEL_TRACE);
     log_set_lock(sowr_LockLogFile);
@@ -100,7 +100,7 @@ void sowr_DestroyLogger()
         sowr_LockLogFile(NULL, true);
         fclose(sowr_log_file);
         sowr_LockLogFile(NULL, false);
-        sowr_DestroyMutex(&sowr_log_file_mtx);
+        sowr_DestroyCriticalSection(&sowr_log_file_mtx);
     }
 #endif
 }
