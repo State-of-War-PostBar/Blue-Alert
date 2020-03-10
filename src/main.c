@@ -40,12 +40,6 @@ main(int argc, char *argv[])
     sowr_InitLogger();
     sowr_InitProfiler();
     SOWR_LOG_INFO("Starting...");
-
-    SOWR_START_PROFILE();
-    SOWR_LOG_INFO("%zu %zu %zu", sowr_GetStrHash("Credits:", strlen("Credits:")), sowr_GetStrHash("Taxerap", strlen("Taxerap")), sowr_GetStrHash("DragoonKiller", strlen("DragoonKiller")));
-    SOWR_STOP_PROFILE();
-    SOWR_LOG_INFO("What a shit hash function!");
-
     SOWR_LOG_INFO("Really starting...");
 
     sowr_WindowCreateInfo info =
