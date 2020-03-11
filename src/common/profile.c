@@ -70,7 +70,10 @@ sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_li
     thread_local static sowr_PosixTimeval_t start, stop;
 
     if (first_called)
+    {
+        start_line = called_line;
         gettimeofday(&start, NULL);
+    }
     else
     {
         gettimeofday(&stop, NULL);
