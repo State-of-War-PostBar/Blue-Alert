@@ -71,8 +71,7 @@
 #include <string.h>
 #include <tgmath.h>
 
-// #include <threads.h>
-// Yeah why don't they have it in MingW, I can't use glibc here QWQ.          -- Taxerap
+//#include <threads.h>
 #undef  thread_local
 #define thread_local _Thread_local
 
