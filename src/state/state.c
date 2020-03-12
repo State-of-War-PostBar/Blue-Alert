@@ -36,13 +36,13 @@
 //////////////////   Definitions   //////////////////
 /////////////////////////////////////////////////////
 
-const char *SOWR_PROG_ID                      = "keystel";
-const char *SOWR_PROG_NAME                    = "Keystel";
+const char *SOWR_PROG_ID                      = "sowr";
+const char *SOWR_PROG_NAME                    = "State of War: Remastered";
 const unsigned int SOWR_PROG_VERSION_MAJOR    = 0;
 const unsigned int SOWR_PROG_VERSION_MINOR    = 0;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0;
 
-const char *SOWR_LOG_FILE_NAME                = "keystel.log";
+const char *SOWR_LOG_FILE_NAME                = "sowr.log";
 
 const unsigned int SOWR_INIT_WIN_WIDTH        = 1366;
 const unsigned int SOWR_INIT_WIN_HEIGHT       = 768;
