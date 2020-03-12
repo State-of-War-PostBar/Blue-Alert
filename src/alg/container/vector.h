@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_VECTOR_H_
-#define _SOWR_VECTOR_H_
+#ifndef SOWR_ALG_CONTAINER_VECTOR_H
+#define SOWR_ALG_CONTAINER_VECTOR_H
 
 #include <pch.h>
 
@@ -34,7 +34,7 @@
 typedef void (*sowr_VecFreeFunc)(void *);
 
 #define SOWR_DEF_VECTOR_OF_TYPE(type_name)                                                       \
-typedef struct sowr_Vector_##type_name##_t                                                       \
+typedef struct                                                                                   \
 {                                                                                                \
     size_t length;                                                                               \
     size_t capacity;                                                                             \
@@ -232,4 +232,4 @@ typedef struct sowr_Vector_##type_name##_t                                      
     sowr_HeapFree(pv);                                                                           \
 }
 
-#endif
+#endif // !SOWR_ALG_CONTAINER_VECTOR_H

@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_LOG_H_
-#define _SOWR_LOG_H_
+#ifndef SOWR_COMMON_LOG_H
+#define SOWR_COMMON_LOG_H
 
 #include <pch.h>
 
@@ -54,4 +54,4 @@
 
 #define SOWR_DEFAULT_LOG_BUFFER_SIZE 512
 
-#endif
+#endif // !SOWR_COMMON_LOG_H

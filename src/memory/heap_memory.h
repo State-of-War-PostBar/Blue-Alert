@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_HEAP_MEMORY_H_
-#define _SOWR_HEAP_MEMORY_H_
+#ifndef SOWR_MEMORY_HEAP_MEMORY_H
+#define SOWR_MEMORY_HEAP_MEMORY_H
 
 #include <pch.h>
 
@@ -43,4 +43,4 @@ sowr_ReAlloc(void *, size_t);
 void *
 sowr_ZeroAlloc(size_t);
 
-#endif
+#endif // !SOWR_MEMORY_HEAP_MEMORY_H

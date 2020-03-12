@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_PCH_H_
-#define _SOWR_PCH_H_
+#ifndef SOWR_PCH_H
+#define SOWR_PCH_H
 
 #if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
     #define SOWR_TARGET_WINDOWS
@@ -72,8 +72,7 @@
 #include <tgmath.h>
 
 // #include <threads.h>
-// Yeah why don't they have it in MingW, I can't use glibc here QWQ.
-// And WinAPI sucks, so I have no choice but use pthread.             -- Taxerap
+// Yeah why don't they have it in MingW, I can't use glibc here QWQ.          -- Taxerap
 #undef  thread_local
 #define thread_local _Thread_local
 
@@ -86,4 +85,4 @@
     #include <windows.h>
 #endif
 
-#endif //! _SOWR_PCH_H_
+#endif // !SOWR_PCH_H

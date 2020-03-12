@@ -67,12 +67,14 @@ sowr_ShowWindow()
     glfwShowWindow(sowr_GetMainWindowContext());
 }
 
+inline
 int
 sowr_GetMainWindowWidth()
 {
     return sowr_window_width;
 }
 
+inline
 int
 sowr_GetMainWindowHeight()
 {
@@ -108,12 +110,14 @@ sowr_MakeMainWindowCurrent()
     glfwMakeContextCurrent(sowr_main_window);
 }
 
+inline
 GLFWwindow *
 sowr_GetMainWindowContext()
 {
     return sowr_main_window;
 }
 
+inline
 bool
 sowr_MainWindowShouldClose()
 {

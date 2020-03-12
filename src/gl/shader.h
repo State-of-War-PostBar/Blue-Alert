@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_SHADER_H_
-#define _SOWR_SHADER_H_
+#ifndef SOWR_GL_SHADER_H
+#define SOWR_GL_SHADER_H
 
 #include <pch.h>
 
@@ -38,4 +38,4 @@ sowr_gl_ShaderFromSource(const char *, sowr_gl_ShaderType);
 sowr_gl_ShaderProgram
 sowr_gl_ProgramFromShaders(const sowr_gl_Shader *, unsigned short, bool);
 
-#endif // ! _SOWR_SHADER_H_
+#endif // !SOWR_GL_SHADER_H

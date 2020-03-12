@@ -54,23 +54,19 @@ const unsigned int SOWR_DEFAULT_PORT          = 23333;
 /////////////////////////////////////////////////
 
 #ifdef SOWR_BUILD_DEBUG
-    static bool sowr_log_available;
+    static bool sowr_log_available = false;
     static FILE *sowr_log_file;
     static sowr_CriticalSection sowr_log_file_mtx;
-#endif
 
-// I can actually remove the gap here, but it looks ugly so yeah.  -- Taxerap
-
-#ifdef SOWR_BUILD_DEBUG
-static inline
-void
-sowr_LockLogFile(void *_, int lock)
-{
-    lock ?
-        sowr_EnterCriticalSection(&sowr_log_file_mtx)
-    :
-        sowr_LeaveCriticalSection(&sowr_log_file_mtx);
-}
+    static inline
+    void
+    sowr_LockLogFile(void *user_data, int lock)
+    {
+        lock ?
+            sowr_EnterCriticalSection(&sowr_log_file_mtx)
+        :
+            sowr_LeaveCriticalSection(&sowr_log_file_mtx);
+    }
 #endif
 
 void

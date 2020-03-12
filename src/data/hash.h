@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_DATA_H_
-#define _SOWR_DATA_H_
+#ifndef SOWR_DATA_HASH_H
+#define SOWR_DATA_HASH_H
 
 #include <pch.h>
 
@@ -33,4 +33,4 @@ typedef size_t sowr_HashVal;
 sowr_HashVal
 sowr_GetStrHash(const char *, size_t);
 
-#endif // ! _SOWR_DATA_H_
+#endif // !SOWR_DATA_HASH_H

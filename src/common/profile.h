@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_PROFILE_H_
-#define _SOWR_PROFILE_H_
+#ifndef SOWR_COMMON_PROFILE_H
+#define SOWR_COMMON_PROFILE_H
 
 #include <pch.h>
 
@@ -35,11 +35,11 @@ void
 sowr_ProfileFunc(const char *, const char *, int);
 
 #ifdef SOWR_BUILD_DEBUG
-#define SOWR_START_PROFILE() sowr_ProfileFunc(__FILE__, __func__, __LINE__)
-#define SOWR_STOP_PROFILE()  sowr_ProfileFunc(__FILE__, __func__, __LINE__)
+    #define SOWR_START_PROFILE() sowr_ProfileFunc(__FILE__, __func__, __LINE__)
+    #define SOWR_STOP_PROFILE()  sowr_ProfileFunc(__FILE__, __func__, __LINE__)
 #else
-#define SOWR_START_PROFILE()
-#define SOWR_STOP_PROFILE()
+    #define SOWR_START_PROFILE()
+    #define SOWR_STOP_PROFILE()
 #endif
 
-#endif
+#endif // !SOWR_COMMON_PROFILE_H

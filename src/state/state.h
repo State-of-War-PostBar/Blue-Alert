@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_STATE_H_
-#define _SOWR_STATE_H_
+#ifndef SOWR_STATE_STATE_H
+#define SOWR_STATE_STATE_H
 
 #include <pch.h>
 
@@ -75,4 +75,4 @@ sowr_InitGLAD();
 void
 sowr_StartMainLoop();
 
-#endif // ! _SOWR_STATE_H_
+#endif // !SOWR_STATE_STATE_H

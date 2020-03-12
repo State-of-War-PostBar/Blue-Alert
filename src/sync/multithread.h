@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_MULTI_THREAD_H_
-#define _SOWR_MULTI_THREAD_H_
+#ifndef SOWR_SYNC_MULTITHREAD_H
+#define SOWR_SYNC_MULTITHREAD_H
 
 #include <pch.h>
 
@@ -102,4 +102,4 @@ sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *);
 void
 sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *);
 
-#endif
+#endif // !SOWR_SYNC_MULTITHREAD_H

@@ -23,14 +23,14 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef _SOWR_WINDOW_H_
-#define _SOWR_WINDOW_H_
+#ifndef SOWR_MULTIMEDIA_WINDOW_H
+#define SOWR_MULTIMEDIA_WINDOW_H
 
 #include <pch.h>
 
 #include <glfw/glfw3.h>
 
-typedef struct sowr_WindowCreateInfo_t
+typedef struct
 {
     int width;
     int height;
@@ -74,4 +74,4 @@ sowr_MainWindowShouldClose();
 void
 sowr_UpdateMainWindow();
 
-#endif // ! _SOWR_WINDOW_H_
+#endif // !SOWR_MULTIMEDIA_WINDOW_H
