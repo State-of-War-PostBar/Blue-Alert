@@ -26,19 +26,19 @@
 #include "hash.h"
 
 sowr_HashVal
-sowr_GetStrHash(const char *str, size_t len)
+sowr_GetHash(const char *bytes, size_t length)
 {
     sowr_HashVal res = 0;
 
     int i = 0;
-    for (i = 0; i < len / 4; i++)
-        res += (str[i] * str[i] >> 5) * 0x1070601686fULL;
-    for (i = len / 4; i < len / 2; i++)
-        res += (str[i] * str[i] << 2) * 0x405236496fULL;
-    for (i = len / 2; i < len * 3 / 4; i++)
-        res += (str[i] * str[i] >> 1) * 0x1966822847fULL;
-    for (i = len * 3 / 4; i < len; i++)
-        res += (str[i] * str[i] << 4) * 0x732464301fULL;
+    for (i = 0; i < length / 4; i++)
+        res += (bytes[i] * bytes[i] >> 5) * 0x1070601686fULL;
+    for (i = length / 4; i < length / 2; i++)
+        res += (bytes[i] * bytes[i] << 2) * 0x405236496fULL;
+    for (i = length / 2; i < length * 3 / 4; i++)
+        res += (bytes[i] * bytes[i] >> 1) * 0x1966822847fULL;
+    for (i = length * 3 / 4; i < length; i++)
+        res += (bytes[i] * bytes[i] << 4) * 0x732464301fULL;
 
     res = res * 0x666666666ULL / 0233333333ULL;
 

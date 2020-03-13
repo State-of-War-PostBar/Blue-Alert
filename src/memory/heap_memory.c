@@ -44,7 +44,7 @@ sowr_HeapAlloc(size_t size)
 
 inline
 void *
-sowr_AlignedAlloc(size_t size, size_t alignment)
+sowr_AlignedHeapAlloc(size_t size, size_t alignment)
 {
 #ifdef SOWR_TARGET_WINDOWS
     void *ptr = _aligned_malloc(size, alignment);

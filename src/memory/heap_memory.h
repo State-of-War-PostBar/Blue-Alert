@@ -32,7 +32,7 @@ void *
 sowr_HeapAlloc(size_t);
 
 void *
-sowr_AlignedAlloc(size_t, size_t);
+sowr_AlignedHeapAlloc(size_t, size_t);
 
 void
 sowr_HeapFree(void *);

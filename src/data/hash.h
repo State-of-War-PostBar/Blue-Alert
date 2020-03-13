@@ -31,6 +31,6 @@
 typedef size_t sowr_HashVal;
 
 sowr_HashVal
-sowr_GetStrHash(const char *, size_t);
+sowr_GetHash(const char *, size_t);
 
 #endif // !SOWR_DATA_HASH_H
