@@ -27,7 +27,7 @@
 
 inline
 void
-sowr_InitMutex(sowr_Mutex * mtx, sowr_MutexAttribute *attr)
+sowr_InitMutex(sowr_Mutex *mtx, sowr_MutexAttribute *attr)
 {
 #ifdef SOWR_TARGET_WINDOWS
     *mtx = CreateMutex(attr, FALSE, NULL);
