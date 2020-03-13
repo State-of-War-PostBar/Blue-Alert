@@ -68,7 +68,7 @@ sowr_gl_ProgramFromShaders(const sowr_gl_Shader *shaders, unsigned short count, 
     if (!success)
     {
         glGetProgramInfoLog(id, SOWR_DEFAULT_LOG_BUFFER_SIZE, NULL, info_log);
-        SOWR_LOG_ERROR("Failed to link an OpenGL shader program!\n%s", info_log);
+        SOWR_LOG_ERROR("Failed to link an OpenGL shader program!\n%s\n", info_log);
     }
 
     glValidateProgram(id);
@@ -76,7 +76,7 @@ sowr_gl_ProgramFromShaders(const sowr_gl_Shader *shaders, unsigned short count, 
     if (!success)
     {
         glGetProgramInfoLog(id, SOWR_DEFAULT_LOG_BUFFER_SIZE, NULL, info_log);
-        SOWR_LOG_ERROR("Failed to validate an OpenGL shader program!\n%s", info_log);
+        SOWR_LOG_ERROR("Failed to validate an OpenGL shader program!\n%s\n", info_log);
     }
 
     if (del)

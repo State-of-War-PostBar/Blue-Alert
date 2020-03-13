@@ -38,7 +38,7 @@ main(int argc, char *argv[])
 #endif
     sowr_InitLogger();
     sowr_InitProfiler();
-    SOWR_LOG_INFO("Starting...");
+    SOWR_LOG_INFO("Starting State of War:Remasted V%u.%u-r%u, build %03u.", SOWR_PROG_VERSION_MAJOR, SOWR_PROG_VERSION_MINOR, SOWR_PROG_VERSION_REVISION, SOWR_PROG_BUILD_NUMBER);
 
     sowr_WindowCreateInfo info =
     {

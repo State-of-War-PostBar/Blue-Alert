@@ -30,9 +30,11 @@
 
 extern const char *          SOWR_PROG_ID;
 extern const char *          SOWR_PROG_NAME;
+
 extern const unsigned int    SOWR_PROG_VERSION_MAJOR;
 extern const unsigned int    SOWR_PROG_VERSION_MINOR;
 extern const unsigned int    SOWR_PROG_VERSION_REVISION;
+extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
 
 extern const char *          SOWR_LOG_FILE_NAME;
 
