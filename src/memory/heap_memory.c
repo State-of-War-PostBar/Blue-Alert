@@ -44,7 +44,7 @@ sowr_HeapAlloc(size_t size)
 
 inline
 void *
-sowr_AlignedHeapAlloc(size_t size, size_t alignment)
+sowr_HeapAlignedAlloc(size_t size, size_t alignment)
 {
 #ifdef SOWR_TARGET_WINDOWS
     void *ptr = _aligned_malloc(size, alignment);
@@ -85,7 +85,7 @@ sowr_ReAlloc(void *ptr, size_t size)
 
 inline
 void *
-sowr_ZeroAlloc(size_t size)
+sowr_HeapZeroAlloc(size_t size)
 {
     void *ptr = calloc(1, size);
 #ifdef SOWR_BUILD_DEBUG

@@ -32,7 +32,7 @@ void *
 sowr_HeapAlloc(size_t);
 
 void *
-sowr_AlignedHeapAlloc(size_t, size_t);
+sowr_HeapAlignedAlloc(size_t, size_t);
 
 void
 sowr_HeapFree(void *);
@@ -41,6 +41,6 @@ void *
 sowr_ReAlloc(void *, size_t);
 
 void *
-sowr_ZeroAlloc(size_t);
+sowr_HeapZeroAlloc(size_t);
 
 #endif // !SOWR_MEMORY_HEAP_MEMORY_H
