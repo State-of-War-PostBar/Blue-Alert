@@ -42,7 +42,8 @@ typedef struct                                                                  
     type_name *ptr;                                                                              \
     sowr_VecFreeFunc free_func;                                                                  \
     sowr_CriticalSection *mtx;                                                                   \
-} sowr_Vector_##type_name
+    atomic_bool usable;                                                                          \
+} sowr_Vector_##type_name;
 
 #define SOWR_VECTOR_INIT(type_name, pv, free_func_)                                              \
 {                                                                                                \
@@ -55,6 +56,7 @@ typedef struct                                                                  
     sowr_CriticalSection *mtx = sowr_HeapAlloc(sizeof(sowr_CriticalSection));                    \
     sowr_InitCriticalSection(mtx);                                                               \
     pv->mtx = mtx;                                                                               \
+    pv->usable = true;                                                                           \
 }
 
 #define SOWR_VECTOR_EXPAND(pv)                                                                   \
@@ -73,8 +75,8 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_EXPAND_UNTIL(pv, i)                                                          \
 {                                                                                                \
-    while (pv->capacity < i) SOWR_VECTOR_EXPAND(pv)                                              \
-        ;                                                                                        \
+    while (pv->capacity < i)                                                                     \
+        SOWR_VECTOR_EXPAND(pv);                                                                  \
 }
 
 #define SOWR_VECTOR_WALK(pv, f)                                                                  \
@@ -90,131 +92,168 @@ typedef struct                                                                  
 #define SOWR_VECTOR_FRONT(pv)     pv->ptr
 #define SOWR_VECTOR_BACK(pv)      &(pv->ptr[pv->length])
 
+#define SOWR_VECTOR_WALK_S(pv, f)                                                                \
+{                                                                                                \
+    if (pv->usable)                                                                              \
+    {                                                                                            \
+        SOWR_VECTOR_LOCK(pv);                                                                    \
+        SOWR_VECTOR_WALK(pv, f);                                                                 \
+        SOWR_VECTOR_UNLOCK(pv);                                                                  \
+    }                                                                                            \
+}
+
 #define SOWR_VECTOR_CLEAR(pv)                                                                    \
 {                                                                                                \
-    SOWR_VECTOR_LOCK(pv);                                                                        \
-    if (pv->free_func)                                                                           \
+    if (pv->usable)                                                                              \
     {                                                                                            \
-        SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
+        SOWR_VECTOR_LOCK(pv);                                                                    \
+        if (pv->free_func)                                                                       \
+        {                                                                                        \
+            SOWR_VECTOR_WALK(pv, pv->free_func);                                                 \
+        }                                                                                        \
+        pv->length = 0;                                                                          \
+        SOWR_VECTOR_UNLOCK(pv);                                                                  \
     }                                                                                            \
-    pv->length = 0;                                                                              \
-    SOWR_VECTOR_UNLOCK(pv);                                                                      \
 }
 
 #define SOWR_VECTOR_INSERT(pv, ptr_element, i)                                                   \
 {                                                                                                \
-    if (i >= pv->length)                                                                         \
+    if (pv->usable)                                                                              \
     {                                                                                            \
-        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_LOCK(pv);                                                                    \
-        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
-        void *ptr_inserting = &(pv->ptr[i]);                                                     \
-        void *ptr_shifting = &(pv->ptr[i + 1]);                                                  \
-        size_t bytes_to_shift = pv->elem_size * (pv->length - i);                                \
-        memmove(ptr_shifting, ptr_inserting, bytes_to_shift);                                    \
-        memmove(ptr_inserting, ptr_element, pv->elem_size);                                      \
-        pv->length++;                                                                            \
-        SOWR_VECTOR_UNLOCK(pv);                                                                  \
+        if (i >= pv->length)                                                                     \
+        {                                                                                        \
+            SOWR_VECTOR_PUSH(pv, ptr_element);                                                   \
+        }                                                                                        \
+        else                                                                                     \
+        {                                                                                        \
+            SOWR_VECTOR_LOCK(pv);                                                                \
+            SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                        \
+            void *ptr_inserting = &(pv->ptr[i]);                                                 \
+            void *ptr_shifting = &(pv->ptr[i + 1]);                                              \
+            size_t bytes_to_shift = pv->elem_size * (pv->length - i);                            \
+            memmove(ptr_shifting, ptr_inserting, bytes_to_shift);                                \
+            memmove(ptr_inserting, ptr_element, pv->elem_size);                                  \
+            pv->length++;                                                                        \
+            SOWR_VECTOR_UNLOCK(pv);                                                              \
+        }                                                                                        \
     }                                                                                            \
 }
 
 #define SOWR_VECTOR_INSERT_CPY(pv, ptr_element, i)                                               \
 {                                                                                                \
-    if (i >= pv->length)                                                                         \
+    if (pv->usable)                                                                              \
     {                                                                                            \
-        SOWR_VECTOR_PUSH_CPY(pv, ptr_element);                                                   \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_LOCK(pv);                                                                    \
-        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
-        void *ptr_inserting = &(pv->ptr[i]);                                                     \
-        void *ptr_shifting = &(pv->ptr[i + 1]);                                                  \
-        size_t bytes_to_shift = pv->elem_size * (pv->length - i);                                \
-        memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                     \
-        memcpy(ptr_inserting, ptr_element, pv->elem_size);                                       \
-        pv->length++;                                                                            \
-        SOWR_VECTOR_UNLOCK(pv);                                                                  \
+        if (i >= pv->length)                                                                     \
+        {                                                                                        \
+            SOWR_VECTOR_PUSH_CPY(pv, ptr_element);                                               \
+        }                                                                                        \
+        else                                                                                     \
+        {                                                                                        \
+            SOWR_VECTOR_LOCK(pv);                                                                \
+            SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                        \
+            void *ptr_inserting = &(pv->ptr[i]);                                                 \
+            void *ptr_shifting = &(pv->ptr[i + 1]);                                              \
+            size_t bytes_to_shift = pv->elem_size * (pv->length - i);                            \
+            memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                 \
+            memcpy(ptr_inserting, ptr_element, pv->elem_size);                                   \
+            pv->length++;                                                                        \
+            SOWR_VECTOR_UNLOCK(pv);                                                              \
+        }                                                                                        \
     }                                                                                            \
 }
 
 #define SOWR_VECTOR_DELETE(pv, i)                                                                \
 {                                                                                                \
-    SOWR_VECTOR_LOCK(pv);                                                                        \
-    if (pv->free_func)                                                                           \
-    {                                                                                            \
-        pv->free_func((void *)&(pv->ptr[i]));                                                    \
-    }                                                                                            \
-    void *ptr_shifting = &(pv->ptr[i]);                                                          \
-    void *ptr_data = &(pv->ptr[i + 1]);                                                          \
-    size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                                \
-    memmove(ptr_shifting, ptr_data, bytes_to_shift);                                             \
-    pv->length--;                                                                                \
-    SOWR_VECTOR_UNLOCK(pv);                                                                      \
-}
-
-#define SOWR_VECTOR_TAKE(pv, i, ptr_retrieve)                                                    \
-{                                                                                                \
-    if (i >= pv->length)                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_POP(pv, ptr_retrieve);                                                       \
-    }                                                                                            \
-    else                                                                                         \
+    if (pv->usable)                                                                              \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
-        void *ptr_shifting = SOWR_VECTOR_GET(pv, i);                                             \
-        void *ptr_data = SOWR_VECTOR_GET(pv, i + 1);                                             \
+        if (pv->free_func)                                                                       \
+        {                                                                                        \
+            pv->free_func((void *)&(pv->ptr[i]));                                                \
+        }                                                                                        \
+        void *ptr_shifting = &(pv->ptr[i]);                                                      \
+        void *ptr_data = &(pv->ptr[i + 1]);                                                      \
         size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                            \
-        memmove(ptr_retrieve, ptr_shifting, pv->elem_size);                                      \
         memmove(ptr_shifting, ptr_data, bytes_to_shift);                                         \
         pv->length--;                                                                            \
         SOWR_VECTOR_UNLOCK(pv);                                                                  \
     }                                                                                            \
 }
 
+#define SOWR_VECTOR_TAKE(pv, i, ptr_retrieve)                                                    \
+{                                                                                                \
+    if (pv->usable)                                                                              \
+    {                                                                                            \
+        if (i >= pv->length)                                                                     \
+        {                                                                                        \
+            SOWR_VECTOR_POP(pv, ptr_retrieve);                                                   \
+        }                                                                                        \
+        else                                                                                     \
+        {                                                                                        \
+            SOWR_VECTOR_LOCK(pv);                                                                \
+            void *ptr_shifting = SOWR_VECTOR_GET(pv, i);                                         \
+            void *ptr_data = SOWR_VECTOR_GET(pv, i + 1);                                         \
+            size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                        \
+            memmove(ptr_retrieve, ptr_shifting, pv->elem_size);                                  \
+            memmove(ptr_shifting, ptr_data, bytes_to_shift);                                     \
+            pv->length--;                                                                        \
+            SOWR_VECTOR_UNLOCK(pv);                                                              \
+        }                                                                                        \
+    }                                                                                            \
+}
+
 #define SOWR_VECTOR_PUSH(pv, ptr_element)                                                        \
 {                                                                                                \
-    SOWR_VECTOR_LOCK(pv);                                                                        \
-    SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                                \
-    void *ptr = &(pv->ptr[pv->length]);                                                          \
-    memmove(ptr, ptr_element, pv->elem_size);                                                    \
-    pv->length++;                                                                                \
-    SOWR_VECTOR_UNLOCK(pv);                                                                      \
+    if (pv->usable)                                                                              \
+    {                                                                                            \
+        SOWR_VECTOR_LOCK(pv);                                                                    \
+        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
+        void *ptr = &(pv->ptr[pv->length]);                                                      \
+        memmove(ptr, ptr_element, pv->elem_size);                                                \
+        pv->length++;                                                                            \
+        SOWR_VECTOR_UNLOCK(pv);                                                                  \
+    }                                                                                            \
 }
 
 #define SOWR_VECTOR_PUSH_CPY(pv, ptr_element)                                                    \
 {                                                                                                \
-    SOWR_VECTOR_LOCK(pv);                                                                        \
-    SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                                \
-    void *ptr = &(pv->ptr[pv->length]);                                                          \
-    memcpy(ptr, ptr_element, pv->elem_size);                                                     \
-    pv->length++;                                                                                \
-    SOWR_VECTOR_UNLOCK(pv);                                                                      \
+    if (pv->usable)                                                                              \
+    {                                                                                            \
+        SOWR_VECTOR_LOCK(pv);                                                                    \
+        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
+        void *ptr = &(pv->ptr[pv->length]);                                                      \
+        memcpy(ptr, ptr_element, pv->elem_size);                                                 \
+        pv->length++;                                                                            \
+        SOWR_VECTOR_UNLOCK(pv);                                                                  \
+    }                                                                                            \
 }
 
 #define SOWR_VECTOR_POP(pv, ptr_retrieve)                                                        \
 {                                                                                                \
-    SOWR_VECTOR_LOCK(pv);                                                                        \
-    if (ptr_retrieve)                                                                            \
+    if (pv->usable)                                                                              \
     {                                                                                            \
-        memmove(ptr_retrieve, &(pv->ptr[pv->length - 1]), pv->elem_size);                        \
+        SOWR_VECTOR_LOCK(pv);                                                                    \
+        if (ptr_retrieve)                                                                        \
+        {                                                                                        \
+            memmove(ptr_retrieve, &(pv->ptr[pv->length - 1]), pv->elem_size);                    \
+        }                                                                                        \
+        pv->length--;                                                                            \
+        SOWR_VECTOR_UNLOCK(pv);                                                                  \
     }                                                                                            \
-    pv->length--;                                                                                \
-    SOWR_VECTOR_UNLOCK(pv);                                                                      \
 }
 
 #define SOWR_VECTOR_SHRINK_TO_FIT(pv)                                                            \
 {                                                                                                \
-    SOWR_VECTOR_LOCK(pv);                                                                        \
-    if (pv->capacity > pv->length && pv->length)                                                 \
+    if (pv->usable)                                                                              \
     {                                                                                            \
-        pv->ptr = sowr_ReAlloc(pv->length * pv->elem_size, pv->ptr);                             \
-        pv->capacity = pv->length;                                                               \
-    }                                                                                            \
+        SOWR_VECTOR_LOCK(pv);                                                                    \
+        if (pv->capacity > pv->length && pv->length)                                             \
+        {                                                                                        \
+            pv->ptr = sowr_ReAlloc(pv->length * pv->elem_size, pv->ptr);                         \
+            pv->capacity = pv->length;                                                           \
+        }                                                                                        \
     SOWR_VECTOR_UNLOCK(pv);                                                                      \
+    }                                                                                            \
 }
 
 #define SOWR_VECTOR_DESTROY(pv)                                                                  \
@@ -225,6 +264,7 @@ typedef struct                                                                  
         SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
     }                                                                                            \
     sowr_HeapFree(pv->ptr);                                                                      \
+    pv->usable = false;                                                                          \
     SOWR_VECTOR_UNLOCK(pv);                                                                      \
     sowr_DestroyCriticalSection(pv->mtx);                                                        \
     sowr_HeapFree(pv->mtx);                                                                      \
