@@ -32,35 +32,27 @@
 #include <glad/glad.h>
 #include <pthread.h>
 
-/////////////////////////////////////////////////////
-//////////////////   Definitions   //////////////////
-/////////////////////////////////////////////////////
+const char *const SOWR_PROG_ID                      = "sowr";
+const char *const SOWR_PROG_NAME                    = "State of War: Remastered";
 
-const char *SOWR_PROG_ID                      = "sowr";
-const char *SOWR_PROG_NAME                    = "State of War: Remastered";
-
+const char *const  SOWR_PROG_VERSION_STAGE    = "Indev";
 const unsigned int SOWR_PROG_VERSION_MAJOR    = 0;
 const unsigned int SOWR_PROG_VERSION_MINOR    = 0;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0;
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1;
 
-const char *SOWR_LOG_FILE_NAME                = "sowr.log";
+const char *const SOWR_LOG_FILE_NAME                = "sowr.log";
 
-const unsigned int SOWR_INIT_WIN_WIDTH        = 1536;
-const unsigned int SOWR_INIT_WIN_HEIGHT       = 864;
-
-const unsigned int SOWR_DEFAULT_PORT          = 23333;
-
-/////////////////////////////////////////////////
-//////////////////   Logging   //////////////////
-/////////////////////////////////////////////////
+const unsigned int SOWR_INIT_WIN_WIDTH        = 1366;
+const unsigned int SOWR_INIT_WIN_HEIGHT       = 768;
 
 #ifdef SOWR_BUILD_DEBUG
     static bool sowr_log_available = false;
     static FILE *sowr_log_file;
     static sowr_CriticalSection sowr_log_file_mtx;
 
-    static inline
+    static
+    inline
     void
     sowr_LockLogFile(void *user_data, int lock)
     {
@@ -90,7 +82,8 @@ sowr_InitLogger()
 #endif
 }
 
-void sowr_DestroyLogger()
+void
+sowr_DestroyLogger()
 {
 #ifdef SOWR_BUILD_DEBUG
     if (sowr_log_available)
@@ -103,10 +96,7 @@ void sowr_DestroyLogger()
 #endif
 }
 
-///////////////////////////////////////
-///////////////// GL //////////////////
-///////////////////////////////////////
-
+inline
 void
 sowr_InitGLFW()
 {
@@ -117,25 +107,23 @@ sowr_InitGLFW()
     }
 }
 
+inline
 void
 sowr_DestroyGLFW()
 {
     glfwTerminate();
 }
 
+inline
 void
 sowr_InitGLAD()
 {
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         SOWR_LOG_ERROR("Failed to initialize GLAD.");
         abort();
     }
 }
-
-///////////////////////////////////////////////
-////////////////// Main Loop //////////////////
-///////////////////////////////////////////////
 
 void
 sowr_StartMainLoop()

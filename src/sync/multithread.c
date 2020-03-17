@@ -31,41 +31,8 @@ sowr_InitMutex(sowr_Mutex *mtx, sowr_MutexAttribute *attr)
 {
 #ifdef SOWR_TARGET_WINDOWS
     *mtx = CreateMutex(attr, FALSE, NULL);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_mutex_init(mtx, attr);
-#endif
-}
-
-inline
-void
-sowr_InitCriticalSection(sowr_CriticalSection *cs)
-{
-#ifdef SOWR_TARGET_WINDOWS
-    InitializeCriticalSection(cs);
-#elif defined SOWR_TARGET_POSIX
-    pthread_mutex_init(cs, NULL);
-#endif
-}
-
-inline
-void
-sowr_DestroyMutex(sowr_Mutex *mtx)
-{
-#ifdef SOWR_TARGET_WINDOWS
-    CloseHandle(*mtx);
-#elif defined SOWR_TARGET_POSIX
-    pthread_mutex_destroy(mtx);
-#endif
-}
-
-inline
-void
-sowr_DestroyCriticalSection(sowr_CriticalSection *cs)
-{
-#ifdef SOWR_TARGET_WINDOWS
-    DeleteCriticalSection(cs);
-#elif defined SOWR_TARGET_POSIX
-    pthread_mutex_destroy(cs);
 #endif
 }
 
@@ -75,7 +42,7 @@ sowr_LockMutex(sowr_Mutex *mtx)
 {
 #ifdef SOWR_TARGET_WINDOWS
     WaitForSingleObject(*mtx, INFINITE);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_mutex_lock(mtx);
 #endif
 }
@@ -86,8 +53,41 @@ sowr_TryLockMutex(sowr_Mutex *mtx)
 {
 #ifdef SOWR_TARGET_WINDOWS
     WaitForSingleObject(*mtx, 1);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_mutex_trylock(mtx);
+#endif
+}
+
+inline
+void
+sowr_UnlockMutex(sowr_Mutex *mtx)
+{
+#ifdef SOWR_TARGET_WINDOWS
+    ReleaseMutex(*mtx);
+#else
+    pthread_mutex_unlock(mtx);
+#endif
+}
+
+inline
+void
+sowr_DestroyMutex(sowr_Mutex *mtx)
+{
+#ifdef SOWR_TARGET_WINDOWS
+    CloseHandle(*mtx);
+#else
+    pthread_mutex_destroy(mtx);
+#endif
+}
+
+inline
+void
+sowr_InitCriticalSection(sowr_CriticalSection *cs)
+{
+#ifdef SOWR_TARGET_WINDOWS
+    InitializeCriticalSection(cs);
+#else
+    pthread_mutex_init(cs, NULL);
 #endif
 }
 
@@ -97,7 +97,7 @@ sowr_EnterCriticalSection(sowr_CriticalSection *cs)
 {
 #ifdef SOWR_TARGET_WINDOWS
     EnterCriticalSection(cs);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_mutex_lock(cs);
 #endif
 }
@@ -108,19 +108,8 @@ sowr_TryEnterCriticalSection(sowr_CriticalSection *cs)
 {
 #ifdef SOWR_TARGET_WINDOWS
     TryEnterCriticalSection(cs);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_mutex_trylock(cs);
-#endif
-}
-
-inline
-void
-sowr_UnlockMutex(sowr_Mutex *mtx)
-{
-#ifdef SOWR_TARGET_WINDOWS
-    ReleaseMutex(*mtx);
-#elif defined SOWR_TARGET_POSIX
-    pthread_mutex_unlock(mtx);
 #endif
 }
 
@@ -130,8 +119,19 @@ sowr_LeaveCriticalSection(sowr_CriticalSection *cs)
 {
 #ifdef SOWR_TARGET_WINDOWS
     LeaveCriticalSection(cs);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_mutex_unlock(cs);
+#endif
+}
+
+inline
+void
+sowr_DestroyCriticalSection(sowr_CriticalSection *cs)
+{
+#ifdef SOWR_TARGET_WINDOWS
+    DeleteCriticalSection(cs);
+#else
+    pthread_mutex_destroy(cs);
 #endif
 }
 
@@ -141,17 +141,8 @@ sowr_InitReadWriteLock(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     InitializeSRWLock(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_init(rwl, NULL);
-#endif
-}
-
-inline
-void
-sowr_DestroyReadWriteLock(sowr_ReadWriteLock *rwl)
-{
-#ifdef SOWR_TARGET_POSIX
-    pthread_rwlock_destroy(rwl);
 #endif
 }
 
@@ -161,7 +152,7 @@ sowr_LockReadWriteLockRead(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     AcquireSRWLockShared(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_rdlock(rwl);
 #endif
 }
@@ -172,7 +163,7 @@ sowr_LockReadWriteLockWrite(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     AcquireSRWLockExclusive(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_wrlock(rwl);
 #endif
 }
@@ -183,7 +174,7 @@ sowr_TryLockReadWriteLockRead(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     TryAcquireSRWLockShared(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_tryrdlock(rwl);
 #endif
 }
@@ -194,7 +185,7 @@ sowr_TryLockReadWriteLockWrite(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     TryAcquireSRWLockExclusive(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_trywrlock(rwl);
 #endif
 }
@@ -205,7 +196,7 @@ sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     ReleaseSRWLockShared(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_unlock(rwl);
 #endif
 }
@@ -216,7 +207,16 @@ sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *rwl)
 {
 #ifdef SOWR_TARGET_WINDOWS
     ReleaseSRWLockExclusive(rwl);
-#elif defined SOWR_TARGET_POSIX
+#else
     pthread_rwlock_unlock(rwl);
+#endif
+}
+
+inline
+void
+sowr_DestroyReadWriteLock(sowr_ReadWriteLock *rwl)
+{
+#ifdef SOWR_TARGET_POSIX
+    pthread_rwlock_destroy(rwl);
 #endif
 }

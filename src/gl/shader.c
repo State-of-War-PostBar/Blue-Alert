@@ -54,8 +54,7 @@ sowr_gl_ProgramFromShaders(size_t count, const sowr_gl_Shader *shaders, bool rel
 {
     sowr_gl_ShaderProgram id = 0;
     id = glCreateProgram();
-
-    volatile int i;
+    int i;
 
     for (i = 0; i < count; i++)
         glAttachShader(id, shaders[i]);

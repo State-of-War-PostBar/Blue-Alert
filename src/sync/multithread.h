@@ -30,35 +30,24 @@
 
 #ifdef SOWR_TARGET_WINDOWS
     #include <synchapi.h>
-    typedef HANDLE sowr_Thread;
 
-    typedef HANDLE sowr_Mutex;
-    typedef CRITICAL_SECTION sowr_CriticalSection;
-    typedef SRWLOCK sowr_ReadWriteLock;
+    typedef HANDLE                  sowr_Mutex;
+    typedef CRITICAL_SECTION        sowr_CriticalSection;
+    typedef SRWLOCK                 sowr_ReadWriteLock;
 
-    typedef SECURITY_ATTRIBUTES sowr_MutexAttribute;
-#elif defined SOWR_TARGET_POSIX
+    typedef SECURITY_ATTRIBUTES     sowr_MutexAttribute;
+#else
     #include <pthread.h>
-    typedef pthread_t sowr_Thread;
 
-    typedef pthread_mutex_t sowr_Mutex;
-    typedef pthread_mutex_t sowr_CriticalSection;
-    typedef pthread_rwlock_t sowr_ReadWriteLock;
+    typedef pthread_mutex_t         sowr_Mutex;
+    typedef pthread_mutex_t         sowr_CriticalSection;
+    typedef pthread_rwlock_t        sowr_ReadWriteLock;
 
-    typedef pthread_mutexattr_t sowr_MutexAttribute;
+    typedef pthread_mutexattr_t     sowr_MutexAttribute;
 #endif
 
 void
 sowr_InitMutex(sowr_Mutex *, sowr_MutexAttribute *);
-
-void
-sowr_InitCriticalSection(sowr_CriticalSection *);
-
-void
-sowr_DestroyMutex(sowr_Mutex *);
-
-void
-sowr_DestroyCriticalSection(sowr_CriticalSection *);
 
 void
 sowr_LockMutex(sowr_Mutex *);
@@ -67,22 +56,28 @@ void
 sowr_TryLockMutex(sowr_Mutex *);
 
 void
+sowr_UnlockMutex(sowr_Mutex *);
+
+void
+sowr_DestroyMutex(sowr_Mutex *);
+
+void
+sowr_InitCriticalSection(sowr_CriticalSection *);
+
+void
 sowr_EnterCriticalSection(sowr_CriticalSection *);
 
 void
 sowr_TryEnterCriticalSection(sowr_CriticalSection *);
 
 void
-sowr_UnlockMutex(sowr_Mutex *);
-
-void
 sowr_LeaveCriticalSection(sowr_CriticalSection *);
 
 void
-sowr_InitReadWriteLock(sowr_ReadWriteLock *);
+sowr_DestroyCriticalSection(sowr_CriticalSection *);
 
 void
-sowr_DestroyReadWriteLock(sowr_ReadWriteLock *);
+sowr_InitReadWriteLock(sowr_ReadWriteLock *);
 
 void
 sowr_LockReadWriteLockRead(sowr_ReadWriteLock *);
@@ -101,5 +96,8 @@ sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *);
 
 void
 sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *);
+
+void
+sowr_DestroyReadWriteLock(sowr_ReadWriteLock *);
 
 #endif // !SOWR_SYNC_MULTITHREAD_H

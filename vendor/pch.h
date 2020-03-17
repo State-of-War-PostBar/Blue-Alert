@@ -42,7 +42,7 @@
     #define SOWR_BUILD_RELEASE
 #endif
 
-#if ((-1) >> 1) == (-1)
+#if ((-1) >> (1)) == (-1)
     #define SOWR_ARCH_RSHIFT_RESERVE_SIGN
 #endif
 
@@ -71,7 +71,6 @@
 #include <string.h>
 #include <tgmath.h>
 
-//#include <threads.h>
 #undef  thread_local
 #define thread_local _Thread_local
 
