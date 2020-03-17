@@ -1,6 +1,6 @@
 # State of War: Remastered
 
-In C18.  
+In C2x.  
 
 ## Used libraries
 
