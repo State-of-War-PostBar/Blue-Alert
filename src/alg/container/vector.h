@@ -43,6 +43,7 @@ typedef struct                                                                  
     sowr_VecFreeFunc free_func;                                                                  \
     sowr_CriticalSection *mtx;                                                                   \
     atomic_bool usable;                                                                          \
+    atomic_bool locked;                                                                          \
 } sowr_Vector_##type_name;
 
 #define SOWR_VECTOR_INIT(type_name, pv, free_func_)                                              \
@@ -57,6 +58,7 @@ typedef struct                                                                  
     sowr_InitCriticalSection(mtx);                                                               \
     pv->mtx = mtx;                                                                               \
     pv->usable = true;                                                                           \
+    pv->locked = false;                                                                          \
 }
 
 #define SOWR_VECTOR_EXPAND(pv)                                                                   \
@@ -85,8 +87,23 @@ typedef struct                                                                  
         f((void *)ptr);                                                                          \
 }
 
-#define SOWR_VECTOR_LOCK(pv)      sowr_EnterCriticalSection(pv->mtx)
-#define SOWR_VECTOR_UNLOCK(pv)    sowr_LeaveCriticalSection(pv->mtx)
+#define SOWR_VECTOR_LOCK(pv)                                                                     \
+{                                                                                                \
+    if (!pv->locked)                                                                             \
+    {                                                                                            \
+        sowr_EnterCriticalSection(pv->mtx);                                                      \
+        pv->locked = true;                                                                       \
+    }                                                                                            \
+}
+
+#define SOWR_VECTOR_UNLOCK(pv)                                                                   \
+{                                                                                                \
+    if (pv->locked)                                                                              \
+    {                                                                                            \
+        pv->locked = false;                                                                      \
+        sowr_LeaveCriticalSection(pv->mtx);                                                      \
+    }                                                                                            \
+}
 
 #define SOWR_VECTOR_GET(pv, i)    &(pv->ptr[i])
 #define SOWR_VECTOR_FRONT(pv)     pv->ptr
