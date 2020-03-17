@@ -77,8 +77,7 @@ sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_li
     else
         {
             gettimeofday(&stop, NULL);
-            elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f;
-            elapsed += (stop.tv_usec - start.tv_usec) / 1000.0f;
+            elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f + (stop.tv_usec - start.tv_usec) / 1000.0f;
             SOWR_LOG_DEBUG("Profiling %s (line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #endif
