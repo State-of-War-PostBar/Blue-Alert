@@ -38,7 +38,11 @@ main(int argc, char *argv[])
 #endif
     sowr_InitLogger();
     sowr_InitProfiler();
-    SOWR_LOG_INFO("Starting State of War:Remasted V%u.%u-r%u, build %03u.", SOWR_PROG_VERSION_MAJOR, SOWR_PROG_VERSION_MINOR, SOWR_PROG_VERSION_REVISION, SOWR_PROG_BUILD_NUMBER);
+    SOWR_LOG_INFO("Starting State of War:Remasted %s V%u.%u-r%u, build %03u.", SOWR_PROG_VERSION_STAGE,
+                                                                               SOWR_PROG_VERSION_MAJOR,
+                                                                               SOWR_PROG_VERSION_MINOR,
+                                                                               SOWR_PROG_VERSION_REVISION,
+                                                                               SOWR_PROG_BUILD_NUMBER);
 
     sowr_WindowCreateInfo info =
     {
@@ -50,11 +54,9 @@ main(int argc, char *argv[])
 
     sowr_InitGLFW();
     sowr_CreateMainWindow(&info);
-
-    sowr_ShowWindow();
-
     sowr_MakeMainWindowCurrent();
     sowr_InitGLAD();
+    sowr_ShowWindow();
 
     sowr_StartMainLoop();
 

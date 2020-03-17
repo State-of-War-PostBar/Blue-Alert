@@ -62,6 +62,21 @@ sowr_HeapAlignedAlloc(size_t size, size_t alignment)
 }
 
 inline
+void *
+sowr_HeapZeroAlloc(size_t size)
+{
+    void *ptr = calloc(1, size);
+#ifdef SOWR_BUILD_DEBUG
+    if (!ptr)
+    {
+        SOWR_LOG_FATAL("Failed to initialize allocate %zu bytes of memory, program failing.", size);
+        abort();
+    }
+#endif
+    return ptr;
+}
+
+inline
 void
 sowr_HeapFree(void *ptr)
 {
@@ -81,19 +96,4 @@ sowr_ReAlloc(size_t size, void *ptr)
     }
 #endif
     return new;
-}
-
-inline
-void *
-sowr_HeapZeroAlloc(size_t size)
-{
-    void *ptr = calloc(1, size);
-#ifdef SOWR_BUILD_DEBUG
-    if (!ptr)
-    {
-        SOWR_LOG_FATAL("Failed to initialize allocate %zu bytes of memory, program failing.", size);
-        abort();
-    }
-#endif
-    return ptr;
 }

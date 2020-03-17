@@ -124,6 +124,7 @@ sowr_MainWindowShouldClose()
     return glfwWindowShouldClose(sowr_main_window);
 }
 
+inline
 void
 sowr_UpdateMainWindow()
 {
