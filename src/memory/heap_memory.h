@@ -38,7 +38,7 @@ void
 sowr_HeapFree(void *);
 
 void *
-sowr_ReAlloc(void *, size_t);
+sowr_ReAlloc(size_t, void *);
 
 void *
 sowr_HeapZeroAlloc(size_t);

@@ -70,7 +70,7 @@ sowr_HeapFree(void *ptr)
 
 inline
 void *
-sowr_ReAlloc(void *ptr, size_t size)
+sowr_ReAlloc(size_t size, void *ptr)
 {
     void *new = realloc(ptr, size);
 #ifdef SOWR_BUILD_DEBUG

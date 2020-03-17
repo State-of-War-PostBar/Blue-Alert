@@ -26,7 +26,7 @@
 #include "hash.h"
 
 sowr_HashVal
-sowr_GetHash(const char *bytes, size_t length)
+sowr_GetHash(size_t length, const char *bytes)
 {
     sowr_HashVal res = 0;
 

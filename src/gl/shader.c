@@ -30,7 +30,7 @@
 #include <glad/glad.h>
 
 sowr_gl_Shader
-sowr_gl_ShaderFromSource(const char *src, sowr_gl_ShaderType type)
+sowr_gl_ShaderFromSource(sowr_gl_ShaderType type, const char *src)
 {
     sowr_gl_Shader id = 0;
     id = glCreateShader(type);
@@ -50,7 +50,7 @@ sowr_gl_ShaderFromSource(const char *src, sowr_gl_ShaderType type)
 }
 
 sowr_gl_ShaderProgram
-sowr_gl_ProgramFromShaders(const sowr_gl_Shader *shaders, unsigned short count, bool del)
+sowr_gl_ProgramFromShaders(size_t count, const sowr_gl_Shader *shaders, bool release)
 {
     sowr_gl_ShaderProgram id = 0;
     id = glCreateProgram();
@@ -79,7 +79,7 @@ sowr_gl_ProgramFromShaders(const sowr_gl_Shader *shaders, unsigned short count, 
         SOWR_LOG_ERROR("Failed to validate an OpenGL shader program!\n%s\n", info_log);
     }
 
-    if (del)
+    if (release)
         for (i = 0; i < count; i++)
             glDeleteShader(shaders[i]);
 

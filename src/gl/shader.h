@@ -33,9 +33,9 @@ typedef unsigned int sowr_gl_Shader;
 typedef unsigned int sowr_gl_ShaderProgram;
 
 sowr_gl_Shader
-sowr_gl_ShaderFromSource(const char *, sowr_gl_ShaderType);
+sowr_gl_ShaderFromSource(sowr_gl_ShaderType, const char *);
 
 sowr_gl_ShaderProgram
-sowr_gl_ProgramFromShaders(const sowr_gl_Shader *, unsigned short, bool);
+sowr_gl_ProgramFromShaders(size_t, const sowr_gl_Shader *, bool);
 
 #endif // !SOWR_GL_SHADER_H

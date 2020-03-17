@@ -67,7 +67,7 @@ typedef struct                                                                  
     else                                                                                         \
     {                                                                                            \
         pv->capacity *= 2;                                                                       \
-        pv->ptr = sowr_ReAlloc(pv->ptr, pv->elem_size * pv->capacity);                           \
+        pv->ptr = sowr_ReAlloc(pv->elem_size * pv->capacity, pv->ptr);                           \
     }                                                                                            \
 }
 
@@ -211,7 +211,7 @@ typedef struct                                                                  
     SOWR_VECTOR_LOCK(pv);                                                                        \
     if (pv->capacity > pv->length && pv->length)                                                 \
     {                                                                                            \
-        pv->ptr = sowr_ReAlloc(pv->ptr, pv->length * pv->elem_size);                             \
+        pv->ptr = sowr_ReAlloc(pv->length * pv->elem_size, pv->ptr);                             \
         pv->capacity = pv->length;                                                               \
     }                                                                                            \
     SOWR_VECTOR_UNLOCK(pv);                                                                      \
