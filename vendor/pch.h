@@ -29,10 +29,9 @@
 #if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
     #define SOWR_TARGET_WINDOWS
 #elif defined __MACH__ && defined __APPLE__
-    #define SOWR_TARGET_MACOSX
+    #define SOWR_TARGET_MACOS
     #define SOWR_TARGET_POSIX
 #else
-    #define SOWR_TARGET_NIX
     #define SOWR_TARGET_POSIX
 #endif
 

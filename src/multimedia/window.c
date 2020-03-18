@@ -45,6 +45,9 @@ sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef SOWR_TARGET_MACOS
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
     sowr_main_window = glfwCreateWindow(info->width, info->height, info->title, info->full_screen ? glfwGetPrimaryMonitor() : NULL, NULL);
 
