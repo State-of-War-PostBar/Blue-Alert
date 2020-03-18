@@ -49,7 +49,7 @@ sowr_HeapAlignedAlloc(size_t size, size_t alignment)
 #ifdef SOWR_TARGET_WINDOWS
     void *ptr = _aligned_malloc(size, alignment);
 #else
-    void *ptr = aligned_malloc(alignment, size);
+    void *ptr = aligned_alloc(alignment, size);
 #endif
 #ifdef SOWR_BUILD_DEBUG
     if (!ptr)
