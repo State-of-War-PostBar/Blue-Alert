@@ -31,6 +31,7 @@ static int sowr_window_width;
 static int sowr_window_height;
 
 static
+inline
 void
 sowr_CenterMainWindow()
 {
@@ -42,8 +43,8 @@ void
 sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
 {
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef SOWR_TARGET_MACOS
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -84,6 +85,7 @@ sowr_GetMainWindowHeight()
     return sowr_window_height;
 }
 
+inline
 void
 sowr_ResizeMainWindowWidth(int width)
 {
@@ -91,6 +93,7 @@ sowr_ResizeMainWindowWidth(int width)
     glfwSetWindowSize(sowr_main_window, sowr_window_width, sowr_window_height);
 }
 
+inline
 void
 sowr_ResizeMainWindowHeight(int height)
 {
@@ -98,6 +101,7 @@ sowr_ResizeMainWindowHeight(int height)
     glfwSetWindowSize(sowr_main_window, sowr_window_width, sowr_window_height);
 }
 
+inline
 void
 sowr_ResizeWindow(int width, int height)
 {
