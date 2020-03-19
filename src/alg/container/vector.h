@@ -57,8 +57,8 @@ typedef struct                                                                  
     sowr_CriticalSection *mtx = sowr_HeapAlloc(sizeof(sowr_CriticalSection));                    \
     sowr_InitCriticalSection(mtx);                                                               \
     pv->mtx = mtx;                                                                               \
-    pv->usable = true;                                                                           \
-    pv->locked = false;                                                                          \
+    atomic_store(&pv->usable, true);                                                             \
+    atomic_store(&pv->locked, false);                                                            \
 }
 
 #define SOWR_VECTOR_EXPAND(pv)                                                                   \
@@ -89,18 +89,18 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_LOCK(pv)                                                                     \
 {                                                                                                \
-    if (!pv->locked)                                                                             \
+    if (!atomic_load(&pv->locked))                                                               \
     {                                                                                            \
         sowr_EnterCriticalSection(pv->mtx);                                                      \
-        pv->locked = true;                                                                       \
+        atomic_store(&pv->locked, true);                                                         \
     }                                                                                            \
 }
 
 #define SOWR_VECTOR_UNLOCK(pv)                                                                   \
 {                                                                                                \
-    if (pv->locked)                                                                              \
+    if (atomic_load(&pv->locked))                                                                \
     {                                                                                            \
-        pv->locked = false;                                                                      \
+        atomic_store(&pv->locked, false);                                                        \
         sowr_LeaveCriticalSection(pv->mtx);                                                      \
     }                                                                                            \
 }
@@ -111,7 +111,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_WALK_S(pv, f)                                                                \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         SOWR_VECTOR_WALK(pv, f);                                                                 \
@@ -121,7 +121,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_CLEAR(pv)                                                                    \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         if (pv->free_func)                                                                       \
@@ -135,7 +135,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_INSERT(pv, ptr_element, i)                                                   \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         if (i >= pv->length)                                                                     \
         {                                                                                        \
@@ -158,7 +158,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_INSERT_CPY(pv, ptr_element, i)                                               \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         if (i >= pv->length)                                                                     \
         {                                                                                        \
@@ -181,7 +181,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_DELETE(pv, i)                                                                \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         if (pv->free_func)                                                                       \
@@ -199,7 +199,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_TAKE(pv, i, ptr_retrieve)                                                    \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         if (i >= pv->length)                                                                     \
         {                                                                                        \
@@ -221,7 +221,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_PUSH(pv, ptr_element)                                                        \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
@@ -234,7 +234,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_PUSH_CPY(pv, ptr_element)                                                    \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
@@ -247,7 +247,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_POP(pv, ptr_retrieve)                                                        \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         if (ptr_retrieve)                                                                        \
@@ -261,7 +261,7 @@ typedef struct                                                                  
 
 #define SOWR_VECTOR_SHRINK_TO_FIT(pv)                                                            \
 {                                                                                                \
-    if (pv->usable)                                                                              \
+    if (atomic_load(&pv->usable))                                                                \
     {                                                                                            \
         SOWR_VECTOR_LOCK(pv);                                                                    \
         if (pv->capacity > pv->length && pv->length)                                             \
@@ -281,7 +281,7 @@ typedef struct                                                                  
         SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
     }                                                                                            \
     sowr_HeapFree(pv->ptr);                                                                      \
-    pv->usable = false;                                                                          \
+    atomic_store(&pv->usable, false);                                                            \
     SOWR_VECTOR_UNLOCK(pv);                                                                      \
     sowr_DestroyCriticalSection(pv->mtx);                                                        \
     sowr_HeapFree(pv->mtx);                                                                      \
