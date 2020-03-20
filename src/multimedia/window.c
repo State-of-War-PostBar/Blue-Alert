@@ -25,26 +25,17 @@
 
 #include "window.h"
 
-static GLFWwindow *sowr_main_window;
+GLFWwindow *sowr_main_window;
 
-static int sowr_window_width;
-static int sowr_window_height;
-
-static
-inline
-void
-sowr_CenterMainWindow()
-{
-    const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    glfwSetWindowPos(sowr_main_window, (mode->width - sowr_window_width) / 2, (mode->height - sowr_window_height) / 2);
-}
+int sowr_window_width;
+int sowr_window_height;
 
 void
 sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
 {
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef SOWR_TARGET_MACOS
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -54,35 +45,27 @@ sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
 
     sowr_window_width = info->width;
     sowr_window_height = info->height;
-    sowr_CenterMainWindow();
+}
+
+void
+sowr_CenterMainWindow()
+{
+    const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    glfwSetWindowPos(sowr_main_window, (mode->width - sowr_window_width) / 2, (mode->height - sowr_window_height) / 2);
 }
 
 inline
 void
 sowr_HideWindow()
 {
-    glfwHideWindow(sowr_GetMainWindowContext());
+    glfwHideWindow(sowr_main_window);
 }
 
 inline
 void
 sowr_ShowWindow()
 {
-    glfwShowWindow(sowr_GetMainWindowContext());
-}
-
-inline
-int
-sowr_GetMainWindowWidth()
-{
-    return sowr_window_width;
-}
-
-inline
-int
-sowr_GetMainWindowHeight()
-{
-    return sowr_window_height;
+    glfwShowWindow(sowr_main_window);
 }
 
 inline
@@ -115,13 +98,6 @@ void
 sowr_MakeMainWindowCurrent()
 {
     glfwMakeContextCurrent(sowr_main_window);
-}
-
-inline
-GLFWwindow *
-sowr_GetMainWindowContext()
-{
-    return sowr_main_window;
 }
 
 inline

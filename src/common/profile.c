@@ -48,9 +48,9 @@ void
 sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_line)
 {
 #ifdef SOWR_BUILD_DEBUG
-    thread_local static double elapsed = 0.0;
+    thread_local static double elapsed;
     thread_local static bool first_called = true;
-    thread_local static int start_line = 0;
+    thread_local static int start_line;
 
     #ifdef SOWR_TARGET_WINDOWS
         thread_local static LARGE_INTEGER start, stop;

@@ -38,20 +38,22 @@ typedef struct
     bool full_screen;
 } sowr_WindowCreateInfo;
 
+extern GLFWwindow *sowr_main_window;
+
+extern int sowr_window_width;
+extern int sowr_window_height;
+
 void
 sowr_CreateMainWindow(sowr_WindowCreateInfo *);
+
+void
+sowr_CenterMainWindow();
 
 void
 sowr_HideWindow();
 
 void
 sowr_ShowWindow();
-
-int
-sowr_GetMainWindowWidth();
-
-int
-sowr_GetMainWindowHeight();
 
 void
 sowr_ResizeMainWindowWidth(int);
@@ -64,9 +66,6 @@ sowr_ResizeWindow(int, int);
 
 void
 sowr_MakeMainWindowCurrent();
-
-GLFWwindow *
-sowr_GetMainWindowContext();
 
 bool
 sowr_MainWindowShouldClose();

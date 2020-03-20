@@ -47,7 +47,7 @@ const unsigned int SOWR_INIT_WIN_WIDTH        = 1366;
 const unsigned int SOWR_INIT_WIN_HEIGHT       = 768;
 
 #ifdef SOWR_BUILD_DEBUG
-    static bool sowr_log_available = false;
+    static bool sowr_log_available;
     static FILE *sowr_log_file;
     static sowr_CriticalSection sowr_log_file_mtx;
 
@@ -71,14 +71,15 @@ sowr_InitLogger()
     if (!sowr_log_file)
     {
         perror("Failed to create a log file, logging will not be availalbe.");
+        sowr_log_available = false;
         return;
     }
 
+    sowr_log_available = true;
     sowr_InitCriticalSection(&sowr_log_file_mtx);
     log_set_fp(sowr_log_file);
     log_set_level(SOWR_LOG_LEVEL_TRACE);
     log_set_lock(sowr_LockLogFile);
-    sowr_log_available = true;
 #endif
 }
 
@@ -128,7 +129,8 @@ sowr_InitGLAD()
 void
 sowr_StartMainLoop()
 {
-    glViewport(0, 0, sowr_GetMainWindowWidth(), sowr_GetMainWindowHeight());
+    sowr_CenterMainWindow();
+    glViewport(0, 0, sowr_window_width, sowr_window_height);
 
     while (!sowr_MainWindowShouldClose())
     {
