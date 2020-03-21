@@ -23,65 +23,14 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#include "profile.h"
+#ifndef SOWR_LIB_HASH_HASH_H
+#define SOWR_LIB_HASH_HASH_H
 
-#include "log.h"
+#include <pch.h>
 
-#ifdef SOWR_BUILD_DEBUG
-    #ifdef SOWR_TARGET_WINDOWS
-        static LARGE_INTEGER sowr_win_profile_timer_frequency;
-    #else
-        #include <sys/time.h>
-        typedef struct timeval sowr_PosixTimeVal;
-    #endif
-#endif
+typedef size_t sowr_HashVal;
 
-void
-sowr_InitProfiler()
-{
-#if defined SOWR_BUILD_DEBUG && defined SOWR_TARGET_WINDOWS
-    QueryPerformanceFrequency(&sowr_win_profile_timer_frequency);
-#endif
-}
+sowr_HashVal
+sowr_GetHash(size_t, const char *);
 
-void
-sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_line)
-{
-#ifdef SOWR_BUILD_DEBUG
-    thread_local static double elapsed;
-    thread_local static bool first_called = true;
-    thread_local static int start_line;
-
-    #ifdef SOWR_TARGET_WINDOWS
-        thread_local static LARGE_INTEGER start, stop;
-
-        if (first_called)
-        {
-            start_line = called_line;
-            QueryPerformanceCounter(&start);
-        }
-    else
-        {
-            QueryPerformanceCounter(&stop);
-            elapsed = (stop.QuadPart - start.QuadPart) * 1000.0f / sowr_win_profile_timer_frequency.QuadPart;
-            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
-        }
-    #else
-        thread_local static sowr_PosixTimeVal start, stop;
-
-        if (first_called)
-        {
-            start_line = called_line;
-            gettimeofday(&start, NULL);
-        }
-    else
-        {
-            gettimeofday(&stop, NULL);
-            elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f + (stop.tv_usec - start.tv_usec) / 1000.0f;
-            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
-        }
-    #endif
-
-    first_called = !first_called;
-#endif
-}
+#endif // !SOWR_LIB_HASH_HASH_H

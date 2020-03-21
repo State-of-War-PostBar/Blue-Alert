@@ -25,8 +25,8 @@
 
 #include <pch.h>
 
-#include "common/log.h"
-#include "common/profile.h"
+#include "lib/log/log.h"
+#include "lib/profile/profile.h"
 #include "multimedia/window.h"
 #include "state/state.h"
 

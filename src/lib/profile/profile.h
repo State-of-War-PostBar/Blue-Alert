@@ -23,8 +23,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_COMMON_PROFILE_H
-#define SOWR_COMMON_PROFILE_H
+#ifndef SOWR_LIB_PROFILE_PROFILE_H
+#define SOWR_LIB_PROFILE_PROFILE_H
 
 #include <pch.h>
 
@@ -42,4 +42,4 @@ sowr_ProfileFunc(const char *, const char *, int);
     #define SOWR_STOP_PROFILE()
 #endif
 
-#endif // !SOWR_COMMON_PROFILE_H
+#endif // !SOWR_LIB_PROFILE_PROFILE_H

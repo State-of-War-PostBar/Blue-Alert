@@ -25,7 +25,7 @@
 
 #include "heap_memory.h"
 
-#include "../common/log.h"
+#include "../log/log.h"
 
 inline
 void *

@@ -23,24 +23,65 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_MEMORY_HEAP_MEMORY_H
-#define SOWR_MEMORY_HEAP_MEMORY_H
+#include "profile.h"
 
-#include <pch.h>
+#include "../log/log.h"
 
-void *
-sowr_HeapAlloc(size_t);
-
-void *
-sowr_HeapAlignedAlloc(size_t, size_t);
-
-void *
-sowr_HeapZeroAlloc(size_t);
+#ifdef SOWR_BUILD_DEBUG
+    #ifdef SOWR_TARGET_WINDOWS
+        static LARGE_INTEGER sowr_win_profile_timer_frequency;
+    #else
+        #include <sys/time.h>
+        typedef struct timeval sowr_PosixTimeVal;
+    #endif
+#endif
 
 void
-sowr_HeapFree(void *);
+sowr_InitProfiler()
+{
+#if defined SOWR_BUILD_DEBUG && defined SOWR_TARGET_WINDOWS
+    QueryPerformanceFrequency(&sowr_win_profile_timer_frequency);
+#endif
+}
 
-void *
-sowr_ReAlloc(size_t, void *);
+void
+sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_line)
+{
+#ifdef SOWR_BUILD_DEBUG
+    thread_local static double elapsed;
+    thread_local static bool first_called = true;
+    thread_local static int start_line;
 
-#endif // !SOWR_MEMORY_HEAP_MEMORY_H
+    #ifdef SOWR_TARGET_WINDOWS
+        thread_local static LARGE_INTEGER start, stop;
+
+        if (first_called)
+        {
+            start_line = called_line;
+            QueryPerformanceCounter(&start);
+        }
+    else
+        {
+            QueryPerformanceCounter(&stop);
+            elapsed = (stop.QuadPart - start.QuadPart) * 1000.0f / sowr_win_profile_timer_frequency.QuadPart;
+            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
+        }
+    #else
+        thread_local static sowr_PosixTimeVal start, stop;
+
+        if (first_called)
+        {
+            start_line = called_line;
+            gettimeofday(&start, NULL);
+        }
+    else
+        {
+            gettimeofday(&stop, NULL);
+            elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f + (stop.tv_usec - start.tv_usec) / 1000.0f;
+            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
+        }
+    #endif
+
+    first_called = !first_called;
+#endif
+}

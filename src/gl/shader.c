@@ -25,7 +25,7 @@
 
 #include "shader.h"
 
-#include "../common/log.h"
+#include "../lib/log/log.h"
 
 #include <glad/glad.h>
 

@@ -23,12 +23,12 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_ALG_CONTAINER_VECTOR_H
-#define SOWR_ALG_CONTAINER_VECTOR_H
+#ifndef SOWR_LIB_CONTAINER_VECTOR_H
+#define SOWR_LIB_CONTAINER_VECTOR_H
 
 #include <pch.h>
 
-#include "../../memory/heap_memory.h"
+#include "../memory/heap_memory.h"
 #include "../../sync/multithread.h"
 
 typedef void (*sowr_VecFreeFunc)(void *);
@@ -288,4 +288,4 @@ typedef struct                                                                  
     sowr_HeapFree(pv);                                                                           \
 }
 
-#endif // !SOWR_ALG_CONTAINER_VECTOR_H
+#endif // !SOWR_LIB_CONTAINER_VECTOR_H

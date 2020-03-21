@@ -25,15 +25,15 @@
 
 #include "state.h"
 
-#include "../common/log.h"
+#include "../lib/log/log.h"
 #include "../multimedia/window.h"
 #include "../sync/multithread.h"
 
 #include <glad/glad.h>
 #include <pthread.h>
 
-const char *const SOWR_PROG_ID                      = "sowr";
-const char *const SOWR_PROG_NAME                    = "State of War: Remastered";
+const char *const SOWR_PROG_ID                = "sowr";
+const char *const SOWR_PROG_NAME              = "State of War: Remastered";
 
 const char *const  SOWR_PROG_VERSION_STAGE    = "Indev";
 const unsigned int SOWR_PROG_VERSION_MAJOR    = 0;
@@ -41,7 +41,7 @@ const unsigned int SOWR_PROG_VERSION_MINOR    = 0;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0;
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1;
 
-const char *const SOWR_LOG_FILE_NAME                = "sowr.log";
+const char *const SOWR_LOG_FILE_NAME          = "sowr.log";
 
 const unsigned int SOWR_INIT_WIN_WIDTH        = 1366;
 const unsigned int SOWR_INIT_WIN_HEIGHT       = 768;

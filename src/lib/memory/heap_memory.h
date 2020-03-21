@@ -23,14 +23,24 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_DATA_HASH_H
-#define SOWR_DATA_HASH_H
+#ifndef SOWR_LIB_MEMORY_HEAP_MEMORY_H
+#define SOWR_LIB_MEMORY_HEAP_MEMORY_H
 
 #include <pch.h>
 
-typedef size_t sowr_HashVal;
+void *
+sowr_HeapAlloc(size_t);
 
-sowr_HashVal
-sowr_GetHash(size_t, const char *);
+void *
+sowr_HeapAlignedAlloc(size_t, size_t);
 
-#endif // !SOWR_DATA_HASH_H
+void *
+sowr_HeapZeroAlloc(size_t);
+
+void
+sowr_HeapFree(void *);
+
+void *
+sowr_ReAlloc(size_t, void *);
+
+#endif // !SOWR_LIB_MEMORY_HEAP_MEMORY_H
