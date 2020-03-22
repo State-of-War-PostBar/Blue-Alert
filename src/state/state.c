@@ -64,7 +64,7 @@ const unsigned int SOWR_INIT_WIN_HEIGHT       = 768;
 #endif
 
 void
-sowr_InitLogger()
+sowr_InitLogger(void)
 {
 #ifdef SOWR_BUILD_DEBUG
     sowr_log_file = fopen(SOWR_LOG_FILE_NAME, "w");
@@ -84,7 +84,7 @@ sowr_InitLogger()
 }
 
 void
-sowr_DestroyLogger()
+sowr_DestroyLogger(void)
 {
 #ifdef SOWR_BUILD_DEBUG
     if (sowr_log_available)
@@ -99,7 +99,7 @@ sowr_DestroyLogger()
 
 inline
 void
-sowr_InitGLFW()
+sowr_InitGLFW(void)
 {
     if (!glfwInit())
     {
@@ -110,14 +110,14 @@ sowr_InitGLFW()
 
 inline
 void
-sowr_DestroyGLFW()
+sowr_DestroyGLFW(void)
 {
     glfwTerminate();
 }
 
 inline
 void
-sowr_InitGLAD()
+sowr_InitGLAD(void)
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -127,7 +127,7 @@ sowr_InitGLAD()
 }
 
 void
-sowr_StartMainLoop()
+sowr_StartMainLoop(void)
 {
     sowr_CenterMainWindow();
     glViewport(0, 0, sowr_window_width, sowr_window_height);

@@ -37,7 +37,7 @@
 #endif
 
 void
-sowr_InitProfiler()
+sowr_InitProfiler(void)
 {
 #if defined SOWR_BUILD_DEBUG && defined SOWR_TARGET_WINDOWS
     QueryPerformanceFrequency(&sowr_win_profile_timer_frequency);

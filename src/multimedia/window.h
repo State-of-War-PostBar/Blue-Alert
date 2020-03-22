@@ -47,13 +47,13 @@ void
 sowr_CreateMainWindow(sowr_WindowCreateInfo *);
 
 void
-sowr_CenterMainWindow();
+sowr_CenterMainWindow(void);
 
 void
-sowr_HideWindow();
+sowr_HideWindow(void);
 
 void
-sowr_ShowWindow();
+sowr_ShowWindow(void);
 
 void
 sowr_ResizeMainWindowWidth(int);
@@ -65,12 +65,12 @@ void
 sowr_ResizeWindow(int, int);
 
 void
-sowr_MakeMainWindowCurrent();
+sowr_MakeMainWindowCurrent(void);
 
 bool
-sowr_MainWindowShouldClose();
+sowr_MainWindowShouldClose(void);
 
 void
-sowr_UpdateMainWindow();
+sowr_UpdateMainWindow(void);
 
 #endif // !SOWR_MULTIMEDIA_WINDOW_H

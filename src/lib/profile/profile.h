@@ -29,7 +29,7 @@
 #include <pch.h>
 
 void
-sowr_InitProfiler();
+sowr_InitProfiler(void);
 
 void
 sowr_ProfileFunc(const char *, const char *, int);

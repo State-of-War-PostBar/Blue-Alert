@@ -43,21 +43,21 @@ extern const unsigned int    SOWR_INIT_WIN_WIDTH;
 extern const unsigned int    SOWR_INIT_WIN_HEIGHT;
 
 void
-sowr_InitLogger();
+sowr_InitLogger(void);
 
 void
-sowr_DestroyLogger();
+sowr_DestroyLogger(void);
 
 void
-sowr_InitGLFW();
+sowr_InitGLFW(void);
 
 void
-sowr_DestroyGLFW();
+sowr_DestroyGLFW(void);
 
 void
-sowr_InitGLAD();
+sowr_InitGLAD(void);
 
 void
-sowr_StartMainLoop();
+sowr_StartMainLoop(void);
 
 #endif // !SOWR_STATE_STATE_H

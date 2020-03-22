@@ -48,7 +48,7 @@ sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
 }
 
 void
-sowr_CenterMainWindow()
+sowr_CenterMainWindow(void)
 {
     const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
     glfwSetWindowPos(sowr_main_window, (mode->width - sowr_window_width) / 2, (mode->height - sowr_window_height) / 2);
@@ -56,14 +56,14 @@ sowr_CenterMainWindow()
 
 inline
 void
-sowr_HideWindow()
+sowr_HideWindow(void)
 {
     glfwHideWindow(sowr_main_window);
 }
 
 inline
 void
-sowr_ShowWindow()
+sowr_ShowWindow(void)
 {
     glfwShowWindow(sowr_main_window);
 }
@@ -95,21 +95,21 @@ sowr_ResizeWindow(int width, int height)
 
 inline
 void
-sowr_MakeMainWindowCurrent()
+sowr_MakeMainWindowCurrent(void)
 {
     glfwMakeContextCurrent(sowr_main_window);
 }
 
 inline
 bool
-sowr_MainWindowShouldClose()
+sowr_MainWindowShouldClose(void)
 {
     return glfwWindowShouldClose(sowr_main_window);
 }
 
 inline
 void
-sowr_UpdateMainWindow()
+sowr_UpdateMainWindow(void)
 {
     glfwSwapBuffers(sowr_main_window);
     glfwPollEvents();
