@@ -58,6 +58,9 @@ void
 sowr_InitGLAD(void);
 
 void
+sowr_CreateProgramState(void);
+
+void
 sowr_StartMainLoop(void);
 
 #endif // !SOWR_STATE_STATE_H

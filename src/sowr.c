@@ -38,6 +38,7 @@ main(int argc, char *argv[])
 #endif
     sowr_InitLogger();
     sowr_InitProfiler();
+    sowr_CreateProgramState();
     SOWR_LOG_INFO("Starting State of War:Remasted %s V%u.%u-r%u, build %03u.", SOWR_PROG_VERSION_STAGE,
                                                                                SOWR_PROG_VERSION_MAJOR,
                                                                                SOWR_PROG_VERSION_MINOR,

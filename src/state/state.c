@@ -127,6 +127,12 @@ sowr_InitGLAD(void)
 }
 
 void
+sowr_CreateProgramState(void)
+{
+    srand(time(NULL));
+}
+
+void
 sowr_StartMainLoop(void)
 {
     sowr_CenterMainWindow();
