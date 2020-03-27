@@ -136,7 +136,7 @@ void
 sowr_StartMainLoop(void)
 {
     sowr_CenterMainWindow();
-    glViewport(0, 0, sowr_window_width, sowr_window_height);
+    glViewport(0, 0, sowr_g_window_width, sowr_g_window_height);
 
     while (!sowr_MainWindowShouldClose())
     {

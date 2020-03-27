@@ -25,10 +25,10 @@
 
 #include "window.h"
 
-GLFWwindow *sowr_main_window;
+GLFWwindow *sowr_g_main_window;
 
-int sowr_window_width;
-int sowr_window_height;
+int sowr_g_window_width;
+int sowr_g_window_height;
 
 void
 sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
@@ -41,76 +41,76 @@ sowr_CreateMainWindow(sowr_WindowCreateInfo *info)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    sowr_main_window = glfwCreateWindow(info->width, info->height, info->title, info->full_screen ? glfwGetPrimaryMonitor() : NULL, NULL);
+    sowr_g_main_window = glfwCreateWindow(info->width, info->height, info->title, info->full_screen ? glfwGetPrimaryMonitor() : NULL, NULL);
 
-    sowr_window_width = info->width;
-    sowr_window_height = info->height;
+    sowr_g_window_width = info->width;
+    sowr_g_window_height = info->height;
 }
 
 void
 sowr_CenterMainWindow(void)
 {
     const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    glfwSetWindowPos(sowr_main_window, (mode->width - sowr_window_width) / 2, (mode->height - sowr_window_height) / 2);
+    glfwSetWindowPos(sowr_g_main_window, (mode->width - sowr_g_window_width) / 2, (mode->height - sowr_g_window_height) / 2);
 }
 
 inline
 void
 sowr_HideWindow(void)
 {
-    glfwHideWindow(sowr_main_window);
+    glfwHideWindow(sowr_g_main_window);
 }
 
 inline
 void
 sowr_ShowWindow(void)
 {
-    glfwShowWindow(sowr_main_window);
+    glfwShowWindow(sowr_g_main_window);
 }
 
 inline
 void
 sowr_ResizeMainWindowWidth(int width)
 {
-    sowr_window_width = width;
-    glfwSetWindowSize(sowr_main_window, sowr_window_width, sowr_window_height);
+    sowr_g_window_width = width;
+    glfwSetWindowSize(sowr_g_main_window, sowr_g_window_width, sowr_g_window_height);
 }
 
 inline
 void
 sowr_ResizeMainWindowHeight(int height)
 {
-    sowr_window_height = height;
-    glfwSetWindowSize(sowr_main_window, sowr_window_width, sowr_window_height);
+    sowr_g_window_height = height;
+    glfwSetWindowSize(sowr_g_main_window, sowr_g_window_width, sowr_g_window_height);
 }
 
 inline
 void
 sowr_ResizeWindow(int width, int height)
 {
-    sowr_window_width = width;
-    sowr_window_height = height;
-    glfwSetWindowSize(sowr_main_window, width, height);
+    sowr_g_window_width = width;
+    sowr_g_window_height = height;
+    glfwSetWindowSize(sowr_g_main_window, width, height);
 }
 
 inline
 void
 sowr_MakeMainWindowCurrent(void)
 {
-    glfwMakeContextCurrent(sowr_main_window);
+    glfwMakeContextCurrent(sowr_g_main_window);
 }
 
 inline
 bool
 sowr_MainWindowShouldClose(void)
 {
-    return glfwWindowShouldClose(sowr_main_window);
+    return glfwWindowShouldClose(sowr_g_main_window);
 }
 
 inline
 void
 sowr_UpdateMainWindow(void)
 {
-    glfwSwapBuffers(sowr_main_window);
+    glfwSwapBuffers(sowr_g_main_window);
     glfwPollEvents();
 }

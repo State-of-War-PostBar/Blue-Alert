@@ -38,10 +38,10 @@ typedef struct
     bool full_screen;
 } sowr_WindowCreateInfo;
 
-extern GLFWwindow *sowr_main_window;
+extern GLFWwindow *sowr_g_main_window;
 
-extern int sowr_window_width;
-extern int sowr_window_height;
+extern int sowr_g_window_width;
+extern int sowr_g_window_height;
 
 void
 sowr_CreateMainWindow(sowr_WindowCreateInfo *);
