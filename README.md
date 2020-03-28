@@ -1,6 +1,6 @@
 # State of War: Remastered
 
-In C2x.  
+In C.  
 
 ## Used libraries
 
