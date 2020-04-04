@@ -29,7 +29,6 @@
 #include <pch.h>
 
 #include "../memory/heap_memory.h"
-#include "../../sync/multithread.h"
 
 typedef void (*sowr_VecFreeFunc)(void *);
 
