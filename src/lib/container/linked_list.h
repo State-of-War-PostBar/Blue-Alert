@@ -28,8 +28,6 @@
 
 #include <pch.h>
 
-#include "../memory/heap_memory.h"
-
 typedef void (*sowr_LinkedListFreeFunc)(void *);
 typedef void (*sowr_LinkedListWalkFunc)(void *);
 typedef bool (*sowr_LinkedListCmpFunc)(const void *, const void *);
@@ -49,118 +47,39 @@ typedef struct
 } sowr_Linked_List;
 
 sowr_Linked_List *
-LinkedList_Create(size_t elem_size, const sowr_LinkedListFreeFunc free_func)
-{
-    sowr_Linked_List *list = sowr_HeapAlloc(sizeof(sowr_Linked_List));
-    list->next = NULL;
-    list->elem_size = elem_size;
-    list->length = 0;
-    list->free_func = free_func;
-    return list;
-}
+sowr_LinkedList_Create(size_t, const sowr_LinkedListFreeFunc);
 
 void
-LinkedList_Walk(const sowr_Linked_List *list, const sowr_LinkedListWalkFunc func)
-{
-    if (!list->next)
-        return;
-
-    for (sowr_Linked_List_Node *iter = list->next; iter; iter = iter->next)
-        func(iter->data);
-}
+sowr_LinkedList_Walk(sowr_Linked_List *, const sowr_LinkedListWalkFunc);
 
 void
-sowr_LinkedList_Clear(sowr_Linked_List *list)
-{
-    sowr_Linked_List_Node *iter = list->next, *save = NULL;
-    while (iter)
-    {
-        save = iter->next;
-        if (list->free_func)
-            list->free_func(iter->data);
-        sowr_HeapFree(iter->data);
-        sowr_HeapFree(iter);
-        iter = save;
-    }
-    list->next = NULL;
-}
+sowr_LinkedList_Clear(sowr_Linked_List *);
 
 sowr_Linked_List_Node *
-sowr_LinkedList_Insert(sowr_Linked_List *list, void *elem)
-{
-    sowr_Linked_List_Node *node = sowr_HeapAlloc(sizeof(sowr_Linked_List_Node));
-    node->data = sowr_HeapAlloc(list->elem_size);
-    memmove(node->data, elem, list->elem_size);
-    node->next = list->length ? list->next : NULL;
-    list->next = node;
-    list->length++;
-
-    return node;
-}
+sowr_LinkedList_Insert_Mov(sowr_Linked_List *, void *);
 
 sowr_Linked_List_Node *
-LinkedList_Insert_Cpy(sowr_Linked_List *list, const void *elem)
-{
-    sowr_Linked_List_Node *node = sowr_HeapAlloc(sizeof(sowr_Linked_List_Node));
-    node->data = sowr_HeapAlloc(list->elem_size);
-    memcpy(node->data, elem, list->elem_size);
-    node->next = list->next ? list->next : NULL;
-    list->next = node;
-    list->length++;
-
-    return node;
-}
-
-sowr_Linked_List_Node *
-LinkedList_Find(const sowr_Linked_List *list, const void *elem, const sowr_LinkedListCmpFunc cmp)
-{
-    for (sowr_Linked_List_Node *iter = list->next; iter; iter = iter->next)
-        if (cmp(iter->data, elem))
-            return iter;
-
-    return NULL;
-}
-
-sowr_Linked_List_Node *
-LinkedList_Back(const sowr_Linked_List *list)
-{
-    sowr_Linked_List_Node *iter = list->next, *save = NULL;
-    while (iter)
-    {
-        save = iter;
-        iter = iter->next;
-    }
-
-    return save;
-}
+sowr_LinkedList_Insert_Cpy(sowr_Linked_List *, const void *);
 
 void
-sowr_LinkedList_Delete(sowr_Linked_List *list, void *elem, const sowr_LinkedListCmpFunc cmp)
-{
-    sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
-    while (iter)
-    {
-        next = iter->next;
-        if (cmp(iter->data, elem))
-        {
-            if (prev)
-                prev->next = next;
-            if (list->free_func)
-                list->free_func(iter->data);
-            sowr_HeapFree(iter->data);
-            sowr_HeapFree(iter);
-            return;
-        }
-        prev = iter;
-        iter = iter->next;
-    }
-}
+sowr_LinkedList_Pop(sowr_Linked_List *);
 
 void
-sowr_LinkedList_Destroy(sowr_Linked_List *list)
-{
-    sowr_LinkedList_Clear(list);
-    sowr_HeapFree(list);
-}
+sowr_LinkedList_PopNF(sowr_Linked_List *);
 
-#endif
+sowr_Linked_List_Node *
+sowr_LinkedList_Find(const sowr_Linked_List *, const void *, const sowr_LinkedListCmpFunc);
+
+sowr_Linked_List_Node *
+sowr_LinkedList_Back(const sowr_Linked_List *);
+
+void
+sowr_LinkedList_Delete(sowr_Linked_List *, void *, const sowr_LinkedListCmpFunc);
+
+void
+sowr_LinkedList_DeleteNF(sowr_Linked_List *, void *, const sowr_LinkedListCmpFunc);
+
+void
+sowr_LinkedList_Destroy(sowr_Linked_List *);
+
+#endif //!SOWR_LIB_CONTAINER_LINKED_LIST_H
