@@ -32,7 +32,7 @@
 
 typedef void (*sowr_VecFreeFunc)(void *);
 
-#define SOWR_DEF_VECTOR_OF_TYPE(type_name)                                                       \
+#define SOWR_DEF_VECTOR_OF_TYPE(type_name, name)                                                 \
 typedef struct                                                                                   \
 {                                                                                                \
     size_t length;                                                                               \
@@ -40,11 +40,11 @@ typedef struct                                                                  
     size_t elem_size;                                                                            \
     type_name *ptr;                                                                              \
     sowr_VecFreeFunc free_func;                                                                  \
-} sowr_Vector_##type_name;
+} name;
 
-#define SOWR_VECTOR_INIT(type_name, pv, free_func_)                                              \
+#define SOWR_VECTOR_INIT(type_name, name, pv, free_func_)                                        \
 {                                                                                                \
-    pv = sowr_HeapAlloc(sizeof(sowr_CVector_##type_name));                                       \
+    pv = sowr_HeapAlloc(sizeof(name));                                                           \
     pv->length = 0;                                                                              \
     pv->capacity = 0;                                                                            \
     pv->elem_size = sizeof(type_name);                                                           \
@@ -124,6 +124,38 @@ typedef struct                                                                  
         memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                     \
         memcpy(ptr_inserting, ptr_element, pv->elem_size);                                       \
         pv->length++;                                                                            \
+    }                                                                                            \
+}
+
+#define SOWR_VECTOR_REPLACE(pv, ptr_element, i)                                                  \
+{                                                                                                \
+    if (i >= pv->length)                                                                         \
+    {                                                                                            \
+        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
+    }                                                                                            \
+    else                                                                                         \
+    {                                                                                            \
+        if (pv->free_func)                                                                       \
+        {                                                                                        \
+            pv->free_func((void *)&(pv->ptr[i]));                                                \
+        }                                                                                        \
+        memmove(&(pv->ptr[i]), ptr_element, pv->elem_size);                                      \
+    }                                                                                            \
+}
+
+#define SOWR_VECTOR_REPLACE_CPY(pv, ptr_element, i)                                              \
+{                                                                                                \
+    if (i >= pv->length)                                                                         \
+    {                                                                                            \
+        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
+    }                                                                                            \
+    else                                                                                         \
+    {                                                                                            \
+        if (pv->free_func)                                                                       \
+        {                                                                                        \
+            pv->free_func((void *)&(pv->ptr[i]));                                                \
+        }                                                                                        \
+        memcpy(&(pv->ptr[i]), ptr_element, pv->elem_size);                                       \
     }                                                                                            \
 }
 

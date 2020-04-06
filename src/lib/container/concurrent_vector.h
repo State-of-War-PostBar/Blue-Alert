@@ -33,7 +33,7 @@
 
 typedef void (*sowr_CVecFreeFunc)(void *);
 
-#define SOWR_DEF_CVECTOR_OF_TYPE(type_name)                                                      \
+#define SOWR_DEF_CVECTOR_OF_TYPE(type_name, name)                                                \
 typedef struct                                                                                   \
 {                                                                                                \
     size_t length;                                                                               \
@@ -44,11 +44,11 @@ typedef struct                                                                  
     sowr_CriticalSection *mtx;                                                                   \
     atomic_bool usable;                                                                          \
     atomic_bool locked;                                                                          \
-} sowr_CVector_##type_name;
+} name;
 
-#define SOWR_CVECTOR_INIT(type_name, pv, free_func_)                                             \
+#define SOWR_CVECTOR_INIT(type_name, name, pv, free_func_)                                       \
 {                                                                                                \
-    pv = sowr_HeapAlloc(sizeof(sowr_CVector_##type_name));                                       \
+    pv = sowr_HeapAlloc(sizeof(name));                                                           \
     pv->length = 0;                                                                              \
     pv->capacity = 0;                                                                            \
     pv->elem_size = sizeof(type_name);                                                           \
@@ -174,6 +174,48 @@ typedef struct                                                                  
             memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                 \
             memcpy(ptr_inserting, ptr_element, pv->elem_size);                                   \
             pv->length++;                                                                        \
+            SOWR_CVECTOR_UNLOCK(pv);                                                             \
+        }                                                                                        \
+    }                                                                                            \
+}
+
+#define SOWR_CVECTOR_REPLACE(pv, ptr_element, i)                                                 \
+{                                                                                                \
+    if (atomic_load(&pv->usable))                                                                \
+    {                                                                                            \
+        if (i >= pv->length)                                                                     \
+        {                                                                                        \
+            SOWR_CVECTOR_PUSH(pv, ptr_element);                                                  \
+        }                                                                                        \
+        else                                                                                     \
+        {                                                                                        \
+            SOWR_CVECTOR_LOCK(pv);                                                               \
+            if (pv->free_func)                                                                   \
+            {                                                                                    \
+                pv->free_func((void *)&(pv->ptr[i]));                                            \
+            }                                                                                    \
+            memmove(&(pv->ptr[i]), ptr_element, pv->elem_size);                                  \
+            SOWR_CVECTOR_UNLOCK(pv);                                                             \
+        }                                                                                        \
+    }                                                                                            \
+}
+
+#define SOWR_CVECTOR_REPLACE_CPY(pv, ptr_element, i)                                             \
+{                                                                                                \
+    if (atomic_load(&pv->usable))                                                                \
+    {                                                                                            \
+        if (i >= pv->length)                                                                     \
+        {                                                                                        \
+            SOWR_CVECTOR_PUSH_CPY(pv, ptr_element);                                              \
+        }                                                                                        \
+        else                                                                                     \
+        {                                                                                        \
+            SOWR_CVECTOR_LOCK(pv);                                                               \
+            if (pv->free_func)                                                                   \
+            {                                                                                    \
+                pv->free_func((void *)&(pv->ptr[i]));                                            \
+            }                                                                                    \
+            memcpy(&(pv->ptr[i]), ptr_element, pv->elem_size);                                   \
             SOWR_CVECTOR_UNLOCK(pv);                                                             \
         }                                                                                        \
     }                                                                                            \
