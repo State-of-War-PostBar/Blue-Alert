@@ -94,6 +94,7 @@ sowr_HashMap_Create_SuggestBuckets(size_t buckets_count)
 
     map->buckets = buckets;
     map->buckets_count = buckets_count;
+    map->length = 0;
 
     return map;
 }
