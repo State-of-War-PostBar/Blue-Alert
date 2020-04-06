@@ -73,10 +73,10 @@ sowr_LinkedList_Find(const sowr_Linked_List *, const void *, const sowr_LinkedLi
 sowr_Linked_List_Node *
 sowr_LinkedList_Back(const sowr_Linked_List *);
 
-void
-sowr_LinkedList_Delete(sowr_Linked_List *, void *, const sowr_LinkedListCmpFunc);
+int
+sowr_LinkedList_Delete(sowr_Linked_List *, const void *, const sowr_LinkedListCmpFunc);
 
-void
+int
 sowr_LinkedList_DeleteNF(sowr_Linked_List *, void *, const sowr_LinkedListCmpFunc);
 
 void

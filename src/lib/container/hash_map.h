@@ -48,36 +48,33 @@ typedef struct
     size_t length;
 } sowr_HashMap;
 
-const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
+extern const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT;
 
 sowr_HashMap *
 sowr_HashMap_Create();
 
 sowr_HashMap *
-sowr_HashMap_Create_SuggestBuckets(size_t buckets_count);
+sowr_HashMap_Create_SuggestBuckets(size_t);
 
 void
-sowr_HashMap_InsertToBucket(sowr_HashMap *map, size_t bucket, sowr_HashMapValue *data);
+sowr_HashMap_Insert_Mov(sowr_HashMap *, size_t, const char *, size_t, char *);
 
 void
-sowr_HashMap_Insert_Mov(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, char *value);
-
-void
-sowr_HashMap_Insert_Cpy(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value);
+sowr_HashMap_Insert_Cpy(sowr_HashMap *, size_t, const char *, size_t, const char *);
 
 sowr_HashMapValue *
-sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index);
+sowr_HashMap_Get(sowr_HashMap *, size_t, const char *);
 
 sowr_HashMapValue *
-sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index);
+sowr_HashMap_Take(sowr_HashMap *, size_t, const char *);
 
 void
-sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index);
+sowr_HashMap_Delete(sowr_HashMap *, size_t, const char *);
 
 void
-sowr_HashMap_Clear(sowr_HashMap *map);
+sowr_HashMap_Clear(sowr_HashMap *);
 
 void
-sowr_HashMap_Destroy(sowr_HashMap *map);
+sowr_HashMap_Destroy(sowr_HashMap *);
 
 #endif //!SOWR_LIB_CONTAINER_HASH_MAP_H

@@ -27,6 +27,8 @@
 
 #include "../memory/heap_memory.h"
 
+const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
+
 static
 bool
 sowr_HashValCmpDataFunc(const void *left, const void *right)
@@ -52,14 +54,14 @@ sowr_HashValCmpHashToDataFunc(const void *left_val, const void *right_hash)
 
 static
 void
-HashMapValueFreeFunc(void *data)
+sowr_HashMapValueFreeFunc(void *data)
 {
     sowr_HeapFree(((sowr_HashMapValue *)data)->data);
 }
 
 static
 void
-HashMapListFreeFunc(void *data)
+sowr_HashMapListFreeFunc(void *data)
 {
     sowr_LinkedList_Clear((sowr_Linked_List *)data);
 }
@@ -83,12 +85,12 @@ sowr_HashMap_Create_SuggestBuckets(size_t buckets_count)
     sowr_HashMap *map = sowr_HeapAlloc(sizeof(sowr_HashMap));
 
     sowr_VecLinkedList *buckets;
-    SOWR_VECTOR_INIT(sowr_Linked_List, sowr_VecLinkedList, buckets, HashMapListFreeFunc);
+    SOWR_VECTOR_INIT(sowr_Linked_List, sowr_VecLinkedList, buckets, sowr_HashMapListFreeFunc);
     SOWR_VECTOR_EXPAND_UNTIL(buckets, buckets_count);
 
     for (size_t i = 0; i < buckets_count; i++)
     {
-        sowr_Linked_List *slot = sowr_LinkedList_Create(sizeof(sowr_HashMapValue), HashMapValueFreeFunc);
+        sowr_Linked_List *slot = sowr_LinkedList_Create(sizeof(sowr_HashMapValue), sowr_HashMapValueFreeFunc);
         SOWR_VECTOR_PUSH(buckets, slot);
     }
 
@@ -111,12 +113,12 @@ sowr_HashMap_Insert_Mov(sowr_HashMap *map, size_t index_length, const char *inde
     block->hash = hash;
 
     size_t slot = hash % map->buckets_count;
+    map->length = sowr_LinkedList_Delete(&(map->buckets->ptr[slot]), block, sowr_HashValCmpDataFunc) ? map->length : map->length + 1;
     sowr_LinkedList_Insert_Mov(&(map->buckets->ptr[slot]), block);
-    map->length++;
 }
 
 void
-HashMap_Insert_Cpy(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value)
+sowr_HashMap_Insert_Cpy(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value)
 {
     sowr_HashMapValue *block = sowr_HeapAlloc(sizeof(sowr_HashMapValue));
     block->data = sowr_HeapAlloc(sizeof(char) * val_length);
@@ -127,8 +129,8 @@ HashMap_Insert_Cpy(sowr_HashMap *map, size_t index_length, const char *index, si
     block->hash = hash;
 
     size_t slot = hash % map->buckets_count;
-    sowr_LinkedList_Insert_Cpy(&(map->buckets->ptr[slot]), block);
-    map->length++;
+    map->length = sowr_LinkedList_Delete(&(map->buckets->ptr[slot]), block, sowr_HashValCmpDataFunc) ? map->length : map->length + 1;
+    sowr_LinkedList_Insert_Mov(&(map->buckets->ptr[slot]), block);
 }
 
 sowr_HashMapValue *

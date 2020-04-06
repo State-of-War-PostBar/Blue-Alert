@@ -154,8 +154,8 @@ sowr_LinkedList_Back(const sowr_Linked_List *list)
     return save;
 }
 
-void
-sowr_LinkedList_Delete(sowr_Linked_List *list, void *elem, const sowr_LinkedListCmpFunc cmp)
+int
+sowr_LinkedList_Delete(sowr_Linked_List *list, const void *elem, const sowr_LinkedListCmpFunc cmp)
 {
     sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
     while (iter)
@@ -169,14 +169,16 @@ sowr_LinkedList_Delete(sowr_Linked_List *list, void *elem, const sowr_LinkedList
                 list->free_func(iter->data);
             sowr_HeapFree(iter->data);
             sowr_HeapFree(iter);
-            return;
+            return 1;
         }
         prev = iter;
         iter = iter->next;
     }
+
+    return 0;
 }
 
-void
+int
 sowr_LinkedList_DeleteNF(sowr_Linked_List *list, void *elem, const sowr_LinkedListCmpFunc cmp)
 {
     sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
@@ -189,11 +191,13 @@ sowr_LinkedList_DeleteNF(sowr_Linked_List *list, void *elem, const sowr_LinkedLi
                 prev->next = next;
             sowr_HeapFree(iter->data);
             sowr_HeapFree(iter);
-            return;
+            return 1;
         }
         prev = iter;
         iter = iter->next;
     }
+
+    return 0;
 }
 
 void
