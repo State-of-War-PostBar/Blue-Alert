@@ -26,7 +26,6 @@
 #include "state.h"
 
 #include "../lib/log/log.h"
-#include "../multimedia/window.h"
 #include "../sync/multithread.h"
 
 #include <glad/glad.h>
@@ -40,6 +39,7 @@ const unsigned int SOWR_PROG_VERSION_MAJOR    = 0;
 const unsigned int SOWR_PROG_VERSION_MINOR    = 0;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0;
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1;
+const char *const  SOWR_PROG_VERSION_STRING        = "Indev 0.0 rev0 Build 001";
 
 const char *const SOWR_LOG_FILE_NAME          = "sowr.log";
 
@@ -51,6 +51,14 @@ const unsigned int SOWR_INIT_WIN_HEIGHT       = 768;
     static FILE *sowr_log_file;
     static sowr_CriticalSection sowr_log_file_mtx;
 
+    ///
+    /// \brief Lock the log file
+    ///
+    /// Locking function for the log file, feed to log.c
+    ///
+    /// \param user_data User-defined data when called. Unused.
+    /// \param lock To lock or to unlock the log file. 0 for unlock.
+    ///
     static
     inline
     void
@@ -97,52 +105,8 @@ sowr_DestroyLogger(void)
 #endif
 }
 
-inline
-void
-sowr_InitGLFW(void)
-{
-    if (!glfwInit())
-    {
-        SOWR_LOG_ERROR("Failed to initialize GLFW.");
-        abort();
-    }
-}
-
-inline
-void
-sowr_DestroyGLFW(void)
-{
-    glfwTerminate();
-}
-
-inline
-void
-sowr_InitGLAD(void)
-{
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        SOWR_LOG_ERROR("Failed to initialize GLAD.");
-        abort();
-    }
-}
-
 void
 sowr_CreateProgramState(void)
 {
     srand(time(NULL));
-}
-
-void
-sowr_StartMainLoop(void)
-{
-    sowr_CenterMainWindow();
-    glViewport(0, 0, sowr_g_window_width, sowr_g_window_height);
-
-    while (!sowr_MainWindowShouldClose())
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.658f, 0.658f, 0.658f, 0.0f);
-
-        sowr_UpdateMainWindow();
-    }
 }

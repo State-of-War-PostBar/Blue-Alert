@@ -45,7 +45,7 @@ sowr_InitProfiler(void)
 }
 
 void
-sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_line)
+sowr_ProfileFunc(const char *caller_file, const char *caller_func, int called_line)
 {
 #ifdef SOWR_BUILD_DEBUG
     thread_local static double elapsed;
@@ -64,7 +64,7 @@ sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_li
         {
             QueryPerformanceCounter(&stop);
             elapsed = (stop.QuadPart - start.QuadPart) * 1000.0f / sowr_win_profile_timer_frequency.QuadPart;
-            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
+            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #else
         thread_local static sowr_PosixTimeVal start, stop;
@@ -78,7 +78,7 @@ sowr_ProfileFunc(const char *caller_file, const char *caller_name, int called_li
         {
             gettimeofday(&stop, NULL);
             elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f + (stop.tv_usec - start.tv_usec) / 1000.0f;
-            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_name, start_line + 1, called_line - 1, caller_file, elapsed);
+            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #endif
 

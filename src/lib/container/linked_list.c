@@ -65,25 +65,12 @@ sowr_LinkedList_Clear(sowr_Linked_List *list)
 }
 
 sowr_Linked_List_Node *
-sowr_LinkedList_Insert_Mov(sowr_Linked_List *list, void *elem)
-{
-    sowr_Linked_List_Node *node = sowr_HeapAlloc(sizeof(sowr_Linked_List_Node));
-    node->data = sowr_HeapAlloc(list->elem_size);
-    memmove(node->data, elem, list->elem_size);
-    node->next = list->length ? list->next : NULL;
-    list->next = node;
-    list->length++;
-
-    return node;
-}
-
-sowr_Linked_List_Node *
-sowr_LinkedList_Insert_Cpy(sowr_Linked_List *list, const void *elem)
+sowr_LinkedList_Insert(sowr_Linked_List *list, const void *elem)
 {
     sowr_Linked_List_Node *node = sowr_HeapAlloc(sizeof(sowr_Linked_List_Node));
     node->data = sowr_HeapAlloc(list->elem_size);
     memcpy(node->data, elem, list->elem_size);
-    node->next = list->next ? list->next : NULL;
+    node->next = list->length ? list->next : NULL;
     list->next = node;
     list->length++;
 
@@ -113,10 +100,13 @@ sowr_LinkedList_Pop(sowr_Linked_List *list)
 }
 
 void
-sowr_LinkedList_PopNF(sowr_Linked_List *list)
+sowr_LinkedList_PopNF(sowr_Linked_List *list, void **ptr_retrieve)
 {
     if (!list->length)
+    {
+        *ptr_retrieve = NULL;
         return;
+    }
 
     sowr_Linked_List_Node *next = list->next;
 
@@ -127,6 +117,9 @@ sowr_LinkedList_PopNF(sowr_Linked_List *list)
     }
     else
         list->next = NULL;
+
+    if (ptr_retrieve)
+        *ptr_retrieve = next->data;
 
     sowr_HeapFree(next);
 }
@@ -154,9 +147,10 @@ sowr_LinkedList_Back(const sowr_Linked_List *list)
     return save;
 }
 
-int
+size_t
 sowr_LinkedList_Delete(sowr_Linked_List *list, const void *elem, const sowr_LinkedListCmpFunc cmp)
 {
+    size_t count = 0;
     sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
     while (iter)
     {
@@ -169,18 +163,19 @@ sowr_LinkedList_Delete(sowr_Linked_List *list, const void *elem, const sowr_Link
                 list->free_func(iter->data);
             sowr_HeapFree(iter->data);
             sowr_HeapFree(iter);
-            return 1;
+            count++;
         }
         prev = iter;
         iter = iter->next;
     }
 
-    return 0;
+    return count;
 }
 
-int
-sowr_LinkedList_DeleteNF(sowr_Linked_List *list, void *elem, const sowr_LinkedListCmpFunc cmp)
+size_t
+sowr_LinkedList_DeleteNF(sowr_Linked_List *list, const void *elem, const sowr_LinkedListCmpFunc cmp, void **ptr_retrieve)
 {
+    size_t count = 0;
     sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
     while (iter)
     {
@@ -189,15 +184,19 @@ sowr_LinkedList_DeleteNF(sowr_Linked_List *list, void *elem, const sowr_LinkedLi
         {
             if (prev)
                 prev->next = next;
-            sowr_HeapFree(iter->data);
+            if (ptr_retrieve)
+                *ptr_retrieve = iter->data;
             sowr_HeapFree(iter);
-            return 1;
+            count++;
         }
         prev = iter;
         iter = iter->next;
     }
 
-    return 0;
+    if (!count)
+        *ptr_retrieve = NULL;
+
+    return count;
 }
 
 void

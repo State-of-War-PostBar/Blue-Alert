@@ -28,11 +28,32 @@
 
 #include <pch.h>
 
+///
+/// \brief Initialize the profiler
+///
+/// Initialize the profiler for the whole program. This function needs to be called for once and only once for the profiler to work.
+///
+/// \note You do not have to call it for different threads, only one thread needs to do so.
+///
 void
 sowr_InitProfiler(void);
 
+///
+/// \brief Profile a function
+///
+/// Start or stop profiling a function. When called for the first time, profiling starts. When called for the second time (in the same thread),
+/// the profiling stops.
+/// The profile result is outputed as [Debug logger prefix] Profiling "function name" ("start line" to "stop line" in "file name") took "time" ms.
+/// This function is thread-safe, every thread have their own profile record.
+///
+/// \note It is recommanded to use the macros \a SOWR_START_PROFILE() and \a SOWR_STOP_PROFILE() instead.
+///
+/// \param caller_file File of the caller in.
+/// \param caller_func Function to profile.
+/// \param line The line when profiling starts or stops.
+///
 void
-sowr_ProfileFunc(const char *, const char *, int);
+sowr_ProfileFunc(const char *caller_file, const char *caller_func, int line);
 
 #ifdef SOWR_BUILD_DEBUG
     #define SOWR_START_PROFILE() sowr_ProfileFunc(__FILE__, __func__, __LINE__)

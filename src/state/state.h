@@ -36,31 +36,35 @@ extern const unsigned int    SOWR_PROG_VERSION_MAJOR;
 extern const unsigned int    SOWR_PROG_VERSION_MINOR;
 extern const unsigned int    SOWR_PROG_VERSION_REVISION;
 extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
+extern const char *const     SOWR_PROG_VERSION_STRING;
 
 extern const char *const     SOWR_LOG_FILE_NAME;
 
 extern const unsigned int    SOWR_INIT_WIN_WIDTH;
 extern const unsigned int    SOWR_INIT_WIN_HEIGHT;
 
+///
+/// \brief Initialize the logger
+///
+/// Initialize the logger of program. This must be called first in order to use logging feature.
+///
 void
 sowr_InitLogger(void);
 
+///
+/// \brief Destroy the logger
+///
+/// Destroy the logger and release all resources.
+///
 void
 sowr_DestroyLogger(void);
 
-void
-sowr_InitGLFW(void);
-
-void
-sowr_DestroyGLFW(void);
-
-void
-sowr_InitGLAD(void);
-
+///
+/// \brief Create program state
+///
+/// Create the pre-state for the program to run.
+///
 void
 sowr_CreateProgramState(void);
-
-void
-sowr_StartMainLoop(void);
 
 #endif // !SOWR_STATE_STATE_H

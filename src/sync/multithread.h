@@ -46,58 +46,232 @@
     typedef pthread_mutexattr_t     sowr_MutexAttribute;
 #endif
 
+///
+/// \brief Initialize a mutex
+///
+/// Initialize a mutual exclusion object. On Windows it would be WinMutex, or Pthread's mutex otherwise.
+/// 
+/// \note It is recommanded to use Critical Section on Windows instead of WinMutex for better performance.
+///
+/// \param mtx The mutex object to be initialized. <I>It must be allocated first!</I>
+/// \param attr The mutex attribute for the mutex object
+///
 void
-sowr_InitMutex(sowr_Mutex *, sowr_MutexAttribute *);
+sowr_InitMutex(sowr_Mutex *mtx, sowr_MutexAttribute *attr);
 
+///
+/// \brief Lock a mutex
+///
+/// Attempt to lock a mutex object, waiting infinitely until the mutex is acquired.
+///
+/// \param mtx The mutex object to be locked
+///
 void
-sowr_LockMutex(sowr_Mutex *);
+sowr_LockMutex(sowr_Mutex *mtx);
 
+///
+/// \brief Try to lock a mutex
+///
+/// Attempt to lock a mutex object, if the acquisition failed continue immediately.
+///
+/// \param mtx The mutex object to be locked
+///
 void
-sowr_TryLockMutex(sowr_Mutex *);
+sowr_TryLockMutex(sowr_Mutex *mtx);
 
+///
+/// \brief Unlock a mutex
+///
+/// Unlock a previously locked mutex in this thread.
+///
+/// \param mtx The mutex object to be unlocked
+///
 void
-sowr_UnlockMutex(sowr_Mutex *);
+sowr_UnlockMutex(sowr_Mutex *mtx);
 
+///
+/// \brief Destroy a mutex
+///
+/// Destroy a mutex object, it is no longer usable.
+///
+/// \note This function does not deallocate the mutex object, you have to do it yourself if you wish so.
+///
+/// \param mtx The mutex object to be destroyed
+///
 void
-sowr_DestroyMutex(sowr_Mutex *);
+sowr_DestroyMutex(sowr_Mutex *mtx);
 
+///
+/// \brief Initialize a critical section
+///
+/// Initialize a critical section, a lock on Windows that is way faster than WinMutex.
+/// <B>If used on Posix systems, it has the same effect as \a sowr_InitMutex(), except that attributes cannot be applied to it.</B>
+///
+/// \param cs The critical section to be initialized. <I>It must be allocated first!</I>
+///
 void
-sowr_InitCriticalSection(sowr_CriticalSection *);
+sowr_InitCriticalSection(sowr_CriticalSection *cs);
 
+///
+/// \brief Enter a critical section
+///
+/// Enter <I>(that is, lock)</I> a critical section, waiting infinitely until entrance of the critical section.
+/// <B>If used on Posix systems, it has the same effect as \a sowr_LockMutex().</B>
+///
+/// \param cs The critical section to be locked
+///
 void
-sowr_EnterCriticalSection(sowr_CriticalSection *);
+sowr_EnterCriticalSection(sowr_CriticalSection *cs);
 
+///
+/// \brief Try to enter a critical section
+///
+/// Attempt to enter a critical section. If the entrance failed continue immediately.
+/// <B>If used on Posix systems, it has the same effect as \a sowr_TryLockMutex().</B>
+///
+/// \param cs The critical section to be locked
+///
 void
-sowr_TryEnterCriticalSection(sowr_CriticalSection *);
+sowr_TryEnterCriticalSection(sowr_CriticalSection *cs);
 
+///
+/// \brief Leave a critical section
+///
+/// Leave a previously entered critical section.
+/// <B>If used on Posix systems, it has the same effect as \a sowr_UnlockMutex().</B>
+///
+/// \param cs The critical section to be unlocked
+/// 
 void
-sowr_LeaveCriticalSection(sowr_CriticalSection *);
+sowr_LeaveCriticalSection(sowr_CriticalSection *cs);
 
+///
+/// \brief Destroy a critical section
+///
+/// Destroy a critical section, it is no longer usable
+///
+/// \note This function does not deallocate the critical section, you have to do it yourself if you wish so.
+/// <B>If used on Posix systems, it has the same effect as \a sowr_DestroyMutex().</B>
+///
+/// \param cs The critical section to be destroyed
+///
 void
-sowr_DestroyCriticalSection(sowr_CriticalSection *);
+sowr_DestroyCriticalSection(sowr_CriticalSection *cs);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Initialize a read-write lock
+///
+/// Initialize a read-write lock.
+///
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
+///
+/// \param rwl The read-write lock to be initialized.
+///
 void
-sowr_InitReadWriteLock(sowr_ReadWriteLock *);
+sowr_InitReadWriteLock(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Lock a read-write lock in read mode.
+///
+/// Lock a read-write lock in read mode, waiting infinitely until the acquisition.
+/// Multiple readers can lock it in read mode an the same time, but no reader or writer can obtain the read-write lock if there is one writer.
+///
+/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+///
+/// \param rwl The read-write lock to be locked.
+///
 void
-sowr_LockReadWriteLockRead(sowr_ReadWriteLock *);
+sowr_LockReadWriteLockRead(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Lock a read-write lock in write mode.
+///
+/// Lock a read-write lock in write mode, waiting infinitely until the acquisition.
+/// Only one thread can do so. No other reader or writer can obtain the read-write lock.
+///
+/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+///
+/// \param rwl The read-write lock to be locked.
+///
 void
-sowr_LockReadWriteLockWrite(sowr_ReadWriteLock *);
+sowr_LockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Lock a read-write lock in read mode.
+///
+/// Lock a read-write lock in read mode, if the acquisition fails continue immediately.
+/// Multiple readers can lock it in read mode an the same time, but no reader or writer can obtain the read-write lock if there is one writer.
+///
+/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+///
+/// \param rwl The read-write lock to be locked.
+///
 void
-sowr_TryLockReadWriteLockRead(sowr_ReadWriteLock *);
+sowr_TryLockReadWriteLockRead(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Lock a read-write lock in write mode.
+///
+/// Lock a read-write lock in write mode, if the acquisition fails continue immediately.
+/// Only one thread can do so. No other reader or writer can obtain the read-write lock.
+///
+/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+///
+/// \param rwl The read-write lock to be locked.
+///
 void
-sowr_TryLockReadWriteLockWrite(sowr_ReadWriteLock *);
+sowr_TryLockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Unlock a read mode read-write lock
+///
+/// Unlock a reader mode read-write lock. It must be the reader to unlock.
+///
+/// \note On Posix, it has the same effect as \a sowr_UnlockReadWriteLockWrite() since you don't have to distinguish them when unlocking.
+///
+/// \param rwl The read-write lock to be unlocked.
+///
 void
-sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *);
+sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Unlock a read mode read-write lock
+///
+/// Unlock a reader mode read-write lock. It must be the writer to unlock.
+///
+/// \note On Posix, it has the same effect as \a sowr_UnlockReadWriteLockRead() since you don't have to distinguish them when unlocking.
+///
+/// \param rwl The read-write lock to be unlocked.
+///
 void
-sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *);
+sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
 
+///
+/// \deprecated It sucks, try not to use it.
+///
+/// \brief Destroy a read-write lock
+///
+/// Destroy a read-write lock, it is no longer usable.
+///
+/// \note On Windows, this has no effect.
+///
+/// \param rwl The read-write lock to be destroyed.
+///
 void
-sowr_DestroyReadWriteLock(sowr_ReadWriteLock *);
+sowr_DestroyReadWriteLock(sowr_ReadWriteLock *rwl);
 
 #endif // !SOWR_SYNC_MULTITHREAD_H

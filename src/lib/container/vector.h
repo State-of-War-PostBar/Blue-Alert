@@ -31,206 +31,178 @@
 #include "../memory/heap_memory.h"
 
 typedef void (*sowr_VecFreeFunc)(void *);
+typedef void (*sowr_VecWalkFunc)(void *);
 
-#define SOWR_DEF_VECTOR_OF_TYPE(type_name, name)                                                 \
-typedef struct                                                                                   \
-{                                                                                                \
-    size_t length;                                                                               \
-    size_t capacity;                                                                             \
-    size_t elem_size;                                                                            \
-    type_name *ptr;                                                                              \
-    sowr_VecFreeFunc free_func;                                                                  \
-} name;
+typedef struct
+{
+    size_t length;
+    size_t capacity;
+    void *ptr;
+    size_t elem_size;
+    sowr_VecFreeFunc free_func;
+} sowr_Vector;
 
-#define SOWR_VECTOR_INIT(type_name, name, pv, free_func_)                                        \
-{                                                                                                \
-    pv = sowr_HeapAlloc(sizeof(name));                                                           \
-    pv->length = 0;                                                                              \
-    pv->capacity = 0;                                                                            \
-    pv->elem_size = sizeof(type_name);                                                           \
-    pv->ptr = NULL;                                                                              \
-    pv->free_func = free_func_;                                                                  \
-}
+///
+/// \brief Create a vector
+///
+/// Create a vector.
+///
+/// \param elem_size Size of vector's elements
+/// \param free_func Function to call when the vector frees an element
+///
+/// \return Created vector
+///
+sowr_Vector *
+sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func);
 
-#define SOWR_VECTOR_EXPAND(pv)                                                                   \
-{                                                                                                \
-    if (!pv->capacity)                                                                           \
-    {                                                                                            \
-        pv->capacity = 1;                                                                        \
-        pv->ptr = sowr_HeapAlloc(pv->elem_size * pv->capacity);                                  \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        pv->capacity *= 2;                                                                       \
-        pv->ptr = sowr_ReAlloc(pv->elem_size * pv->capacity, pv->ptr);                           \
-    }                                                                                            \
-}
+///
+/// \brief Get the indexth element
+///
+/// Get the pointer to some place in the vector.
+///
+/// \warning There is no boundary checking for this function!
+///
+/// \param vec Vector
+/// \param index Index to access
+///
+/// \return Pointer to the location after index
+///
+void *
+sowr_Vector_PtrAt(sowr_Vector *vec, size_t index);
 
-#define SOWR_VECTOR_EXPAND_UNTIL(pv, i)                                                          \
-{                                                                                                \
-    while (pv->capacity < i)                                                                     \
-        SOWR_VECTOR_EXPAND(pv);                                                                  \
-}
+///
+/// \brief Expand the vector
+///
+/// Expand the vector, usually doubling its capacity unless the length is 0.
+///
+/// \param vec Vector to expand
+///
+void
+sowr_Vector_Expand(sowr_Vector *vec);
 
-#define SOWR_VECTOR_WALK(pv, f)                                                                  \
-{                                                                                                \
-    for (char *ptr = (char *)pv->ptr; ptr != (char *)SOWR_VECTOR_BACK(pv); ptr += pv->elem_size) \
-        f((void *)ptr);                                                                          \
-}
+///
+/// \brief Expand the vector
+///
+/// Expand the vector until its capacity reaches the set limit.
+///
+/// \param vec Vector to expand
+/// \param size Target size for expanding
+///
+void
+sowr_Vector_ExpandUntil(sowr_Vector *vec, size_t size);
 
-#define SOWR_VECTOR_GET(pv, i)    &(pv->ptr[i])
-#define SOWR_VECTOR_FRONT(pv)     pv->ptr
-#define SOWR_VECTOR_BACK(pv)      &(pv->ptr[pv->length])
+///
+/// \brief Walkthrough the vector
+///
+/// Walk the vector by a function.
+///
+/// \param vec Vector to walk
+/// \param func Function for walking
+///
+void
+sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func);
 
-#define SOWR_VECTOR_CLEAR(pv)                                                                    \
-{                                                                                                \
-    if (pv->free_func)                                                                           \
-    {                                                                                            \
-        SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
-    }                                                                                            \
-    pv->length = 0;                                                                              \
-}
+///
+/// \brief Clear out a vector
+///
+/// Clear the content of a vector, its capacity is unchanged.
+///
+/// \param vec Vector to clear
+///
+void
+sowr_Vector_Clear(sowr_Vector *vec);
 
-#define SOWR_VECTOR_INSERT(pv, ptr_element, i)                                                   \
-{                                                                                                \
-    if (i >= pv->length)                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
-        void *ptr_inserting = &(pv->ptr[i]);                                                     \
-        void *ptr_shifting = &(pv->ptr[i + 1]);                                                  \
-        size_t bytes_to_shift = pv->elem_size * (pv->length - i);                                \
-        memmove(ptr_shifting, ptr_inserting, bytes_to_shift);                                    \
-        memmove(ptr_inserting, ptr_element, pv->elem_size);                                      \
-        pv->length++;                                                                            \
-    }                                                                                            \
-}
+///
+/// \brief Insert element to vector
+///
+/// Insert an element to vector.
+/// If index is out of bound, it is understood to push the element to last of vector.
+///
+/// \param vec Vector to insert
+/// \param elem Element to insert
+/// \param index Index to insert
+///
+void
+sowr_Vector_Insert(sowr_Vector *vec, void *elem, size_t index);
 
-#define SOWR_VECTOR_INSERT_CPY(pv, ptr_element, i)                                               \
-{                                                                                                \
-    if (i >= pv->length)                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_PUSH_CPY(pv, ptr_element);                                                   \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                            \
-        void *ptr_inserting = &(pv->ptr[i]);                                                     \
-        void *ptr_shifting = &(pv->ptr[i + 1]);                                                  \
-        size_t bytes_to_shift = pv->elem_size * (pv->length - i);                                \
-        memcpy(ptr_shifting, ptr_inserting, bytes_to_shift);                                     \
-        memcpy(ptr_inserting, ptr_element, pv->elem_size);                                       \
-        pv->length++;                                                                            \
-    }                                                                                            \
-}
+///
+/// \brief Replace an element
+///
+/// Replace an element with a new one, the old one will be freed.
+/// If index is out of bound, it is understood to push the element to last of vector.
+///
+/// \param vec Vector to operate
+/// \param elem Element to replace
+/// \param index Index to replace
+///
+void
+sowr_Vector_Replace(sowr_Vector *vec, void *elem, size_t index);
 
-#define SOWR_VECTOR_REPLACE(pv, ptr_element, i)                                                  \
-{                                                                                                \
-    if (i >= pv->length)                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        if (pv->free_func)                                                                       \
-        {                                                                                        \
-            pv->free_func((void *)&(pv->ptr[i]));                                                \
-        }                                                                                        \
-        memmove(&(pv->ptr[i]), ptr_element, pv->elem_size);                                      \
-    }                                                                                            \
-}
+///
+/// \brief Delete an element
+///
+/// Delete an element in index.
+/// If index is out of bound, it does nothing.
+///
+/// \param vec Vector to operate
+/// \param index Index to delete
+///
+void
+sowr_Vector_Delete(sowr_Vector *vec, size_t index);
 
-#define SOWR_VECTOR_REPLACE_CPY(pv, ptr_element, i)                                              \
-{                                                                                                \
-    if (i >= pv->length)                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_PUSH(pv, ptr_element);                                                       \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        if (pv->free_func)                                                                       \
-        {                                                                                        \
-            pv->free_func((void *)&(pv->ptr[i]));                                                \
-        }                                                                                        \
-        memcpy(&(pv->ptr[i]), ptr_element, pv->elem_size);                                       \
-    }                                                                                            \
-}
+///
+/// \brief Take an element
+///
+/// Take an element out of the vector. The old element will be freed.
+///
+/// \param vec Vector to operate
+/// \param index Index to take out
+/// \param ptr_retrieve Pointer to retrieve the result
+///
+void
+sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve);
 
-#define SOWR_VECTOR_DELETE(pv, i)                                                                \
-{                                                                                                \
-    if (pv->free_func)                                                                           \
-    {                                                                                            \
-        pv->free_func((void *)&(pv->ptr[i]));                                                    \
-    }                                                                                            \
-    void *ptr_shifting = &(pv->ptr[i]);                                                          \
-    void *ptr_data = &(pv->ptr[i + 1]);                                                          \
-    size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                                \
-    memmove(ptr_shifting, ptr_data, bytes_to_shift);                                             \
-    pv->length--;                                                                                \
-}
+///
+/// \brief Push an element
+///
+/// Push an element into the end of vector.
+///
+/// \param vec Vector to push into
+/// \param elem Element to be pushed
+///
+void
+sowr_Vector_Push(sowr_Vector *vec, void *elem);
 
-#define SOWR_VECTOR_TAKE(pv, i, ptr_retrieve)                                                    \
-{                                                                                                \
-    if (i >= pv->length)                                                                         \
-    {                                                                                            \
-        SOWR_VECTOR_POP(pv, ptr_retrieve);                                                       \
-    }                                                                                            \
-    else                                                                                         \
-    {                                                                                            \
-        void *ptr_shifting = SOWR_VECTOR_GET(pv, i);                                             \
-        void *ptr_data = SOWR_VECTOR_GET(pv, i + 1);                                             \
-        size_t bytes_to_shift = pv->elem_size * (pv->length - i - 1);                            \
-        memmove(ptr_retrieve, ptr_shifting, pv->elem_size);                                      \
-        memmove(ptr_shifting, ptr_data, bytes_to_shift);                                         \
-        pv->length--;                                                                            \
-    }                                                                                            \
-}
+///
+/// \brief Pop the last element of vector
+///
+/// Pop the last element of vector into the pointer.
+/// Whether ptr_retrieve is NULL or not, the last element will be freed.
+///
+/// \param vec Vector to pop out
+/// \param ptr_retrieve Pointer to retrieve the result
+///
+void
+sowr_Vector_Pop(sowr_Vector *vec, void *ptr_retrieve);
 
-#define SOWR_VECTOR_PUSH(pv, ptr_element)                                                        \
-{                                                                                                \
-    SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                                \
-    void *ptr = &(pv->ptr[pv->length]);                                                          \
-    memmove(ptr, ptr_element, pv->elem_size);                                                    \
-    pv->length++;                                                                                \
-}
+///
+/// \brief Shrink the vector
+///
+/// Shrink the vector to just enough to fit its contents.
+///
+/// \param vec Vector to shrink
+///
+void
+sowr_Vector_ShrinkToFit(sowr_Vector *vec);
 
-#define SOWR_VECTOR_PUSH_CPY(pv, ptr_element)                                                    \
-{                                                                                                \
-    SOWR_VECTOR_EXPAND_UNTIL(pv, pv->length + 1);                                                \
-    void *ptr = &(pv->ptr[pv->length]);                                                          \
-    memcpy(ptr, ptr_element, pv->elem_size);                                                     \
-    pv->length++;                                                                                \
-}
-
-#define SOWR_VECTOR_POP(pv, ptr_retrieve)                                                        \
-{                                                                                                \
-    if (ptr_retrieve)                                                                            \
-    {                                                                                            \
-        memmove(ptr_retrieve, &(pv->ptr[pv->length - 1]), pv->elem_size);                        \
-    }                                                                                            \
-    pv->length--;                                                                                \
-}
-
-#define SOWR_VECTOR_SHRINK_TO_FIT(pv)                                                            \
-{                                                                                                \
-    if (pv->capacity > pv->length && pv->length)                                                 \
-    {                                                                                            \
-        pv->ptr = sowr_ReAlloc(pv->length * pv->elem_size, pv->ptr);                             \
-        pv->capacity = pv->length;                                                               \
-    }                                                                                            \
-}
-
-#define SOWR_VECTOR_DESTROY(pv)                                                                  \
-{                                                                                                \
-    if (pv->free_func)                                                                           \
-    {                                                                                            \
-        SOWR_VECTOR_WALK(pv, pv->free_func);                                                     \
-    }                                                                                            \
-    sowr_HeapFree(pv->ptr);                                                                      \
-    sowr_HeapFree(pv);                                                                           \
-}
+///
+/// \brief Destroy a vector
+///
+/// Destroy a vector, freeing all its elements.
+///
+/// \param vec Vector to destroy
+///
+void
+sowr_Vector_Destroy(sowr_Vector *vec);
 
 #endif // !SOWR_LIB_CONTAINER_VECTOR_H

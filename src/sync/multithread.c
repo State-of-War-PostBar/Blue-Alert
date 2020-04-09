@@ -216,6 +216,7 @@ inline
 void
 sowr_DestroyReadWriteLock(sowr_ReadWriteLock *rwl)
 {
+    // It seems like you don't have to "destroy" a read-write lock on Windows? Lol.
 #ifdef SOWR_TARGET_POSIX
     pthread_rwlock_destroy(rwl);
 #endif

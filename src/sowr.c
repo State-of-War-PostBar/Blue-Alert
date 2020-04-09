@@ -27,8 +27,9 @@
 
 #include "lib/log/log.h"
 #include "lib/profile/profile.h"
-#include "multimedia/window.h"
 #include "state/state.h"
+
+#include "test/test.h"
 
 int
 main(int argc, char *argv[])
@@ -39,29 +40,7 @@ main(int argc, char *argv[])
     sowr_InitLogger();
     sowr_InitProfiler();
     sowr_CreateProgramState();
-    SOWR_LOG_INFO("Starting State of War:Remasted %s V%u.%u-r%u, build %03u.", SOWR_PROG_VERSION_STAGE,
-                                                                               SOWR_PROG_VERSION_MAJOR,
-                                                                               SOWR_PROG_VERSION_MINOR,
-                                                                               SOWR_PROG_VERSION_REVISION,
-                                                                               SOWR_PROG_BUILD_NUMBER);
-
-    sowr_WindowCreateInfo info =
-    {
-        .width = SOWR_INIT_WIN_WIDTH,
-        .height = SOWR_INIT_WIN_HEIGHT,
-        .title = SOWR_PROG_NAME,
-        .full_screen = false
-    };
-
-    sowr_InitGLFW();
-    sowr_CreateMainWindow(&info);
-    sowr_MakeMainWindowCurrent();
-    sowr_InitGLAD();
-    sowr_ShowWindow();
-
-    sowr_StartMainLoop();
-
-    sowr_DestroyGLFW();
+    SOWR_LOG_INFO("Starting State of War:Remasted %s.", SOWR_PROG_VERSION_STRING);
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();

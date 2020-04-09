@@ -28,19 +28,69 @@
 
 #include <pch.h>
 
+///
+/// \brief Allocate memory in the heap
+///
+/// Allocate memory in the heap. If the allocation fails, it terminates the program.
+///
+/// \param size Size in bytes of the allocation
+///
+/// \return Pointer to the allocated memory
+///
 void *
-sowr_HeapAlloc(size_t);
+sowr_HeapAlloc(size_t size);
 
+///
+/// \brief Allocate memory in the heap with alignment
+///
+/// Allocate memory in the heap with alignment, see documents for \a aligned_alloc().
+/// If the allocation failes, it terminates the program.
+///
+/// \param size Size in bytes of the allocation
+/// \param alignment Size in bytes of the alignment
+///
+/// \return Pointer to the allocated memory
+///
 void *
-sowr_HeapAlignedAlloc(size_t, size_t);
+sowr_HeapAlignedAlloc(size_t size, size_t alignment);
 
+///
+/// \brief Allocate memory in the heap with zeroing out
+///
+/// Allocate memory in the heap, zeroing out all the contents.
+/// If the allocation fails, it terminates the program.
+///
+/// \param size Size in bytes of the allocation
+///
+/// \return Pointer to the allocated memory
+///
 void *
-sowr_HeapZeroAlloc(size_t);
+sowr_HeapZeroAlloc(size_t size);
 
+///
+/// \brief Free the allocated memory
+///
+/// Free the allocated memory, it is unsafe to use it anymore.
+///
+/// \param ptr Pointer to the freeing memory
+///
 void
-sowr_HeapFree(void *);
+sowr_HeapFree(void *ptr);
 
+///
+/// \brief Allocate the allocated memory with a new size.
+///
+/// Allocate the allocated memory with a new size.
+/// If the allocation fails, it terminates the program.
+///
+/// \note Keep in mind that the old pointer is not usable anymore.
+///
+/// \param size Size in bytes of the allocation
+/// \param ptr Pointer to the reallocating memory
+///
+/// \return Pointer to the allocated memory
+///
 void *
-sowr_ReAlloc(size_t, void *);
+sowr_ReAlloc(size_t size, void *ptr);
 
 #endif // !SOWR_LIB_MEMORY_HEAP_MEMORY_H

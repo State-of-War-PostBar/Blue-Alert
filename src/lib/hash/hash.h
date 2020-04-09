@@ -28,9 +28,22 @@
 
 #include <pch.h>
 
+///
+/// The hashed value
+///
 typedef size_t sowr_HashVal;
 
+///
+/// \brief Hash some bytes
+///
+/// Get the hashcode of some bytes.
+///
+/// \param length Length of the byte array
+/// \param bytes Byte array to hash
+///
+/// \return Hashed result
+///
 sowr_HashVal
-sowr_GetHash(size_t, const char *);
+sowr_GetHash(size_t length, const char *bytes);
 
 #endif // !SOWR_LIB_HASH_HASH_H

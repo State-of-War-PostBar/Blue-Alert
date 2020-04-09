@@ -32,8 +32,6 @@
 #include "linked_list.h"
 #include "../hash/hash.h"
 
-SOWR_DEF_VECTOR_OF_TYPE(sowr_Linked_List, sowr_VecLinkedList);
-
 typedef struct
 {
     char *data;
@@ -43,38 +41,158 @@ typedef struct
 
 typedef struct
 {
-    sowr_VecLinkedList *buckets;
+    sowr_Vector *buckets;
     size_t buckets_count;
     size_t length;
 } sowr_HashMap;
 
 extern const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT;
 
+///
+/// \brief Create a hashmap
+///
+/// Create a hashmap, with default buckets, ready to use.
+///
+/// \return A hashmap
+///
 sowr_HashMap *
 sowr_HashMap_Create();
 
+///
+/// \brief Create a hashmap
+///
+/// Create a hashmap with custom number of buckets, ready to use.
+///
+/// \return A hashmap
+///
 sowr_HashMap *
-sowr_HashMap_Create_SuggestBuckets(size_t);
+sowr_HashMap_Create_SuggestBuckets(size_t buckets_count);
 
+///
+/// \brief Insert an element to hashmap
+///
+/// Use key and value to insert element to hashmap, override the old value if key is identical.
+///
+/// \param map Map to insert
+/// \param index_length Length of index in byte
+/// \param index Index
+/// \param val_length Length of value in byte
+/// \param value Value to insert
+///
 void
-sowr_HashMap_Insert_Mov(sowr_HashMap *, size_t, const char *, size_t, char *);
+sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value);
 
+///
+/// \brief Insert an element to hashmap
+///
+/// Use key and value to insert element to hashmap, override the old value if key is identical.
+/// The key and value are understood to be null-terminated strings.
+///
+/// \param map Map to insert
+/// \param index Index
+/// \param value Value to insert
+///
 void
-sowr_HashMap_Insert_Cpy(sowr_HashMap *, size_t, const char *, size_t, const char *);
+sowr_HashMap_InsertS(sowr_HashMap *map, const char *index, const char *value);
 
+///
+/// \brief Get a value from the map
+///
+/// Use key to get a value from the map.
+///
+/// \param map Map to get
+/// \param index_length Length of index in byte
+/// \param index Index
+///
+/// \return The value from key, NULL if not found
+///
 sowr_HashMapValue *
-sowr_HashMap_Get(sowr_HashMap *, size_t, const char *);
+sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index);
 
+///
+/// \brief Get a value from the map
+///
+/// Use key to get a value from the map.
+/// The key is understood to be null-terminated string.
+///
+/// \param map Map to get
+/// \param index Index
+///
+/// \return The value from key, NULL if not found
+///
 sowr_HashMapValue *
-sowr_HashMap_Take(sowr_HashMap *, size_t, const char *);
+sowr_HashMap_GetS(sowr_HashMap *map, const char *index);
 
-void
-sowr_HashMap_Delete(sowr_HashMap *, size_t, const char *);
+///
+/// \brief Take a value from the map
+///
+/// Take a value from the map.
+///
+/// \param map Map to get
+/// \param index_length Length of index in byte
+/// \param index Index
+///
+/// \return The value from key, NULL if not found
+///
+sowr_HashMapValue *
+sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index);
 
-void
-sowr_HashMap_Clear(sowr_HashMap *);
+///
+/// \brief Take a value from the map
+///
+/// Take a value from the map.
+/// The key is understood to be null-terminated string.
+///
+/// \param map Map to get
+/// \param index Index
+///
+/// \return The value from key, NULL if not found
+///
+sowr_HashMapValue *
+sowr_HashMap_TakeS(sowr_HashMap *map, const char *index);
 
+///
+/// \brief Delete a value from the map
+///
+/// Delete a value by index from the map.
+///
+/// \param map Map to operate
+/// \param index_length Length of index in byte
+/// \param index Index
+///
 void
-sowr_HashMap_Destroy(sowr_HashMap *);
+sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index);
+
+///
+/// \brief Delete a value from the map
+///
+/// Delete a value by index from the map.
+/// The index is understood to be null-terminated string.
+///
+/// \param map Map to operate
+/// \param index Index
+///
+void
+sowr_HashMap_DeleteS(sowr_HashMap *map, const char *index);
+
+///
+/// \brief Clear the hashmap
+///
+/// Clear the contents of the hashmap
+///
+/// \param map Map to clear
+///
+void
+sowr_HashMap_Clear(sowr_HashMap *map);
+
+///
+/// \brief Destroy the hashmap
+///
+/// Destroy the hashmap.
+///
+/// \param map Map to destroy
+///
+void
+sowr_HashMap_Destroy(sowr_HashMap *map);
 
 #endif //!SOWR_LIB_CONTAINER_HASH_MAP_H
