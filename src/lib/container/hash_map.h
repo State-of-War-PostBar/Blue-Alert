@@ -46,8 +46,6 @@ typedef struct
     size_t length;
 } sowr_HashMap;
 
-extern const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT;
-
 ///
 /// \brief Create a hashmap
 ///

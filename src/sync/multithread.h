@@ -49,7 +49,7 @@
 ///
 /// \brief Initialize a mutex
 ///
-/// Initialize a mutual exclusion object. On Windows it would be WinMutex, or Pthread's mutex otherwise.
+/// Initialize a mutual exclusion object. On Windows it would be WinMutex, or pthread's mutex otherwise.
 /// 
 /// \note It is recommanded to use Critical Section on Windows instead of WinMutex for better performance.
 ///
@@ -72,7 +72,7 @@ sowr_LockMutex(sowr_Mutex *mtx);
 ///
 /// \brief Try to lock a mutex
 ///
-/// Attempt to lock a mutex object, if the acquisition failed continue immediately.
+/// Attempt to lock a mutex object, if the acquisition fails continue immediately.
 ///
 /// \param mtx The mutex object to be locked
 ///
@@ -104,7 +104,7 @@ sowr_DestroyMutex(sowr_Mutex *mtx);
 ///
 /// \brief Initialize a critical section
 ///
-/// Initialize a critical section, a lock on Windows that is way faster than WinMutex.
+/// Initialize a critical section, a lock on Windows this is way faster than WinMutex.<BR />
 /// <B>If used on Posix systems, it has the same effect as \a sowr_InitMutex(), except that attributes cannot be applied to it.</B>
 ///
 /// \param cs The critical section to be initialized. <I>It must be allocated first!</I>
@@ -115,7 +115,7 @@ sowr_InitCriticalSection(sowr_CriticalSection *cs);
 ///
 /// \brief Enter a critical section
 ///
-/// Enter <I>(that is, lock)</I> a critical section, waiting infinitely until entrance of the critical section.
+/// Enter <I>(that is, lock)</I> a critical section, waiting infinitely until entrance of the critical section.<BR />
 /// <B>If used on Posix systems, it has the same effect as \a sowr_LockMutex().</B>
 ///
 /// \param cs The critical section to be locked
@@ -126,7 +126,7 @@ sowr_EnterCriticalSection(sowr_CriticalSection *cs);
 ///
 /// \brief Try to enter a critical section
 ///
-/// Attempt to enter a critical section. If the entrance failed continue immediately.
+/// Attempt to enter a critical section. If the entrance failed continue immediately.<BR />
 /// <B>If used on Posix systems, it has the same effect as \a sowr_TryLockMutex().</B>
 ///
 /// \param cs The critical section to be locked
@@ -137,7 +137,7 @@ sowr_TryEnterCriticalSection(sowr_CriticalSection *cs);
 ///
 /// \brief Leave a critical section
 ///
-/// Leave a previously entered critical section.
+/// Leave a previously entered critical section.<BR />
 /// <B>If used on Posix systems, it has the same effect as \a sowr_UnlockMutex().</B>
 ///
 /// \param cs The critical section to be unlocked
@@ -150,7 +150,7 @@ sowr_LeaveCriticalSection(sowr_CriticalSection *cs);
 ///
 /// Destroy a critical section, it is no longer usable
 ///
-/// \note This function does not deallocate the critical section, you have to do it yourself if you wish so.
+/// \note This function does not deallocate the critical section, you have to do it yourself if you wish so.<BR />
 /// <B>If used on Posix systems, it has the same effect as \a sowr_DestroyMutex().</B>
 ///
 /// \param cs The critical section to be destroyed

@@ -29,7 +29,7 @@
 #include <pch.h>
 
 ///
-/// The hashed value
+/// Hashed value
 ///
 typedef size_t sowr_HashVal;
 

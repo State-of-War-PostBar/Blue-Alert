@@ -27,7 +27,7 @@
 
 #include "../memory/heap_memory.h"
 
-const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
+static const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
 
 static
 bool

@@ -66,7 +66,7 @@ sowr_LinkedList_Create(size_t elem_size, const sowr_LinkedListFreeFunc free_func
 /// \param func Function for walking
 ///
 void
-sowr_LinkedList_Walk(sowr_Linked_List *list, const sowr_LinkedListWalkFunc func);
+sowr_LinkedList_Walk(const sowr_Linked_List *list, const sowr_LinkedListWalkFunc func);
 
 ///
 /// \brief Clear a linked list

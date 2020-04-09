@@ -87,7 +87,7 @@ sowr_Vector_Clear(sowr_Vector *vec)
 }
 
 void
-sowr_Vector_Insert(sowr_Vector *vec, void *elem, size_t index)
+sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index)
 {
     if (index >= vec->length)
         sowr_Vector_Push(vec, elem);
@@ -104,7 +104,7 @@ sowr_Vector_Insert(sowr_Vector *vec, void *elem, size_t index)
 }
 
 void
-sowr_Vector_Replace(sowr_Vector *vec, void *elem, size_t index)
+sowr_Vector_Replace(sowr_Vector *vec, const void *elem, size_t index)
 {
     if (index >= vec->length)
         sowr_Vector_Push(vec, elem);
@@ -152,7 +152,7 @@ sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve)
 }
 
 void
-sowr_Vector_Push(sowr_Vector *vec, void *elem)
+sowr_Vector_Push(sowr_Vector *vec, const void *elem)
 {
     sowr_Vector_ExpandUntil(vec, vec->length + 1);
     memcpy(sowr_Vector_PtrAt(vec, vec->length), elem, vec->elem_size);

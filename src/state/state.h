@@ -40,9 +40,6 @@ extern const char *const     SOWR_PROG_VERSION_STRING;
 
 extern const char *const     SOWR_LOG_FILE_NAME;
 
-extern const unsigned int    SOWR_INIT_WIN_WIDTH;
-extern const unsigned int    SOWR_INIT_WIN_HEIGHT;
-
 ///
 /// \brief Initialize the logger
 ///

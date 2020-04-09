@@ -29,8 +29,6 @@
 #include "lib/profile/profile.h"
 #include "state/state.h"
 
-#include "test/test.h"
-
 int
 main(int argc, char *argv[])
 {

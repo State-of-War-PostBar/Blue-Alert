@@ -123,7 +123,7 @@ sowr_Vector_Clear(sowr_Vector *vec);
 /// \param index Index to insert
 ///
 void
-sowr_Vector_Insert(sowr_Vector *vec, void *elem, size_t index);
+sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index);
 
 ///
 /// \brief Replace an element
@@ -136,7 +136,7 @@ sowr_Vector_Insert(sowr_Vector *vec, void *elem, size_t index);
 /// \param index Index to replace
 ///
 void
-sowr_Vector_Replace(sowr_Vector *vec, void *elem, size_t index);
+sowr_Vector_Replace(sowr_Vector *vec, const void *elem, size_t index);
 
 ///
 /// \brief Delete an element
@@ -171,7 +171,7 @@ sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve);
 /// \param elem Element to be pushed
 ///
 void
-sowr_Vector_Push(sowr_Vector *vec, void *elem);
+sowr_Vector_Push(sowr_Vector *vec, const void *elem);
 
 ///
 /// \brief Pop the last element of vector
