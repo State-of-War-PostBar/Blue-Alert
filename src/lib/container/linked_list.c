@@ -96,6 +96,7 @@ sowr_LinkedList_Pop(sowr_Linked_List *list)
     if(list->free_func)
         list->free_func(next->data);
 
+    list->length--;
     sowr_HeapFree(next);
 }
 
@@ -121,6 +122,7 @@ sowr_LinkedList_PopNF(sowr_Linked_List *list, void **ptr_retrieve)
     if (ptr_retrieve)
         *ptr_retrieve = next->data;
 
+    list->length--;
     sowr_HeapFree(next);
 }
 
@@ -151,7 +153,7 @@ size_t
 sowr_LinkedList_Delete(sowr_Linked_List *list, const void *elem, const sowr_LinkedListCmpFunc cmp)
 {
     size_t count = 0;
-    sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
+    sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL, *save = NULL;
     while (iter)
     {
         next = iter->next;
@@ -161,9 +163,14 @@ sowr_LinkedList_Delete(sowr_Linked_List *list, const void *elem, const sowr_Link
                 prev->next = next;
             if (list->free_func)
                 list->free_func(iter->data);
+            save = iter;
             sowr_HeapFree(iter->data);
             sowr_HeapFree(iter);
             count++;
+            list->length--;
+            if (!next)
+                return count;
+            iter = save;
         }
         prev = iter;
         iter = iter->next;
@@ -176,7 +183,7 @@ size_t
 sowr_LinkedList_DeleteNF(sowr_Linked_List *list, const void *elem, const sowr_LinkedListCmpFunc cmp, void **ptr_retrieve)
 {
     size_t count = 0;
-    sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL;
+    sowr_Linked_List_Node *iter = list->next, *prev = NULL, *next = NULL, *save = NULL;
     while (iter)
     {
         next = iter->next;
@@ -186,8 +193,13 @@ sowr_LinkedList_DeleteNF(sowr_Linked_List *list, const void *elem, const sowr_Li
                 prev->next = next;
             if (ptr_retrieve)
                 *ptr_retrieve = iter->data;
+            save = iter;
             sowr_HeapFree(iter);
             count++;
+            list->length--;
+            if (!next)
+                return count;
+            iter = save;
         }
         prev = iter;
         iter = iter->next;

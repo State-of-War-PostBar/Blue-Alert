@@ -150,6 +150,16 @@ sowr_HashMap_GetS(sowr_HashMap *map, const char *index)
     return sowr_HashMap_Get(map, strlen(index) + 1, index);
 }
 
+void
+sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func)
+{
+    if (!map->length)
+        return;
+
+    for (size_t i = 0; i < map->buckets_count; i++)
+        sowr_LinkedList_Walk(sowr_Vector_PtrAt(map->buckets, i), func);
+}
+
 sowr_HashMapValue *
 sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index)
 {

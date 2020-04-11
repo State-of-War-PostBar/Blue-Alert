@@ -32,6 +32,8 @@
 #include "linked_list.h"
 #include "../hash/hash.h"
 
+typedef void (*sowr_HashMapWalkFunc)(void *);
+
 typedef struct
 {
     char *data;
@@ -120,6 +122,19 @@ sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index);
 ///
 sowr_HashMapValue *
 sowr_HashMap_GetS(sowr_HashMap *map, const char *index);
+
+///
+/// \brief Walk the map
+///
+/// Walk the map with given function.
+///
+/// \param map Map to walk
+/// \param index_length Length of index in byte
+/// \param index Index
+/// \param func Function to use
+///
+void
+sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func);
 
 ///
 /// \brief Take a value from the map

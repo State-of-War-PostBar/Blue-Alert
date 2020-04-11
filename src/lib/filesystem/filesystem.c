@@ -57,8 +57,8 @@ bool
 sowr_CreateDirectory(const char *path)
 {
 #ifdef SOWR_TARGET_WINDOWS
-    _mkdir(path);
+    return _mkdir(path);
 #else
-    mkdir(path.str, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    return mkdir(path.str, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #endif
 }
