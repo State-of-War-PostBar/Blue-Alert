@@ -74,7 +74,7 @@ sowr_GetFileSize(FILE *file)
     rewind(file);
     return size;
 #else
-    struct stat st;
+    struct stat64 st;
     fstat64(fileno(file), &st);
     return st.st_size;
 #endif

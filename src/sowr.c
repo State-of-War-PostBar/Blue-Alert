@@ -42,7 +42,7 @@ main(int argc, char *argv[])
     sowr_CreateProgramState();
     SOWR_LOG_INFO("Starting State of War: Remasted %s.", SOWR_PROG_VERSION_STRING);
 
-    test();
+    sowr_Testy();
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();
