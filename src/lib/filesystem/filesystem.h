@@ -54,4 +54,18 @@ sowr_PathExists(const char *path);
 bool
 sowr_CreateDirectory(const char *path);
 
+///
+///
+/// \brief Get the file size
+///
+/// Get the size of a file in bytes.<BR />
+/// This function is thread-safe but requires you to create file pointer yourself.
+///
+/// \param file File to get size
+///
+/// \return The file size
+///
+size_t
+sowr_GetFileSize(FILE *file);
+
 #endif

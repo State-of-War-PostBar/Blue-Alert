@@ -46,5 +46,5 @@ main(int argc, char *argv[])
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();
-    return 0;
+    return EXIT_SUCCESS;
 }

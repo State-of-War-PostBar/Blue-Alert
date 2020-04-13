@@ -32,6 +32,7 @@
     #include <direct.h>
 
     const char SOWR_PATH_SEP = '\\';
+    const char *SOWR_LINE_SEP = "\r\n";
 #else
     #include <unistd.h>
     #include <sys/dir.h>
@@ -39,6 +40,7 @@
     #include <sys/types.h>
 
     const char SOWR_PATH_SEP = '/';
+    const char SOWR_LINE_SEP = '\n';
 #endif
 
 inline
@@ -60,5 +62,20 @@ sowr_CreateDirectory(const char *path)
     return _mkdir(path);
 #else
     return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+#endif
+}
+
+size_t
+sowr_GetFileSize(FILE *file)
+{
+#ifdef SOWR_TARGET_WINDOWS
+    fseeko(file, 0, SEEK_END);
+    size_t size = ftello(file);
+    rewind(file);
+    return size;
+#else
+    struct stat st;
+    fstat64(fileno(file), &st);
+    return st.st_size;
 #endif
 }

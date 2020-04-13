@@ -14,6 +14,9 @@ void prnt(void *e)
 
 void test(void)
 {
+    FILE *testf = fopen("gg.txt", "r");
+    printf("gg.txt has %zu bytes.\n", sowr_GetFileSize(testf));
+    fclose(testf);
     sowr_HashMap *map = sowr_HashMap_Create();
 
     const char *index = "sbest";
@@ -59,7 +62,7 @@ void test(void)
     sowr_HashMap_InsertS(map, "sbest", "taxerap");
 
     printf("sbest hashed: %zu, taxerap hashed: %zu.\n", sowr_GetHashS("sbest"), sowr_GetHashS("taxerap"));
-    printf("confirm in hashmap: sbest-%zu, taxerap: %zu\n", sowr_HashMap_GetS(map, "sbest")->index_hash, sowr_HashMap_GetS(map, "sbest")->value_hash);
+    printf("confirm in hashmap: sbest-%zu, taxerap-%zu\n", sowr_HashMap_GetS(map, "sbest")->index_hash, sowr_HashMap_GetS(map, "sbest")->value_hash);
 
     sowr_HashMap_Destroy(map);
 }
