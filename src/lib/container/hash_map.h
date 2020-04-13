@@ -36,9 +36,10 @@ typedef void (*sowr_HashMapWalkFunc)(void *);
 
 typedef struct
 {
+    size_t index_hash;
+    size_t value_hash;
+    size_t value_length;
     char *data;
-    size_t length;
-    size_t hash;
 } sowr_HashMapValue;
 
 typedef struct
