@@ -14,9 +14,6 @@ void prnt(void *e)
 
 void test(void)
 {
-    printf("sowr.log exists? %d\n", sowr_PathExists("sowr.log"));
-    printf("src/lib exists? %d\n", sowr_PathExists("src/lib"));
-    printf("lol/ggg.a exists? %d\n", sowr_PathExists("lol/ggg"));
     sowr_HashMap *map = sowr_HashMap_Create();
 
     const char *index = "sbest";
