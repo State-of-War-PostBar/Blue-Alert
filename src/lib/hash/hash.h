@@ -46,4 +46,17 @@ typedef size_t sowr_HashVal;
 sowr_HashVal
 sowr_GetHash(size_t length, const char *bytes);
 
+///
+/// \brief Hash a string
+///
+/// Get the hashcode of a string.
+/// The string is understood to be null-terminated
+///
+/// \param str String to hash
+///
+/// \return Hashed result
+///
+sowr_HashVal
+sowr_GetHashS(const char *str);
+
 #endif // !SOWR_LIB_HASH_HASH_H

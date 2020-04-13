@@ -44,3 +44,10 @@ sowr_GetHash(size_t length, const char *bytes)
 
     return res;
 }
+
+inline
+sowr_HashVal
+sowr_GetHashS(const char *str)
+{
+    return sowr_GetHash(strlen(str) + 1, str);
+}
