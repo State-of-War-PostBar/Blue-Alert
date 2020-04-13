@@ -57,7 +57,7 @@ typedef struct
 /// \return A hashmap
 ///
 sowr_HashMap *
-sowr_HashMap_Create();
+sowr_HashMap_Create(void);
 
 ///
 /// \brief Create a hashmap

@@ -68,7 +68,7 @@ sowr_HashMap_ClearListFunc(void *list)
 
 inline
 sowr_HashMap *
-sowr_HashMap_Create()
+sowr_HashMap_Create(void)
 {
     return sowr_HashMap_Create_SuggestBuckets(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT);
 }
@@ -86,6 +86,7 @@ sowr_HashMap_Create_SuggestBuckets(size_t buckets_count)
         sowr_LinkedList *slot = sowr_LinkedList_Create(sizeof(sowr_HashMapValue), sowr_HashMapValueFreeFunc);
         sowr_Vector_Push(buckets, slot);
     }
+    sowr_Vector_ShrinkToFit(buckets);
 
     map->buckets = buckets;
     map->buckets_count = buckets_count;
@@ -223,6 +224,7 @@ sowr_HashMap_DeleteS(sowr_HashMap *map, const char *index)
     sowr_HashMap_Delete(map, strlen(index) + 1, index);
 }
 
+inline
 void
 sowr_HashMap_Clear(sowr_HashMap *map)
 {

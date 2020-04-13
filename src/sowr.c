@@ -29,8 +29,6 @@
 #include "lib/profile/profile.h"
 #include "state/state.h"
 
-#include "test/test.h"
-
 int
 main(int argc, char *argv[])
 {
@@ -41,8 +39,6 @@ main(int argc, char *argv[])
     sowr_InitProfiler();
     sowr_CreateProgramState();
     SOWR_LOG_INFO("Starting State of War: Remasted %s.", SOWR_PROG_VERSION_STRING);
-
-    sowr_Testy();
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();

@@ -38,7 +38,7 @@ const unsigned int SOWR_PROG_VERSION_MAJOR    = 0;
 const unsigned int SOWR_PROG_VERSION_MINOR    = 0;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0;
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1;
-const char *const  SOWR_PROG_VERSION_STRING        = "Indev 0.0 rev0 Build 001";
+const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.0 rev0 Build 001";
 
 const char *const SOWR_LOG_FILE_NAME          = "sowr.log";
 
@@ -56,7 +56,6 @@ const char *const SOWR_LOG_FILE_NAME          = "sowr.log";
     /// \param lock To lock or to unlock the log file. 0 for unlock.
     ///
     static
-    inline
     void
     sowr_LockLogFile(void *user_data, int lock)
     {
