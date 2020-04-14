@@ -26,7 +26,7 @@
 #include "state.h"
 
 #include "../lib/log/log.h"
-#include "../sync/multithread.h"
+#include "../lib/sync/lock.h"
 
 #include <pthread.h>
 
