@@ -12,3 +12,5 @@
 
 # I use this folder's .c files for implementations of libraries.  -- Taxerap
 /vendor/*.c
+
+/test/
