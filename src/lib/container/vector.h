@@ -56,6 +56,20 @@ sowr_Vector *
 sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func);
 
 ///
+/// \brief Create a vector
+///
+/// Create a vector, but return a stack variable.<BR />
+/// <B>The created vector must be freed by \a sowr_Vector_DestroyS().</B>
+///
+/// \param elem_size Size of vector's elements
+/// \param free_func Function to call when the vector frees an element
+///
+/// \return Created vector
+///
+sowr_Vector
+sowr_Vector_CreateS(size_t elem_size, const sowr_VecFreeFunc free_func);
+
+///
 /// \brief Get the indexth element
 ///
 /// Get the pointer to some place in the vector.
@@ -204,5 +218,15 @@ sowr_Vector_ShrinkToFit(sowr_Vector *vec);
 ///
 void
 sowr_Vector_Destroy(sowr_Vector *vec);
+
+///
+/// \brief Destroy a vector
+///
+/// Destroy a vector created by \a sowr_Vector_CreateS(), freeing all its elements.
+///
+/// \param vec Vector to destroy
+///
+void
+sowr_Vector_DestroyS(sowr_Vector *vec);
 
 #endif // !SOWR_LIB_CONTAINER_VECTOR_H

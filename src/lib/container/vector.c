@@ -37,6 +37,20 @@ sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func)
     return vec;
 }
 
+sowr_Vector
+sowr_Vector_CreateS(size_t elem_size, const sowr_VecFreeFunc free_func)
+{
+    sowr_Vector vec =
+    {
+        .length = 0,
+        .capacity = 0,
+        .elem_size = elem_size,
+        .ptr = NULL,
+        .free_func = free_func
+    };
+    return vec;
+}
+
 inline
 void *
 sowr_Vector_PtrAt(sowr_Vector *vec, size_t index)
@@ -74,8 +88,11 @@ inline
 void
 sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func)
 {
-    for (char *ptr = (char *)vec->ptr; ptr != sowr_Vector_PtrAt(vec, vec->length); ptr += vec->elem_size)
-        func(ptr);
+    if (!vec->length)
+        return;
+
+    for (size_t i = 0; i < vec->length; i++)
+        func(sowr_Vector_PtrAt(vec, i));
 }
 
 void
@@ -185,4 +202,11 @@ sowr_Vector_Destroy(sowr_Vector *vec)
     sowr_Vector_Clear(vec);
     sowr_HeapFree(vec->ptr);
     sowr_HeapFree(vec);
+}
+
+void
+sowr_Vector_DestroyS(sowr_Vector *vec)
+{
+    sowr_Vector_Clear(vec);
+    sowr_HeapFree(vec->ptr);
 }

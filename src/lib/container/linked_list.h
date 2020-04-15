@@ -58,6 +58,18 @@ sowr_LinkedList *
 sowr_LinkedList_Create(size_t elem_size, const sowr_LinkedListFreeFunc free_func);
 
 ///
+/// \brief Create a linked list
+///
+/// Create a linked list ready to use by stack variable.<BR />
+/// <B>The created list must be destroyed by \a sowr_LinkedList_Destroy().</B>
+///
+/// \param elem_size Size of each element
+/// \param free_func Function to call when freeing an element
+///
+sowr_LinkedList
+sowr_LinkedList_CreateS(size_t elem_size, const sowr_LinkedListFreeFunc free_func);
+
+///
 /// \brief Walk a linked list
 ///
 /// Walk a linked list with given function
@@ -170,5 +182,15 @@ sowr_LinkedList_DeleteNF(sowr_LinkedList *list, const void *elem, const sowr_Lin
 ///
 void
 sowr_LinkedList_Destroy(sowr_LinkedList *list);
+
+///
+/// \brief Destroy a linked list
+///
+/// Destroy a linked list created by \a sowr_LinkedList_CreateS().
+///
+/// \param list List to destroy
+///
+void
+sowr_LinkedList_DestroyS(sowr_LinkedList *list);
 
 #endif //!SOWR_LIB_CONTAINER_LINKED_LIST_H

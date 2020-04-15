@@ -38,6 +38,19 @@ sowr_LinkedList_Create(size_t elem_size, const sowr_LinkedListFreeFunc free_func
     return list;
 }
 
+sowr_LinkedList
+sowr_LinkedList_CreateS(size_t elem_size, const sowr_LinkedListFreeFunc free_func)
+{
+    sowr_LinkedList list =
+    {
+        .next = NULL,
+        .elem_size = elem_size,
+        .length = 0,
+        .free_func = free_func
+    };
+    return list;
+}
+
 void
 sowr_LinkedList_Walk(const sowr_LinkedList *list, const sowr_LinkedListWalkFunc func)
 {
@@ -51,6 +64,9 @@ sowr_LinkedList_Walk(const sowr_LinkedList *list, const sowr_LinkedListWalkFunc 
 void
 sowr_LinkedList_Clear(sowr_LinkedList *list)
 {
+    if (!list->length)
+        return;
+
     sowr_LinkedListNode *iter = list->next, *save = NULL;
     while (iter)
     {
@@ -62,6 +78,7 @@ sowr_LinkedList_Clear(sowr_LinkedList *list)
         iter = save;
     }
     list->next = NULL;
+    list->length = 0;
 }
 
 sowr_LinkedListNode *
@@ -168,7 +185,7 @@ sowr_LinkedList_Delete(sowr_LinkedList *list, const void *elem, const sowr_Linke
             sowr_HeapFree(iter);
             count++;
             list->length--;
-            if (!next)
+            if (!list->length)
                 return count;
             iter = save;
         }
@@ -216,4 +233,10 @@ sowr_LinkedList_Destroy(sowr_LinkedList *list)
 {
     sowr_LinkedList_Clear(list);
     sowr_HeapFree(list);
+}
+
+void
+sowr_LinkedList_DestroyS(sowr_LinkedList *list)
+{
+    sowr_LinkedList_Clear(list);
 }
