@@ -11,4 +11,4 @@ Personal experimenting project of [Taxerap](https://github.com/Taxerap), In C.
 
 ---
 
-Published under [JDBM License](https://raw.githubusercontent.com/mhtvsSFrpHdE/ipcui/master/LICENSE_JDBM), some rights reserved.
+Published under [JDBM License](https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM), some rights reserved.
