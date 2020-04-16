@@ -31,7 +31,7 @@ static const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
 
 static
 bool
-sowr_HashValCmpIndexFunc(const void *left, const void *right)
+sowr_CompareIndexHash(const void *left, const void *right)
 {
     if (((sowr_HashMapValue *)left)->index_hash == ((sowr_HashMapValue *)right)->index_hash)
         return true;
@@ -40,7 +40,7 @@ sowr_HashValCmpIndexFunc(const void *left, const void *right)
 
 static
 bool
-sowr_HashValCmpHashToDataFunc(const void *left_val, const void *right_hash)
+sowr_CompareIndexHashToHash(const void *left_val, const void *right_hash)
 {
     return ((sowr_HashMapValue *)left_val)->index_hash == *(sowr_HashVal *)right_hash;
 }
@@ -119,7 +119,7 @@ sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, s
 
     size_t slot = index_hash % map->buckets_count;
     sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
-    map->length = sowr_LinkedList_Delete(bucket, block, sowr_HashValCmpIndexFunc) ? map->length : map->length + 1ULL;
+    map->length = sowr_LinkedList_Delete(bucket, block, sowr_CompareIndexHash) ? map->length : map->length + 1ULL;
     sowr_LinkedList_Insert(bucket, block);
 }
 
@@ -147,7 +147,7 @@ sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index)
         case 1ULL:
             return (sowr_HashMapValue *)bucket->head->data;
         default:
-            return (sowr_HashMapValue *)sowr_LinkedList_Find(bucket, &hash, sowr_HashValCmpHashToDataFunc)->data;
+            return (sowr_HashMapValue *)sowr_LinkedList_Find(bucket, &hash, sowr_CompareIndexHashToHash)->data;
     }
 }
 
@@ -192,7 +192,7 @@ sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index)
         default:
         {
             sowr_HashMapValue *new_val;
-            sowr_LinkedList_DeleteN(bucket, &hash, sowr_HashValCmpHashToDataFunc, &new_val);
+            sowr_LinkedList_DeleteN(bucket, &hash, sowr_CompareIndexHashToHash, &new_val);
             map->length--;
             return new_val;
         }
@@ -227,7 +227,7 @@ sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index)
         }
         default:
         {
-            sowr_LinkedList_Delete(bucket, &hash, sowr_HashValCmpHashToDataFunc);
+            sowr_LinkedList_Delete(bucket, &hash, sowr_CompareIndexHashToHash);
             map->length--;
         }
     }
