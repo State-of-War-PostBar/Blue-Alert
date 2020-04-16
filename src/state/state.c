@@ -30,17 +30,17 @@
 
 #include <pthread.h>
 
-const char *const SOWR_PROG_ID                = "sowr";
-const char *const SOWR_PROG_NAME              = "State of War: Remastered";
+const char *const  SOWR_PROG_ID               = "sowr";
+const char *const  SOWR_PROG_NAME             = "State of War: Remastered";
 
 const char *const  SOWR_PROG_VERSION_STAGE    = "Indev";
-const unsigned int SOWR_PROG_VERSION_MAJOR    = 0;
-const unsigned int SOWR_PROG_VERSION_MINOR    = 0;
-const unsigned int SOWR_PROG_VERSION_REVISION = 0;
-const unsigned int SOWR_PROG_BUILD_NUMBER     = 1;
+const unsigned int SOWR_PROG_VERSION_MAJOR    = 0U;
+const unsigned int SOWR_PROG_VERSION_MINOR    = 0U;
+const unsigned int SOWR_PROG_VERSION_REVISION = 0U;
+const unsigned int SOWR_PROG_BUILD_NUMBER     = 1U;
 const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.0 rev0 Build 001";
 
-const char *const SOWR_LOG_FILE_NAME          = "sowr.log";
+static const char *const  SOWR_LOG_FILE_NAME  = "sowr.log";
 
 #ifdef SOWR_BUILD_DEBUG
     static bool sowr_log_available;
@@ -50,7 +50,7 @@ const char *const SOWR_LOG_FILE_NAME          = "sowr.log";
     ///
     /// \brief Lock the log file
     ///
-    /// Locking function for the log file, feed to log.c
+    /// Locking function for the log file, feed to log.c.
     ///
     /// \param user_data User-defined data when called. Unused.
     /// \param lock To lock or to unlock the log file. 0 for unlock.
@@ -98,10 +98,4 @@ sowr_DestroyLogger(void)
         sowr_DestroyCriticalSection(&sowr_log_file_mtx);
     }
 #endif
-}
-
-void
-sowr_CreateProgramState(void)
-{
-    srand(time(NULL));
 }

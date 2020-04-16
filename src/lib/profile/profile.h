@@ -31,7 +31,8 @@
 ///
 /// \brief Initialize the profiler
 ///
-/// Initialize the profiler for the whole program. This function needs to be called for once and only once for the profiler to work.
+/// Initialize the profiler for the whole program. This function needs to be called for once and only once for the profiler to work.<BR />
+/// <B>On Posix systems, this function does nothing.</B>
 ///
 /// \note You do not have to call it for different threads, only one thread needs to do so.
 ///
@@ -42,9 +43,9 @@ sowr_InitProfiler(void);
 /// \brief Profile a function
 ///
 /// Start or stop profiling a function. When called for the first time, profiling starts. When called for the second time (in the same thread),
-/// the profiling stops.
-/// The profile result is outputed as [Debug logger prefix] Profiling "function name" ("start line" to "stop line" in "file name") took "time" ms.
-/// This function is thread-safe, every thread have their own profile record.
+/// the profiling stops.<BR />
+/// The profile result is outputed as [Logger debug prefix] Profiling "function name" ("start line" to "stop line" in "file name") took "time" ms.
+/// This function is thread-safe, every thread has their own profile record.
 ///
 /// \note It is recommanded to use the macros \a SOWR_START_PROFILE() and \a SOWR_STOP_PROFILE() instead.
 ///

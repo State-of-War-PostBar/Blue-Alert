@@ -44,7 +44,7 @@ sowr_HeapAlloc(size_t size)
 
 inline
 void *
-sowr_HeapAlignedAlloc(size_t size, size_t alignment)
+sowr_HeapAlignedAlloc(size_t alignment, size_t size)
 {
 #ifdef SOWR_TARGET_WINDOWS
     void *ptr = _aligned_malloc(size, alignment);
@@ -65,7 +65,7 @@ inline
 void *
 sowr_HeapZeroAlloc(size_t size)
 {
-    void *ptr = calloc(1, size);
+    void *ptr = calloc(1ULL, size);
     if (!ptr)
     {
 #ifdef SOWR_BUILD_DEBUG
@@ -91,7 +91,7 @@ sowr_ReAlloc(size_t size, void *ptr)
     if (!new)
     {
 #ifdef SOWR_BUILD_DEBUG
-        SOWR_LOG_FATAL("Failed to reallocate %zu bytes of memory at %p, program failing.", ptr, size);
+        SOWR_LOG_FATAL("Failed to reallocate %zu bytes of memory for %p, program failing.", ptr, size);
 #endif
         abort();
     }

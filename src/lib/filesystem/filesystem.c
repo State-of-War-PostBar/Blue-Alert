@@ -30,17 +30,11 @@
 #ifdef SOWR_TARGET_WINDOWS
     #include <io.h>
     #include <direct.h>
-
-    const char SOWR_PATH_SEP = '\\';
-    const char *SOWR_LINE_SEP = "\r\n";
 #else
     #include <unistd.h>
     #include <sys/dir.h>
     #include <sys/stat.h>
     #include <sys/types.h>
-
-    const char SOWR_PATH_SEP = '/';
-    const char SOWR_LINE_SEP = '\n';
 #endif
 
 inline

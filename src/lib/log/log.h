@@ -52,6 +52,4 @@
     #define SOWR_LOG_FATAL(...)
 #endif
 
-#define SOWR_DEFAULT_LOG_BUFFER_SIZE 512
-
 #endif // !SOWR_LIB_LOG_LOG_H

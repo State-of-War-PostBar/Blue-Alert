@@ -38,12 +38,10 @@ extern const unsigned int    SOWR_PROG_VERSION_REVISION;
 extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
 extern const char *const     SOWR_PROG_VERSION_STRING;
 
-extern const char *const     SOWR_LOG_FILE_NAME;
-
 ///
 /// \brief Initialize the logger
 ///
-/// Initialize the logger of program. This must be called first in order to use logging feature.
+/// Initialize the logger of program. This must be called first for using logging feature.
 ///
 void
 sowr_InitLogger(void);
@@ -55,13 +53,5 @@ sowr_InitLogger(void);
 ///
 void
 sowr_DestroyLogger(void);
-
-///
-/// \brief Create program state
-///
-/// Create the pre-state for the program to run.
-///
-void
-sowr_CreateProgramState(void);
 
 #endif // !SOWR_STATE_STATE_H

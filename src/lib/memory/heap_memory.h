@@ -46,13 +46,13 @@ sowr_HeapAlloc(size_t size);
 /// Allocate memory in the heap with alignment, see documents for \a aligned_alloc().
 /// If the allocation failes, it terminates the program.
 ///
-/// \param size Size in bytes of the allocation
 /// \param alignment Size in bytes of the alignment
+/// \param size Size in bytes of the allocation
 ///
 /// \return Pointer to the allocated memory
 ///
 void *
-sowr_HeapAlignedAlloc(size_t size, size_t alignment);
+sowr_HeapAlignedAlloc(size_t alignment, size_t size);
 
 ///
 /// \brief Allocate memory in the heap with zeroing out
@@ -78,9 +78,9 @@ void
 sowr_HeapFree(void *ptr);
 
 ///
-/// \brief Allocate the allocated memory with a new size.
+/// \brief Reallocate the allocated memory with a new size.
 ///
-/// Allocate the allocated memory with a new size.
+/// Reallocate the allocated memory with a new size.
 /// If the allocation fails, it terminates the program.
 ///
 /// \note Keep in mind that the old pointer is not usable anymore.

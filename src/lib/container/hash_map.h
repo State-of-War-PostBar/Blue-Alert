@@ -36,17 +36,17 @@ typedef void (*sowr_HashMapWalkFunc)(void *);
 
 typedef struct
 {
-    size_t index_hash;
-    size_t value_hash;
+    sowr_HashVal index_hash;
+    sowr_HashVal value_hash;
     size_t value_length;
     char *data;
 } sowr_HashMapValue;
 
 typedef struct
 {
-    sowr_Vector buckets;
     size_t buckets_count;
     size_t length;
+    sowr_Vector buckets;
 } sowr_HashMap;
 
 ///
@@ -62,7 +62,7 @@ sowr_HashMap_Create(void);
 ///
 /// \brief Create a hashmap
 ///
-/// Create a hashmap on stack, with default buckets, ready to use.<BR />
+/// Create a hashmap by stack, with default buckets, ready to use.<BR />
 /// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
 ///
 /// \return A hashmap
@@ -83,7 +83,7 @@ sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count);
 ///
 /// \brief Create a hashmap
 ///
-/// Create a hashmap with custom number of buckets on stack, ready to use.<BR />
+/// Create a hashmap with custom number of buckets by stack, ready to use.<BR />
 /// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
 ///
 /// \return A hashmap
@@ -108,7 +108,7 @@ sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, s
 ///
 /// \brief Insert an element to hashmap
 ///
-/// Use key and value to insert element to hashmap, override the old value if key is identical.
+/// Use key and value to insert element to hashmap, override the old value if key is identical.<BR />
 /// The key and value are understood to be null-terminated strings.
 ///
 /// \param map Map to insert
@@ -135,7 +135,7 @@ sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index);
 ///
 /// \brief Get a value from the map
 ///
-/// Use key to get a value from the map.
+/// Use key to get a value from the map.<BR />
 /// The key is understood to be null-terminated string.
 ///
 /// \param map Map to get
@@ -152,8 +152,6 @@ sowr_HashMap_GetI(sowr_HashMap *map, const char *index);
 /// Walk the map with given function.
 ///
 /// \param map Map to walk
-/// \param index_length Length of index in byte
-/// \param index Index
 /// \param func Function to use
 ///
 void
@@ -176,7 +174,7 @@ sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index);
 ///
 /// \brief Take a value from the map
 ///
-/// Take a value from the map.
+/// Take a value from the map.<BR />
 /// The key is understood to be null-terminated string.
 ///
 /// \param map Map to get
@@ -202,7 +200,7 @@ sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index);
 ///
 /// \brief Delete a value from the map
 ///
-/// Delete a value by index from the map.
+/// Delete a value by index from the map.<BR />
 /// The index is understood to be null-terminated string.
 ///
 /// \param map Map to operate
@@ -214,7 +212,7 @@ sowr_HashMap_DeleteI(sowr_HashMap *map, const char *index);
 ///
 /// \brief Clear the hashmap
 ///
-/// Clear the contents of the hashmap
+/// Clear the contents of the hashmap.
 ///
 /// \param map Map to clear
 ///

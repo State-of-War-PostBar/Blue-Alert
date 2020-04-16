@@ -37,9 +37,9 @@ typedef struct
 {
     size_t length;
     size_t capacity;
-    void *ptr;
     size_t elem_size;
     sowr_VecFreeFunc free_func;
+    void *ptr;
 } sowr_Vector;
 
 ///
@@ -58,7 +58,7 @@ sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func);
 ///
 /// \brief Create a vector
 ///
-/// Create a vector, but return a stack variable.<BR />
+/// Create a vector by stack.<BR />
 /// <B>The created vector must be freed by \a sowr_Vector_DestroyS().</B>
 ///
 /// \param elem_size Size of vector's elements
@@ -119,7 +119,7 @@ sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func);
 ///
 /// \brief Clear out a vector
 ///
-/// Clear the content of a vector, its capacity is unchanged.
+/// Clear the content of a vector. Its capacity is unchanged.
 ///
 /// \param vec Vector to clear
 ///
@@ -127,10 +127,20 @@ void
 sowr_Vector_Clear(sowr_Vector *vec);
 
 ///
+/// \brief Shrink the vector
+///
+/// Shrink the vector to just enough to fit its contents.
+///
+/// \param vec Vector to shrink
+///
+void
+sowr_Vector_ShrinkToFit(sowr_Vector *vec);
+
+///
 /// \brief Insert element to vector
 ///
 /// Insert an element to vector.
-/// If index is out of bound, it is understood to push the element to last of vector.
+/// If index is out of bound, it is understood to push the element to the end of vector.
 ///
 /// \param vec Vector to insert
 /// \param elem Element to insert
@@ -142,7 +152,7 @@ sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index);
 ///
 /// \brief Replace an element
 ///
-/// Replace an element with a new one, the old one will be freed.
+/// Replace an element with a new one, the old one will be overriden.
 /// If index is out of bound, it is understood to push the element to last of vector.
 ///
 /// \param vec Vector to operate
@@ -167,7 +177,7 @@ sowr_Vector_Delete(sowr_Vector *vec, size_t index);
 ///
 /// \brief Take an element
 ///
-/// Take an element out of the vector. The old element will be freed.
+/// Take an element out of the vector. The old element will be overriden.
 ///
 /// \param vec Vector to operate
 /// \param index Index to take out
@@ -191,23 +201,13 @@ sowr_Vector_Push(sowr_Vector *vec, const void *elem);
 /// \brief Pop the last element of vector
 ///
 /// Pop the last element of vector into the pointer.
-/// Whether ptr_retrieve is NULL or not, the last element will be freed.
+/// Whether ptr_retrieve is NULL or not, the last element will be overriden.
 ///
 /// \param vec Vector to pop out
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
 sowr_Vector_Pop(sowr_Vector *vec, void *ptr_retrieve);
-
-///
-/// \brief Shrink the vector
-///
-/// Shrink the vector to just enough to fit its contents.
-///
-/// \param vec Vector to shrink
-///
-void
-sowr_Vector_ShrinkToFit(sowr_Vector *vec);
 
 ///
 /// \brief Destroy a vector

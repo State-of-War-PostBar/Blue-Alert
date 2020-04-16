@@ -42,7 +42,7 @@ static
 bool
 sowr_HashValCmpHashToDataFunc(const void *left_val, const void *right_hash)
 {
-    return ((sowr_HashMapValue *)left_val)->index_hash == *((sowr_HashVal *)right_hash);
+    return ((sowr_HashMapValue *)left_val)->index_hash == *(sowr_HashVal *)right_hash;
 }
 
 static
@@ -50,13 +50,6 @@ void
 sowr_HashMapValueFreeFunc(void *data)
 {
     sowr_HeapFree(((sowr_HashMapValue *)data)->data);
-}
-
-static
-void
-sowr_HashMapListClearFunc(void *list)
-{
-    sowr_LinkedList_Clear((sowr_LinkedList *)list);
 }
 
 inline
@@ -78,19 +71,16 @@ sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count)
 {
     sowr_HashMap *map = sowr_HeapAlloc(sizeof(sowr_HashMap));
 
-    map->buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_HashMapListClearFunc);
-    sowr_Vector_ExpandUntil(&map->buckets, buckets_count);
-
-    for (size_t i = 0; i < buckets_count; i++)
+    map->buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_LinkedList_DestroyS);
+    sowr_Vector_ExpandUntil(&(map->buckets), buckets_count);
+    for (size_t i = 0ULL; i < buckets_count; i++)
     {
         sowr_LinkedList slot = sowr_LinkedList_CreateS(sizeof(sowr_HashMapValue), sowr_HashMapValueFreeFunc);
-        sowr_Vector_Push(&map->buckets, &slot);
+        sowr_Vector_Push(&(map->buckets), &slot);
     }
-    sowr_Vector_ShrinkToFit(&map->buckets);
 
     map->buckets_count = buckets_count;
-    map->buckets.free_func = sowr_LinkedList_DestroyS;
-    map->length = 0;
+    map->length = 0ULL;
 
     return map;
 }
@@ -100,19 +90,16 @@ sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count)
 {
     sowr_HashMap map = {};
 
-    map.buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_HashMapListClearFunc);
-    sowr_Vector_ExpandUntil(&map.buckets, buckets_count);
-
-    for (size_t i = 0; i < buckets_count; i++)
+    map.buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_LinkedList_DestroyS);
+    sowr_Vector_ExpandUntil(&(map.buckets), buckets_count);
+    for (size_t i = 0ULL; i < buckets_count; i++)
     {
         sowr_LinkedList slot = sowr_LinkedList_CreateS(sizeof(sowr_HashMapValue), sowr_HashMapValueFreeFunc);
-        sowr_Vector_Push(&map.buckets, &slot);
+        sowr_Vector_Push(&(map.buckets), &slot);
     }
-    sowr_Vector_ShrinkToFit(&map.buckets);
 
     map.buckets_count = buckets_count;
-    map.buckets.free_func = sowr_LinkedList_DestroyS;
-    map.length = 0;
+    map.length = 0ULL;
 
     return map;
 }
@@ -131,8 +118,8 @@ sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, s
     block->value_hash = value_hash;
 
     size_t slot = index_hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&map->buckets, slot);
-    map->length = sowr_LinkedList_Delete(bucket, block, sowr_HashValCmpIndexFunc) ? map->length : map->length + 1;
+    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
+    map->length = sowr_LinkedList_Delete(bucket, block, sowr_HashValCmpIndexFunc) ? map->length : map->length + 1ULL;
     sowr_LinkedList_Insert(bucket, block);
 }
 
@@ -140,22 +127,25 @@ inline
 void
 sowr_HashMap_InsertI(sowr_HashMap *map, const char *index, const char *value)
 {
-    sowr_HashMap_Insert(map, strlen(index) + 1, index, strlen(value) + 1, value);
+    sowr_HashMap_Insert(map, strlen(index) + 1ULL, index, strlen(value) + 1ULL, value);
 }
 
 sowr_HashMapValue *
 sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index)
 {
+    if (!map->length)
+        return NULL;
+
     sowr_HashVal hash = sowr_GetHash(index_length, index);
     size_t slot = hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&map->buckets, slot);
+    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
 
     switch (bucket->length)
     {
-        case 0:
+        case 0ULL:
             return NULL;
-        case 1:
-            return (sowr_HashMapValue *)bucket->next->data;
+        case 1ULL:
+            return (sowr_HashMapValue *)bucket->head->data;
         default:
             return (sowr_HashMapValue *)sowr_LinkedList_Find(bucket, &hash, sowr_HashValCmpHashToDataFunc)->data;
     }
@@ -165,7 +155,7 @@ inline
 sowr_HashMapValue *
 sowr_HashMap_GetI(sowr_HashMap *map, const char *index)
 {
-    return sowr_HashMap_Get(map, strlen(index) + 1, index);
+    return sowr_HashMap_Get(map, strlen(index) + 1ULL, index);
 }
 
 void
@@ -174,33 +164,35 @@ sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func)
     if (!map->length)
         return;
 
-    for (size_t i = 0; i < map->buckets_count; i++)
-        sowr_LinkedList_Walk(sowr_Vector_PtrAt(&map->buckets, i), func);
+    for (size_t i = 0ULL; i < map->buckets_count; i++)
+        sowr_LinkedList_Walk(sowr_Vector_PtrAt(&(map->buckets), i), func);
 }
 
 sowr_HashMapValue *
 sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index)
 {
+    if (!map->length)
+        return NULL;
+
     sowr_HashVal hash = sowr_GetHash(index_length, index);
     size_t slot = hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&map->buckets, slot);
-
-    if (!bucket->length)
-        return NULL;
+    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
 
     switch (bucket->length)
     {
-        case 1:
+        case 0ULL:
+            return NULL;
+        case 1ULL:
         {
             sowr_HashMapValue *new_val;
-            sowr_LinkedList_PopNF(bucket, (void **)&new_val);
+            sowr_LinkedList_PopN(bucket, &new_val);
             map->length--;
             return new_val;
         }
         default:
         {
             sowr_HashMapValue *new_val;
-            sowr_LinkedList_DeleteNF(bucket, &hash, sowr_HashValCmpHashToDataFunc, (void **)&new_val);
+            sowr_LinkedList_DeleteN(bucket, &hash, sowr_HashValCmpHashToDataFunc, &new_val);
             map->length--;
             return new_val;
         }
@@ -210,22 +202,24 @@ sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index)
 sowr_HashMapValue *
 sowr_HashMap_TakeI(sowr_HashMap *map, const char *index)
 {
-    return sowr_HashMap_Take(map, strlen(index) + 1, index);
+    return sowr_HashMap_Take(map, strlen(index) + 1ULL, index);
 }
 
 void
 sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index)
 {
+    if (!map->length)
+        return;
+
     sowr_HashVal hash = sowr_GetHash(index_length, index);
     size_t slot = hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&map->buckets, slot);
-
-    if (!bucket->length)
-        return;
+    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
 
     switch (bucket->length)
     {
-        case 1:
+        case 0ULL:
+            return;
+        case 1ULL:
         {
             sowr_LinkedList_Pop(bucket);
             map->length--;
@@ -243,20 +237,20 @@ inline
 void
 sowr_HashMap_DeleteI(sowr_HashMap *map, const char *index)
 {
-    sowr_HashMap_Delete(map, strlen(index) + 1, index);
+    sowr_HashMap_Delete(map, strlen(index) + 1ULL, index);
 }
 
 inline
 void
 sowr_HashMap_Clear(sowr_HashMap *map)
 {
-    sowr_Vector_Walk(&map->buckets, sowr_HashMapListClearFunc);
+    sowr_Vector_Walk(&(map->buckets), sowr_LinkedList_Clear);
 }
 
 void
 sowr_HashMap_Destroy(sowr_HashMap *map)
 {
-    sowr_Vector_DestroyS(&map->buckets);
+    sowr_Vector_DestroyS(&(map->buckets));
     sowr_HeapFree(map);
 }
 

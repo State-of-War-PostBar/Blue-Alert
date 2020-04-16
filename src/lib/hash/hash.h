@@ -28,9 +28,7 @@
 
 #include <pch.h>
 
-///
 /// Hashed value
-///
 typedef size_t sowr_HashVal;
 
 ///
@@ -49,8 +47,8 @@ sowr_GetHash(size_t length, const char *bytes);
 ///
 /// \brief Hash a string
 ///
-/// Get the hashcode of a string.
-/// The string is understood to be null-terminated
+/// Get the hashcode of a string.<BR />
+/// The string is understood to be null-terminated.
 ///
 /// \param str String to hash
 ///
