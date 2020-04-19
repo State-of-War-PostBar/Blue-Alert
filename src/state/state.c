@@ -40,9 +40,8 @@ const unsigned int SOWR_PROG_VERSION_REVISION = 0U;
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1U;
 const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.0 rev0 Build 001";
 
-static const char *const  SOWR_LOG_FILE_NAME  = "sowr.log";
-
 #ifdef SOWR_BUILD_DEBUG
+    static const char *const SOWR_LOG_FILE_NAME = "sowr.log";
     static bool sowr_log_available;
     static FILE *sowr_log_file;
     static sowr_CriticalSection sowr_log_file_mtx;
