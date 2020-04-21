@@ -78,7 +78,7 @@ sowr_LinkedList_Clear(sowr_LinkedList *list)
         iter = save;
     }
     list->head = NULL;
-    list->length = 0;
+    list->length = 0ULL;
 }
 
 void

@@ -30,7 +30,7 @@ sowr_GetHash(size_t length, const char *bytes)
 {
     sowr_HashVal res = 0ULL;
 
-    size_t i = 0;
+    size_t i = 0ULL;
     for (i = 0ULL; i < length / 4ULL; i++)
         res += (bytes[i] * bytes[i] >> 5) * 0x1070601686fULL;
     for (i = length / 4ULL; i < length / 2ULL; i++)

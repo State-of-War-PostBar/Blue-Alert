@@ -47,7 +47,7 @@ sowr_CompareIndexHashToHash(const void *left_val, const void *right_hash)
 
 static
 void
-sowr_HashMapValueFreeFunc(void *data)
+sowr_FreeHashMapValue(void *data)
 {
     sowr_HeapFree(((sowr_HashMapValue *)data)->data);
 }
@@ -75,7 +75,7 @@ sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count)
     sowr_Vector_ExpandUntil(&(map->buckets), buckets_count);
     for (size_t i = 0ULL; i < buckets_count; i++)
     {
-        sowr_LinkedList slot = sowr_LinkedList_CreateS(sizeof(sowr_HashMapValue), sowr_HashMapValueFreeFunc);
+        sowr_LinkedList slot = sowr_LinkedList_CreateS(sizeof(sowr_HashMapValue), sowr_FreeHashMapValue);
         sowr_Vector_Push(&(map->buckets), &slot);
     }
 
@@ -88,13 +88,13 @@ sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count)
 sowr_HashMap
 sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count)
 {
-    sowr_HashMap map = {};
+    sowr_HashMap map;
 
     map.buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_LinkedList_DestroyS);
     sowr_Vector_ExpandUntil(&(map.buckets), buckets_count);
     for (size_t i = 0ULL; i < buckets_count; i++)
     {
-        sowr_LinkedList slot = sowr_LinkedList_CreateS(sizeof(sowr_HashMapValue), sowr_HashMapValueFreeFunc);
+        sowr_LinkedList slot = sowr_LinkedList_CreateS(sizeof(sowr_HashMapValue), sowr_FreeHashMapValue);
         sowr_Vector_Push(&(map.buckets), &slot);
     }
 
@@ -257,5 +257,5 @@ sowr_HashMap_Destroy(sowr_HashMap *map)
 void
 sowr_HashMap_DestroyS(sowr_HashMap *map)
 {
-    sowr_Vector_DestroyS(&map->buckets);
+    sowr_Vector_DestroyS(&(map->buckets));
 }

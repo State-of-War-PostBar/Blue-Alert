@@ -63,7 +63,7 @@ size_t
 sowr_GetFileSize(FILE *file)
 {
 #ifdef SOWR_TARGET_WINDOWS
-    fseeko(file, 0, SEEK_END);
+    fseeko(file, 0L, SEEK_END);
     size_t size = ftello(file);
     rewind(file);
     return size;
