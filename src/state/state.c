@@ -95,6 +95,8 @@ sowr_DestroyLogger(void)
         fclose(sowr_log_file);
         sowr_LockLogFile(NULL, false);
         sowr_DestroyCriticalSection(&sowr_log_file_mtx);
+        sowr_log_file = NULL;
+        sowr_log_available = false;
     }
 #endif
 }
