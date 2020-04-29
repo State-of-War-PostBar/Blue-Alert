@@ -29,18 +29,6 @@
 #include <pch.h>
 
 ///
-/// \brief Check if the path exists
-///
-/// Check if the path exists, works for both file and directory.
-///
-/// \param path Path to check
-///
-/// \return True if the path exists, false otherwise.
-///
-bool
-sowr_PathExists(const char *path);
-
-///
 /// \brief Create a directory
 ///
 /// Create a directory.

@@ -160,7 +160,7 @@ sowr_LinkedList_Delete(sowr_LinkedList *list, const void *elem, const sowr_Linke
 /// \param func Function for comparision
 /// \param ptr_retrieve Pointer to retrieve the data if needed
 ///
-/// return Successfully deleted elements count
+/// \return Successfully deleted elements count
 ///
 size_t
 sowr_LinkedList_DeleteN(sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func, void **ptr_retrieve);

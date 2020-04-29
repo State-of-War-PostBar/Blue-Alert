@@ -39,17 +39,6 @@
 
 inline
 bool
-sowr_PathExists(const char *path)
-{
-#ifdef SOWR_TARGET_WINDOWS
-    return _access(path, 0) == 0;
-#else
-    return access(path, 0) == 0;
-#endif
-}
-
-inline
-bool
 sowr_CreateDirectory(const char *path)
 {
 #ifdef SOWR_TARGET_WINDOWS
