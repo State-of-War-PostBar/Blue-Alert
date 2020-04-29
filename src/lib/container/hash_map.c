@@ -107,20 +107,20 @@ sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count)
 void
 sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value)
 {
-    sowr_HashMapValue *block = sowr_HeapAlloc(sizeof(sowr_HashMapValue));
-    block->data = sowr_HeapAlloc(sizeof(char) * val_length);
-    memcpy(block->data, value, val_length);
-    block->value_length = val_length;
+    sowr_HashMapValue block;
+    block.data = sowr_HeapAlloc(sizeof(char) * val_length);
+    memcpy(block.data, value, val_length);
+    block.value_length = val_length;
 
     sowr_HashVal index_hash = sowr_GetHash(index_length, index);
-    block->index_hash = index_hash;
+    block.index_hash = index_hash;
     sowr_HashVal value_hash = sowr_GetHash(val_length, value);
-    block->value_hash = value_hash;
+    block.value_hash = value_hash;
 
     size_t slot = index_hash % map->buckets_count;
     sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
-    map->length = sowr_LinkedList_Delete(bucket, block, sowr_CompareIndexHash) ? map->length : map->length + 1ULL;
-    sowr_LinkedList_Insert(bucket, block);
+    map->length = sowr_LinkedList_Delete(bucket, &block, sowr_CompareIndexHash) ? map->length : map->length + 1ULL;
+    sowr_LinkedList_Insert(bucket, &block);
 }
 
 inline
