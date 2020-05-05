@@ -35,10 +35,10 @@ const char *const  SOWR_PROG_NAME             = "State of War: Remastered";
 
 const char *const  SOWR_PROG_VERSION_STAGE    = "Indev";
 const unsigned int SOWR_PROG_VERSION_MAJOR    = 0U;
-const unsigned int SOWR_PROG_VERSION_MINOR    = 0U;
+const unsigned int SOWR_PROG_VERSION_MINOR    = 1U;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0U;
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1U;
-const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.0 rev0 Build 001";
+const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.1 rev0 Build 001";
 
 #ifdef SOWR_BUILD_DEBUG
     static const char *const SOWR_LOG_FILE_NAME = "sowr.log";
@@ -56,7 +56,7 @@ const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.0 rev0 Build 001";
     ///
     static
     void
-    sowr_LockLogFile(void *user_data, int lock)
+    sowr_LockLogFile( void *user_data, int lock )
     {
         lock ?
             sowr_EnterCriticalSection(&sowr_log_file_mtx)
@@ -66,7 +66,7 @@ const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.0 rev0 Build 001";
 #endif
 
 void
-sowr_InitLogger(void)
+sowr_InitLogger( void )
 {
 #ifdef SOWR_BUILD_DEBUG
     sowr_log_file = fopen(SOWR_LOG_FILE_NAME, "w");
@@ -86,7 +86,7 @@ sowr_InitLogger(void)
 }
 
 void
-sowr_DestroyLogger(void)
+sowr_DestroyLogger( void )
 {
 #ifdef SOWR_BUILD_DEBUG
     if (sowr_log_available)

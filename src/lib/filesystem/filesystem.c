@@ -39,7 +39,7 @@
 
 inline
 bool
-sowr_CreateDirectory(const char *path)
+sowr_CreateDirectory( const char *path )
 {
 #ifdef SOWR_TARGET_WINDOWS
     return _mkdir(path);
@@ -49,7 +49,7 @@ sowr_CreateDirectory(const char *path)
 }
 
 size_t
-sowr_GetFileSize(FILE *file)
+sowr_GetFileSize( FILE *file )
 {
 #ifdef SOWR_TARGET_WINDOWS
     fseeko(file, 0L, SEEK_END);

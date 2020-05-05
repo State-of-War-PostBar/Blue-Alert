@@ -38,7 +38,7 @@
 /// \return True if the directory is successfully created, false otherwise.
 ///
 bool
-sowr_CreateDirectory(const char *path);
+sowr_CreateDirectory( const char *path );
 
 ///
 ///
@@ -52,6 +52,6 @@ sowr_CreateDirectory(const char *path);
 /// \return The file size
 ///
 size_t
-sowr_GetFileSize(FILE *file);
+sowr_GetFileSize( FILE *file );
 
 #endif

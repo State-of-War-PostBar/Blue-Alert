@@ -53,7 +53,7 @@ typedef struct
 /// \return Created vector
 ///
 sowr_Vector *
-sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func);
+sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func );
 
 ///
 /// \brief Create a vector
@@ -67,7 +67,7 @@ sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func);
 /// \return Created vector
 ///
 sowr_Vector
-sowr_Vector_CreateS(size_t elem_size, const sowr_VecFreeFunc free_func);
+sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func );
 
 ///
 /// \brief Get the indexth element
@@ -82,7 +82,7 @@ sowr_Vector_CreateS(size_t elem_size, const sowr_VecFreeFunc free_func);
 /// \return Pointer to the location after index
 ///
 void *
-sowr_Vector_PtrAt(sowr_Vector *vec, size_t index);
+sowr_Vector_PtrAt( sowr_Vector *vec, size_t index );
 
 ///
 /// \brief Expand the vector
@@ -92,7 +92,7 @@ sowr_Vector_PtrAt(sowr_Vector *vec, size_t index);
 /// \param vec Vector to expand
 ///
 void
-sowr_Vector_Expand(sowr_Vector *vec);
+sowr_Vector_Expand( sowr_Vector *vec );
 
 ///
 /// \brief Expand the vector
@@ -103,7 +103,7 @@ sowr_Vector_Expand(sowr_Vector *vec);
 /// \param size Target size for expanding
 ///
 void
-sowr_Vector_ExpandUntil(sowr_Vector *vec, size_t size);
+sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size );
 
 ///
 /// \brief Walkthrough the vector
@@ -114,7 +114,7 @@ sowr_Vector_ExpandUntil(sowr_Vector *vec, size_t size);
 /// \param func Function for walking
 ///
 void
-sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func);
+sowr_Vector_Walk( sowr_Vector *vec, const sowr_VecWalkFunc func );
 
 ///
 /// \brief Clear out a vector
@@ -124,7 +124,7 @@ sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func);
 /// \param vec Vector to clear
 ///
 void
-sowr_Vector_Clear(sowr_Vector *vec);
+sowr_Vector_Clear( sowr_Vector *vec );
 
 ///
 /// \brief Shrink the vector
@@ -134,7 +134,7 @@ sowr_Vector_Clear(sowr_Vector *vec);
 /// \param vec Vector to shrink
 ///
 void
-sowr_Vector_ShrinkToFit(sowr_Vector *vec);
+sowr_Vector_ShrinkToFit( sowr_Vector *vec );
 
 ///
 /// \brief Insert element to vector
@@ -147,7 +147,7 @@ sowr_Vector_ShrinkToFit(sowr_Vector *vec);
 /// \param index Index to insert
 ///
 void
-sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index);
+sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index );
 
 ///
 /// \brief Replace an element
@@ -160,7 +160,7 @@ sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index);
 /// \param index Index to replace
 ///
 void
-sowr_Vector_Replace(sowr_Vector *vec, const void *elem, size_t index);
+sowr_Vector_Replace( sowr_Vector *vec, const void *elem, size_t index );
 
 ///
 /// \brief Delete an element
@@ -172,7 +172,7 @@ sowr_Vector_Replace(sowr_Vector *vec, const void *elem, size_t index);
 /// \param index Index to delete
 ///
 void
-sowr_Vector_Delete(sowr_Vector *vec, size_t index);
+sowr_Vector_Delete( sowr_Vector *vec, size_t index );
 
 ///
 /// \brief Take an element
@@ -184,7 +184,7 @@ sowr_Vector_Delete(sowr_Vector *vec, size_t index);
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve);
+sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve );
 
 ///
 /// \brief Push an element
@@ -195,7 +195,7 @@ sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve);
 /// \param elem Element to be pushed
 ///
 void
-sowr_Vector_Push(sowr_Vector *vec, const void *elem);
+sowr_Vector_Push( sowr_Vector *vec, const void *elem );
 
 ///
 /// \brief Pop the last element of vector
@@ -207,7 +207,7 @@ sowr_Vector_Push(sowr_Vector *vec, const void *elem);
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Vector_Pop(sowr_Vector *vec, void *ptr_retrieve);
+sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a vector
@@ -217,7 +217,7 @@ sowr_Vector_Pop(sowr_Vector *vec, void *ptr_retrieve);
 /// \param vec Vector to destroy
 ///
 void
-sowr_Vector_Destroy(sowr_Vector *vec);
+sowr_Vector_Destroy( sowr_Vector *vec );
 
 ///
 /// \brief Destroy a vector
@@ -227,6 +227,6 @@ sowr_Vector_Destroy(sowr_Vector *vec);
 /// \param vec Vector to destroy
 ///
 void
-sowr_Vector_DestroyS(sowr_Vector *vec);
+sowr_Vector_DestroyS( sowr_Vector *vec );
 
 #endif // !SOWR_LIB_CONTAINER_VECTOR_H

@@ -38,7 +38,7 @@
 /// \return Pointer to the allocated memory
 ///
 void *
-sowr_HeapAlloc(size_t size);
+sowr_HeapAlloc( size_t size );
 
 ///
 /// \brief Allocate memory in the heap with alignment
@@ -52,7 +52,7 @@ sowr_HeapAlloc(size_t size);
 /// \return Pointer to the allocated memory
 ///
 void *
-sowr_HeapAlignedAlloc(size_t alignment, size_t size);
+sowr_HeapAlignedAlloc( size_t alignment, size_t size );
 
 ///
 /// \brief Allocate memory in the heap with zeroing out
@@ -65,7 +65,7 @@ sowr_HeapAlignedAlloc(size_t alignment, size_t size);
 /// \return Pointer to the allocated memory
 ///
 void *
-sowr_HeapZeroAlloc(size_t size);
+sowr_HeapZeroAlloc( size_t size );
 
 ///
 /// \brief Free the allocated memory
@@ -75,7 +75,7 @@ sowr_HeapZeroAlloc(size_t size);
 /// \param ptr Pointer to the freeing memory
 ///
 void
-sowr_HeapFree(void *ptr);
+sowr_HeapFree( void *ptr );
 
 ///
 /// \brief Reallocate the allocated memory with a new size.
@@ -91,6 +91,6 @@ sowr_HeapFree(void *ptr);
 /// \return Pointer to the allocated memory
 ///
 void *
-sowr_ReAlloc(size_t size, void *ptr);
+sowr_ReAlloc( size_t size, void *ptr );
 
 #endif // !SOWR_LIB_MEMORY_HEAP_MEMORY_H

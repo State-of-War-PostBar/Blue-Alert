@@ -26,7 +26,7 @@
 #include "vector.h"
 
 sowr_Vector *
-sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func)
+sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func )
 {
     sowr_Vector *vec = sowr_HeapAlloc(sizeof(sowr_Vector));
     vec->length = 0ULL;
@@ -38,7 +38,7 @@ sowr_Vector_Create(size_t elem_size, const sowr_VecFreeFunc free_func)
 }
 
 sowr_Vector
-sowr_Vector_CreateS(size_t elem_size, const sowr_VecFreeFunc free_func)
+sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func )
 {
     sowr_Vector vec =
     {
@@ -53,7 +53,7 @@ sowr_Vector_CreateS(size_t elem_size, const sowr_VecFreeFunc free_func)
 
 inline
 void *
-sowr_Vector_PtrAt(sowr_Vector *vec, size_t index)
+sowr_Vector_PtrAt( sowr_Vector *vec, size_t index )
 {
     char *ptr = (char *)vec->ptr;
     for (size_t i = 0ULL; i < index; i++)
@@ -62,7 +62,7 @@ sowr_Vector_PtrAt(sowr_Vector *vec, size_t index)
 }
 
 void
-sowr_Vector_Expand(sowr_Vector *vec)
+sowr_Vector_Expand( sowr_Vector *vec )
 {
     if (!vec->capacity)
     {
@@ -78,14 +78,14 @@ sowr_Vector_Expand(sowr_Vector *vec)
 
 inline
 void
-sowr_Vector_ExpandUntil(sowr_Vector *vec, size_t size)
+sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size )
 {
     while (vec->capacity < size)
         sowr_Vector_Expand(vec);
 }
 
 void
-sowr_Vector_ShrinkToFit(sowr_Vector *vec)
+sowr_Vector_ShrinkToFit( sowr_Vector *vec )
 {
     if (vec->capacity > vec->length && vec->length)
     {
@@ -100,7 +100,7 @@ sowr_Vector_ShrinkToFit(sowr_Vector *vec)
 }
 
 void
-sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func)
+sowr_Vector_Walk( sowr_Vector *vec, const sowr_VecWalkFunc func )
 {
     if (!vec->length)
         return;
@@ -110,7 +110,7 @@ sowr_Vector_Walk(sowr_Vector *vec, const sowr_VecWalkFunc func)
 }
 
 void
-sowr_Vector_Clear(sowr_Vector *vec)
+sowr_Vector_Clear( sowr_Vector *vec )
 {
     if (vec->free_func)
         sowr_Vector_Walk(vec, vec->free_func);
@@ -118,7 +118,7 @@ sowr_Vector_Clear(sowr_Vector *vec)
 }
 
 void
-sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index)
+sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index )
 {
     if (index >= vec->length)
         sowr_Vector_Push(vec, elem);
@@ -135,7 +135,7 @@ sowr_Vector_Insert(sowr_Vector *vec, const void *elem, size_t index)
 }
 
 void
-sowr_Vector_Replace(sowr_Vector *vec, const void *elem, size_t index)
+sowr_Vector_Replace( sowr_Vector *vec, const void *elem, size_t index )
 {
     if (index >= vec->length)
         sowr_Vector_Push(vec, elem);
@@ -149,7 +149,7 @@ sowr_Vector_Replace(sowr_Vector *vec, const void *elem, size_t index)
 }
 
 void
-sowr_Vector_Delete(sowr_Vector *vec, size_t index)
+sowr_Vector_Delete( sowr_Vector *vec, size_t index )
 {
     if (index >= vec->length)
         return;
@@ -164,7 +164,7 @@ sowr_Vector_Delete(sowr_Vector *vec, size_t index)
 }
 
 void
-sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve)
+sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve )
 {
     if (index >= vec->length)
         sowr_Vector_Pop(vec, ptr_retrieve);
@@ -180,7 +180,7 @@ sowr_Vector_Take(sowr_Vector *vec, size_t index, void *ptr_retrieve)
 }
 
 void
-sowr_Vector_Push(sowr_Vector *vec, const void *elem)
+sowr_Vector_Push( sowr_Vector *vec, const void *elem )
 {
     sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
     memcpy(sowr_Vector_PtrAt(vec, vec->length), elem, vec->elem_size);
@@ -188,7 +188,7 @@ sowr_Vector_Push(sowr_Vector *vec, const void *elem)
 }
 
 void
-sowr_Vector_Pop(sowr_Vector *vec, void *ptr_retrieve)
+sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve )
 {
     if (ptr_retrieve)
         memcpy(ptr_retrieve, sowr_Vector_PtrAt(vec, vec->length), vec->elem_size);
@@ -198,7 +198,7 @@ sowr_Vector_Pop(sowr_Vector *vec, void *ptr_retrieve)
 }
 
 void
-sowr_Vector_Destroy(sowr_Vector *vec)
+sowr_Vector_Destroy( sowr_Vector *vec )
 {
     sowr_Vector_Clear(vec);
     sowr_HeapFree(vec->ptr);
@@ -206,7 +206,7 @@ sowr_Vector_Destroy(sowr_Vector *vec)
 }
 
 void
-sowr_Vector_DestroyS(sowr_Vector *vec)
+sowr_Vector_DestroyS( sowr_Vector *vec )
 {
     sowr_Vector_Clear(vec);
     sowr_HeapFree(vec->ptr);

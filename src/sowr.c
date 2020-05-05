@@ -30,7 +30,7 @@
 #include "state/state.h"
 
 int
-main(int argc, char *argv[])
+main( int argc, char *argv[] )
 {
 #if defined SOWR_BUILD_RELEASE && defined SOWR_TARGET_WINDOWS
     FreeConsole();

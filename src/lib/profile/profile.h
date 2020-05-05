@@ -37,7 +37,7 @@
 /// \note You do not have to call it for different threads, only one thread needs to do so.
 ///
 void
-sowr_InitProfiler(void);
+sowr_InitProfiler( void );
 
 ///
 /// \brief Profile a function
@@ -54,7 +54,7 @@ sowr_InitProfiler(void);
 /// \param line The line when profiling starts or stops.
 ///
 void
-sowr_ProfileFunc(const char *caller_file, const char *caller_func, int line);
+sowr_ProfileFunc( const char *caller_file, const char *caller_func, int line );
 
 #ifdef SOWR_BUILD_DEBUG
     #define SOWR_START_PROFILE() sowr_ProfileFunc(__FILE__, __func__, __LINE__)

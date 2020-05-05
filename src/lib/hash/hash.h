@@ -42,7 +42,7 @@ typedef size_t sowr_HashVal;
 /// \return Hashed result
 ///
 sowr_HashVal
-sowr_GetHash(size_t length, const char *bytes);
+sowr_GetHash( size_t length, const char *bytes );
 
 ///
 /// \brief Hash a string
@@ -55,6 +55,6 @@ sowr_GetHash(size_t length, const char *bytes);
 /// \return Hashed result
 ///
 sowr_HashVal
-sowr_GetHashS(const char *str);
+sowr_GetHashI( const char *str );
 
 #endif // !SOWR_LIB_HASH_HASH_H

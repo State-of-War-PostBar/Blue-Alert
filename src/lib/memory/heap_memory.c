@@ -29,7 +29,7 @@
 
 inline
 void *
-sowr_HeapAlloc(size_t size)
+sowr_HeapAlloc( size_t size )
 {
     void *ptr = malloc(size);
     if (!ptr)
@@ -44,7 +44,7 @@ sowr_HeapAlloc(size_t size)
 
 inline
 void *
-sowr_HeapAlignedAlloc(size_t alignment, size_t size)
+sowr_HeapAlignedAlloc( size_t alignment, size_t size )
 {
 #ifdef SOWR_TARGET_WINDOWS
     void *ptr = _aligned_malloc(size, alignment);
@@ -63,7 +63,7 @@ sowr_HeapAlignedAlloc(size_t alignment, size_t size)
 
 inline
 void *
-sowr_HeapZeroAlloc(size_t size)
+sowr_HeapZeroAlloc( size_t size )
 {
     void *ptr = calloc(1ULL, size);
     if (!ptr)
@@ -78,14 +78,14 @@ sowr_HeapZeroAlloc(size_t size)
 
 inline
 void
-sowr_HeapFree(void *ptr)
+sowr_HeapFree( void *ptr )
 {
     free(ptr);
 }
 
 inline
 void *
-sowr_ReAlloc(size_t size, void *ptr)
+sowr_ReAlloc( size_t size, void *ptr )
 {
     void *new = realloc(ptr, size);
     if (!new)

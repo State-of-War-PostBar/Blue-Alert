@@ -44,7 +44,7 @@ extern const char *const     SOWR_PROG_VERSION_STRING;
 /// Initialize the logger of program. This must be called first for using logging feature.
 ///
 void
-sowr_InitLogger(void);
+sowr_InitLogger( void );
 
 ///
 /// \brief Destroy the logger
@@ -52,6 +52,6 @@ sowr_InitLogger(void);
 /// Destroy the logger and release all resources.
 ///
 void
-sowr_DestroyLogger(void);
+sowr_DestroyLogger( void );
 
 #endif // !SOWR_STATE_STATE_H

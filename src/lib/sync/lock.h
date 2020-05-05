@@ -57,7 +57,7 @@
 /// \param attr The mutex attribute for the mutex object
 ///
 void
-sowr_InitMutex(sowr_Mutex *mtx, sowr_MutexAttribute *attr);
+sowr_InitMutex( sowr_Mutex *mtx, sowr_MutexAttribute *attr );
 
 ///
 /// \brief Lock a mutex
@@ -67,7 +67,7 @@ sowr_InitMutex(sowr_Mutex *mtx, sowr_MutexAttribute *attr);
 /// \param mtx The mutex object to be locked
 ///
 void
-sowr_LockMutex(sowr_Mutex *mtx);
+sowr_LockMutex( sowr_Mutex *mtx );
 
 ///
 /// \brief Try to lock a mutex
@@ -77,7 +77,7 @@ sowr_LockMutex(sowr_Mutex *mtx);
 /// \param mtx The mutex object to be locked
 ///
 void
-sowr_TryLockMutex(sowr_Mutex *mtx);
+sowr_TryLockMutex( sowr_Mutex *mtx );
 
 ///
 /// \brief Unlock a mutex
@@ -87,7 +87,7 @@ sowr_TryLockMutex(sowr_Mutex *mtx);
 /// \param mtx The mutex object to be unlocked
 ///
 void
-sowr_UnlockMutex(sowr_Mutex *mtx);
+sowr_UnlockMutex( sowr_Mutex *mtx );
 
 ///
 /// \brief Destroy a mutex
@@ -99,7 +99,7 @@ sowr_UnlockMutex(sowr_Mutex *mtx);
 /// \param mtx The mutex object to be destroyed
 ///
 void
-sowr_DestroyMutex(sowr_Mutex *mtx);
+sowr_DestroyMutex( sowr_Mutex *mtx );
 
 ///
 /// \brief Initialize a critical section
@@ -110,7 +110,7 @@ sowr_DestroyMutex(sowr_Mutex *mtx);
 /// \param cs The critical section to be initialized. <I>It must be allocated first!</I>
 ///
 void
-sowr_InitCriticalSection(sowr_CriticalSection *cs);
+sowr_InitCriticalSection( sowr_CriticalSection *cs );
 
 ///
 /// \brief Enter a critical section
@@ -121,7 +121,7 @@ sowr_InitCriticalSection(sowr_CriticalSection *cs);
 /// \param cs The critical section to be locked
 ///
 void
-sowr_EnterCriticalSection(sowr_CriticalSection *cs);
+sowr_EnterCriticalSection( sowr_CriticalSection *cs );
 
 ///
 /// \brief Try to enter a critical section
@@ -132,7 +132,7 @@ sowr_EnterCriticalSection(sowr_CriticalSection *cs);
 /// \param cs The critical section to be locked
 ///
 void
-sowr_TryEnterCriticalSection(sowr_CriticalSection *cs);
+sowr_TryEnterCriticalSection( sowr_CriticalSection *cs );
 
 ///
 /// \brief Leave a critical section
@@ -143,7 +143,7 @@ sowr_TryEnterCriticalSection(sowr_CriticalSection *cs);
 /// \param cs The critical section to be unlocked
 /// 
 void
-sowr_LeaveCriticalSection(sowr_CriticalSection *cs);
+sowr_LeaveCriticalSection( sowr_CriticalSection *cs );
 
 ///
 /// \brief Destroy a critical section
@@ -156,7 +156,7 @@ sowr_LeaveCriticalSection(sowr_CriticalSection *cs);
 /// \param cs The critical section to be destroyed
 ///
 void
-sowr_DestroyCriticalSection(sowr_CriticalSection *cs);
+sowr_DestroyCriticalSection( sowr_CriticalSection *cs );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -170,7 +170,7 @@ sowr_DestroyCriticalSection(sowr_CriticalSection *cs);
 /// \param rwl The read-write lock to be initialized. <I>It must be allocated first!</I>
 ///
 void
-sowr_InitReadWriteLock(sowr_ReadWriteLock *rwl);
+sowr_InitReadWriteLock( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -185,7 +185,7 @@ sowr_InitReadWriteLock(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be locked.
 ///
 void
-sowr_LockReadWriteLockRead(sowr_ReadWriteLock *rwl);
+sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -200,7 +200,7 @@ sowr_LockReadWriteLockRead(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be locked.
 ///
 void
-sowr_LockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
+sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -215,7 +215,7 @@ sowr_LockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be locked.
 ///
 void
-sowr_TryLockReadWriteLockRead(sowr_ReadWriteLock *rwl);
+sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -230,7 +230,7 @@ sowr_TryLockReadWriteLockRead(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be locked.
 ///
 void
-sowr_TryLockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
+sowr_TryLockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -244,7 +244,7 @@ sowr_TryLockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be unlocked.
 ///
 void
-sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *rwl);
+sowr_UnlockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -258,7 +258,7 @@ sowr_UnlockReadWriteLockRead(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be unlocked.
 ///
 void
-sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
+sowr_UnlockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
 ///
 /// \deprecated It sucks, try not to use it.
@@ -272,6 +272,6 @@ sowr_UnlockReadWriteLockWrite(sowr_ReadWriteLock *rwl);
 /// \param rwl The read-write lock to be destroyed.
 ///
 void
-sowr_DestroyReadWriteLock(sowr_ReadWriteLock *rwl);
+sowr_DestroyReadWriteLock( sowr_ReadWriteLock *rwl );
 
 #endif // !SOWR_LIB_SYNC_LOCK_H

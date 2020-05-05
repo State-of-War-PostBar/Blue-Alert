@@ -37,7 +37,7 @@
 #endif
 
 void
-sowr_InitProfiler(void)
+sowr_InitProfiler( void )
 {
 #if defined SOWR_BUILD_DEBUG && defined SOWR_TARGET_WINDOWS
     QueryPerformanceFrequency(&sowr_win_profile_timer_frequency);
@@ -45,7 +45,7 @@ sowr_InitProfiler(void)
 }
 
 void
-sowr_ProfileFunc(const char *caller_file, const char *caller_func, int called_line)
+sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_line )
 {
 #ifdef SOWR_BUILD_DEBUG
     thread_local static double elapsed;

@@ -55,7 +55,7 @@ typedef struct
 /// \param free_func Function to call when freeing an element
 ///
 sowr_LinkedList *
-sowr_LinkedList_Create(size_t elem_size, const sowr_LinkedListFreeFunc free_func);
+sowr_LinkedList_Create( size_t elem_size, const sowr_LinkedListFreeFunc free_func );
 
 ///
 /// \brief Create a linked list
@@ -67,7 +67,7 @@ sowr_LinkedList_Create(size_t elem_size, const sowr_LinkedListFreeFunc free_func
 /// \param free_func Function to call when freeing an element
 ///
 sowr_LinkedList
-sowr_LinkedList_CreateS(size_t elem_size, const sowr_LinkedListFreeFunc free_func);
+sowr_LinkedList_CreateS( size_t elem_size, const sowr_LinkedListFreeFunc free_func );
 
 ///
 /// \brief Walk a linked list
@@ -78,7 +78,7 @@ sowr_LinkedList_CreateS(size_t elem_size, const sowr_LinkedListFreeFunc free_fun
 /// \param func Function for walking
 ///
 void
-sowr_LinkedList_Walk(sowr_LinkedList *list, const sowr_LinkedListWalkFunc func);
+sowr_LinkedList_Walk( sowr_LinkedList *list, const sowr_LinkedListWalkFunc func );
 
 ///
 /// \brief Clear a linked list
@@ -88,7 +88,7 @@ sowr_LinkedList_Walk(sowr_LinkedList *list, const sowr_LinkedListWalkFunc func);
 /// \param list List to clear
 ///
 void
-sowr_LinkedList_Clear(sowr_LinkedList *list);
+sowr_LinkedList_Clear( sowr_LinkedList *list );
 
 ///
 /// \brief Insert element to list
@@ -99,7 +99,7 @@ sowr_LinkedList_Clear(sowr_LinkedList *list);
 /// \param elem Element to insert
 ///
 void
-sowr_LinkedList_Insert(sowr_LinkedList *list, const void *elem);
+sowr_LinkedList_Insert( sowr_LinkedList *list, const void *elem );
 
 ///
 /// \brief Pop the first element
@@ -109,7 +109,7 @@ sowr_LinkedList_Insert(sowr_LinkedList *list, const void *elem);
 /// \param list List to pop
 ///
 void
-sowr_LinkedList_Pop(sowr_LinkedList *list);
+sowr_LinkedList_Pop( sowr_LinkedList *list );
 
 ///
 /// \brief Pop the first element
@@ -120,7 +120,7 @@ sowr_LinkedList_Pop(sowr_LinkedList *list);
 /// \param ptr_retrieve Pointer to retrieve the element if needed
 ///
 void
-sowr_LinkedList_PopN(sowr_LinkedList *list, void **ptr_retrieve);
+sowr_LinkedList_PopN( sowr_LinkedList *list, void **ptr_retrieve );
 
 ///
 /// \brief Find an element
@@ -134,7 +134,7 @@ sowr_LinkedList_PopN(sowr_LinkedList *list, void **ptr_retrieve);
 /// \return The node containing the element if found, NULL otherwise.
 ///
 sowr_LinkedListNode *
-sowr_LinkedList_Find(const sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func);
+sowr_LinkedList_Find( const sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func );
 
 ///
 /// \brief Delete an element
@@ -148,7 +148,7 @@ sowr_LinkedList_Find(const sowr_LinkedList *list, const void *elem, const sowr_L
 /// \return Successfully deleted elements count
 ///
 size_t
-sowr_LinkedList_Delete(sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func);
+sowr_LinkedList_Delete( sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func );
 
 ///
 /// \brief Delete an element
@@ -163,7 +163,7 @@ sowr_LinkedList_Delete(sowr_LinkedList *list, const void *elem, const sowr_Linke
 /// \return Successfully deleted elements count
 ///
 size_t
-sowr_LinkedList_DeleteN(sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func, void **ptr_retrieve);
+sowr_LinkedList_DeleteN( sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func, void **ptr_retrieve );
 
 ///
 /// \brief Destroy a linked list
@@ -173,7 +173,7 @@ sowr_LinkedList_DeleteN(sowr_LinkedList *list, const void *elem, const sowr_Link
 /// \param list List to destroy
 ///
 void
-sowr_LinkedList_Destroy(sowr_LinkedList *list);
+sowr_LinkedList_Destroy( sowr_LinkedList *list );
 
 ///
 /// \brief Destroy a linked list
@@ -183,6 +183,6 @@ sowr_LinkedList_Destroy(sowr_LinkedList *list);
 /// \param list List to destroy
 ///
 void
-sowr_LinkedList_DestroyS(sowr_LinkedList *list);
+sowr_LinkedList_DestroyS( sowr_LinkedList *list );
 
 #endif //!SOWR_LIB_CONTAINER_LINKED_LIST_H

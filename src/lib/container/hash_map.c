@@ -31,7 +31,7 @@ static const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
 
 static
 bool
-sowr_CompareIndexHash(const void *left, const void *right)
+sowr_CompareIndexHash( const void *left, const void *right )
 {
     if (((sowr_HashMapValue *)left)->index_hash == ((sowr_HashMapValue *)right)->index_hash)
         return true;
@@ -40,34 +40,34 @@ sowr_CompareIndexHash(const void *left, const void *right)
 
 static
 bool
-sowr_CompareIndexHashToHash(const void *left_val, const void *right_hash)
+sowr_CompareIndexHashToHash( const void *left_val, const void *right_hash )
 {
     return ((sowr_HashMapValue *)left_val)->index_hash == *(sowr_HashVal *)right_hash;
 }
 
 static
 void
-sowr_FreeHashMapValue(void *data)
+sowr_FreeHashMapValue( void *data )
 {
     sowr_HeapFree(((sowr_HashMapValue *)data)->data);
 }
 
 inline
 sowr_HashMap *
-sowr_HashMap_Create(void)
+sowr_HashMap_Create( void )
 {
     return sowr_HashMap_Create_SuggestBucketsCount(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT);
 }
 
 inline
 sowr_HashMap
-sowr_HashMap_CreateS(void)
+sowr_HashMap_CreateS( void )
 {
     return sowr_HashMap_Create_SuggestBucketsCountS(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT);
 }
 
 sowr_HashMap *
-sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count)
+sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count )
 {
     sowr_HashMap *map = sowr_HeapAlloc(sizeof(sowr_HashMap));
 
@@ -86,7 +86,7 @@ sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count)
 }
 
 sowr_HashMap
-sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count)
+sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count )
 {
     sowr_HashMap map;
 
@@ -105,7 +105,7 @@ sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count)
 }
 
 void
-sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value)
+sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value )
 {
     sowr_HashMapValue block;
     block.data = sowr_HeapAlloc(sizeof(char) * val_length);
@@ -125,13 +125,13 @@ sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, s
 
 inline
 void
-sowr_HashMap_InsertI(sowr_HashMap *map, const char *index, const char *value)
+sowr_HashMap_InsertI( sowr_HashMap *map, const char *index, const char *value )
 {
     sowr_HashMap_Insert(map, strlen(index) + 1ULL, index, strlen(value) + 1ULL, value);
 }
 
 sowr_HashMapValue *
-sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index)
+sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index )
 {
     if (!map->length)
         return NULL;
@@ -153,13 +153,13 @@ sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index)
 
 inline
 sowr_HashMapValue *
-sowr_HashMap_GetI(sowr_HashMap *map, const char *index)
+sowr_HashMap_GetI( sowr_HashMap *map, const char *index )
 {
     return sowr_HashMap_Get(map, strlen(index) + 1ULL, index);
 }
 
 void
-sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func)
+sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func )
 {
     if (!map->length)
         return;
@@ -169,7 +169,7 @@ sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func)
 }
 
 sowr_HashMapValue *
-sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index)
+sowr_HashMap_Take( sowr_HashMap *map, size_t index_length, const char *index )
 {
     if (!map->length)
         return NULL;
@@ -200,13 +200,13 @@ sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index)
 }
 
 sowr_HashMapValue *
-sowr_HashMap_TakeI(sowr_HashMap *map, const char *index)
+sowr_HashMap_TakeI( sowr_HashMap *map, const char *index )
 {
     return sowr_HashMap_Take(map, strlen(index) + 1ULL, index);
 }
 
 void
-sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index)
+sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
 {
     if (!map->length)
         return;
@@ -235,27 +235,27 @@ sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index)
 
 inline
 void
-sowr_HashMap_DeleteI(sowr_HashMap *map, const char *index)
+sowr_HashMap_DeleteI( sowr_HashMap *map, const char *index )
 {
     sowr_HashMap_Delete(map, strlen(index) + 1ULL, index);
 }
 
 inline
 void
-sowr_HashMap_Clear(sowr_HashMap *map)
+sowr_HashMap_Clear( sowr_HashMap *map )
 {
     sowr_Vector_Walk(&(map->buckets), sowr_LinkedList_Clear);
 }
 
 void
-sowr_HashMap_Destroy(sowr_HashMap *map)
+sowr_HashMap_Destroy( sowr_HashMap *map )
 {
     sowr_Vector_DestroyS(&(map->buckets));
     sowr_HeapFree(map);
 }
 
 void
-sowr_HashMap_DestroyS(sowr_HashMap *map)
+sowr_HashMap_DestroyS( sowr_HashMap *map )
 {
     sowr_Vector_DestroyS(&(map->buckets));
 }

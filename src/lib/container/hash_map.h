@@ -57,7 +57,7 @@ typedef struct
 /// \return A hashmap
 ///
 sowr_HashMap *
-sowr_HashMap_Create(void);
+sowr_HashMap_Create( void );
 
 ///
 /// \brief Create a hashmap
@@ -68,7 +68,7 @@ sowr_HashMap_Create(void);
 /// \return A hashmap
 ///
 sowr_HashMap
-sowr_HashMap_CreateS(void);
+sowr_HashMap_CreateS( void );
 
 ///
 /// \brief Create a hashmap
@@ -78,7 +78,7 @@ sowr_HashMap_CreateS(void);
 /// \return A hashmap
 ///
 sowr_HashMap *
-sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count);
+sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count );
 
 ///
 /// \brief Create a hashmap
@@ -89,7 +89,7 @@ sowr_HashMap_Create_SuggestBucketsCount(size_t buckets_count);
 /// \return A hashmap
 ///
 sowr_HashMap
-sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count);
+sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count );
 
 ///
 /// \brief Insert an element to hashmap
@@ -103,7 +103,7 @@ sowr_HashMap_Create_SuggestBucketsCountS(size_t buckets_count);
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value);
+sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value );
 
 ///
 /// \brief Insert an element to hashmap
@@ -116,7 +116,7 @@ sowr_HashMap_Insert(sowr_HashMap *map, size_t index_length, const char *index, s
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_InsertI(sowr_HashMap *map, const char *index, const char *value);
+sowr_HashMap_InsertI( sowr_HashMap *map, const char *index, const char *value );
 
 ///
 /// \brief Get a value from the map
@@ -130,7 +130,7 @@ sowr_HashMap_InsertI(sowr_HashMap *map, const char *index, const char *value);
 /// \return The value from key, NULL if not found
 ///
 sowr_HashMapValue *
-sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index);
+sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index );
 
 ///
 /// \brief Get a value from the map
@@ -144,7 +144,7 @@ sowr_HashMap_Get(sowr_HashMap *map, size_t index_length, const char *index);
 /// \return The value from key, NULL if not found
 ///
 sowr_HashMapValue *
-sowr_HashMap_GetI(sowr_HashMap *map, const char *index);
+sowr_HashMap_GetI( sowr_HashMap *map, const char *index );
 
 ///
 /// \brief Walk the map
@@ -155,7 +155,7 @@ sowr_HashMap_GetI(sowr_HashMap *map, const char *index);
 /// \param func Function to use
 ///
 void
-sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func);
+sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func );
 
 ///
 /// \brief Take a value from the map
@@ -169,7 +169,7 @@ sowr_HashMap_Walk(sowr_HashMap *map, const sowr_HashMapWalkFunc func);
 /// \return The value from key, NULL if not found
 ///
 sowr_HashMapValue *
-sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index);
+sowr_HashMap_Take( sowr_HashMap *map, size_t index_length, const char *index );
 
 ///
 /// \brief Take a value from the map
@@ -183,7 +183,7 @@ sowr_HashMap_Take(sowr_HashMap *map, size_t index_length, const char *index);
 /// \return The value from key, NULL if not found
 ///
 sowr_HashMapValue *
-sowr_HashMap_TakeI(sowr_HashMap *map, const char *index);
+sowr_HashMap_TakeI( sowr_HashMap *map, const char *index );
 
 ///
 /// \brief Delete a value from the map
@@ -195,7 +195,7 @@ sowr_HashMap_TakeI(sowr_HashMap *map, const char *index);
 /// \param index Index
 ///
 void
-sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index);
+sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index );
 
 ///
 /// \brief Delete a value from the map
@@ -207,7 +207,7 @@ sowr_HashMap_Delete(sowr_HashMap *map, size_t index_length, const char *index);
 /// \param index Index
 ///
 void
-sowr_HashMap_DeleteI(sowr_HashMap *map, const char *index);
+sowr_HashMap_DeleteI( sowr_HashMap *map, const char *index );
 
 ///
 /// \brief Clear the hashmap
@@ -217,7 +217,7 @@ sowr_HashMap_DeleteI(sowr_HashMap *map, const char *index);
 /// \param map Map to clear
 ///
 void
-sowr_HashMap_Clear(sowr_HashMap *map);
+sowr_HashMap_Clear( sowr_HashMap *map );
 
 ///
 /// \brief Destroy the hashmap
@@ -227,7 +227,7 @@ sowr_HashMap_Clear(sowr_HashMap *map);
 /// \param map Map to destroy
 ///
 void
-sowr_HashMap_Destroy(sowr_HashMap *map);
+sowr_HashMap_Destroy( sowr_HashMap *map );
 
 ///
 /// \brief Destroy the hashmap
@@ -237,6 +237,6 @@ sowr_HashMap_Destroy(sowr_HashMap *map);
 /// \param map Map to destroy
 ///
 void
-sowr_HashMap_DestroyS(sowr_HashMap *map);
+sowr_HashMap_DestroyS( sowr_HashMap *map );
 
 #endif //!SOWR_LIB_CONTAINER_HASH_MAP_H
