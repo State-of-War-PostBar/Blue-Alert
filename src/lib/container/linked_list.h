@@ -28,9 +28,9 @@
 
 #include <pch.h>
 
-typedef void (*sowr_LinkedListFreeFunc)(void *);
-typedef void (*sowr_LinkedListWalkFunc)(void *);
-typedef bool (*sowr_LinkedListCmpFunc)(const void *, const void *);
+typedef void (*sowr_LinkedListFreeFunc)( void * );
+typedef void (*sowr_LinkedListWalkFunc)( void * );
+typedef bool (*sowr_LinkedListCmpFunc)( const void *, const void * );
 
 typedef struct sowr_LinkedListNode
 {
@@ -54,6 +54,8 @@ typedef struct
 /// \param elem_size Size of each element
 /// \param free_func Function to call when freeing an element
 ///
+/// \return Created linked list
+///
 sowr_LinkedList *
 sowr_LinkedList_Create( size_t elem_size, const sowr_LinkedListFreeFunc free_func );
 
@@ -65,6 +67,8 @@ sowr_LinkedList_Create( size_t elem_size, const sowr_LinkedListFreeFunc free_fun
 ///
 /// \param elem_size Size of each element
 /// \param free_func Function to call when freeing an element
+///
+/// \return Created linked list
 ///
 sowr_LinkedList
 sowr_LinkedList_CreateS( size_t elem_size, const sowr_LinkedListFreeFunc free_func );

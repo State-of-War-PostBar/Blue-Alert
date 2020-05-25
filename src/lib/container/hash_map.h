@@ -32,7 +32,7 @@
 #include "linked_list.h"
 #include "../hash/hash.h"
 
-typedef void (*sowr_HashMapWalkFunc)(void *);
+typedef void (*sowr_HashMapWalkFunc)( void * );
 
 typedef struct
 {

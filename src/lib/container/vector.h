@@ -28,10 +28,8 @@
 
 #include <pch.h>
 
-#include "../memory/heap_memory.h"
-
-typedef void (*sowr_VecFreeFunc)(void *);
-typedef void (*sowr_VecWalkFunc)(void *);
+typedef void (*sowr_VecFreeFunc)( void * );
+typedef void (*sowr_VecWalkFunc)( void * );
 
 typedef struct
 {

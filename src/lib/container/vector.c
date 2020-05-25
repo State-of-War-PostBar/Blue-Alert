@@ -25,6 +25,8 @@
 
 #include "vector.h"
 
+#include "../memory/heap_memory.h"
+
 sowr_Vector *
 sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func )
 {
