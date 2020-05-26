@@ -144,7 +144,7 @@ sowr_BinaryTree_Clear( sowr_BinaryTree *tree );
 ///
 /// \return Accumulated height
 ///
-unsigned int
+size_t
 sowr_BinaryTree_Height( const sowr_BinaryTree *tree );
 
 ///
@@ -156,7 +156,7 @@ sowr_BinaryTree_Height( const sowr_BinaryTree *tree );
 ///
 /// \return Accumulated width
 ///
-unsigned int
+size_t
 sowr_BinaryTree_Width( const sowr_BinaryTree *tree );
 
 ///

@@ -50,27 +50,27 @@ sowr_BinaryTreeNode_Find( const sowr_BinaryTreeNode *node, const void *elem, con
 }
 
 static
-unsigned int
+size_t
 sowr_BinaryTreeNode_Height( const sowr_BinaryTreeNode *node )
 {
     if (!node)
         return 0U;
-    unsigned int left_height = 0U, right_height = 0U;
+    size_t left_height = 0ULL, right_height = 0ULL;
     left_height = sowr_BinaryTreeNode_Height(node->left);
     right_height = sowr_BinaryTreeNode_Height(node->right);
 
-    return max(left_height, right_height) + 1U;
+    return (left_height ^ ((left_height ^ right_height) & -(left_height < right_height))) + 1ULL;
 }
 
 static
-unsigned int
-sowr_BinaryTreeNode_Width( const sowr_BinaryTreeNode *node, unsigned int level )
+size_t
+sowr_BinaryTreeNode_Width( const sowr_BinaryTreeNode *node, size_t level )
 {
     if (!node)
-        return 0U;
-    if (level == 1U)
-        return 1U;
-    return sowr_BinaryTreeNode_Width(node->left, level - 1U) + sowr_BinaryTreeNode_Width(node->right, level - 1U);
+        return 0ULL;
+    if (level == 1ULL)
+        return 1ULL;
+    return sowr_BinaryTreeNode_Width(node->left, level - 1ULL) + sowr_BinaryTreeNode_Width(node->right, level - 1ULL);
 }
 
 static
@@ -268,28 +268,28 @@ sowr_BinaryTree_Clear( sowr_BinaryTree *tree )
     tree->length = 0ULL;
 }
 
-unsigned int
+size_t
 sowr_BinaryTree_Height( const sowr_BinaryTree *tree )
 {
     if (!tree->length)
-        return 0U;
+        return 0ULL;
     return sowr_BinaryTreeNode_Height(tree->head);
 }
 
-unsigned int
+size_t
 sowr_BinaryTree_Width( const sowr_BinaryTree *tree )
 {
     if (!tree->length)
-        return 0U;
+        return 0ULL;
 
-    unsigned int max_width = 0U;
-    unsigned int current_width = 0U;
-    unsigned int height = sowr_BinaryTree_Height(tree);
+    size_t max_width = 0ULL;
+    size_t current_width = 0ULL;
+    size_t height = sowr_BinaryTree_Height(tree);
 
-    for (unsigned int i = 1U; i <= height; i++)
+    for (size_t i = 1ULL; i <= height; i++)
     {
         current_width = sowr_BinaryTreeNode_Width(tree->head, i);
-        max_width = max(current_width, max_width);
+        max_width = current_width ^ ((current_width ^ max_width) & -(current_width < max_width));
     }
 
     return max_width;
