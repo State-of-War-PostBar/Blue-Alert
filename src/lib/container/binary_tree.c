@@ -39,14 +39,18 @@ sowr_BinaryTreeNode_Walk( sowr_BinaryTreeNode *node, const sowr_BinaryTreeWalkFu
 }
 
 static
-bool
+sowr_BinaryTreeNode *
 sowr_BinaryTreeNode_Find( const sowr_BinaryTreeNode *node, const void *elem, const sowr_BinaryTreeCmpFunc cmp )
 {
     if (!node)
-        return false;
+        return NULL;
     if (!cmp(node->data, elem))
-        return true;
-    return sowr_BinaryTreeNode_Find(node->left, elem, cmp) || sowr_BinaryTreeNode_Find(node->right, elem, cmp);
+        return (sowr_BinaryTreeNode *)node;
+    sowr_BinaryTreeNode *result = NULL;
+    result = sowr_BinaryTreeNode_Find(node->left, elem, cmp);
+    if (!result)
+        result = sowr_BinaryTreeNode_Find(node->right, elem, cmp);
+    return result;
 }
 
 static
@@ -54,7 +58,7 @@ size_t
 sowr_BinaryTreeNode_Height( const sowr_BinaryTreeNode *node )
 {
     if (!node)
-        return 0U;
+        return 0ULL;
     size_t left_height = 0ULL, right_height = 0ULL;
     left_height = sowr_BinaryTreeNode_Height(node->left);
     right_height = sowr_BinaryTreeNode_Height(node->right);
@@ -74,6 +78,55 @@ sowr_BinaryTreeNode_Width( const sowr_BinaryTreeNode *node, size_t level )
 }
 
 static
+sowr_BinaryTreeNode *
+sowr_BinaryTreeNode_MinAfter( const sowr_BinaryTreeNode *node )
+{
+    if (!node)
+        return NULL;
+    if (!node->left)
+        return (sowr_BinaryTreeNode *)node;
+    return sowr_BinaryTreeNode_MinAfter(node->left);
+}
+
+static
+sowr_BinaryTreeNode *
+sowr_BinaryTreeNode_MaxAfter( const sowr_BinaryTreeNode *node )
+{
+    if (!node)
+        return NULL;
+    if (!node->right)
+        return (sowr_BinaryTreeNode *)node;
+    return sowr_BinaryTreeNode_MaxAfter(node->right);
+}
+
+static
+sowr_BinaryTreeNode *
+sowr_BinaryTreeNode_ParentOf( const sowr_BinaryTreeNode *head, const sowr_BinaryTreeNode *node, const sowr_BinaryTreeCmpFunc cmp )
+{
+    if (!head || !node)
+        return NULL;
+
+    const sowr_BinaryTreeNode *iter = head;
+    const sowr_BinaryTreeNode *previous = NULL;
+    int result = 0;
+    while (iter)
+    {
+        result = cmp(node->data, iter->data);
+        if (!result)
+            return (sowr_BinaryTreeNode *)previous;
+        else
+        {
+            previous = iter;
+            if (result < 0)
+                iter = iter->left;
+            else
+                iter = iter->right;
+        }
+    }
+    return NULL;
+}
+
+static
 void
 sowr_BinaryTreeNode_Clear( sowr_BinaryTreeNode *node, const sowr_BinaryTreeFreeFunc free_func )
 {
@@ -89,23 +142,25 @@ sowr_BinaryTreeNode_Clear( sowr_BinaryTreeNode *node, const sowr_BinaryTreeFreeF
 }
 
 sowr_BinaryTree *
-sowr_BinaryTree_Create( size_t elem_size, sowr_BinaryTreeFreeFunc free_func )
+sowr_BinaryTree_Create( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func )
 {
     sowr_BinaryTree *tree = sowr_HeapAlloc(sizeof(sowr_BinaryTree));
     tree->elem_size = elem_size;
     tree->free_func = free_func;
+    tree->cmp_func = cmp_func;
     tree->head = NULL;
     tree->length = 0ULL;
     return tree;
 }
 
 sowr_BinaryTree
-sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func )
+sowr_BinaryTree_CreateS( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func )
 {
     sowr_BinaryTree tree =
     {
         .elem_size = elem_size,
         .free_func = free_func,
+        .cmp_func = cmp_func,
         .head = NULL,
         .length = 0ULL
     };
@@ -113,15 +168,16 @@ sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func )
 }
 
 void
-sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem, const sowr_BinaryTreeCmpFunc cmp )
+sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem )
 {
-    sowr_BinaryTreeNode *node = sowr_HeapAlloc(sizeof(sowr_BinaryTreeNode));
-    node->data = sowr_HeapAlloc(sizeof(tree->elem_size));
-    memcpy(node->data, elem, tree->elem_size);
-    node->left = node->right = NULL;
-
     if (!tree->length)
+    {
+        sowr_BinaryTreeNode *node = sowr_HeapAlloc(sizeof(sowr_BinaryTreeNode));
+        node->data = sowr_HeapAlloc(sizeof(tree->elem_size));
+        memcpy(node->data, elem, tree->elem_size);
+        node->left = node->right = NULL;
         tree->head = node;
+    }
     else
     {
         sowr_BinaryTreeNode *iter = tree->head;
@@ -131,15 +187,20 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem, const sowr_Bina
         while (iter)
         {
             target = iter;
-            int result = cmp(elem, iter->data);
+            int result = tree->cmp_func(elem, iter->data);
             result_r = result;
             if (!result)
-                return;
+                return;         // Duplicate data, do nothing
             else if (result < 0)
                 iter = iter->left;
             else
                 iter = iter->right;
         }
+
+        sowr_BinaryTreeNode *node = sowr_HeapAlloc(sizeof(sowr_BinaryTreeNode));
+        node->data = sowr_HeapAlloc(sizeof(tree->elem_size));
+        memcpy(node->data, elem, tree->elem_size);
+        node->left = node->right = NULL;
 
         if (result_r < 0)
             target->left = node;
@@ -151,95 +212,95 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem, const sowr_Bina
 }
 
 bool
-sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem, const sowr_BinaryTreeCmpFunc cmp )
+sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem )
 {
+    if (!tree->length)
+        return false;
+
     sowr_BinaryTreeNode *iter = tree->head;
     sowr_BinaryTreeNode *previous = NULL;
-    sowr_BinaryTreeNode *target = NULL;
-    bool left_of_previous = false;
-
+    bool left_of_previous = true;
+    int result = 0;
     while (iter)
     {
-        int result = cmp(elem, iter->data);
+        result = tree->cmp_func(elem, iter->data);
         if (!result)
         {
-            if (iter->left || iter->right)
+            if (iter->left && iter->right)
             {
-                if (!iter->left)
+                // Node has two children
+                sowr_BinaryTreeNode *successor = sowr_BinaryTreeNode_MinAfter(iter->right);
+                sowr_BinaryTreeNode *presuccessor = sowr_BinaryTreeNode_ParentOf(tree->head, successor, tree->cmp_func);
+
+                // If successor has a right child (it can never have a left child)
+                // make it presuccessor's left child, unless its presuccessor is the deleting node itself.
+                if (iter != presuccessor)
+                    presuccessor->left = successor->right ? successor->right : NULL;
+                // Otherwise (presuccessor is the node), we do nothing and proceed.
+
+                // Switch the connection of the deleting node and the successor
+                if (previous)
                 {
-                    // Only left child is empty, reattach right child
-                    sowr_BinaryTreeNode *right = iter->right;
-
-                    iter->data = right->data;
-                    iter->left = right->left;
-                    iter->right = right->right;
-
-                    target = right;
-                }
-                else if (!iter->right)
-                {
-                    // Only right child is empty, reattach left child
-                    sowr_BinaryTreeNode *left = iter->left;
-
-                    iter->data = left->data;
-                    iter->left = left->left;
-                    iter->right = left->right;
-
-                    target = left;
-                }
-                else
-                {
-                    // Neither left or right child is empty
-                    sowr_BinaryTreeNode *target = iter;
-                    sowr_BinaryTreeNode *leftest = iter->left;
-                    while (leftest->right)
-                    {
-                        target = leftest;
-                        leftest = leftest->right;
-                    }
-                    iter->data = leftest->data;
-                    if (target != iter)
-                        target->right = leftest->left;
+                    if (left_of_previous)
+                        previous->left = successor;
                     else
-                        target->left = leftest->left;
-
-                    target = leftest;
+                        previous->right = successor;
                 }
+                else
+                    tree->head = successor;
+                successor->left = iter->left;
+                successor->right = iter->right;
+            }
+            else if (iter->left || iter->right)
+            {
+                // Node has one child
+                sowr_BinaryTreeNode *child = iter->left ? iter->left : iter->right;
+                if (previous)
+                {
+                    if (left_of_previous)
+                        previous->left = child;
+                    else
+                        previous->right = child;
+                }
+                else
+                    tree->head = child;
             }
             else
             {
-                // Leaf is deleted
-                target = iter;
-                if (left_of_previous)
-                    previous->left = NULL;
+                // Node is leaf
+                if (previous)
+                {
+                    if (left_of_previous)
+                        previous->left = NULL;
+                    else
+                        previous->right = NULL;
+                }
                 else
-                    previous->right = NULL;
+                    tree->head = NULL;
             }
-            // Delete the target
+
             if (tree->free_func)
-                tree->free_func(target->data);
-            sowr_HeapFree(target->data);
-            sowr_HeapFree(target);
-            if (tree->length > 1ULL)
-                tree->length--;
-            else
-                tree->length = 0U;
+                tree->free_func(iter->data);
+            sowr_HeapFree(iter->data);
+            sowr_HeapFree(iter);
+            tree->length--;
             return true;
-        }
-        else if (result < 0)
-        {
-            previous = iter;
-            left_of_previous = true;
-            iter = iter->left;
         }
         else
         {
             previous = iter;
-            left_of_previous = false;
-            iter = iter->right;
+            if (result < 0)
+            {
+                left_of_previous = true;
+                iter = iter->left;
+            }
+            else
+            {
+                left_of_previous = false;
+                iter = iter->right;
+            }
         }
     }
-
     return false;
 }
 
@@ -251,12 +312,12 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, const sowr_BinaryTreeWalkFunc func 
     sowr_BinaryTreeNode_Walk(tree->head, func);
 }
 
-bool
-sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem , const sowr_BinaryTreeCmpFunc cmp )
+sowr_BinaryTreeNode *
+sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem )
 {
     if (!tree->length)
-        return false;
-    return sowr_BinaryTreeNode_Find(tree->head, elem, cmp);
+        return NULL;
+    return sowr_BinaryTreeNode_Find(tree->head, elem, tree->cmp_func);
 }
 
 void

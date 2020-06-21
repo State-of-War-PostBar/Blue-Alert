@@ -55,7 +55,21 @@ sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func )
 
 inline
 void *
-sowr_Vector_PtrAt( sowr_Vector *vec, size_t index )
+sowr_Vector_First( const sowr_Vector *vec )
+{
+    return vec->ptr;
+}
+
+inline
+void *
+sowr_Vector_Last( const sowr_Vector *vec )
+{
+    return sowr_Vector_PtrAt(vec, vec->length - 1ULL);
+}
+
+inline
+void *
+sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index )
 {
     char *ptr = (char *)vec->ptr;
     for (size_t i = 0ULL; i < index; i++)
@@ -168,6 +182,8 @@ sowr_Vector_Delete( sowr_Vector *vec, size_t index )
 void
 sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve )
 {
+    if (!vec->length)
+        return;
     if (index >= vec->length)
         sowr_Vector_Pop(vec, ptr_retrieve);
     else
@@ -192,11 +208,37 @@ sowr_Vector_Push( sowr_Vector *vec, const void *elem )
 void
 sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve )
 {
+    if (!vec->length)
+        return;
     if (ptr_retrieve)
         memcpy(ptr_retrieve, sowr_Vector_PtrAt(vec, vec->length), vec->elem_size);
     else if (vec->free_func)
         vec->free_func(sowr_Vector_PtrAt(vec, vec->length));
     vec->length--;
+}
+
+void
+sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem )
+{
+    sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
+    memmove(sowr_Vector_PtrAt(vec, 1ULL), vec->ptr, vec->elem_size * vec->length);
+    char *new_head = (char *)vec->ptr - vec->elem_size;
+    vec->ptr = new_head;
+    memcpy(vec->ptr, elem, vec->elem_size);
+    vec->length++;
+}
+
+void
+sowr_Vector_Pop_Front( sowr_Vector *vec, void *ptr_retrieve )
+{
+    if (!vec->length)
+        return;
+    if (ptr_retrieve)
+        memcpy(ptr_retrieve, vec->ptr, vec->elem_size);
+    else if (vec->free_func)
+        vec->free_func(vec->ptr);
+    vec->length--;
+    memmove(vec->ptr, sowr_Vector_PtrAt(vec, 1ULL), vec->elem_size * vec->length);
 }
 
 void

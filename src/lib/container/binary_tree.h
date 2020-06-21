@@ -45,6 +45,7 @@ typedef struct
     size_t elem_size;
     size_t length;
     sowr_BinaryTreeFreeFunc free_func;
+    sowr_BinaryTreeCmpFunc cmp_func;
     sowr_BinaryTreeNode *head;
 } sowr_BinaryTree;
 
@@ -59,7 +60,7 @@ typedef struct
 /// \return Created tree
 ///
 sowr_BinaryTree *
-sowr_BinaryTree_Create( size_t elem_size, sowr_BinaryTreeFreeFunc free_func );
+sowr_BinaryTree_Create( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Create a binary tree
@@ -72,7 +73,7 @@ sowr_BinaryTree_Create( size_t elem_size, sowr_BinaryTreeFreeFunc free_func );
 /// \return Created tree
 ///
 sowr_BinaryTree
-sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func );
+sowr_BinaryTree_CreateS( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Insert element to binary tree
@@ -84,7 +85,7 @@ sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func );
 /// \param cmp Comparision function
 ///
 void
-sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem, const sowr_BinaryTreeCmpFunc cmp );
+sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem );
 
 ///
 /// \brief Delete element in tree
@@ -98,7 +99,7 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem, const sowr_Bina
 /// \return If anything is deleted
 ///
 bool
-sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem, const sowr_BinaryTreeCmpFunc cmp );
+sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem );
 
 ///
 /// \brief Walk the binary tree
@@ -120,10 +121,10 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, const sowr_BinaryTreeWalkFunc func 
 /// \param elem Element to look for
 /// \param cmp Comparision function
 ///
-/// \return If found
+/// \return The node if found
 ///
-bool
-sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem , const sowr_BinaryTreeCmpFunc cmp );
+sowr_BinaryTreeNode *
+sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem );
 
 ///
 /// \brief Clear a tree

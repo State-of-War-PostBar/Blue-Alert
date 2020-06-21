@@ -68,6 +68,30 @@ sowr_Vector
 sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func );
 
 ///
+/// \brief Get the first element
+///
+/// Get the first element of the vector.
+///
+/// \param vec Vector
+///
+/// \return Pointer to the first element
+///
+void *
+sowr_Vector_First( const sowr_Vector *vec );
+
+///
+/// \brief Get the last element
+///
+/// Get the last element of the vector.
+///
+/// \param vec Vector
+///
+/// \return Pointer to the last element
+///
+void *
+sowr_Vector_Last( const sowr_Vector *vec );
+
+///
 /// \brief Get the indexth element
 ///
 /// Get the pointer to some place in the vector.
@@ -80,7 +104,7 @@ sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func );
 /// \return Pointer to the location after index
 ///
 void *
-sowr_Vector_PtrAt( sowr_Vector *vec, size_t index );
+sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index );
 
 ///
 /// \brief Expand the vector
@@ -206,6 +230,29 @@ sowr_Vector_Push( sowr_Vector *vec, const void *elem );
 ///
 void
 sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve );
+
+///
+/// \brief Push an element to front
+///
+/// Push an element into the front of vector.
+///
+/// \param vec Vector to push into
+/// \param elem Element to be pushed
+///
+void
+sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem );
+
+///
+/// \brief Pop the first element of vector
+///
+/// Pop the first element of vector into the pointer.
+/// Whether ptr_retrieve is NULL or not, the first element will be overriden.
+///
+/// \param vec Vector to pop out
+/// \param ptr_retrieve Pointer to retrieve the result
+///
+void
+sowr_Vector_Pop_Front( sowr_Vector *vec, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a vector
