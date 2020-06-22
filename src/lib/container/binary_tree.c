@@ -249,7 +249,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem )
                 else
                     tree->head = successor;
                 successor->left = iter->left;
-                successor->right = iter->right;
+                successor->right = iter != presuccessor ? iter->right : successor->right;
             }
             else if (iter->left || iter->right)
             {
