@@ -44,13 +44,14 @@ sowr_BinaryTreeNode_Find( const sowr_BinaryTreeNode *node, const void *elem, con
 {
     if (!node)
         return NULL;
-    if (!cmp(node->data, elem))
-        return (sowr_BinaryTreeNode *)node;
-    sowr_BinaryTreeNode *result = NULL;
-    result = sowr_BinaryTreeNode_Find(node->left, elem, cmp);
+
+    int result = cmp(elem, node->data);
     if (!result)
-        result = sowr_BinaryTreeNode_Find(node->right, elem, cmp);
-    return result;
+        return (sowr_BinaryTreeNode *)node;
+    else if (result < 0)
+        return sowr_BinaryTreeNode_Find(node->left, elem, cmp);
+    else
+        return sowr_BinaryTreeNode_Find(node->right, elem, cmp);
 }
 
 static
