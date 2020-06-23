@@ -35,8 +35,9 @@ extern const char *const     SOWR_PROG_VERSION_STAGE;
 extern const unsigned int    SOWR_PROG_VERSION_MAJOR;
 extern const unsigned int    SOWR_PROG_VERSION_MINOR;
 extern const unsigned int    SOWR_PROG_VERSION_REVISION;
-extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
 extern const char *const     SOWR_PROG_VERSION_STRING;
+extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
+const char *const            SOWR_PROG_BUILD_STRING;
 
 ///
 /// \brief Initialize the logger

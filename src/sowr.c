@@ -37,7 +37,7 @@ main( int argc, char *argv[] )
 #endif
     sowr_InitLogger();
     sowr_InitProfiler();
-    SOWR_LOG_INFO("Starting State of War: Remasted %s.", SOWR_PROG_VERSION_STRING);
+    SOWR_LOG_INFO("Starting State of War: Remasted %s %s.", SOWR_PROG_VERSION_STRING, SOWR_PROG_BUILD_STRING);
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();
