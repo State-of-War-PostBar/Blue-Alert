@@ -39,22 +39,6 @@ sowr_BinaryTreeNode_Walk( sowr_BinaryTreeNode *node, const sowr_BinaryTreeWalkFu
 }
 
 static
-sowr_BinaryTreeNode *
-sowr_BinaryTreeNode_Find( const sowr_BinaryTreeNode *node, const void *elem, const sowr_BinaryTreeCmpFunc cmp )
-{
-    if (!node)
-        return NULL;
-
-    int result = cmp(elem, node->data);
-    if (!result)
-        return (sowr_BinaryTreeNode *)node;
-    else if (result < 0)
-        return sowr_BinaryTreeNode_Find(node->left, elem, cmp);
-    else
-        return sowr_BinaryTreeNode_Find(node->right, elem, cmp);
-}
-
-static
 size_t
 sowr_BinaryTreeNode_Height( const sowr_BinaryTreeNode *node )
 {
@@ -87,17 +71,6 @@ sowr_BinaryTreeNode_MinAfter( const sowr_BinaryTreeNode *node )
     if (!node->left)
         return (sowr_BinaryTreeNode *)node;
     return sowr_BinaryTreeNode_MinAfter(node->left);
-}
-
-static
-sowr_BinaryTreeNode *
-sowr_BinaryTreeNode_MaxAfter( const sowr_BinaryTreeNode *node )
-{
-    if (!node)
-        return NULL;
-    if (!node->right)
-        return (sowr_BinaryTreeNode *)node;
-    return sowr_BinaryTreeNode_MaxAfter(node->right);
 }
 
 static
@@ -318,7 +291,21 @@ sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem )
 {
     if (!tree->length)
         return NULL;
-    return sowr_BinaryTreeNode_Find(tree->head, elem, tree->cmp_func);
+
+    sowr_BinaryTreeNode *iter = tree->head;
+    int result = 0;
+    while (iter)
+    {
+        result = tree->cmp_func(elem, iter->data);
+        if (!result)
+            return iter;
+        else if (result < 0)
+            iter = iter->left;
+        else
+            iter = iter->right;
+    }
+
+    return NULL;
 }
 
 void

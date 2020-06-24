@@ -51,9 +51,10 @@ sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, const sowr_TrieFreeFunc free_fun
         if (node->characters[i])
             sowr_TrieNode_DeleteAfter(node->characters[i], free_func);
 
-    if (node->data && free_func)
+    if (node->data)
     {
-        free_func(node->data);
+        if (free_func)
+            free_func(node->data);
         sowr_HeapFree(node->data);
     }
     sowr_HeapFree(node);

@@ -33,9 +33,7 @@ static
 bool
 sowr_CompareIndexHash( const void *left, const void *right )
 {
-    if (((sowr_HashMapValue *)left)->index_hash == ((sowr_HashMapValue *)right)->index_hash)
-        return true;
-    return false;
+    return ((sowr_HashMapValue *)left)->index_hash == ((sowr_HashMapValue *)right)->index_hash;
 }
 
 static
@@ -147,7 +145,10 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index )
         case 1ULL:
             return (sowr_HashMapValue *)bucket->head->data;
         default:
-            return (sowr_HashMapValue *)sowr_LinkedList_Find(bucket, &hash, sowr_CompareIndexHashToHash)->data;
+        {
+            sowr_LinkedListNode *result = sowr_LinkedList_Find(bucket, &hash, sowr_CompareIndexHashToHash);
+            return result ? (sowr_HashMapValue *)result->data : NULL;
+        }
     }
 }
 
