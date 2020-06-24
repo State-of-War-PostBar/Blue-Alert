@@ -85,7 +85,7 @@ sowr_BinaryTreeNode_ParentOf( const sowr_BinaryTreeNode *head, const sowr_Binary
     int result = 0;
     while (iter)
     {
-        result = cmp(node->data, iter->data);
+        result = cmp(iter->data, node->data);
         if (!result)
             return (sowr_BinaryTreeNode *)previous;
         else
@@ -157,12 +157,11 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem )
         sowr_BinaryTreeNode *iter = tree->head;
         sowr_BinaryTreeNode *target = NULL;
 
-        int result_r = 0;
+        int result = 0;
         while (iter)
         {
             target = iter;
-            int result = tree->cmp_func(elem, iter->data);
-            result_r = result;
+            result = tree->cmp_func(iter->data, elem);
             if (!result)
                 return;         // Duplicate data, do nothing
             else if (result < 0)
@@ -176,7 +175,7 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem )
         memcpy(node->data, elem, tree->elem_size);
         node->left = node->right = NULL;
 
-        if (result_r < 0)
+        if (result < 0)
             target->left = node;
         else
             target->right = node;
@@ -197,7 +196,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem )
     int result = 0;
     while (iter)
     {
-        result = tree->cmp_func(elem, iter->data);
+        result = tree->cmp_func(iter->data, elem);
         if (!result)
         {
             if (iter->left && iter->right)
@@ -296,7 +295,7 @@ sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem )
     int result = 0;
     while (iter)
     {
-        result = tree->cmp_func(elem, iter->data);
+        result = tree->cmp_func(iter->data, elem);
         if (!result)
             return iter;
         else if (result < 0)

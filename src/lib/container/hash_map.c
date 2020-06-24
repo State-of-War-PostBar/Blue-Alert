@@ -142,8 +142,6 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index )
     {
         case 0ULL:
             return NULL;
-        case 1ULL:
-            return (sowr_HashMapValue *)bucket->head->data;
         default:
         {
             sowr_LinkedListNode *result = sowr_LinkedList_Find(bucket, &hash, sowr_CompareIndexHashToHash);
@@ -183,13 +181,6 @@ sowr_HashMap_Take( sowr_HashMap *map, size_t index_length, const char *index )
     {
         case 0ULL:
             return NULL;
-        case 1ULL:
-        {
-            sowr_HashMapValue *new_val;
-            sowr_LinkedList_PopN(bucket, &new_val);
-            map->length--;
-            return new_val;
-        }
         default:
         {
             sowr_HashMapValue *new_val;
@@ -220,12 +211,6 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
     {
         case 0ULL:
             return;
-        case 1ULL:
-        {
-            sowr_LinkedList_Pop(bucket);
-            map->length--;
-            break;
-        }
         default:
         {
             sowr_LinkedList_Delete(bucket, &hash, sowr_CompareIndexHashToHash);

@@ -35,7 +35,7 @@ typedef void (*sowr_TrieFreeFunc)( void * );
 typedef struct sowr_TrieNode
 {
     void *data;
-    bool leaf;
+    size_t children;
     struct sowr_TrieNode *characters[SOWR_TRIE_CHARACTERS];
 } sowr_TrieNode;
 

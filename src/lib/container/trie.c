@@ -33,7 +33,7 @@ sowr_TrieNode_Gen()
 {
     sowr_TrieNode *node = sowr_HeapAlloc(sizeof(sowr_TrieNode));
     node->data = NULL;
-    node->leaf = false;
+    node->children = 0ULL;
     for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
         node->characters[i] = NULL;
 
@@ -47,9 +47,13 @@ sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, const sowr_TrieFreeFunc free_fun
     if (!node)
         return;
 
-    for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
-        if (node->characters[i])
-            sowr_TrieNode_DeleteAfter(node->characters[i], free_func);
+    if (node->children)
+        for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+            if (node->characters[i])
+            {
+                sowr_TrieNode_DeleteAfter(node->characters[i], free_func);
+                node->children--;
+            }
 
     if (node->data)
     {
@@ -65,7 +69,7 @@ sowr_Trie_Create( size_t elem_size, const sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
     head.data = NULL;
-    head.leaf = false;
+    head.children = 0ULL;
     for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
         head.characters[i] = NULL;
 
@@ -82,7 +86,7 @@ sowr_Trie_CreateS( size_t elem_size, const sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
     head.data = NULL;
-    head.leaf = false;
+    head.children = 0ULL;
     for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
         head.characters[i] = NULL;
 
@@ -102,8 +106,10 @@ sowr_Trie_Clear( sowr_Trie *trie )
     if (!trie)
         return;
 
-    for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
-        sowr_TrieNode_DeleteAfter(trie->head.characters[i], trie->free_func);
+    if (trie->head.children)
+        for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+            sowr_TrieNode_DeleteAfter(trie->head.characters[i], trie->free_func);
+    trie->head.children = 0ULL;
 }
 
 void
@@ -118,7 +124,10 @@ sowr_Trie_Insert( sowr_Trie *trie, const char *index, const void *data )
     {
         ch = *index;
         if (!iter->characters[ch])
+        {
             iter->characters[ch] = sowr_TrieNode_Gen();
+            iter->children++;
+        }
 
         iter = iter->characters[ch];
         index++;
@@ -128,14 +137,12 @@ sowr_Trie_Insert( sowr_Trie *trie, const char *index, const void *data )
     {
         iter->data = sowr_HeapAlloc(trie->elem_size);
         memcpy(iter->data, data, trie->elem_size);
-        iter->leaf = true;
     }
     else
     {
         if (trie->free_func)
             trie->free_func(iter->data);
         memcpy(iter->data, data, trie->elem_size);
-        iter->leaf = true;
     }
 }
 
@@ -163,11 +170,12 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index )
     if (!trie)
         return false;
 
-    sowr_TrieNode *iter = &(trie->head);
-    sowr_TrieNode **previous = NULL;
+    sowr_TrieNode *iter = &(trie->head), *previous = NULL;
+    sowr_TrieNode **parent_ptr = NULL;
     while (*index)
     {
-        previous = &(iter->characters[(size_t)*index]);
+        previous = iter;
+        parent_ptr = &(iter->characters[(size_t)*index]);
         iter = iter->characters[(size_t)*index];
         if (!iter)
             return false;
@@ -181,7 +189,8 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index )
         sowr_HeapFree(iter->data);
     }
     sowr_HeapFree(iter);
-    *previous = NULL;
+    *parent_ptr = NULL;
+    previous->children--;
 
     return true;
 }
