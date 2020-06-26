@@ -31,7 +31,8 @@
 ///
 /// \brief Allocate memory in the heap
 ///
-/// Allocate memory in the heap. If the allocation fails, it terminates the program.
+/// Allocate memory in the heap.
+/// If the allocation fails, it terminates the program.
 ///
 /// \param size Size in bytes of the allocation
 ///
@@ -44,7 +45,7 @@ sowr_HeapAlloc( size_t size );
 /// \brief Allocate memory in the heap with alignment
 ///
 /// Allocate memory in the heap with alignment, see documents for \a aligned_alloc().
-/// If the allocation failes, it terminates the program.
+/// If the allocation fails, it terminates the program.
 ///
 /// \param alignment Size in bytes of the alignment
 /// \param size Size in bytes of the allocation
