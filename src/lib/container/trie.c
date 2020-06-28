@@ -170,12 +170,9 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index )
     if (!trie)
         return false;
 
-    sowr_TrieNode *iter = &(trie->head), *previous = NULL;
-    sowr_TrieNode **parent_ptr = NULL;
+    sowr_TrieNode *iter = &(trie->head);
     while (*index)
     {
-        previous = iter;
-        parent_ptr = &(iter->characters[(size_t)*index]);
         iter = iter->characters[(size_t)*index];
         if (!iter)
             return false;
