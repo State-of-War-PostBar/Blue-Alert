@@ -213,8 +213,8 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
             return;
         default:
         {
-            sowr_LinkedList_Delete(bucket, &hash, sowr_CompareIndexHashToHash);
-            map->length--;
+            if (sowr_LinkedList_Delete(bucket, &hash, sowr_CompareIndexHashToHash) > 0ULL)
+                map->length--;
         }
     }
 }
