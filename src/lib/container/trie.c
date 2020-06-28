@@ -188,9 +188,7 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index )
             trie->free_func(iter->data);
         sowr_HeapFree(iter->data);
     }
-    sowr_HeapFree(iter);
-    *parent_ptr = NULL;
-    previous->children--;
+    iter->data = NULL;
 
     return true;
 }
