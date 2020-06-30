@@ -51,12 +51,12 @@ const char *const  SOWR_PROG_BUILD_STRING     = "Build 001";
     ///
     /// Locking function for the log file, feed to log.c.
     ///
+    /// \param lock To lock or to unlock the log file. False for unlock.
     /// \param user_data User-defined data when called. Unused.
-    /// \param lock To lock or to unlock the log file. 0 for unlock.
     ///
     static
     void
-    sowr_LockLogFile( void *user_data, int lock )
+    sowr_LockLogFile( bool lock, void *user_data )
     {
         lock ?
             sowr_EnterCriticalSection(&sowr_log_file_mtx)
@@ -79,9 +79,8 @@ sowr_InitLogger( void )
 
     sowr_log_available = true;
     sowr_InitCriticalSection(&sowr_log_file_mtx);
-    log_set_fp(sowr_log_file);
-    log_set_level(SOWR_LOG_LEVEL_TRACE);
-    log_set_lock(sowr_LockLogFile);
+    log_add_fp(sowr_log_file, SOWR_LOG_LEVEL_TRACE);
+    log_set_lock(sowr_LockLogFile, NULL);
 #endif
 }
 
@@ -91,9 +90,9 @@ sowr_DestroyLogger( void )
 #ifdef SOWR_BUILD_DEBUG
     if (sowr_log_available)
     {
-        sowr_LockLogFile(NULL, true);
+        sowr_LockLogFile(true, NULL);
         fclose(sowr_log_file);
-        sowr_LockLogFile(NULL, false);
+        sowr_LockLogFile(false, NULL);
         sowr_DestroyCriticalSection(&sowr_log_file_mtx);
         sowr_log_file = NULL;
         sowr_log_available = false;
