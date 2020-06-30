@@ -28,7 +28,7 @@
 #include "../memory/heap_memory.h"
 
 sowr_Vector *
-sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func )
+sowr_Vector_Create( size_t elem_size, sowr_VecFreeFunc free_func )
 {
     sowr_Vector *vec = sowr_HeapAlloc(sizeof(sowr_Vector));
     vec->length = 0ULL;
@@ -40,7 +40,7 @@ sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func )
 }
 
 sowr_Vector
-sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func )
+sowr_Vector_CreateS( size_t elem_size, sowr_VecFreeFunc free_func )
 {
     sowr_Vector vec =
     {
@@ -116,13 +116,14 @@ sowr_Vector_ShrinkToFit( sowr_Vector *vec )
 }
 
 void
-sowr_Vector_Walk( sowr_Vector *vec, const sowr_VecWalkFunc func )
+sowr_Vector_Walk( sowr_Vector *vec, sowr_VecWalkFunc func )
 {
     if (!vec->length)
         return;
 
-    for (size_t i = 0ULL; i < vec->length; i++)
-        func(sowr_Vector_PtrAt(vec, i));
+    char *ptr = vec->ptr;
+    for (size_t i = 0ULL; i < vec->length; i++, ptr += vec->elem_size)
+        func(ptr);
 }
 
 void
@@ -191,7 +192,8 @@ sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve )
         void *ptr_shifting = sowr_Vector_PtrAt(vec, index);
         void *ptr_data = sowr_Vector_PtrAt(vec, index + 1ULL);
         size_t bytes_to_shift = vec->elem_size * (vec->length - index - 1ULL);
-        memcpy(ptr_retrieve, ptr_shifting, vec->elem_size);
+        if (ptr_retrieve)
+            memcpy(ptr_retrieve, ptr_shifting, vec->elem_size);
         memmove(ptr_shifting, ptr_data, bytes_to_shift);
         vec->length--;
     }

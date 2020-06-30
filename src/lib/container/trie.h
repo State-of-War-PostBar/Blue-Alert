@@ -28,18 +28,16 @@
 
 #include <pch.h>
 
-enum { SOWR_TRIE_CHARACTERS = 128 };
-
 typedef void (*sowr_TrieFreeFunc)( void * );
 
 typedef struct sowr_TrieNode
 {
-    void *data;
     size_t children;
-    struct sowr_TrieNode *characters[SOWR_TRIE_CHARACTERS];
+    void *data;
+    struct sowr_TrieNode *characters[CHAR_MAX];
 } sowr_TrieNode;
 
-typedef struct
+typedef struct sowr_Trie
 {
     size_t elem_size;
     sowr_TrieFreeFunc free_func;
@@ -57,7 +55,7 @@ typedef struct
 /// \return Created trie
 ///
 sowr_Trie *
-sowr_Trie_Create( size_t elem_size, const sowr_TrieFreeFunc free_func );
+sowr_Trie_Create( size_t elem_size, sowr_TrieFreeFunc free_func );
 
 ///
 /// \brief Create a trie
@@ -71,7 +69,7 @@ sowr_Trie_Create( size_t elem_size, const sowr_TrieFreeFunc free_func );
 /// \return Created trie
 ///
 sowr_Trie
-sowr_Trie_CreateS( size_t elem_size, const sowr_TrieFreeFunc free_func );
+sowr_Trie_CreateS( size_t elem_size, sowr_TrieFreeFunc free_func );
 
 ///
 /// \brief Clear the trie

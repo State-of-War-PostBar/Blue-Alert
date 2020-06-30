@@ -70,8 +70,9 @@
 #include <string.h>
 #include <tgmath.h>
 
-#undef  thread_local
-#define thread_local _Thread_local
+#ifndef thread_local
+    #define thread_local _Thread_local
+#endif
 
 #include <time.h>
 #include <uchar.h>

@@ -27,14 +27,14 @@
 
 inline
 sowr_Stack *
-sowr_Stack_Create ( size_t elem_size, const sowr_StackFreeFunc free_func )
+sowr_Stack_Create ( size_t elem_size, sowr_StackFreeFunc free_func )
 {
     return sowr_Vector_Create(elem_size, free_func);
 }
 
 inline
 sowr_Stack
-sowr_Stack_CreateS ( size_t elem_size, const sowr_StackFreeFunc free_func )
+sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func )
 {
     return sowr_Vector_CreateS(elem_size, free_func);
 }
@@ -61,7 +61,7 @@ sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size )
 }
 
 void
-sowr_Stack_Eat( sowr_Stack *stack, const sowr_StackEatFunc func )
+sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func )
 {
     if (!stack->length)
         return;

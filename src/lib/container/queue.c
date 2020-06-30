@@ -27,14 +27,14 @@
 
 inline
 sowr_Queue *
-sowr_Queue_Create ( size_t elem_size, const sowr_QueueFreeFunc free_func )
+sowr_Queue_Create ( size_t elem_size, sowr_QueueFreeFunc free_func )
 {
     return sowr_Vector_Create(elem_size, free_func);
 }
 
 inline
 sowr_Queue
-sowr_Queue_CreateS ( size_t elem_size, const sowr_QueueFreeFunc free_func )
+sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func )
 {
     return sowr_Vector_CreateS(elem_size, free_func);
 }
@@ -61,7 +61,7 @@ sowr_Queue_ExpandUntil( sowr_Queue *queue, size_t size )
 }
 
 void
-sowr_Queue_Eat( sowr_Queue *queue, const sowr_QueueEatFunc func )
+sowr_Queue_Eat( sowr_Queue *queue, sowr_QueueEatFunc func )
 {
     if (!queue->length)
         return;

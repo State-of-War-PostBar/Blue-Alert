@@ -72,7 +72,7 @@ sowr_LockMutex( sowr_Mutex *mtx );
 ///
 /// \brief Try to lock a mutex
 ///
-/// Attempt to lock a mutex object, if the acquisition fails continue immediately.
+/// Attempt to lock a mutex object, if the acquisition fails do nothing.
 ///
 /// \param mtx The mutex object to be locked
 ///
@@ -126,7 +126,7 @@ sowr_EnterCriticalSection( sowr_CriticalSection *cs );
 ///
 /// \brief Try to enter a critical section
 ///
-/// Attempt to enter a critical section. If the entrance failed continue immediately.<BR />
+/// Attempt to enter a critical section. If the entrance failed do nothing.<BR />
 /// <B>If used on Posix systems, it has the same effect as \a sowr_TryLockMutex().</B>
 ///
 /// \param cs The critical section to be locked
@@ -159,7 +159,7 @@ void
 sowr_DestroyCriticalSection( sowr_CriticalSection *cs );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Initialize a read-write lock
 ///
@@ -173,14 +173,14 @@ void
 sowr_InitReadWriteLock( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Lock a read-write lock in read mode.
 ///
 /// Lock a read-write lock in read mode, waiting infinitely until the acquisition.
 /// Multiple readers can lock it in read mode an the same time, but no reader or writer can obtain the read-write lock if there is one writer acquired it.
 ///
-/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
 /// \param rwl The read-write lock to be locked.
 ///
@@ -188,14 +188,14 @@ void
 sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Lock a read-write lock in write mode.
 ///
 /// Lock a read-write lock in write mode, waiting infinitely until the acquisition.
 /// No other reader or writer can obtain the read-write lock after the writer acquired it.
 ///
-/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
 /// \param rwl The read-write lock to be locked.
 ///
@@ -203,14 +203,14 @@ void
 sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Lock a read-write lock in read mode.
 ///
-/// Lock a read-write lock in read mode, if the acquisition fails continue immediately.
+/// Lock a read-write lock in read mode, if the acquisition fails do nothing.
 /// Multiple readers can lock it in read mode an the same time, but no reader or writer can obtain the read-write lock if there is one writer acquired it.
 ///
-/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
 /// \param rwl The read-write lock to be locked.
 ///
@@ -218,14 +218,14 @@ void
 sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Lock a read-write lock in write mode.
 ///
 /// Lock a read-write lock in write mode, if the acquisition fails continue immediately.
 /// No other reader or writer can obtain the read-write lock after the writer acquired it.
 ///
-/// \note On Windows, it has some weird compatibility because of WOW64. Try not to use it.
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
 /// \param rwl The read-write lock to be locked.
 ///
@@ -233,12 +233,13 @@ void
 sowr_TryLockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Unlock a read mode read-write lock
 ///
 /// Unlock a reader mode read-write lock. It must be the reader to unlock.
 ///
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 /// \note On Posix, it has the same effect as \a sowr_UnlockReadWriteLockWrite() since you don't have to distinguish them when unlocking.
 ///
 /// \param rwl The read-write lock to be unlocked.
@@ -247,12 +248,13 @@ void
 sowr_UnlockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Unlock a write mode read-write lock
 ///
 /// Unlock a writer mode read-write lock. It must be the writer to unlock.
 ///
+/// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 /// \note On Posix, it has the same effect as \a sowr_UnlockReadWriteLockRead() since you don't have to distinguish them when unlocking.
 ///
 /// \param rwl The read-write lock to be unlocked.
@@ -261,13 +263,13 @@ void
 sowr_UnlockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks, try not to use it.
+/// \deprecated It sucks.
 ///
 /// \brief Destroy a read-write lock
 ///
 /// Destroy a read-write lock, it will be no longer usable.
 ///
-/// \note On Windows, this function does nothing.
+/// \note On Windows, this function does nothing. Also it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
 /// \param rwl The read-write lock to be destroyed.
 ///

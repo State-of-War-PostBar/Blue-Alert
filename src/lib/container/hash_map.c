@@ -117,7 +117,7 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
 
     size_t slot = index_hash % map->buckets_count;
     sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
-    map->length = sowr_LinkedList_Delete(bucket, &block, sowr_CompareIndexHash) ? map->length : map->length + 1ULL;
+    map->length = sowr_LinkedList_Take(bucket, &block, sowr_CompareIndexHash, NULL) ? map->length : map->length + 1ULL;
     sowr_LinkedList_Insert(bucket, &block);
 }
 
@@ -167,36 +167,6 @@ sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func )
         sowr_LinkedList_Walk(sowr_Vector_PtrAt(&(map->buckets), i), func);
 }
 
-sowr_HashMapValue *
-sowr_HashMap_Take( sowr_HashMap *map, size_t index_length, const char *index )
-{
-    if (!map->length)
-        return NULL;
-
-    sowr_HashVal hash = sowr_GetHash(index_length, index);
-    size_t slot = hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
-
-    switch (bucket->length)
-    {
-        case 0ULL:
-            return NULL;
-        default:
-        {
-            sowr_HashMapValue *new_val;
-            sowr_LinkedList_DeleteN(bucket, &hash, sowr_CompareIndexHashToHash, &new_val);
-            map->length--;
-            return new_val;
-        }
-    }
-}
-
-sowr_HashMapValue *
-sowr_HashMap_TakeI( sowr_HashMap *map, const char *index )
-{
-    return sowr_HashMap_Take(map, strlen(index) + 1ULL, index);
-}
-
 void
 sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
 {
@@ -213,7 +183,7 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
             return;
         default:
         {
-            if (sowr_LinkedList_Delete(bucket, &hash, sowr_CompareIndexHashToHash) > 0ULL)
+            if (sowr_LinkedList_Take(bucket, &hash, sowr_CompareIndexHashToHash, NULL))
                 map->length--;
         }
     }

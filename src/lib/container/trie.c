@@ -34,7 +34,7 @@ sowr_TrieNode_Gen()
     sowr_TrieNode *node = sowr_HeapAlloc(sizeof(sowr_TrieNode));
     node->data = NULL;
     node->children = 0ULL;
-    for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+    for (size_t i = 0ULL; i < CHAR_MAX; i++)
         node->characters[i] = NULL;
 
     return node;
@@ -42,13 +42,13 @@ sowr_TrieNode_Gen()
 
 static
 void
-sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, const sowr_TrieFreeFunc free_func )
+sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, sowr_TrieFreeFunc free_func )
 {
     if (!node)
         return;
 
     if (node->children)
-        for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+        for (size_t i = 0ULL; i < CHAR_MAX; i++)
             if (node->characters[i])
             {
                 sowr_TrieNode_DeleteAfter(node->characters[i], free_func);
@@ -65,12 +65,12 @@ sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, const sowr_TrieFreeFunc free_fun
 }
 
 sowr_Trie *
-sowr_Trie_Create( size_t elem_size, const sowr_TrieFreeFunc free_func )
+sowr_Trie_Create( size_t elem_size, sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
     head.data = NULL;
     head.children = 0ULL;
-    for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+    for (size_t i = 0ULL; i < CHAR_MAX; i++)
         head.characters[i] = NULL;
 
     sowr_Trie *trie = sowr_HeapAlloc(sizeof(sowr_Trie));
@@ -82,12 +82,12 @@ sowr_Trie_Create( size_t elem_size, const sowr_TrieFreeFunc free_func )
 }
 
 sowr_Trie
-sowr_Trie_CreateS( size_t elem_size, const sowr_TrieFreeFunc free_func )
+sowr_Trie_CreateS( size_t elem_size, sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
     head.data = NULL;
     head.children = 0ULL;
-    for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+    for (size_t i = 0ULL; i < CHAR_MAX; i++)
         head.characters[i] = NULL;
 
     sowr_Trie trie =
@@ -107,7 +107,7 @@ sowr_Trie_Clear( sowr_Trie *trie )
         return;
 
     if (trie->head.children)
-        for (size_t i = 0ULL; i < SOWR_TRIE_CHARACTERS; i++)
+        for (size_t i = 0ULL; i < CHAR_MAX; i++)
             sowr_TrieNode_DeleteAfter(trie->head.characters[i], trie->free_func);
     trie->head.children = 0ULL;
 }

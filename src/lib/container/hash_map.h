@@ -34,7 +34,7 @@
 
 typedef void (*sowr_HashMapWalkFunc)( void * );
 
-typedef struct
+typedef struct sowr_HashMapValue
 {
     sowr_HashVal index_hash;
     sowr_HashVal value_hash;
@@ -42,7 +42,7 @@ typedef struct
     char *data;
 } sowr_HashMapValue;
 
-typedef struct
+typedef struct sowr_HashMap
 {
     size_t buckets_count;
     size_t length;
@@ -156,34 +156,6 @@ sowr_HashMap_GetI( sowr_HashMap *map, const char *index );
 ///
 void
 sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func );
-
-///
-/// \brief Take a value from the map
-///
-/// Take a value from the map.
-///
-/// \param map Map to get
-/// \param index_length Length of index in byte
-/// \param index Index
-///
-/// \return The value from key, NULL if not found
-///
-sowr_HashMapValue *
-sowr_HashMap_Take( sowr_HashMap *map, size_t index_length, const char *index );
-
-///
-/// \brief Take a value from the map
-///
-/// Take a value from the map.<BR />
-/// The key is understood to be null-terminated string.
-///
-/// \param map Map to get
-/// \param index Index
-///
-/// \return The value from key, NULL if not found
-///
-sowr_HashMapValue *
-sowr_HashMap_TakeI( sowr_HashMap *map, const char *index );
 
 ///
 /// \brief Delete a value from the map

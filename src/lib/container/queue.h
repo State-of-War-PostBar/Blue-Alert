@@ -46,7 +46,7 @@ typedef sowr_Vector sowr_Queue;
 /// \return Created queue
 ///
 sowr_Queue *
-sowr_Queue_Create ( size_t elem_size, const sowr_QueueFreeFunc free_func );
+sowr_Queue_Create ( size_t elem_size, sowr_QueueFreeFunc free_func );
 
 ///
 /// \brief Create a queue
@@ -60,7 +60,7 @@ sowr_Queue_Create ( size_t elem_size, const sowr_QueueFreeFunc free_func );
 /// \return Created queue
 ///
 sowr_Queue
-sowr_Queue_CreateS ( size_t elem_size, const sowr_QueueFreeFunc free_func );
+sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func );
 
 ///
 /// \brief Get the first element
@@ -104,7 +104,7 @@ sowr_Queue_ExpandUntil( sowr_Queue *queue, size_t size );
 /// \param func Function for eating
 ///
 void
-sowr_Queue_Eat( sowr_Queue *queue, const sowr_QueueEatFunc func );
+sowr_Queue_Eat( sowr_Queue *queue, sowr_QueueEatFunc func );
 
 ///
 /// \brief Clear out a queue

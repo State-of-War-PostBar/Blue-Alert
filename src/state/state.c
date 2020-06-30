@@ -28,8 +28,6 @@
 #include "../lib/log/log.h"
 #include "../lib/sync/lock.h"
 
-#include <pthread.h>
-
 const char *const  SOWR_PROG_ID               = "sowr";
 const char *const  SOWR_PROG_NAME             = "State of War: Remastered";
 
@@ -38,6 +36,7 @@ const unsigned int SOWR_PROG_VERSION_MAJOR    = 0U;
 const unsigned int SOWR_PROG_VERSION_MINOR    = 1U;
 const unsigned int SOWR_PROG_VERSION_REVISION = 0U;
 const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.1 rev0";
+
 const unsigned int SOWR_PROG_BUILD_NUMBER     = 1U;
 const char *const  SOWR_PROG_BUILD_STRING     = "Build 001";
 
@@ -73,7 +72,7 @@ sowr_InitLogger( void )
     sowr_log_file = fopen(SOWR_LOG_FILE_NAME, "w");
     if (!sowr_log_file)
     {
-        perror("Failed to create a log file, logging will not be availalbe.");
+        perror("Failed to create a log file, logging will not be availalbe");
         sowr_log_available = false;
         return;
     }

@@ -49,5 +49,5 @@ inline
 sowr_HashVal
 sowr_GetHashI( const char *str )
 {
-    return sowr_GetHash(strlen(str) + 1ULL, str);
+    return sowr_GetHash(strlen(str), str);
 }

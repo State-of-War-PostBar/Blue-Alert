@@ -31,11 +31,11 @@
 typedef void (*sowr_VecFreeFunc)( void * );
 typedef void (*sowr_VecWalkFunc)( void * );
 
-typedef struct
+typedef struct sowr_Vector
 {
-    size_t length;
-    size_t capacity;
     size_t elem_size;
+    size_t capacity;
+    size_t length;
     sowr_VecFreeFunc free_func;
     void *ptr;
 } sowr_Vector;
@@ -51,7 +51,7 @@ typedef struct
 /// \return Created vector
 ///
 sowr_Vector *
-sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func );
+sowr_Vector_Create( size_t elem_size, sowr_VecFreeFunc free_func );
 
 ///
 /// \brief Create a vector
@@ -65,7 +65,7 @@ sowr_Vector_Create( size_t elem_size, const sowr_VecFreeFunc free_func );
 /// \return Created vector
 ///
 sowr_Vector
-sowr_Vector_CreateS( size_t elem_size, const sowr_VecFreeFunc free_func );
+sowr_Vector_CreateS( size_t elem_size, sowr_VecFreeFunc free_func );
 
 ///
 /// \brief Get the first element
@@ -92,7 +92,7 @@ void *
 sowr_Vector_Last( const sowr_Vector *vec );
 
 ///
-/// \brief Get the indexth element
+/// \brief Get the indexed element
 ///
 /// Get the pointer to some place in the vector.
 ///
@@ -136,7 +136,7 @@ sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size );
 /// \param func Function for walking
 ///
 void
-sowr_Vector_Walk( sowr_Vector *vec, const sowr_VecWalkFunc func );
+sowr_Vector_Walk( sowr_Vector *vec, sowr_VecWalkFunc func );
 
 ///
 /// \brief Clear out a vector
@@ -161,7 +161,7 @@ sowr_Vector_ShrinkToFit( sowr_Vector *vec );
 ///
 /// \brief Insert element to vector
 ///
-/// Insert an element to vector.
+/// Insert an element to vector.<BR />
 /// If index is out of bound, it is understood to push the element to the end of vector.
 ///
 /// \param vec Vector to insert
@@ -174,7 +174,7 @@ sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index );
 ///
 /// \brief Replace an element
 ///
-/// Replace an element with a new one, the old one will be overriden.
+/// Replace an element with a new one, the old one will be overriden.<BR />
 /// If index is out of bound, it is understood to push the element to last of vector.
 ///
 /// \param vec Vector to operate
@@ -187,7 +187,7 @@ sowr_Vector_Replace( sowr_Vector *vec, const void *elem, size_t index );
 ///
 /// \brief Delete an element
 ///
-/// Delete an element in index.
+/// Delete an element in index.<BR />
 /// If index is out of bound, it does nothing.
 ///
 /// \param vec Vector to operate
@@ -199,7 +199,8 @@ sowr_Vector_Delete( sowr_Vector *vec, size_t index );
 ///
 /// \brief Take an element
 ///
-/// Take an element out of the vector. The old element will be overriden.
+/// Take an element out of the vector.<BR />
+/// Whether ptr_retrieve is NULL or not, the old element will be overriden.
 ///
 /// \param vec Vector to operate
 /// \param index Index to take out
@@ -222,7 +223,7 @@ sowr_Vector_Push( sowr_Vector *vec, const void *elem );
 ///
 /// \brief Pop the last element of vector
 ///
-/// Pop the last element of vector into the pointer.
+/// Pop the last element of vector into the pointer.<BR />
 /// Whether ptr_retrieve is NULL or not, the last element will be overriden.
 ///
 /// \param vec Vector to pop out
@@ -245,7 +246,7 @@ sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem );
 ///
 /// \brief Pop the first element of vector
 ///
-/// Pop the first element of vector into the pointer.
+/// Pop the first element of vector into the pointer.<BR />
 /// Whether ptr_retrieve is NULL or not, the first element will be overriden.
 ///
 /// \param vec Vector to pop out

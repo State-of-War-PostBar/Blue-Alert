@@ -46,7 +46,7 @@ typedef sowr_Vector sowr_Stack;
 /// \return Created stack
 ///
 sowr_Stack *
-sowr_Stack_Create ( size_t elem_size, const sowr_StackFreeFunc free_func );
+sowr_Stack_Create ( size_t elem_size, sowr_StackFreeFunc free_func );
 
 ///
 /// \brief Create a stack
@@ -60,14 +60,14 @@ sowr_Stack_Create ( size_t elem_size, const sowr_StackFreeFunc free_func );
 /// \return Created stack
 ///
 sowr_Stack
-sowr_Stack_CreateS ( size_t elem_size, const sowr_StackFreeFunc free_func );
+sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func );
 
 ///
 /// \brief Get the last element
 ///
 /// Get the last element of the stack.
 ///
-/// \param vec Stack
+/// \param stack Stack
 ///
 /// \return Pointer to the last element
 ///
@@ -79,7 +79,7 @@ sowr_Stack_Last( const sowr_Stack *stack );
 ///
 /// Expand the stack, usually doubling its capacity unless the length is 0.
 ///
-/// \param vec Stack to expand
+/// \param stack Stack to expand
 ///
 void
 sowr_Stack_Expand( sowr_Stack *stack );
@@ -104,7 +104,7 @@ sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size );
 /// \param func Function for eating
 ///
 void
-sowr_Stack_Eat( sowr_Stack *stack, const sowr_StackEatFunc func );
+sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func );
 
 ///
 /// \brief Clear out a stack

@@ -38,7 +38,7 @@ typedef struct sowr_LinkedListNode
     struct sowr_LinkedListNode *next;
 } sowr_LinkedListNode;
 
-typedef struct
+typedef struct sowr_LinkedList
 {
     size_t elem_size;
     size_t length;
@@ -57,7 +57,7 @@ typedef struct
 /// \return Created linked list
 ///
 sowr_LinkedList *
-sowr_LinkedList_Create( size_t elem_size, const sowr_LinkedListFreeFunc free_func );
+sowr_LinkedList_Create( size_t elem_size, sowr_LinkedListFreeFunc free_func );
 
 ///
 /// \brief Create a linked list
@@ -71,18 +71,18 @@ sowr_LinkedList_Create( size_t elem_size, const sowr_LinkedListFreeFunc free_fun
 /// \return Created linked list
 ///
 sowr_LinkedList
-sowr_LinkedList_CreateS( size_t elem_size, const sowr_LinkedListFreeFunc free_func );
+sowr_LinkedList_CreateS( size_t elem_size, sowr_LinkedListFreeFunc free_func );
 
 ///
 /// \brief Walk a linked list
 ///
-/// Walk a linked list with given function
+/// Walk a linked list with given function.
 ///
 /// \param list List to walk
 /// \param func Function for walking
 ///
 void
-sowr_LinkedList_Walk( sowr_LinkedList *list, const sowr_LinkedListWalkFunc func );
+sowr_LinkedList_Walk( sowr_LinkedList *list, sowr_LinkedListWalkFunc func );
 
 ///
 /// \brief Clear a linked list
@@ -108,23 +108,14 @@ sowr_LinkedList_Insert( sowr_LinkedList *list, const void *elem );
 ///
 /// \brief Pop the first element
 ///
-/// Pop the first element of the list.
-///
-/// \param list List to pop
-///
-void
-sowr_LinkedList_Pop( sowr_LinkedList *list );
-
-///
-/// \brief Pop the first element
-///
-/// Pop the first element of the list, but not freeing node's content.
+/// Pop the first element of the list.<BR />
+/// If the given retrieving pointer is NULL, the data is freed.
 ///
 /// \param list List to pop
 /// \param ptr_retrieve Pointer to retrieve the element if needed
 ///
 void
-sowr_LinkedList_PopN( sowr_LinkedList *list, void **ptr_retrieve );
+sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve );
 
 ///
 /// \brief Find an element
@@ -138,36 +129,24 @@ sowr_LinkedList_PopN( sowr_LinkedList *list, void **ptr_retrieve );
 /// \return The node containing the element if found, NULL otherwise.
 ///
 sowr_LinkedListNode *
-sowr_LinkedList_Find( const sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func );
+sowr_LinkedList_Find( const sowr_LinkedList *list, const void *elem, sowr_LinkedListCmpFunc func );
 
 ///
-/// \brief Delete an element
+/// \brief Extract an element
 ///
-/// Delete an element in the list.
-///
-/// \param list List to operate
-/// \param elem Element to delete
-/// \param func Function for comparision
-///
-/// \return Successfully deleted elements count
-///
-size_t
-sowr_LinkedList_Delete( sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func );
-
-///
-/// \brief Delete an element
-///
-/// Delete an element in the list, but not freeing node's content.
+/// Extract an element in the list.<BR />
+/// If the given retrieving pointer is NULL, the data is freed.<BR />
+/// This function will extract out all the elements matching the comparision, but only copying once.
 ///
 /// \param list List to operate
 /// \param elem Element to delete
 /// \param func Function for comparision
 /// \param ptr_retrieve Pointer to retrieve the data if needed
 ///
-/// \return Successfully deleted elements count
+/// \return Successfully extracted elements count
 ///
 size_t
-sowr_LinkedList_DeleteN( sowr_LinkedList *list, const void *elem, const sowr_LinkedListCmpFunc func, void **ptr_retrieve );
+sowr_LinkedList_Take( sowr_LinkedList *list, const void *elem, sowr_LinkedListCmpFunc func, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a linked list

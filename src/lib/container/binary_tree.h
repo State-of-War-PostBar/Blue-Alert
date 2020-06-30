@@ -40,7 +40,7 @@ typedef struct sowr_BinaryTreeNode
     struct sowr_BinaryTreeNode *left, *right;
 } sowr_BinaryTreeNode;
 
-typedef struct
+typedef struct sowr_BinaryTree
 {
     size_t elem_size;
     size_t length;
@@ -60,7 +60,7 @@ typedef struct
 /// \return Created tree
 ///
 sowr_BinaryTree *
-sowr_BinaryTree_Create( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func );
+sowr_BinaryTree_Create( size_t elem_size, sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Create a binary tree
@@ -73,7 +73,7 @@ sowr_BinaryTree_Create( size_t elem_size, const sowr_BinaryTreeFreeFunc free_fun
 /// \return Created tree
 ///
 sowr_BinaryTree
-sowr_BinaryTree_CreateS( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func );
+sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Insert element to binary tree
@@ -110,7 +110,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem );
 /// \param func Function for walking
 ///
 void
-sowr_BinaryTree_Walk( sowr_BinaryTree *tree, const sowr_BinaryTreeWalkFunc func );
+sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func );
 
 ///
 /// \brief Find an element in tree

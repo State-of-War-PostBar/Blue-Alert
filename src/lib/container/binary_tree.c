@@ -29,7 +29,7 @@
 
 static
 void
-sowr_BinaryTreeNode_Walk( sowr_BinaryTreeNode *node, const sowr_BinaryTreeWalkFunc func )
+sowr_BinaryTreeNode_Walk( sowr_BinaryTreeNode *node, sowr_BinaryTreeWalkFunc func )
 {
     if (!node)
         return;
@@ -75,7 +75,7 @@ sowr_BinaryTreeNode_MinAfter( const sowr_BinaryTreeNode *node )
 
 static
 sowr_BinaryTreeNode *
-sowr_BinaryTreeNode_ParentOf( const sowr_BinaryTreeNode *head, const sowr_BinaryTreeNode *node, const sowr_BinaryTreeCmpFunc cmp )
+sowr_BinaryTreeNode_ParentOf( const sowr_BinaryTreeNode *head, const sowr_BinaryTreeNode *node, sowr_BinaryTreeCmpFunc cmp )
 {
     if (!head || !node)
         return NULL;
@@ -102,7 +102,7 @@ sowr_BinaryTreeNode_ParentOf( const sowr_BinaryTreeNode *head, const sowr_Binary
 
 static
 void
-sowr_BinaryTreeNode_Clear( sowr_BinaryTreeNode *node, const sowr_BinaryTreeFreeFunc free_func )
+sowr_BinaryTreeNode_Clear( sowr_BinaryTreeNode *node, sowr_BinaryTreeFreeFunc free_func )
 {
     if (!node)
         return;
@@ -116,7 +116,7 @@ sowr_BinaryTreeNode_Clear( sowr_BinaryTreeNode *node, const sowr_BinaryTreeFreeF
 }
 
 sowr_BinaryTree *
-sowr_BinaryTree_Create( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func )
+sowr_BinaryTree_Create( size_t elem_size, sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func )
 {
     sowr_BinaryTree *tree = sowr_HeapAlloc(sizeof(sowr_BinaryTree));
     tree->elem_size = elem_size;
@@ -128,7 +128,7 @@ sowr_BinaryTree_Create( size_t elem_size, const sowr_BinaryTreeFreeFunc free_fun
 }
 
 sowr_BinaryTree
-sowr_BinaryTree_CreateS( size_t elem_size, const sowr_BinaryTreeFreeFunc free_func, const sowr_BinaryTreeCmpFunc cmp_func )
+sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func )
 {
     sowr_BinaryTree tree =
     {
@@ -278,7 +278,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem )
 }
 
 void
-sowr_BinaryTree_Walk( sowr_BinaryTree *tree, const sowr_BinaryTreeWalkFunc func )
+sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func )
 {
     if (!tree->length)
         return;

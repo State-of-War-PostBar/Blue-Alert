@@ -31,7 +31,7 @@
 ///
 /// \brief Allocate memory in the heap
 ///
-/// Allocate memory in the heap.
+/// Allocate memory in the heap.<BR />
 /// If the allocation fails, it terminates the program.
 ///
 /// \param size Size in bytes of the allocation
@@ -44,7 +44,7 @@ sowr_HeapAlloc( size_t size );
 ///
 /// \brief Allocate memory in the heap with alignment
 ///
-/// Allocate memory in the heap with alignment, see documents for \a aligned_alloc().
+/// Allocate memory in the heap with alignment. See documents for \a aligned_alloc().<BR />
 /// If the allocation fails, it terminates the program.
 ///
 /// \param alignment Size in bytes of the alignment
@@ -58,7 +58,7 @@ sowr_HeapAlignedAlloc( size_t alignment, size_t size );
 ///
 /// \brief Allocate memory in the heap with zeroing out
 ///
-/// Allocate memory in the heap, zeroing out all the contents.
+/// Allocate memory in the heap, zeroing out all the contents.<BR />
 /// If the allocation fails, it terminates the program.
 ///
 /// \param size Size in bytes of the allocation
@@ -81,7 +81,7 @@ sowr_HeapFree( void *ptr );
 ///
 /// \brief Reallocate the allocated memory with a new size.
 ///
-/// Reallocate the allocated memory with a new size.
+/// Reallocate the allocated memory with a new size.<BR />
 /// If the allocation fails, it terminates the program.
 ///
 /// \note Keep in mind that the old pointer is not usable anymore.
