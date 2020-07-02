@@ -39,7 +39,6 @@ sowr_GetHash( size_t length, const char *bytes )
         res += (bytes[i] * bytes[i] >> 1ULL) * 0x1966822847fULL;
     for (i = length * 3ULL / 4ULL; i < length; i++)
         res += (bytes[i] * bytes[i] << 4ULL) * 0x732464301fULL;
-
     res = res * 0x666abcdefULL / 02333333333ULL;
 
     return res;

@@ -33,6 +33,7 @@ sowr_BinaryTreeNode_Walk( sowr_BinaryTreeNode *node, sowr_BinaryTreeWalkFunc fun
 {
     if (!node)
         return;
+
     sowr_BinaryTreeNode_Walk(node->left, func);
     func(node->data);
     sowr_BinaryTreeNode_Walk(node->right, func);
@@ -44,10 +45,10 @@ sowr_BinaryTreeNode_Height( const sowr_BinaryTreeNode *node )
 {
     if (!node)
         return 0ULL;
+
     size_t left_height = 0ULL, right_height = 0ULL;
     left_height = sowr_BinaryTreeNode_Height(node->left);
     right_height = sowr_BinaryTreeNode_Height(node->right);
-
     return (left_height ^ ((left_height ^ right_height) & -(left_height < right_height))) + 1ULL;
 }
 
@@ -57,6 +58,7 @@ sowr_BinaryTreeNode_Clear( sowr_BinaryTreeNode *node, sowr_BinaryTreeFreeFunc fr
 {
     if (!node)
         return;
+
     sowr_BinaryTreeNode_Clear(node->left, free_func);
     sowr_BinaryTreeNode_Clear(node->right, free_func);
 
@@ -112,7 +114,7 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
             target = iter;
             result = tree->cmp_func(iter->data, data);
             if (!result)
-                return;         // Duplicate data, do nothing
+                return;
             else if (result < 0)
                 iter = iter->left;
             else
@@ -129,7 +131,6 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
         else
             target->right = node;
     }
-
     tree->length++;
 }
 
@@ -152,7 +153,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data )
             {
                 // Node has two children
                 // Find it successor (minimum after the node) and presuccessor (parent of successor).
-                sowr_BinaryTreeNode *successor = iter, *presuccessor = NULL;
+                sowr_BinaryTreeNode *successor = iter, *presuccessor = iter;
                 while (iter->left)
                 {
                     presuccessor = successor;
@@ -236,6 +237,7 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func )
 {
     if (!tree->length)
         return;
+
     sowr_BinaryTreeNode_Walk(tree->head, func);
 }
 
@@ -266,6 +268,7 @@ sowr_BinaryTree_Clear( sowr_BinaryTree *tree )
 {
     if (!tree->length)
         return;
+
     sowr_BinaryTreeNode_Clear(tree->head, tree->free_func);
     tree->length = 0ULL;
 }
@@ -275,6 +278,7 @@ sowr_BinaryTree_Height( const sowr_BinaryTree *tree )
 {
     if (!tree->length)
         return 0ULL;
+
     return sowr_BinaryTreeNode_Height(tree->head);
 }
 

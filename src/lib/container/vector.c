@@ -53,33 +53,31 @@ sowr_Vector_CreateS( size_t elem_size, sowr_VecFreeFunc free_func )
     return vec;
 }
 
+inline
 void *
 sowr_Vector_First( const sowr_Vector *vec )
 {
     return vec->ptr;
 }
 
+inline
 void *
 sowr_Vector_Last( const sowr_Vector *vec )
 {
-    char *ptr = (char *)(vec->ptr);
-    for (size_t i = 0ULL; i < vec->length; i++)
-        ptr += vec->elem_size;
-    return ptr;
+    return (void *)((char *)(vec->ptr) + vec->elem_size * vec->length);
 }
 
+inline
 void *
 sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index )
 {
     if (index >= vec->length)
         return sowr_Vector_Last(vec);
 
-    char *ptr = (char *)(vec->ptr);
-    for (size_t i = 0ULL; i < index; i++)
-        ptr += vec->elem_size;
-    return ptr;
+    return (void *)((char *)(vec->ptr) + vec->elem_size * index);
 }
 
+inline
 void
 sowr_Vector_Expand( sowr_Vector *vec )
 {
@@ -106,6 +104,7 @@ sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size )
     }
 }
 
+inline
 void
 sowr_Vector_ShrinkToFit( sowr_Vector *vec )
 {
@@ -132,6 +131,7 @@ sowr_Vector_Walk( sowr_Vector *vec, sowr_VecWalkFunc func )
         func((void *)ptr);
 }
 
+inline
 void
 sowr_Vector_Clear( sowr_Vector *vec )
 {

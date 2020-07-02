@@ -107,7 +107,7 @@ sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve )
     if (!list->length)
         return;
 
-    sowr_LinkedListNode *iter = list->head, *previous = NULL;
+    sowr_LinkedListNode *iter = list->head, *previous = list->head;
     while (iter->next)
     {
         previous = iter;
@@ -123,8 +123,6 @@ sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve )
     sowr_HeapFree(iter);
 
     list->length--;
-    if (!list->length)
-        list->head = NULL;
 }
 
 sowr_LinkedListNode *
@@ -189,9 +187,6 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
             iter = iter->next;
         }
     }
-
-    if (!list->length)
-        list->head = NULL;
     return count;
 }
 

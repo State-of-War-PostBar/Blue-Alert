@@ -81,7 +81,6 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
             SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #endif
-
     first_called = !first_called;
 #endif
 }
