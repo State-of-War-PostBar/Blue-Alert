@@ -52,7 +52,7 @@ void
 sowr_TryLockMutex( sowr_Mutex *mtx )
 {
 #ifdef SOWR_TARGET_WINDOWS
-    WaitForSingleObject(*mtx, 1);
+    WaitForSingleObject(*mtx, 1L);
 #else
     pthread_mutex_trylock(mtx);
 #endif

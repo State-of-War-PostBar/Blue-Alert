@@ -71,7 +71,7 @@ sowr_HeapZeroAlloc( size_t size );
 ///
 /// \brief Free the allocated memory
 ///
-/// Free the allocated memory, it is unsafe to use it anymore.
+/// Free the allocated memory.
 ///
 /// \param ptr Pointer to the freeing memory
 ///
@@ -84,7 +84,7 @@ sowr_HeapFree( void *ptr );
 /// Reallocate the allocated memory with a new size.<BR />
 /// If the allocation fails, it terminates the program.
 ///
-/// \note Keep in mind that the old pointer is not usable anymore.
+/// \note Keep in mind that the old pointer will not be safe to use anymore.
 ///
 /// \param size Size in bytes of the allocation
 /// \param ptr Pointer to the reallocating memory

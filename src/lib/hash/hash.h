@@ -29,7 +29,7 @@
 #include <pch.h>
 
 /// Hashed value
-typedef size_t sowr_HashVal;
+typedef size_t sowr_Hash;
 
 ///
 /// \brief Hash some bytes
@@ -41,7 +41,7 @@ typedef size_t sowr_HashVal;
 ///
 /// \return Hashed result
 ///
-sowr_HashVal
+sowr_Hash
 sowr_GetHash( size_t length, const char *bytes );
 
 ///
@@ -54,7 +54,7 @@ sowr_GetHash( size_t length, const char *bytes );
 ///
 /// \return Hashed result
 ///
-sowr_HashVal
+sowr_Hash
 sowr_GetHashI( const char *str );
 
 #endif // !SOWR_LIB_HASH_HASH_H

@@ -25,28 +25,28 @@
 
 #include "hash.h"
 
-sowr_HashVal
+sowr_Hash
 sowr_GetHash( size_t length, const char *bytes )
 {
-    sowr_HashVal res = 0ULL;
+    sowr_Hash res = 0ULL;
 
     size_t i = 0ULL;
     for (i = 0ULL; i < length / 4ULL; i++)
-        res += (bytes[i] * bytes[i] >> 5) * 0x1070601686fULL;
+        res += (bytes[i] * bytes[i] >> 5ULL) * 0x1070601686fULL;
     for (i = length / 4ULL; i < length / 2ULL; i++)
-        res += (bytes[i] * bytes[i] << 2) * 0x405236496fULL;
+        res += (bytes[i] * bytes[i] << 2ULL) * 0x405236496fULL;
     for (i = length / 2ULL; i < length * 3ULL / 4ULL; i++)
-        res += (bytes[i] * bytes[i] >> 1) * 0x1966822847fULL;
+        res += (bytes[i] * bytes[i] >> 1ULL) * 0x1966822847fULL;
     for (i = length * 3ULL / 4ULL; i < length; i++)
-        res += (bytes[i] * bytes[i] << 4) * 0x732464301fULL;
+        res += (bytes[i] * bytes[i] << 4ULL) * 0x732464301fULL;
 
-    res = res * 0x666666666ULL / 0233333333ULL;
+    res = res * 0x666abcdefULL / 02333333333ULL;
 
     return res;
 }
 
 inline
-sowr_HashVal
+sowr_Hash
 sowr_GetHashI( const char *str )
 {
     return sowr_GetHash(strlen(str), str);

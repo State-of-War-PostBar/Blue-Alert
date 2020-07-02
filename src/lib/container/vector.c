@@ -53,25 +53,28 @@ sowr_Vector_CreateS( size_t elem_size, sowr_VecFreeFunc free_func )
     return vec;
 }
 
-inline
 void *
 sowr_Vector_First( const sowr_Vector *vec )
 {
     return vec->ptr;
 }
 
-inline
 void *
 sowr_Vector_Last( const sowr_Vector *vec )
 {
-    return sowr_Vector_PtrAt(vec, vec->length - 1ULL);
+    char *ptr = (char *)(vec->ptr);
+    for (size_t i = 0ULL; i < vec->length; i++)
+        ptr += vec->elem_size;
+    return ptr;
 }
 
-inline
 void *
 sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index )
 {
-    char *ptr = (char *)vec->ptr;
+    if (index >= vec->length)
+        return sowr_Vector_Last(vec);
+
+    char *ptr = (char *)(vec->ptr);
     for (size_t i = 0ULL; i < index; i++)
         ptr += vec->elem_size;
     return ptr;
@@ -96,8 +99,11 @@ inline
 void
 sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size )
 {
-    while (vec->capacity < size)
-        sowr_Vector_Expand(vec);
+    if (vec->capacity < size)
+    {
+        vec->capacity = size;
+        vec->ptr = sowr_ReAlloc(vec->elem_size * vec->capacity, vec->ptr);
+    }
 }
 
 void
@@ -123,7 +129,7 @@ sowr_Vector_Walk( sowr_Vector *vec, sowr_VecWalkFunc func )
 
     char *ptr = vec->ptr;
     for (size_t i = 0ULL; i < vec->length; i++, ptr += vec->elem_size)
-        func(ptr);
+        func((void *)ptr);
 }
 
 void
@@ -135,7 +141,7 @@ sowr_Vector_Clear( sowr_Vector *vec )
 }
 
 void
-sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index )
+sowr_Vector_Insert( sowr_Vector *vec, size_t index, const void *elem )
 {
     if (index >= vec->length)
         sowr_Vector_Push(vec, elem);
@@ -152,7 +158,7 @@ sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index )
 }
 
 void
-sowr_Vector_Replace( sowr_Vector *vec, const void *elem, size_t index )
+sowr_Vector_Replace( sowr_Vector *vec, size_t index, const void *elem )
 {
     if (index >= vec->length)
         sowr_Vector_Push(vec, elem);
@@ -194,6 +200,8 @@ sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve )
         size_t bytes_to_shift = vec->elem_size * (vec->length - index - 1ULL);
         if (ptr_retrieve)
             memcpy(ptr_retrieve, ptr_shifting, vec->elem_size);
+        else if (vec->free_func)
+            vec->free_func(ptr_shifting);
         memmove(ptr_shifting, ptr_data, bytes_to_shift);
         vec->length--;
     }
@@ -224,7 +232,7 @@ sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem )
 {
     sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
     memmove(sowr_Vector_PtrAt(vec, 1ULL), vec->ptr, vec->elem_size * vec->length);
-    char *new_head = (char *)vec->ptr - vec->elem_size;
+    char *new_head = (char *)(vec->ptr) - vec->elem_size;
     vec->ptr = new_head;
     memcpy(vec->ptr, elem, vec->elem_size);
     vec->length++;

@@ -42,8 +42,8 @@ sowr_InitProfiler( void );
 ///
 /// \brief Profile a function
 ///
-/// Start or stop profiling a function. When called for the first time, profiling starts. When called for the second time (in the same thread),
-/// the profiling stops.<BR />
+/// Start or stop profiling a function. When called for the first time, profiling starts.
+/// When called for the second time (in the same thread), the profiling stops.<BR />
 /// The profile result is outputed as <I>[Logger debug prefix] Profiling "function name" ("start line" to "stop line" in "file name") took "time" ms.</I><BR />
 /// This function is thread-safe, every thread has their own profile record.
 ///

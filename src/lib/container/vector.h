@@ -94,9 +94,8 @@ sowr_Vector_Last( const sowr_Vector *vec );
 ///
 /// \brief Get the indexed element
 ///
-/// Get the pointer to some place in the vector.
-///
-/// \warning There is no boundary checking for this function!
+/// Get the pointer to some place in the vector.<BR />
+/// If the index is out of bound, it returns the last element of the vector, if any.
 ///
 /// \param vec Vector
 /// \param index Index to access
@@ -165,11 +164,11 @@ sowr_Vector_ShrinkToFit( sowr_Vector *vec );
 /// If index is out of bound, it is understood to push the element to the end of vector.
 ///
 /// \param vec Vector to insert
-/// \param elem Element to insert
 /// \param index Index to insert
+/// \param elem Element to insert
 ///
 void
-sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index );
+sowr_Vector_Insert( sowr_Vector *vec, size_t index, const void *elem );
 
 ///
 /// \brief Replace an element
@@ -178,11 +177,11 @@ sowr_Vector_Insert( sowr_Vector *vec, const void *elem, size_t index );
 /// If index is out of bound, it is understood to push the element to last of vector.
 ///
 /// \param vec Vector to operate
-/// \param elem Element to replace
 /// \param index Index to replace
+/// \param elem Element to replace
 ///
 void
-sowr_Vector_Replace( sowr_Vector *vec, const void *elem, size_t index );
+sowr_Vector_Replace( sowr_Vector *vec, size_t index, const void *elem );
 
 ///
 /// \brief Delete an element
@@ -200,7 +199,8 @@ sowr_Vector_Delete( sowr_Vector *vec, size_t index );
 /// \brief Take an element
 ///
 /// Take an element out of the vector.<BR />
-/// Whether ptr_retrieve is NULL or not, the old element will be overriden.
+/// If index is out of bound, it is understood to pop the last element of the vector.
+/// If ptr_retrieve is NULL the free function will be called.
 ///
 /// \param vec Vector to operate
 /// \param index Index to take out
@@ -224,7 +224,7 @@ sowr_Vector_Push( sowr_Vector *vec, const void *elem );
 /// \brief Pop the last element of vector
 ///
 /// Pop the last element of vector into the pointer.<BR />
-/// Whether ptr_retrieve is NULL or not, the last element will be overriden.
+/// If ptr_retrieve is NULL the free function will be called.
 ///
 /// \param vec Vector to pop out
 /// \param ptr_retrieve Pointer to retrieve the result

@@ -36,13 +36,13 @@ typedef int  (*sowr_BinaryTreeCmpFunc)( const void *, const void * );
 
 typedef struct sowr_BinaryTreeNode
 {
+    size_t data_size;
     void *data;
     struct sowr_BinaryTreeNode *left, *right;
 } sowr_BinaryTreeNode;
 
 typedef struct sowr_BinaryTree
 {
-    size_t elem_size;
     size_t length;
     sowr_BinaryTreeFreeFunc free_func;
     sowr_BinaryTreeCmpFunc cmp_func;
@@ -54,38 +54,38 @@ typedef struct sowr_BinaryTree
 ///
 /// Create a binary tree ready to use.
 ///
-/// \param elem_size Size of each element
 /// \param free_func Function to call when freeing an element
+/// \param cmp_func Function for comparision
 ///
 /// \return Created tree
 ///
 sowr_BinaryTree *
-sowr_BinaryTree_Create( size_t elem_size, sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
+sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Create a binary tree
 ///
 /// Create a binary tree on stack ready to use.
 ///
-/// \param elem_size Size of each element
 /// \param free_func Function to call when freeing an element
+/// \param cmp_func Function for comparision
 ///
 /// \return Created tree
 ///
 sowr_BinaryTree
-sowr_BinaryTree_CreateS( size_t elem_size, sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
+sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
-/// \brief Insert element to binary tree
+/// \brief Insert data to binary tree
 ///
-/// Insert an element to the binary tree.
+/// Insert some data to the binary tree.
 ///
 /// \param tree Tree to insert
-/// \param elem Element to insert
-/// \param cmp Comparision function
+/// \param data_size Size of data
+/// \param data Data to insert
 ///
 void
-sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem );
+sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *data );
 
 ///
 /// \brief Delete element in tree
@@ -93,13 +93,12 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, const void *elem );
 /// Delete an element in the binary tree.
 ///
 /// \param tree Tree to delete from
-/// \param elem Element to delete
-/// \param cmp Comparision function
+/// \param data Data to delete
 ///
 /// \return If anything is deleted
 ///
 bool
-sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *elem );
+sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data );
 
 ///
 /// \brief Walk the binary tree
@@ -118,18 +117,17 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func );
 /// Look up an element in the binary tree.
 ///
 /// \param tree Tree to look for
-/// \param elem Element to look for
-/// \param cmp Comparision function
+/// \param data Data to look for
 ///
 /// \return The node if found
 ///
 sowr_BinaryTreeNode *
-sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *elem );
+sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data );
 
 ///
 /// \brief Clear a tree
 ///
-/// Clearing out an binary tree, freeing all its elements
+/// Clearing out an binary tree, freeing all its elements.
 ///
 /// \param tree Tree to clear
 ///
@@ -147,18 +145,6 @@ sowr_BinaryTree_Clear( sowr_BinaryTree *tree );
 ///
 size_t
 sowr_BinaryTree_Height( const sowr_BinaryTree *tree );
-
-///
-/// \brief Get the width of tree
-///
-/// Get the width of the binary tree.
-///
-/// \param tree Tree to evaluate
-///
-/// \return Accumulated width
-///
-size_t
-sowr_BinaryTree_Width( const sowr_BinaryTree *tree );
 
 ///
 /// \brief Destroy a tree

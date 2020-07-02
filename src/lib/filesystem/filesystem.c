@@ -25,8 +25,6 @@
 
 #include "filesystem.h"
 
-#include "../memory/heap_memory.h"
-
 #ifdef SOWR_TARGET_WINDOWS
     #include <io.h>
     #include <direct.h>
@@ -37,7 +35,6 @@
     #include <sys/types.h>
 #endif
 
-inline
 bool
 sowr_CreateDirectory( const char *path )
 {
@@ -45,20 +42,5 @@ sowr_CreateDirectory( const char *path )
     return _mkdir(path);
 #else
     return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-#endif
-}
-
-size_t
-sowr_GetFileSize( FILE *file )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    fseeko(file, 0L, SEEK_END);
-    size_t size = ftello(file);
-    rewind(file);
-    return size;
-#else
-    struct stat64 st;
-    fstat64(fileno(file), &st);
-    return st.st_size;
 #endif
 }

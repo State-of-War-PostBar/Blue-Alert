@@ -67,7 +67,7 @@ sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func );
 ///
 /// Get the first element of the queue.
 ///
-/// \param vec Queue
+/// \param queue Queue
 ///
 /// \return Pointer to the first element
 ///
@@ -79,7 +79,7 @@ sowr_Queue_First( const sowr_Queue *queue );
 ///
 /// Expand the queue, usually doubling its capacity unless the length is 0.
 ///
-/// \param vec Queue to expand
+/// \param queue Queue to expand
 ///
 void
 sowr_Queue_Expand( sowr_Queue *queue );
@@ -89,7 +89,7 @@ sowr_Queue_Expand( sowr_Queue *queue );
 ///
 /// Expand the queue until its capacity reaches the set limit.
 ///
-/// \param vec Queue to expand
+/// \param queue Queue to expand
 /// \param size Target size for expanding
 ///
 void
@@ -111,7 +111,7 @@ sowr_Queue_Eat( sowr_Queue *queue, sowr_QueueEatFunc func );
 ///
 /// Clear the content of a queue. Its capacity is unchanged.
 ///
-/// \param vec Queue to clear
+/// \param queue Queue to clear
 ///
 void
 sowr_Queue_Clear( sowr_Queue *queue );
@@ -121,7 +121,7 @@ sowr_Queue_Clear( sowr_Queue *queue );
 ///
 /// Shrink the queue to just enough to fit its contents.
 ///
-/// \param vec Queue to shrink
+/// \param queue Queue to shrink
 ///
 void
 sowr_Queue_ShrinkToFit( sowr_Queue *queue );
@@ -131,7 +131,7 @@ sowr_Queue_ShrinkToFit( sowr_Queue *queue );
 ///
 /// Push an element into the end of queue.
 ///
-/// \param vec Vector to push into
+/// \param queue Queue to push into
 /// \param elem Element to be pushed
 ///
 void
@@ -143,7 +143,7 @@ sowr_Queue_Push( sowr_Queue *queue, const void *elem );
 /// Pop the first element of queue into the pointer.
 /// Whether ptr_retrieve is NULL or not, the first element will be overriden.
 ///
-/// \param vec Vector to pop out
+/// \param queue Queue to pop out
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
@@ -154,7 +154,7 @@ sowr_Queue_Pop( sowr_Queue *queue, void *ptr_retrieve );
 ///
 /// Destroy a queue, freeing all its elements.
 ///
-/// \param vec Queue to destroy
+/// \param queue Queue to destroy
 ///
 void
 sowr_Queue_Destroy( sowr_Queue *queue );
@@ -164,7 +164,7 @@ sowr_Queue_Destroy( sowr_Queue *queue );
 ///
 /// Destroy a queue created by \a sowr_Queue_CreateS(), freeing all its elements.
 ///
-/// \param vec Queue to destroy
+/// \param queue Queue to destroy
 ///
 void
 sowr_Queue_DestroyS( sowr_Queue *queue );

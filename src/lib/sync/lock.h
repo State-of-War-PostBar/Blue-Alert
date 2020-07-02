@@ -177,8 +177,9 @@ sowr_InitReadWriteLock( sowr_ReadWriteLock *rwl );
 ///
 /// \brief Lock a read-write lock in read mode.
 ///
-/// Lock a read-write lock in read mode, waiting infinitely until the acquisition.
-/// Multiple readers can lock it in read mode an the same time, but no reader or writer can obtain the read-write lock if there is one writer acquired it.
+/// Lock a read-write lock in read mode, waiting infinitely until the acquisition.<BR />
+/// Multiple readers can lock it in read mode an the same time, but no reader or writer
+/// can obtain the read-write lock if there is one writer acquired it.
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
@@ -192,7 +193,7 @@ sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 ///
 /// \brief Lock a read-write lock in write mode.
 ///
-/// Lock a read-write lock in write mode, waiting infinitely until the acquisition.
+/// Lock a read-write lock in write mode, waiting infinitely until the acquisition.<BR />
 /// No other reader or writer can obtain the read-write lock after the writer acquired it.
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
@@ -207,8 +208,9 @@ sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 ///
 /// \brief Lock a read-write lock in read mode.
 ///
-/// Lock a read-write lock in read mode, if the acquisition fails do nothing.
-/// Multiple readers can lock it in read mode an the same time, but no reader or writer can obtain the read-write lock if there is one writer acquired it.
+/// Lock a read-write lock in read mode, if the acquisition fails do nothing.<BR />
+/// Multiple readers can lock it in read mode an the same time, but no reader or writer
+/// can obtain the read-write lock if there is one writer acquired it.
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
@@ -222,7 +224,7 @@ sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 ///
 /// \brief Lock a read-write lock in write mode.
 ///
-/// Lock a read-write lock in write mode, if the acquisition fails continue immediately.
+/// Lock a read-write lock in write mode, if the acquisition fails continue immediately.<BR />
 /// No other reader or writer can obtain the read-write lock after the writer acquired it.
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.

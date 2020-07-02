@@ -33,13 +33,13 @@ typedef void (*sowr_TrieFreeFunc)( void * );
 typedef struct sowr_TrieNode
 {
     size_t children;
+    size_t data_size;
     void *data;
     struct sowr_TrieNode *characters[CHAR_MAX];
 } sowr_TrieNode;
 
 typedef struct sowr_Trie
 {
-    size_t elem_size;
     sowr_TrieFreeFunc free_func;
     sowr_TrieNode head;
 } sowr_Trie;
@@ -49,13 +49,12 @@ typedef struct sowr_Trie
 ///
 /// Create a trie ready to use.
 ///
-/// \param elem_size Size of trie's elements
 /// \param free_func Function to call when the trie frees an element
 ///
 /// \return Created trie
 ///
 sowr_Trie *
-sowr_Trie_Create( size_t elem_size, sowr_TrieFreeFunc free_func );
+sowr_Trie_Create( sowr_TrieFreeFunc free_func );
 
 ///
 /// \brief Create a trie
@@ -63,13 +62,12 @@ sowr_Trie_Create( size_t elem_size, sowr_TrieFreeFunc free_func );
 /// Create a trie by stack ready to use.<BR />
 /// <B>The created trie must be destroyed with \a sowr_Trie_DestroyS().</B>
 ///
-/// \param elem_size Size of trie's elements
 /// \param free_func Function to call when the trie frees an element
 ///
 /// \return Created trie
 ///
 sowr_Trie
-sowr_Trie_CreateS( size_t elem_size, sowr_TrieFreeFunc free_func );
+sowr_Trie_CreateS( sowr_TrieFreeFunc free_func );
 
 ///
 /// \brief Clear the trie
@@ -88,10 +86,11 @@ sowr_Trie_Clear( sowr_Trie *trie );
 ///
 /// \param trie Trie to operate
 /// \param index String index for the element
+/// \param data_size Size of the data
 /// \param data Data to insert
 ///
 void
-sowr_Trie_Insert( sowr_Trie *trie, const char *index, const void *data );
+sowr_Trie_Insert( sowr_Trie *trie, const char *index, size_t data_size, const void *data );
 
 ///
 /// \brief Get an element from trie

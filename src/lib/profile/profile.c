@@ -48,33 +48,33 @@ void
 sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_line )
 {
 #ifdef SOWR_BUILD_DEBUG
-    thread_local static double elapsed;
-    thread_local static bool first_called = true;
-    thread_local static int start_line;
+    static thread_local double elapsed;
+    static thread_local bool first_called = true;
+    static thread_local int start_line;
 
     #ifdef SOWR_TARGET_WINDOWS
-        thread_local static LARGE_INTEGER start, stop;
+        static thread_local LARGE_INTEGER start, stop;
 
         if (first_called)
         {
             start_line = called_line;
             QueryPerformanceCounter(&start);
         }
-    else
+        else
         {
             QueryPerformanceCounter(&stop);
             elapsed = (stop.QuadPart - start.QuadPart) * 1000.0f / sowr_win_profile_timer_frequency.QuadPart;
             SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #else
-        thread_local static sowr_PosixTimeVal start, stop;
+        static thread_local sowr_PosixTimeVal start, stop;
 
         if (first_called)
         {
             start_line = called_line;
             gettimeofday(&start, NULL);
         }
-    else
+        else
         {
             gettimeofday(&stop, NULL);
             elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f + (stop.tv_usec - start.tv_usec) / 1000.0f;

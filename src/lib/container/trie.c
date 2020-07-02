@@ -33,6 +33,7 @@ sowr_TrieNode_Gen()
 {
     sowr_TrieNode *node = sowr_HeapAlloc(sizeof(sowr_TrieNode));
     node->data = NULL;
+    node->data_size = 0ULL;
     node->children = 0ULL;
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
         node->characters[i] = NULL;
@@ -52,6 +53,7 @@ sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, sowr_TrieFreeFunc free_func )
             if (node->characters[i])
             {
                 sowr_TrieNode_DeleteAfter(node->characters[i], free_func);
+                node->characters[i] = NULL;
                 node->children--;
             }
 
@@ -65,16 +67,16 @@ sowr_TrieNode_DeleteAfter( sowr_TrieNode *node, sowr_TrieFreeFunc free_func )
 }
 
 sowr_Trie *
-sowr_Trie_Create( size_t elem_size, sowr_TrieFreeFunc free_func )
+sowr_Trie_Create( sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
     head.data = NULL;
+    head.data_size = 0ULL;
     head.children = 0ULL;
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
         head.characters[i] = NULL;
 
     sowr_Trie *trie = sowr_HeapAlloc(sizeof(sowr_Trie));
-    trie->elem_size = elem_size;
     trie->free_func = free_func;
     trie->head = head;
 
@@ -82,17 +84,17 @@ sowr_Trie_Create( size_t elem_size, sowr_TrieFreeFunc free_func )
 }
 
 sowr_Trie
-sowr_Trie_CreateS( size_t elem_size, sowr_TrieFreeFunc free_func )
+sowr_Trie_CreateS( sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
     head.data = NULL;
+    head.data_size = 0ULL;
     head.children = 0ULL;
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
         head.characters[i] = NULL;
 
     sowr_Trie trie =
     {
-        .elem_size = elem_size,
         .free_func = free_func,
         .head = head
     };
@@ -113,7 +115,7 @@ sowr_Trie_Clear( sowr_Trie *trie )
 }
 
 void
-sowr_Trie_Insert( sowr_Trie *trie, const char *index, const void *data )
+sowr_Trie_Insert( sowr_Trie *trie, const char *index, size_t data_size, const void *data )
 {
     if (!trie)
         return;
@@ -122,7 +124,7 @@ sowr_Trie_Insert( sowr_Trie *trie, const char *index, const void *data )
     size_t ch = 0ULL;
     while (*index)
     {
-        ch = *index;
+        ch = (size_t)(*index);
         if (!iter->characters[ch])
         {
             iter->characters[ch] = sowr_TrieNode_Gen();
@@ -135,14 +137,14 @@ sowr_Trie_Insert( sowr_Trie *trie, const char *index, const void *data )
 
     if (!iter->data)
     {
-        iter->data = sowr_HeapAlloc(trie->elem_size);
-        memcpy(iter->data, data, trie->elem_size);
+        iter->data = sowr_HeapAlloc(data_size);
+        memcpy(iter->data, data, data_size);
     }
     else
     {
         if (trie->free_func)
             trie->free_func(iter->data);
-        memcpy(iter->data, data, trie->elem_size);
+        memcpy(iter->data, data, data_size);
     }
 }
 
@@ -173,7 +175,7 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index )
     sowr_TrieNode *iter = &(trie->head);
     while (*index)
     {
-        iter = iter->characters[(size_t)*index];
+        iter = iter->characters[(size_t)(*index)];
         if (!iter)
             return false;
         index++;

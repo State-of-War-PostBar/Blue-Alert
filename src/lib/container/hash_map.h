@@ -36,8 +36,7 @@ typedef void (*sowr_HashMapWalkFunc)( void * );
 
 typedef struct sowr_HashMapValue
 {
-    sowr_HashVal index_hash;
-    sowr_HashVal value_hash;
+    sowr_Hash index_hash;
     size_t value_length;
     char *data;
 } sowr_HashMapValue;

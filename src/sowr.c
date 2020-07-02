@@ -25,9 +25,9 @@
 
 #include <pch.h>
 
+#include "core/core.h"
 #include "lib/log/log.h"
 #include "lib/profile/profile.h"
-#include "state/state.h"
 
 int
 main( int argc, char *argv[] )
@@ -37,10 +37,9 @@ main( int argc, char *argv[] )
 #endif
     sowr_InitLogger();
     sowr_InitProfiler();
-    SOWR_LOG_INFO("Starting State of War: Remasted %s %s.", SOWR_PROG_VERSION_STRING, SOWR_PROG_BUILD_STRING);
+    SOWR_LOG_INFO("Starting %s %s (%s).", SOWR_PROG_NAME, SOWR_PROG_VERSION_STRING, SOWR_PROG_BUILD_STRING);
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();
-
     return EXIT_SUCCESS;
 }

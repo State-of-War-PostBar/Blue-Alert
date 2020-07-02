@@ -23,79 +23,37 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#include "state.h"
+#ifndef SOWR_CORE_CORE_H
+#define SOWR_CORE_CORE_H
 
-#include "../lib/log/log.h"
-#include "../lib/sync/lock.h"
+#include <pch.h>
 
-const char *const  SOWR_PROG_ID               = "sowr";
-const char *const  SOWR_PROG_NAME             = "State of War: Remastered";
+extern const char *const     SOWR_PROG_ID;
+extern const char *const     SOWR_PROG_NAME;
 
-const char *const  SOWR_PROG_VERSION_STAGE    = "Indev";
-const unsigned int SOWR_PROG_VERSION_MAJOR    = 0U;
-const unsigned int SOWR_PROG_VERSION_MINOR    = 1U;
-const unsigned int SOWR_PROG_VERSION_REVISION = 0U;
-const char *const  SOWR_PROG_VERSION_STRING   = "Indev 0.1 rev0";
+extern const char *const     SOWR_PROG_VERSION_STAGE;
+extern const unsigned int    SOWR_PROG_VERSION_MAJOR;
+extern const unsigned int    SOWR_PROG_VERSION_MINOR;
+extern const unsigned int    SOWR_PROG_VERSION_REVISION;
+extern const char *const     SOWR_PROG_VERSION_STRING;
 
-const unsigned int SOWR_PROG_BUILD_NUMBER     = 1U;
-const char *const  SOWR_PROG_BUILD_STRING     = "Build 001";
+extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
+extern const char *const     SOWR_PROG_BUILD_STRING;
 
-#ifdef SOWR_BUILD_DEBUG
-    static const char *const SOWR_LOG_FILE_NAME = "sowr.log";
-    static bool sowr_log_available;
-    static FILE *sowr_log_file;
-    static sowr_CriticalSection sowr_log_file_mtx;
-
-    ///
-    /// \brief Lock the log file
-    ///
-    /// Locking function for the log file, feed to log.c.
-    ///
-    /// \param lock To lock or to unlock the log file. False for unlock.
-    /// \param user_data User-defined data when called. Unused.
-    ///
-    static
-    void
-    sowr_LockLogFile( bool lock, void *user_data )
-    {
-        lock ?
-            sowr_EnterCriticalSection(&sowr_log_file_mtx)
-        :
-            sowr_LeaveCriticalSection(&sowr_log_file_mtx);
-    }
-#endif
-
+///
+/// \brief Initialize the logger
+///
+/// Initialize the logger of program. This must be called for using logging feature.
+///
 void
-sowr_InitLogger( void )
-{
-#ifdef SOWR_BUILD_DEBUG
-    sowr_log_file = fopen(SOWR_LOG_FILE_NAME, "w");
-    if (!sowr_log_file)
-    {
-        perror("Failed to create a log file, logging will not be availalbe");
-        sowr_log_available = false;
-        return;
-    }
+sowr_InitLogger( void );
 
-    sowr_log_available = true;
-    sowr_InitCriticalSection(&sowr_log_file_mtx);
-    log_add_fp(sowr_log_file, SOWR_LOG_LEVEL_TRACE);
-    log_set_lock(sowr_LockLogFile, NULL);
-#endif
-}
-
+///
+/// \brief Destroy the logger
+///
+/// Destroy the logger and release all resources.
+///
 void
-sowr_DestroyLogger( void )
-{
-#ifdef SOWR_BUILD_DEBUG
-    if (sowr_log_available)
-    {
-        sowr_LockLogFile(true, NULL);
-        fclose(sowr_log_file);
-        sowr_LockLogFile(false, NULL);
-        sowr_DestroyCriticalSection(&sowr_log_file_mtx);
-        sowr_log_file = NULL;
-        sowr_log_available = false;
-    }
-#endif
-}
+sowr_DestroyLogger( void );
+
+#endif // !SOWR_CORE_CORE_H

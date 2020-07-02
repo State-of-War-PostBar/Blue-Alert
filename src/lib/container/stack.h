@@ -89,7 +89,7 @@ sowr_Stack_Expand( sowr_Stack *stack );
 ///
 /// Expand the stack until its capacity reaches the set limit.
 ///
-/// \param vec Stack to expand
+/// \param stack Stack to expand
 /// \param size Target size for expanding
 ///
 void
@@ -111,7 +111,7 @@ sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func );
 ///
 /// Clear the content of a stack. Its capacity is unchanged.
 ///
-/// \param vec Stack to clear
+/// \param stack Stack to clear
 ///
 void
 sowr_Stack_Clear( sowr_Stack *stack );
@@ -121,7 +121,7 @@ sowr_Stack_Clear( sowr_Stack *stack );
 ///
 /// Shrink the stack to just enough to fit its contents.
 ///
-/// \param vec Stack to shrink
+/// \param stack Stack to shrink
 ///
 void
 sowr_Stack_ShrinkToFit( sowr_Stack *stack );
@@ -131,7 +131,7 @@ sowr_Stack_ShrinkToFit( sowr_Stack *stack );
 ///
 /// Push an element into the last of stack.
 ///
-/// \param vec Vector to push into
+/// \param stack Stack to push into
 /// \param elem Element to be pushed
 ///
 void
@@ -143,7 +143,7 @@ sowr_Stack_Push( sowr_Stack *stack, const void *elem );
 /// Pop the last element of stack into the pointer.
 /// Whether ptr_retrieve is NULL or not, the last element will be overriden.
 ///
-/// \param vec Vector to pop out
+/// \param stack Stack to pop out
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
@@ -154,7 +154,7 @@ sowr_Stack_Pop( sowr_Stack *stack, void *ptr_retrieve );
 ///
 /// Destroy a stack, freeing all its elements.
 ///
-/// \param vec Stack to destroy
+/// \param stack Stack to destroy
 ///
 void
 sowr_Stack_Destroy( sowr_Stack *stack );
@@ -164,7 +164,7 @@ sowr_Stack_Destroy( sowr_Stack *stack );
 ///
 /// Destroy a stack created by \a sowr_Stack_CreateS(), freeing all its elements.
 ///
-/// \param vec Stack to destroy
+/// \param stack Stack to destroy
 ///
 void
 sowr_Stack_DestroyS( sowr_Stack *stack );
