@@ -337,6 +337,7 @@ sowr_AvlTree_Delete( sowr_AvlTree *tree, const void *data )
     }
     sowr_Stack_Eat(&stack, sowr_AvlTreeNode_UpdateHeightP);
     tree->head = sowr_AvlTreeNode_Rebalance(tree->head);
+    sowr_Stack_DestroyS(&stack);
     return false;
 }
 
