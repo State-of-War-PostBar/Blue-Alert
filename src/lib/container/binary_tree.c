@@ -49,7 +49,7 @@ sowr_BinaryTreeNode_Height( const sowr_BinaryTreeNode *node )
     size_t left_height = 0ULL, right_height = 0ULL;
     left_height = sowr_BinaryTreeNode_Height(node->left);
     right_height = sowr_BinaryTreeNode_Height(node->right);
-    return (left_height ^ ((left_height ^ right_height) & -(left_height < right_height))) + 1ULL;
+    return (size_t)(fmaxl(left_height, right_height)) + 1ULL;
 }
 
 static
@@ -98,6 +98,7 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
     if (!tree->length)
     {
         sowr_BinaryTreeNode *node = sowr_HeapAlloc(sizeof(sowr_BinaryTreeNode));
+        node->data_size = data_size;
         node->data = sowr_HeapAlloc(data_size);
         memcpy(node->data, data, data_size);
         node->left = node->right = NULL;
@@ -122,6 +123,7 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
         }
 
         sowr_BinaryTreeNode *node = sowr_HeapAlloc(sizeof(sowr_BinaryTreeNode));
+        node->data_size = data_size;
         node->data = sowr_HeapAlloc(data_size);
         memcpy(node->data, data, data_size);
         node->left = node->right = NULL;
@@ -153,11 +155,11 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data )
             {
                 // Node has two children
                 // Find it successor (minimum after the node) and presuccessor (parent of successor).
-                sowr_BinaryTreeNode *successor = iter, *presuccessor = iter;
-                while (iter->left)
+                sowr_BinaryTreeNode *successor = iter->right, *presuccessor = iter;
+                while (successor->left)
                 {
                     presuccessor = successor;
-                    iter = iter->left;
+                    successor = successor->left;
                 }
 
                 // If successor has a right child (it can never have a left child)

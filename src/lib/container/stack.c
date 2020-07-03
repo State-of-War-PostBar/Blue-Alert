@@ -66,7 +66,7 @@ sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func )
     if (!stack->length)
         return;
 
-    for (size_t i = stack->length; i > 0ULL; i--)
+    for (size_t i = stack->length - 1ULL; i > 0ULL; i--)
         func(sowr_Vector_PtrAt(stack, i));
     func(sowr_Vector_First(stack));
     sowr_Stack_Clear(stack);

@@ -64,6 +64,8 @@ inline
 void *
 sowr_Vector_Last( const sowr_Vector *vec )
 {
+    if (vec->length == 1)
+        return vec->ptr;
     return (void *)((char *)(vec->ptr) + vec->elem_size * vec->length);
 }
 
@@ -71,9 +73,6 @@ inline
 void *
 sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index )
 {
-    if (index >= vec->length)
-        return sowr_Vector_Last(vec);
-
     return (void *)((char *)(vec->ptr) + vec->elem_size * index);
 }
 

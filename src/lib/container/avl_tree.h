@@ -23,75 +23,74 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_BINARY_TREE_H
-#define SOWR_LIB_CONTAINER_BINARY_TREE_H
+#ifndef SOWR_LIB_CONTAINER_AVL_TREE_H
+#define SOWR_LIB_CONTAINER_AVL_TREE_H
 
 #include <pch.h>
 
-#include "vector.h"
+typedef void (*sowr_AvlTreeFreeFunc)( void * );
+typedef void (*sowr_AvlTreeWalkFunc)( void * );
+typedef int  (*sowr_AvlTreeCmpFunc)( const void *, const void * );
 
-typedef void (*sowr_BinaryTreeFreeFunc)( void * );
-typedef void (*sowr_BinaryTreeWalkFunc)( void * );
-typedef int  (*sowr_BinaryTreeCmpFunc)( const void *, const void * );
-
-typedef struct sowr_BinaryTreeNode
+typedef struct sowr_AvlTreeNode
 {
     size_t data_size;
     void *data;
-    struct sowr_BinaryTreeNode *left, *right;
-} sowr_BinaryTreeNode;
+    struct sowr_AvlTreeNode *left, *right;
+    int height;
+} sowr_AvlTreeNode;
 
-typedef struct sowr_BinaryTree
+typedef struct sowr_AvlTree
 {
     size_t length;
-    sowr_BinaryTreeFreeFunc free_func;
-    sowr_BinaryTreeCmpFunc cmp_func;
-    sowr_BinaryTreeNode *head;
-} sowr_BinaryTree;
+    sowr_AvlTreeFreeFunc free_func;
+    sowr_AvlTreeCmpFunc cmp_func;
+    sowr_AvlTreeNode *head;
+} sowr_AvlTree;
 
 ///
-/// \brief Create a binary tree
+/// \brief Create an avl tree
 ///
-/// Create a binary tree ready to use.
+/// Create an avl tree ready to use.
 ///
 /// \param free_func Function to call when freeing an element
 /// \param cmp_func Function for comparision
 ///
 /// \return Created tree
 ///
-sowr_BinaryTree *
-sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
+sowr_AvlTree *
+sowr_AvlTree_Create( sowr_AvlTreeFreeFunc free_func, sowr_AvlTreeCmpFunc cmp_func );
 
 ///
-/// \brief Create a binary tree
+/// \brief Create an avl tree
 ///
-/// Create a binary tree on stack ready to use.
-/// <B>The created tree must be destroyed with \a sowr_BinaryTree_DestroyS().</B>
+/// Create an avl tree on stack ready to use.<BR />
+/// <B>The created tree must be destroyed with \a sowr_AvlTree_DestroyS().</B>
 ///
 /// \param free_func Function to call when freeing an element
 /// \param cmp_func Function for comparision
 ///
 /// \return Created tree
 ///
-sowr_BinaryTree
-sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
+sowr_AvlTree
+sowr_AvlTree_CreateS( sowr_AvlTreeFreeFunc free_func, sowr_AvlTreeCmpFunc cmp_func );
 
 ///
-/// \brief Insert data to binary tree
+/// \brief Insert data to avl tree
 ///
-/// Insert some data to the binary tree.
+/// Insert some data to the avl tree.
 ///
 /// \param tree Tree to insert
 /// \param data_size Size of data
 /// \param data Data to insert
 ///
 void
-sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *data );
+sowr_AvlTree_Insert( sowr_AvlTree *tree, size_t data_size, const void *data );
 
 ///
 /// \brief Delete element in tree
 ///
-/// Delete an element in the binary tree.
+/// Delete an element in the avl tree.
 ///
 /// \param tree Tree to delete from
 /// \param data Data to delete
@@ -99,71 +98,71 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
 /// \return If anything is deleted
 ///
 bool
-sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data );
+sowr_AvlTree_Delete( sowr_AvlTree *tree, const void *data );
 
 ///
-/// \brief Walk the binary tree
+/// \brief Walk the avl tree
 ///
-/// Walk the binary tree, from lowest to highest.
+/// Walk the avl tree, from lowest to highest.
 ///
 /// \param tree Tree to walk
 /// \param func Function for walking
 ///
 void
-sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func );
+sowr_AvlTree_Walk( sowr_AvlTree *tree, sowr_AvlTreeWalkFunc func );
 
 ///
 /// \brief Find an element in tree
 ///
-/// Look up an element in the binary tree.
+/// Look up an element in the avl tree.
 ///
 /// \param tree Tree to look for
 /// \param data Data to look for
 ///
 /// \return The node if found
 ///
-sowr_BinaryTreeNode *
-sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data );
+sowr_AvlTreeNode *
+sowr_AvlTree_Find( const sowr_AvlTree *tree, const void *data );
 
 ///
 /// \brief Clear a tree
 ///
-/// Clearing out a binary tree, freeing all its elements.
+/// Clearing out an avl tree, freeing all its elements.
 ///
 /// \param tree Tree to clear
 ///
 void
-sowr_BinaryTree_Clear( sowr_BinaryTree *tree );
+sowr_AvlTree_Clear( sowr_AvlTree *tree );
 
 ///
 /// \brief Get the height of tree
 ///
-/// Get the height of the binary tree.
+/// Get the height of the avl tree.
 ///
 /// \param tree Tree to evaluate
 ///
 /// \return Accumulated height
 ///
 size_t
-sowr_BinaryTree_Height( const sowr_BinaryTree *tree );
+sowr_AvlTree_Height( const sowr_AvlTree *tree );
 
 ///
 /// \brief Destroy a tree
 ///
-/// Destroy a binary tree.
+/// Destroy an avl tree.
 ///
 /// \param tree tree to destroy
 ///
 void
-sowr_BinaryTree_Destroy( sowr_BinaryTree *tree );
+sowr_AvlTree_Destroy( sowr_AvlTree *tree );
 
 /// \brief Destroy a tree
 ///
-/// Destroy a binary tree created by \a sowr_BinaryTree_CreateS().
+/// Destroy an avl tree created by \a sowr_AvlTree_CreateS().
 ///
 /// \param tree Tree to destroy
 ///
 void
-sowr_BinaryTree_DestroyS( sowr_BinaryTree *tree );
+sowr_AvlTree_DestroyS( sowr_AvlTree *tree );
 
-#endif //!SOWR_LIB_CONTAINER_BINARY_TREE_H
+#endif // !SOWR_LIB_CONTAINER_AVL_TREE_H
