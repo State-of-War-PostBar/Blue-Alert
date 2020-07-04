@@ -45,7 +45,6 @@ typedef struct sowr_BinaryTree
 {
     size_t length;
     sowr_BinaryTreeFreeFunc free_func;
-    sowr_BinaryTreeCmpFunc cmp_func;
     sowr_BinaryTreeNode *head;
 } sowr_BinaryTree;
 
@@ -60,7 +59,7 @@ typedef struct sowr_BinaryTree
 /// \return Created tree
 ///
 sowr_BinaryTree *
-sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
+sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func );
 
 ///
 /// \brief Create a binary tree
@@ -74,7 +73,7 @@ sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFun
 /// \return Created tree
 ///
 sowr_BinaryTree
-sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFunc cmp_func );
+sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func );
 
 ///
 /// \brief Insert data to binary tree
@@ -84,9 +83,10 @@ sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func, sowr_BinaryTreeCmpFu
 /// \param tree Tree to insert
 /// \param data_size Size of data
 /// \param data Data to insert
+/// \param cmp_func Function for comparision
 ///
 void
-sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *data );
+sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *data, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Delete element in tree
@@ -95,11 +95,12 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
 ///
 /// \param tree Tree to delete from
 /// \param data Data to delete
+/// \param cmp_func Function for comparision
 ///
 /// \return If anything is deleted
 ///
 bool
-sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data );
+sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Walk the binary tree
@@ -119,11 +120,12 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func );
 ///
 /// \param tree Tree to look for
 /// \param data Data to look for
+/// \param cmp_func Function for comparision
 ///
 /// \return The node if found
 ///
 sowr_BinaryTreeNode *
-sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data );
+sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data, sowr_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Clear a tree

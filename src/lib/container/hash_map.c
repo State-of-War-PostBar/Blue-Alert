@@ -25,22 +25,34 @@
 
 #include "hash_map.h"
 
+#include "binary_tree.h"
 #include "../memory/heap_memory.h"
 
 static const size_t SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT = 16ULL;
 
 static
-bool
+int
 sowr_CompareIndexHash( const void *left, const void *right )
 {
-    return ((sowr_HashMapValue *)left)->index_hash == ((sowr_HashMapValue *)right)->index_hash;
+    sowr_HashMapValue *l = (sowr_HashMapValue *)left, *r = (sowr_HashMapValue *)right;
+    if (l->index_hash < r->index_hash)
+        return 1;
+    if (l->index_hash > r->index_hash)
+        return -1;
+    return 0;
 }
 
 static
-bool
+int
 sowr_CompareIndexHashToHash( const void *left_val, const void *right_hash )
 {
-    return ((sowr_HashMapValue *)left_val)->index_hash == *(sowr_Hash *)right_hash;
+    const sowr_HashMapValue *l = (const sowr_HashMapValue *)left_val;
+    const sowr_Hash *r = (const sowr_Hash *)right_hash;
+    if (l->index_hash < *r)
+        return 1;
+    if (l->index_hash > *r)
+        return -1;
+    return 0;
 }
 
 static
@@ -69,12 +81,12 @@ sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count )
 {
     sowr_HashMap *map = sowr_HeapAlloc(sizeof(sowr_HashMap));
 
-    map->buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_LinkedList_DestroyS);
+    map->buckets = sowr_Vector_CreateS(sizeof(sowr_BinaryTree), sowr_BinaryTree_DestroyS);
     sowr_Vector_ExpandUntil(&(map->buckets), buckets_count);
     for (size_t i = 0ULL; i < buckets_count; i++)
     {
-        sowr_LinkedList slot = sowr_LinkedList_CreateS(sowr_FreeHashMapValue);
-        sowr_Vector_Push(&(map->buckets), &slot);
+        sowr_BinaryTree tree = sowr_BinaryTree_CreateS(sowr_FreeHashMapValue);
+        sowr_Vector_Push(&(map->buckets), &tree);
     }
 
     map->buckets_count = buckets_count;
@@ -88,12 +100,12 @@ sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count )
 {
     sowr_HashMap map;
 
-    map.buckets = sowr_Vector_CreateS(sizeof(sowr_LinkedList), sowr_LinkedList_DestroyS);
+    map.buckets = sowr_Vector_CreateS(sizeof(sowr_BinaryTree), sowr_BinaryTree_DestroyS);
     sowr_Vector_ExpandUntil(&(map.buckets), buckets_count);
     for (size_t i = 0ULL; i < buckets_count; i++)
     {
-        sowr_LinkedList slot = sowr_LinkedList_CreateS(sowr_FreeHashMapValue);
-        sowr_Vector_Push(&(map.buckets), &slot);
+        sowr_BinaryTree tree = sowr_BinaryTree_CreateS(sowr_FreeHashMapValue);
+        sowr_Vector_Push(&(map.buckets), &tree);
     }
 
     map.buckets_count = buckets_count;
@@ -114,9 +126,9 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
     block.index_hash = index_hash;
 
     size_t slot = index_hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
-    map->length = sowr_LinkedList_Take(bucket, &block, sowr_CompareIndexHash, NULL) ? map->length : map->length + 1ULL;
-    sowr_LinkedList_Insert(bucket, sizeof(sowr_HashMapValue), &block);
+    sowr_BinaryTree *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
+    map->length = sowr_BinaryTree_Delete(bucket, &block, sowr_CompareIndexHash) ? map->length : map->length + 1ULL;
+    sowr_BinaryTree_Insert(bucket, sizeof(sowr_HashMapValue), &block, sowr_CompareIndexHash);
 }
 
 inline
@@ -134,7 +146,7 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index )
 
     sowr_Hash hash = sowr_GetHash(index_length, index);
     size_t slot = hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
+    sowr_BinaryTree *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
 
     switch (bucket->length)
     {
@@ -142,7 +154,7 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index )
             return NULL;
         default:
         {
-            sowr_LinkedListNode *result = sowr_LinkedList_Find(bucket, &hash, sowr_CompareIndexHashToHash);
+            sowr_BinaryTreeNode *result = sowr_BinaryTree_Find(bucket, &hash, sowr_CompareIndexHashToHash);
             return result ? (sowr_HashMapValue *)(result->data) : NULL;
         }
     }
@@ -173,15 +185,15 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
 
     sowr_Hash hash = sowr_GetHash(index_length, index);
     size_t slot = hash % map->buckets_count;
-    sowr_LinkedList *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
+    sowr_BinaryTree *tree = sowr_Vector_PtrAt(&(map->buckets), slot);
 
-    switch (bucket->length)
+    switch (tree->length)
     {
         case 0ULL:
             return;
         default:
         {
-            if (sowr_LinkedList_Take(bucket, &hash, sowr_CompareIndexHashToHash, NULL))
+            if (sowr_BinaryTree_Delete(tree, &hash, sowr_CompareIndexHashToHash))
                 map->length--;
         }
     }
@@ -198,7 +210,7 @@ inline
 void
 sowr_HashMap_Clear( sowr_HashMap *map )
 {
-    sowr_Vector_Walk(&(map->buckets), sowr_LinkedList_Clear);
+    sowr_Vector_Walk(&(map->buckets), sowr_BinaryTree_Clear);
 }
 
 void
