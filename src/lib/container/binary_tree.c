@@ -104,13 +104,11 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
     }
     else
     {
-        sowr_BinaryTreeNode *iter = tree->head;
-        sowr_BinaryTreeNode *target = NULL;
-
+        sowr_BinaryTreeNode *iter = tree->head, *previous = NULL;
         int result = 0;
         while (iter)
         {
-            target = iter;
+            previous = iter;
             result = cmp_func(iter->data, data);
             if (!result)
                 return;
@@ -127,9 +125,9 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
         node->left = node->right = NULL;
 
         if (result < 0)
-            target->left = node;
+            previous->left = node;
         else
-            target->right = node;
+            previous->right = node;
     }
     tree->length++;
 }
