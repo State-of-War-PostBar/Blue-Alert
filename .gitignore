@@ -6,6 +6,7 @@
 *.gch
 *.map
 
+/bin/
 /.vscode/
 /inc/
 /lib/
