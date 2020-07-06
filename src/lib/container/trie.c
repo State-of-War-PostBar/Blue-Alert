@@ -74,8 +74,8 @@ sowr_Trie *
 sowr_Trie_Create( sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
-    head.data = NULL;
     head.data_size = 0ULL;
+    head.data = NULL;
     head.children = 0ULL;
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
         head.characters[i] = NULL;
@@ -91,8 +91,8 @@ sowr_Trie
 sowr_Trie_CreateS( sowr_TrieFreeFunc free_func )
 {
     sowr_TrieNode head;
-    head.data = NULL;
     head.data_size = 0ULL;
+    head.data = NULL;
     head.children = 0ULL;
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
         head.characters[i] = NULL;

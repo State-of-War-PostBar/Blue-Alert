@@ -112,7 +112,7 @@ sowr_Trie_Get( sowr_Trie *trie, const char *index );
 ///
 /// \brief Delete an element from trie
 ///
-/// Delete an element and the node from the trie.
+/// Delete an element from the trie (the node is not deleted).
 ///
 /// \param trie Trie to operate
 /// \param index String index for the node
