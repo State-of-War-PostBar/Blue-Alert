@@ -63,25 +63,28 @@ static
 void
 sowr_FreeHashMapValue( void *data )
 {
-    sowr_HeapFree(((sowr_HashMapValue *)data)->data);
+    sowr_HashMapValue *value = data;
+    if (value->free_func)
+        value->free_func(value->data);
+    sowr_HeapFree(value->data);
 }
 
 inline
 sowr_HashMap *
-sowr_HashMap_Create( void )
+sowr_HashMap_Create( sowr_HashMapFreeFunc free_func )
 {
-    return sowr_HashMap_Create_SuggestBucketsCount(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT);
+    return sowr_HashMap_Create_SuggestBucketsCount(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT, free_func);
 }
 
 inline
 sowr_HashMap
-sowr_HashMap_CreateS( void )
+sowr_HashMap_CreateS( sowr_HashMapFreeFunc free_func )
 {
-    return sowr_HashMap_Create_SuggestBucketsCountS(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT);
+    return sowr_HashMap_Create_SuggestBucketsCountS(SOWR_HASH_MAP_DEFAULT_BUCKETS_COUNT, free_func);
 }
 
 sowr_HashMap *
-sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count )
+sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count, sowr_HashMapFreeFunc free_func )
 {
     sowr_HashMap *map = sowr_HeapAlloc(sizeof(sowr_HashMap));
 
@@ -95,12 +98,13 @@ sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count )
 
     map->buckets_count = buckets_count;
     map->length = 0ULL;
+    map->free_func = free_func;
 
     return map;
 }
 
 sowr_HashMap
-sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count )
+sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, sowr_HashMapFreeFunc free_func )
 {
     sowr_HashMap map;
 
@@ -114,6 +118,7 @@ sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count )
 
     map.buckets_count = buckets_count;
     map.length = 0ULL;
+    map.free_func = free_func;
 
     return map;
 }
@@ -124,7 +129,7 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
     sowr_HashMapValue block;
     block.data = sowr_HeapAlloc(sizeof(char) * val_length);
     memcpy(block.data, value, val_length);
-    block.value_length = val_length;
+    block.free_func = map->free_func;
 
     sowr_Hash index_hash = sowr_GetHash(index_length, index);
     block.index_hash = index_hash;
@@ -196,10 +201,8 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
         case 0ULL:
             return;
         default:
-        {
             if (sowr_BinaryTree_Delete(tree, &hash, sowr_CompareIndexHashToHash))
                 map->length--;
-        }
     }
 }
 

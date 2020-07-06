@@ -36,12 +36,14 @@
 #include "../hash/hash.h"
 
 typedef void (*sowr_HashMapWalkFunc)( void * );
+typedef void (*sowr_HashMapFreeFunc)( void * );
 
 typedef struct sowr_HashMapValue
 {
     sowr_Hash index_hash;
-    size_t value_length;
-    char *data;
+    size_t data_size;
+    sowr_HashMapFreeFunc free_func;
+    void *data;
 } sowr_HashMapValue;
 
 typedef struct sowr_HashMap
@@ -49,6 +51,7 @@ typedef struct sowr_HashMap
     size_t buckets_count;
     size_t length;
     sowr_Vector buckets;
+    sowr_HashMapFreeFunc free_func;
 } sowr_HashMap;
 
 ///
@@ -56,10 +59,12 @@ typedef struct sowr_HashMap
 ///
 /// Create a hashmap, with default buckets, ready to use.
 ///
+/// \param free_func Function to call when freeing an element
+///
 /// \return A hashmap
 ///
 sowr_HashMap *
-sowr_HashMap_Create( void );
+sowr_HashMap_Create( sowr_HashMapFreeFunc free_func );
 
 ///
 /// \brief Create a hashmap
@@ -67,20 +72,24 @@ sowr_HashMap_Create( void );
 /// Create a hashmap by stack, with default buckets, ready to use.<BR />
 /// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
 ///
+/// \param free_func Function to call when freeing an element
+///
 /// \return A hashmap
 ///
 sowr_HashMap
-sowr_HashMap_CreateS( void );
+sowr_HashMap_CreateS( sowr_HashMapFreeFunc free_func );
 
 ///
 /// \brief Create a hashmap
 ///
 /// Create a hashmap with custom number of buckets, ready to use.
 ///
+/// \param free_func Function to call when freeing an element
+///
 /// \return A hashmap
 ///
 sowr_HashMap *
-sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count );
+sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count, sowr_HashMapFreeFunc free_func );
 
 ///
 /// \brief Create a hashmap
@@ -88,10 +97,12 @@ sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count );
 /// Create a hashmap with custom number of buckets by stack, ready to use.<BR />
 /// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
 ///
+/// \param free_func Function to call when freeing an element
+///
 /// \return A hashmap
 ///
 sowr_HashMap
-sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count );
+sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, sowr_HashMapFreeFunc free_func );
 
 ///
 /// \brief Insert an element to hashmap
