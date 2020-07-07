@@ -96,7 +96,9 @@ sowr_DestroyLogger( void )
 #ifdef SOWR_BUILD_DEBUG
     if (sowr_log_available)
     {
+        sowr_LockLogFile(true, NULL);
         fclose(sowr_log_file);
+        sowr_LockLogFile(false, NULL);
         sowr_DestroyCriticalSection(&sowr_log_file_mtx);
         sowr_log_file = NULL;
         sowr_log_available = false;
