@@ -45,7 +45,7 @@
     #define SOWR_BUILD_RELEASE
 #endif
 
-#if (-1 >> 1) == (-1)
+#if -1 >> 1 == -1
     #define SOWR_ARCH_RSHIFT_RESERVE_SIGN
 #endif
 
