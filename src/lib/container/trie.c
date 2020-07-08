@@ -32,17 +32,11 @@
 #include "../memory/heap_memory.h"
 
 static
+inline
 sowr_TrieNode *
 sowr_TrieNode_Gen()
 {
-    sowr_TrieNode *node = sowr_HeapAlloc(sizeof(sowr_TrieNode));
-    node->data = NULL;
-    node->data_size = 0ULL;
-    node->children = 0ULL;
-    for (size_t i = 0ULL; i < CHAR_MAX; i++)
-        node->characters[i] = NULL;
-
-    return node;
+    return sowr_HeapZeroAlloc(sizeof(sowr_TrieNode));;
 }
 
 static
