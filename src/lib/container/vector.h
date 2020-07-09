@@ -32,15 +32,16 @@
 
 #include <pch.h>
 
-typedef void (*sowr_VecFreeFunc)( void * );
-typedef void (*sowr_VecWalkFunc)( void * );
+typedef void (*sowr_VectorFreeFunc)( void * );
+typedef void (*sowr_VectorWalkFunc)( void * );
+typedef bool (*sowr_VectorCmpFunc)( const void *, const void * );
 
 typedef struct sowr_Vector
 {
     size_t elem_size;
     size_t capacity;
     size_t length;
-    sowr_VecFreeFunc free_func;
+    sowr_VectorFreeFunc free_func;
     void *ptr;
 } sowr_Vector;
 
@@ -55,7 +56,7 @@ typedef struct sowr_Vector
 /// \return Created vector
 ///
 sowr_Vector *
-sowr_Vector_Create( size_t elem_size, sowr_VecFreeFunc free_func );
+sowr_Vector_Create( size_t elem_size, sowr_VectorFreeFunc free_func );
 
 ///
 /// \brief Create a vector
@@ -69,7 +70,7 @@ sowr_Vector_Create( size_t elem_size, sowr_VecFreeFunc free_func );
 /// \return Created vector
 ///
 sowr_Vector
-sowr_Vector_CreateS( size_t elem_size, sowr_VecFreeFunc free_func );
+sowr_Vector_CreateS( size_t elem_size, sowr_VectorFreeFunc free_func );
 
 ///
 /// \brief Get the first element
@@ -110,6 +111,20 @@ void *
 sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index );
 
 ///
+/// \brief Find an element in the vector
+///
+/// Search for an element in the given vector.
+///
+/// \param vec Vector
+/// \param data Data to search
+/// \param cmp Comparision function
+///
+/// \return Pointer to the found element, NULL otherwise.
+///
+void *
+sowr_Vector_Find( const sowr_Vector *vec, const void *data, sowr_VectorCmpFunc cmp );
+
+///
 /// \brief Expand the vector
 ///
 /// Expand the vector, usually doubling its capacity unless the length is 0.
@@ -139,7 +154,7 @@ sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size );
 /// \param func Function for walking
 ///
 void
-sowr_Vector_Walk( sowr_Vector *vec, sowr_VecWalkFunc func );
+sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func );
 
 ///
 /// \brief Clear out a vector

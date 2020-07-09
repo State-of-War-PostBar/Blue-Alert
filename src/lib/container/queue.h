@@ -36,6 +36,7 @@
 
 typedef void (*sowr_QueueFreeFunc)( void * );
 typedef void (*sowr_QueueEatFunc)( void * );
+typedef bool (*sowr_QueueCmpFunc)( const void *, const void * );
 
 typedef sowr_Vector sowr_Queue;
 
@@ -77,6 +78,20 @@ sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func );
 ///
 void *
 sowr_Queue_First( const sowr_Queue *queue );
+
+///
+/// \brief Find an element in the queue
+///
+/// Search for an element in the given queue.
+///
+/// \param queue Queue
+/// \param data Data to search
+/// \param cmp Comparision function
+///
+/// \return Pointer to the found element, NULL otherwise.
+///
+void *
+sowr_Queue_Find( const sowr_Queue *queue, const void *data, sowr_QueueCmpFunc cmp );
 
 ///
 /// \brief Expand the queue

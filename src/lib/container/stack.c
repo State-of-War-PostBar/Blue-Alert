@@ -51,6 +51,13 @@ sowr_Stack_Last( const sowr_Stack *stack )
 }
 
 inline
+void *
+sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cmp )
+{
+    return sowr_Vector_Find(stack, data, cmp);
+}
+
+inline
 void
 sowr_Stack_Expand( sowr_Stack *stack )
 {

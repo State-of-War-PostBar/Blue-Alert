@@ -51,6 +51,13 @@ sowr_Queue_First( const sowr_Queue *queue )
 }
 
 inline
+void *
+sowr_Queue_Find( const sowr_Queue *queue, const void *data, sowr_QueueCmpFunc cmp )
+{
+    return sowr_Vector_Find(queue, data, cmp);
+}
+
+inline
 void
 sowr_Queue_Expand( sowr_Queue *queue )
 {

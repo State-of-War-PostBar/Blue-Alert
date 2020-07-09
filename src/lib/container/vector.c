@@ -32,7 +32,7 @@
 #include "../memory/heap_memory.h"
 
 sowr_Vector *
-sowr_Vector_Create( size_t elem_size, sowr_VecFreeFunc free_func )
+sowr_Vector_Create( size_t elem_size, sowr_VectorFreeFunc free_func )
 {
     sowr_Vector *vec = sowr_HeapAlloc(sizeof(sowr_Vector));
     vec->length = 0ULL;
@@ -44,7 +44,7 @@ sowr_Vector_Create( size_t elem_size, sowr_VecFreeFunc free_func )
 }
 
 sowr_Vector
-sowr_Vector_CreateS( size_t elem_size, sowr_VecFreeFunc free_func )
+sowr_Vector_CreateS( size_t elem_size, sowr_VectorFreeFunc free_func )
 {
     sowr_Vector vec =
     {
@@ -78,6 +78,20 @@ void *
 sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index )
 {
     return (void *)((char *)(vec->ptr) + vec->elem_size * index);
+}
+
+void *
+sowr_Vector_Find( const sowr_Vector *vec, const void *elem, sowr_VectorCmpFunc cmp )
+{
+    if (!vec->length)
+        return NULL;
+
+    char *ptr = vec->ptr;
+    for (size_t i = 0ULL; i < vec->length; i++, ptr += vec->elem_size)
+        if (cmp((void *)ptr, elem))
+            return ptr;
+
+    return NULL;
 }
 
 inline
@@ -124,7 +138,7 @@ sowr_Vector_ShrinkToFit( sowr_Vector *vec )
 }
 
 void
-sowr_Vector_Walk( sowr_Vector *vec, sowr_VecWalkFunc func )
+sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func )
 {
     if (!vec->length)
         return;

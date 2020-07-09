@@ -36,6 +36,7 @@
 
 typedef void (*sowr_StackFreeFunc)( void * );
 typedef void (*sowr_StackEatFunc)( void * );
+typedef bool (*sowr_StackCmpFunc)( const void *, const void * );
 
 typedef sowr_Vector sowr_Stack;
 
@@ -77,6 +78,20 @@ sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func );
 ///
 void *
 sowr_Stack_Last( const sowr_Stack *stack );
+
+///
+/// \brief Find an element in the stack
+///
+/// Search for an element in the given stack.
+///
+/// \param stack Stack
+/// \param data Data to search
+/// \param cmp Comparision function
+///
+/// \return Pointer to the found element, NULL otherwise.
+///
+void *
+sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cmp );
 
 ///
 /// \brief Expand the stack
