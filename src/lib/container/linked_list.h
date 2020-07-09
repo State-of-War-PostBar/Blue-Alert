@@ -66,7 +66,7 @@ sowr_LinkedList_Create( sowr_LinkedListFreeFunc free_func );
 /// \brief Create a linked list
 ///
 /// Create a linked list ready to use by stack.<BR />
-/// <B>The created list must be destroyed by \a sowr_LinkedList_Destroy().</B>
+/// <B>The created list must be destroyed by \a sowr_LinkedList_DestroyS().</B>
 ///
 /// \param free_func Function to call when freeing an element
 ///
