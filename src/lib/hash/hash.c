@@ -53,3 +53,10 @@ sowr_GetHashI( const char *str )
 {
     return sowr_GetHash(strlen(str), str);
 }
+
+inline
+sowr_Hash
+sowr_GetHashS( sowr_String *str )
+{
+    return sowr_GetHash(str->length, str->ptr);
+}

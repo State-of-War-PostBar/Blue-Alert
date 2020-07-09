@@ -27,52 +27,117 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_HASH_HASH_H
-#define SOWR_LIB_HASH_HASH_H
+#include "string.h"
 
-#include <pch.h>
+#include "../memory/heap_memory.h"
 
-#include "../container/string.h"
+sowr_String *
+sowr_String_Create( void )
+{
+    return sowr_HeapZeroAlloc(sizeof(sowr_String));
+}
 
-/// Hashed value
-typedef size_t sowr_Hash;
+sowr_String
+sowr_String_CreateS( void )
+{
+    sowr_String str =
+    {
+        .length = 0ULL,
+        .ptr = NULL
+    };
+    return str;
+}
 
-///
-/// \brief Hash some bytes
-///
-/// Get the hashcode of some bytes.
-///
-/// \param length Length of the byte array
-/// \param bytes Byte array to hash
-///
-/// \return Hashed result
-///
-sowr_Hash
-sowr_GetHash( size_t length, const char *bytes );
+sowr_String *
+sowr_String_From( const char *original )
+{
+    sowr_String *str = sowr_HeapAlloc(sizeof(sowr_String));
+    str->length = strlen(original);
+    str->ptr = sowr_HeapAlloc(str->length + 1ULL);
+    memcpy(str->ptr, original, str->length + 1ULL);
+    return str;
+}
 
-///
-/// \brief Hash a string
-///
-/// Get the hashcode of a string.<BR />
-/// The string is understood to be null-terminated.
-///
-/// \param str String to hash
-///
-/// \return Hashed result
-///
-sowr_Hash
-sowr_GetHashI( const char *str );
+sowr_String
+sowr_String_FromS( const char *original )
+{
+    sowr_String str;
+    str.length = strlen(original);
+    str.ptr = sowr_HeapAlloc(str.length + 1ULL);
+    memcpy(str.ptr, original, str.length + 1ULL);
+    return str;
+}
 
-///
-/// \brief Hash a string
-///
-/// Get the hashcode of a string.<BR />
-///
-/// \param str String to hash
-///
-/// \return Hashed result
-///
-sowr_Hash
-sowr_GetHashS( sowr_String *str );
+char *
+sowr_String_First( const sowr_String *str )
+{
+    return str->ptr;
+}
 
-#endif // !SOWR_LIB_HASH_HASH_H
+char *
+sowr_String_Last( const sowr_String *str )
+{
+    if (!str->length)
+        return NULL;
+
+    return str->ptr + str->length - 1ULL;
+}
+
+void
+sowr_String_PushC( sowr_String *str, char data )
+{
+    if (!str->length)
+    {
+        str->ptr = sowr_HeapAlloc(sizeof(char) * 2ULL);
+        str->ptr[0] = data;
+        str->ptr[1] = '\0';
+    }
+    else
+    {
+        str->ptr = sowr_ReAlloc(sizeof(char) * (str->length + 2ULL), str->ptr);
+        str->ptr[str->length] = data;
+        str->ptr[str->length + 1ULL] = '\0';
+    }
+    str->length++;
+}
+
+void
+sowr_String_PushS( sowr_String *str, const char *data )
+{
+    size_t target_len = strlen(data);
+    if (!str->length)
+    {
+        str->ptr = sowr_HeapAlloc(target_len + 1ULL);
+        memcpy(str->ptr, data, sizeof(char));
+    }
+    else
+    {
+        str->ptr = sowr_ReAlloc(sizeof(char) * (str->length + target_len + 1ULL), str->ptr);
+        memcpy(str->ptr + str->length, data, sizeof(char) * (target_len + 1ULL));
+    }
+    str->length += target_len;
+}
+
+void
+sowr_String_Clear( sowr_String *str )
+{
+    if (str->length)
+    {
+        sowr_HeapFree(str->ptr);
+        str->ptr = NULL;
+        str->length = 0ULL;
+    }
+}
+
+void
+sowr_String_Destroy( sowr_String *str )
+{
+    sowr_String_Clear(str);
+    sowr_HeapFree(str);
+}
+
+void
+sowr_String_DestroyS( sowr_String *str )
+{
+    sowr_String_Clear(str);
+}

@@ -27,52 +27,138 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_HASH_HASH_H
-#define SOWR_LIB_HASH_HASH_H
+#ifndef SOWR_LIB_CONTAINER_STRING_H
+#define SOWR_LIB_CONTAINER_STRING_H
 
 #include <pch.h>
 
-#include "../container/string.h"
-
-/// Hashed value
-typedef size_t sowr_Hash;
-
-///
-/// \brief Hash some bytes
-///
-/// Get the hashcode of some bytes.
-///
-/// \param length Length of the byte array
-/// \param bytes Byte array to hash
-///
-/// \return Hashed result
-///
-sowr_Hash
-sowr_GetHash( size_t length, const char *bytes );
+typedef struct sowr_String
+{
+    size_t length;
+    char *ptr;
+} sowr_String;
 
 ///
-/// \brief Hash a string
+/// \brief Create a string
 ///
-/// Get the hashcode of a string.<BR />
-/// The string is understood to be null-terminated.
+/// Create a string ready to use.
 ///
-/// \param str String to hash
+/// \return Created string
 ///
-/// \return Hashed result
-///
-sowr_Hash
-sowr_GetHashI( const char *str );
+sowr_String *
+sowr_String_Create( void );
 
 ///
-/// \brief Hash a string
+/// \brief Create a string
 ///
-/// Get the hashcode of a string.<BR />
+/// Create a string on stack, ready to use.<BR />
+/// The created string must be destroyed by \a sowr_String_DestroyS().
 ///
-/// \param str String to hash
+/// \return Created string
 ///
-/// \return Hashed result
-///
-sowr_Hash
-sowr_GetHashS( sowr_String *str );
+sowr_String
+sowr_String_CreateS( void );
 
-#endif // !SOWR_LIB_HASH_HASH_H
+///
+/// \brief Duplicate a string
+///
+/// Create a string from an existing one.
+///
+/// \param original String to duplicate from
+///
+/// \return Duplicated string
+///
+sowr_String *
+sowr_String_From( const char *original );
+
+///
+/// \brief Duplicate a string
+///
+/// Create a string from an existing one on stack.<BR />
+/// <B>The created string must be destroyed by \a sowr_String_DestroyS().</B>
+///
+/// \param original String to duplicate from
+///
+/// \return Duplicated string
+///
+sowr_String
+sowr_String_FromS( const char *original );
+
+///
+/// \brief Get the first character
+///
+/// Get the first character of the string.
+///
+/// \param str String
+///
+/// \return Pointer to the first character, NULL if string is empty
+///
+char *
+sowr_String_First( const sowr_String *str );
+
+///
+/// \brief Get the last character
+///
+/// Get the last character of the string.<BR />
+/// <B>This <I>"last character"</I> is not the null terminator!!!</B>
+///
+/// \param str String
+///
+/// \return Pointer to the last character, NULL if string is empty
+///
+char *
+sowr_String_Last( const sowr_String *str );
+
+///
+/// \brief Push a character
+///
+/// Push a character into the string.
+///
+/// \param str String
+/// \param data Pushing character
+///
+void
+sowr_String_PushC( sowr_String *str, char data );
+
+///
+/// \brief Push a string
+///
+/// Push a string into the string.
+///
+/// \param str String
+/// \param data Pushing string (there is ambiguity... lol)
+///
+void
+sowr_String_PushS( sowr_String *str, const char *data );
+
+///
+/// \brief Clear a string
+///
+/// Clear a string an release its resources.
+///
+/// \param str String to clear
+///
+void
+sowr_String_Clear( sowr_String *str );
+
+///
+/// \brief Destroy a string
+///
+/// Destroy a string.
+///
+/// \param str String to destroy
+///
+void
+sowr_String_Destroy( sowr_String *str );
+
+///
+/// \brief Destroy a string
+///
+/// Destroy a string created by \a sowr_String_CreateS().
+///
+/// \param str String to destroy
+///
+void
+sowr_String_DestroyS( sowr_String *str );
+
+#endif // !SOWR_LIB_CONTAINER_STRING_H
