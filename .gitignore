@@ -14,3 +14,6 @@
 
 # I use this folder's .c files for implementations of libraries.  -- Taxerap
 /vendor/*.c
+
+# Finc result  -- Taxerap
+finc.txt
