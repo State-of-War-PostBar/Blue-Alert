@@ -84,6 +84,7 @@ sowr_HashMap_CreateS( sowr_HashMapFreeFunc free_func );
 ///
 /// Create a hashmap with custom number of buckets, ready to use.
 ///
+/// \param buckets_count Suggested buckets count
 /// \param free_func Function to call when freeing an element
 ///
 /// \return A hashmap
@@ -97,6 +98,7 @@ sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count, sowr_HashMapFreeF
 /// Create a hashmap with custom number of buckets by stack, ready to use.<BR />
 /// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
 ///
+/// \param buckets_count Suggested buckets count
 /// \param free_func Function to call when freeing an element
 ///
 /// \return A hashmap
