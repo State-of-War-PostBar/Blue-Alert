@@ -1,6 +1,6 @@
 # State of War: Remastered
 
-A personal experimenting project of [Taxerap](https://github.com/Taxerap), in C.  
+A personal experimenting project of [Taxerap](https://github.com/Taxerap).
 
 ## Used libraries
 
