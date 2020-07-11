@@ -114,11 +114,8 @@ inline
 void
 sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size )
 {
-    if (vec->capacity < size)
-    {
-        vec->capacity = size;
-        vec->ptr = sowr_ReAlloc(vec->elem_size * vec->capacity, vec->ptr);
-    }
+    while (vec->capacity < size)
+        sowr_Vector_Expand(vec);
 }
 
 inline
@@ -272,7 +269,8 @@ void
 sowr_Vector_Destroy( sowr_Vector *vec )
 {
     sowr_Vector_Clear(vec);
-    sowr_HeapFree(vec->ptr);
+    if (vec->capacity)
+        sowr_HeapFree(vec->ptr);
     sowr_HeapFree(vec);
 }
 
@@ -280,5 +278,6 @@ void
 sowr_Vector_DestroyS( sowr_Vector *vec )
 {
     sowr_Vector_Clear(vec);
-    sowr_HeapFree(vec->ptr);
+    if (vec->capacity)
+        sowr_HeapFree(vec->ptr);
 }

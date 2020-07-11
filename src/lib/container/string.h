@@ -34,6 +34,7 @@
 
 typedef struct sowr_String
 {
+    size_t capacity;
     size_t length;
     char *ptr;
 } sowr_String;
@@ -83,6 +84,37 @@ sowr_String_From( const char *original );
 ///
 sowr_String
 sowr_String_FromS( const char *original );
+
+///
+/// \brief Expand the string
+///
+/// Expand the string, usually doubling its capacity unless the length is 0.
+///
+/// \param str String to expand
+///
+void
+sowr_String_Expand( sowr_String *str );
+
+///
+/// \brief Expand the string
+///
+/// Expand the string until its capacity reaches the set limit.
+///
+/// \param str String to expand
+/// \param size Target size for expanding
+///
+void
+sowr_String_ExpandUntil( sowr_String *str, size_t new_size );
+
+///
+/// \brief Shrink the string
+///
+/// Shrink the string to just enough to fit its contents and the null terminator (if any).
+///
+/// \param str String to shrink
+///
+void
+sowr_String_ShrinkToFit( sowr_String *str );
 
 ///
 /// \brief Get the first character
