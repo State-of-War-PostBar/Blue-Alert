@@ -65,9 +65,9 @@ Sublayers are provided.
 A support for sublayers, helps gathering.
 
     [unit_1345]
-        hp = 555
-        x = 13
-        y = 27
+    hp = 555
+    x = 13
+    y = 27
 
 is the same as
 
@@ -78,7 +78,7 @@ is the same as
 Sublayer of blocks are allowed.
 
     [block.return]
-        ok
+    ok
 
 If you want to end a region of a block to enter global field again, use
 
