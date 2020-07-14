@@ -68,9 +68,7 @@ inline
 void *
 sowr_Vector_Last( const sowr_Vector *vec )
 {
-    if (vec->length == 1)
-        return vec->ptr;
-    return (void *)((char *)(vec->ptr) + vec->elem_size * vec->length);
+    return (void *)((char *)(vec->ptr) + vec->elem_size * (vec->length - 1ULL));
 }
 
 inline
