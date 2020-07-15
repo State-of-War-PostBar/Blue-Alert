@@ -32,6 +32,7 @@
 
 #include <pch.h>
 
+#include "string.h"
 #include "vector.h"
 #include "../hash/hash.h"
 
@@ -118,7 +119,7 @@ sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, sowr_HashMapFree
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const char *value );
+sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const void *value );
 
 ///
 /// \brief Insert an element to hashmap
@@ -131,7 +132,47 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_InsertI( sowr_HashMap *map, const char *index, const char *value );
+sowr_HashMap_InsertCC( sowr_HashMap *map, const char *index, const char *value );
+
+///
+/// \brief Insert an element to hashmap
+///
+/// Use key and value to insert element to hashmap, override the old value if key is identical.<BR />
+/// The key is understood to be null-terminated string.
+///
+/// \param map Map to insert
+/// \param index Index
+/// \param val_length Length of value in byte
+/// \param value Value to insert
+///
+void
+sowr_HashMap_InsertCV( sowr_HashMap *map, const char *index, size_t val_length, const void *value );
+
+///
+/// \brief Insert an element to hashmap
+///
+/// Use key and value to insert element to hashmap, override the old value if key is identical.<BR />
+///
+/// \param map Map to insert
+/// \param index Index
+/// \param value Value to insert
+///
+void
+sowr_HashMap_InsertSS( sowr_HashMap *map, const sowr_String *index, const sowr_String *value );
+
+///
+/// \brief Insert an element to hashmap
+///
+/// Use key and value to insert element to hashmap, override the old value if key is identical.<BR />
+/// The  value is understood to be null-terminated string.
+///
+/// \param map Map to insert
+/// \param index Index
+/// \param val_length Length of value in byte
+/// \param value Value to insert
+///
+void
+sowr_HashMap_InsertSV( sowr_HashMap *map, const sowr_String *index, size_t val_length, const void *value );
 
 ///
 /// \brief Get a value from the map
@@ -159,7 +200,21 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index );
 /// \return The value from key, NULL if not found
 ///
 sowr_HashMapValue *
-sowr_HashMap_GetI( sowr_HashMap *map, const char *index );
+sowr_HashMap_GetC( sowr_HashMap *map, const char *index );
+
+
+///
+/// \brief Get a value from the map
+///
+/// Use string index to get a value from the map.
+///
+/// \param map Map to get
+/// \param index Index
+///
+/// \return The value from index, NULL if not found
+///
+sowr_HashMapValue *
+sowr_HashMap_GetS( sowr_HashMap *map, const sowr_String *index );
 
 ///
 /// \brief Walk the map
@@ -194,7 +249,18 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
 /// \param index Index
 ///
 void
-sowr_HashMap_DeleteI( sowr_HashMap *map, const char *index );
+sowr_HashMap_DeleteC( sowr_HashMap *map, const char *index );
+
+///
+/// \brief Delete a value from the map
+///
+/// Delete a value by index from the map using string as index.
+///
+/// \param map Map to operate
+/// \param index Index
+///
+void
+sowr_HashMap_DeleteS( sowr_HashMap *map, const sowr_String *index );
 
 ///
 /// \brief Clear the hashmap
