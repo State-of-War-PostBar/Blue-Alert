@@ -32,6 +32,8 @@
 
 #include <pch.h>
 
+#include "string.h"
+
 typedef void (*sowr_TrieFreeFunc)( void * );
 
 typedef struct sowr_TrieNode
@@ -97,6 +99,19 @@ void
 sowr_Trie_Insert( sowr_Trie *trie, const char *index, size_t data_size, const void *data );
 
 ///
+/// \brief Insert an element to trie
+///
+/// Insert an element to the trie. It will override the old data if overlapped.
+///
+/// \param trie Trie to operate
+/// \param index String index for the element
+/// \param data_size Size of the data
+/// \param data Data to insert
+///
+void
+sowr_Trie_InsertS( sowr_Trie *trie, const sowr_String *index, size_t data_size, const void *data );
+
+///
 /// \brief Get an element from trie
 ///
 /// Get an element from the trie.
@@ -110,6 +125,19 @@ sowr_TrieNode *
 sowr_Trie_Get( sowr_Trie *trie, const char *index );
 
 ///
+/// \brief Get an element from trie
+///
+/// Get an element from the trie.
+///
+/// \param trie Trie to operate
+/// \param index String index for the element
+///
+/// \return The trie node containing data if found, NULL otherwise.
+///
+sowr_TrieNode *
+sowr_Trie_GetS( sowr_Trie *trie, const sowr_String *index );
+
+///
 /// \brief Delete an element from trie
 ///
 /// Delete an element from the trie (the node is not deleted).
@@ -121,6 +149,19 @@ sowr_Trie_Get( sowr_Trie *trie, const char *index );
 ///
 bool
 sowr_Trie_Delete( sowr_Trie *trie, const char *index );
+
+///
+/// \brief Delete an element from trie
+///
+/// Delete an element from the trie (the node is not deleted).
+///
+/// \param trie Trie to operate
+/// \param index String index for the node
+///
+/// \return If anything is deleted
+///
+bool
+sowr_Trie_DeleteS( sowr_Trie *trie, const sowr_String *index );
 
 ///
 /// \brief Destroy the trie

@@ -34,9 +34,9 @@
 static
 inline
 sowr_TrieNode *
-sowr_TrieNode_Gen()
+sowr_TrieNode_Gen( void )
 {
-    return sowr_HeapZeroAlloc(sizeof(sowr_TrieNode));;
+    return sowr_HeapZeroAlloc(sizeof(sowr_TrieNode));
 }
 
 static
@@ -146,6 +146,13 @@ sowr_Trie_Insert( sowr_Trie *trie, const char *index, size_t data_size, const vo
     }
 }
 
+inline
+void
+sowr_Trie_InsertS( sowr_Trie *trie, const sowr_String *index, size_t data_size, const void *data )
+{
+    sowr_Trie_Insert(trie, index->ptr, data_size, data);
+}
+
 sowr_TrieNode *
 sowr_Trie_Get( sowr_Trie *trie, const char *index )
 {
@@ -162,6 +169,13 @@ sowr_Trie_Get( sowr_Trie *trie, const char *index )
     }
 
     return iter;
+}
+
+inline
+sowr_TrieNode *
+sowr_Trie_GetS( sowr_Trie *trie, const sowr_String *index )
+{
+    return sowr_Trie_Get(trie, index->ptr);
 }
 
 bool
@@ -188,6 +202,13 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index )
     iter->data = NULL;
 
     return true;
+}
+
+inline
+bool
+sowr_Trie_DeleteS( sowr_Trie *trie, const sowr_String *index )
+{
+    return sowr_Trie_Delete(trie, index->ptr);
 }
 
 void
