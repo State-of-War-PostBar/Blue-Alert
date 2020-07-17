@@ -30,6 +30,10 @@
 #ifndef SOWR_PCH_H
 #define SOWR_PCH_H
 
+#if defined __cplusplus || __STDC_VERSION__ < 201710L
+    #error "wtf"
+#endif
+
 #if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
     #define SOWR_TARGET_WINDOWS
 #elif defined __MACH__ && defined __APPLE__
