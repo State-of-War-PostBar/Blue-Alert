@@ -30,7 +30,7 @@
 #ifndef SOWR_PCH_H
 #define SOWR_PCH_H
 
-#if defined __cplusplus || __STDC_VERSION__ < 201710L
+#if defined __cplusplus || __STDC_VERSION__ < 201710L || defined _MSC_VER
     #error "wtf"
 #endif
 
