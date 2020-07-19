@@ -119,7 +119,7 @@ sowr_Trie_InsertS( sowr_Trie *trie, const sowr_String *index, size_t data_size, 
 /// \param trie Trie to operate
 /// \param index String index for the element
 ///
-/// \return The trie node containing data if found, NULL otherwise.
+/// \return The trie node containing data if found, NULL otherwise
 ///
 sowr_TrieNode *
 sowr_Trie_Get( sowr_Trie *trie, const char *index );
@@ -132,7 +132,7 @@ sowr_Trie_Get( sowr_Trie *trie, const char *index );
 /// \param trie Trie to operate
 /// \param index String index for the element
 ///
-/// \return The trie node containing data if found, NULL otherwise.
+/// \return The trie node containing data if found, NULL otherwise
 ///
 sowr_TrieNode *
 sowr_Trie_GetS( sowr_Trie *trie, const sowr_String *index );
