@@ -54,8 +54,8 @@ sowr_String_From( const char *original )
 {
     sowr_String *str = sowr_HeapAlloc(sizeof(sowr_String));
     str->length = str->capacity = strlen(original);
-    str->ptr = sowr_HeapAlloc(str->length + 1ULL);
-    memcpy(str->ptr, original, str->length + 1ULL);
+    str->capacity++;
+    str->ptr = strdup(original);
     return str;
 }
 
@@ -64,8 +64,8 @@ sowr_String_FromS( const char *original )
 {
     sowr_String str;
     str.length = str.capacity = strlen(original);
-    str.ptr = sowr_HeapAlloc(str.length + 1ULL);
-    memcpy(str.ptr, original, str.length + 1ULL);
+    str.capacity++;
+    str.ptr = strdup(original);
     return str;
 }
 
@@ -144,8 +144,61 @@ sowr_String_PushS( sowr_String *str, const char *data )
 
 inline
 void
+sowr_String_Pop( sowr_String *str )
+{
+    sowr_String_PopN(str, 1ULL);
+}
+
+void
+sowr_String_PopN( sowr_String *str, size_t num )
+{
+    if (!str->length || !num)
+        return;
+
+    if (str->length <= num)
+        sowr_String_Clear(str);
+    else
+    {
+        str->ptr[str->length - num] = '\0';
+        str->length -= num;
+    }
+}
+
+void
+sowr_String_Sub( sowr_String *str, size_t num )
+{
+    if (!str->length || !num)
+        return;
+
+    if (str->length <= num)
+        sowr_String_Clear(str);
+    else
+    {
+        memmove(str->ptr, str->ptr + sizeof(char) * num, sizeof(char) * (str->length - num + 1ULL));
+        str->length -= num;
+    }
+}
+
+void
+sowr_String_Res( sowr_String *str, size_t num )
+{
+    if (!str->length || !num)
+        return;
+
+    if (str->length <= num)
+        return;
+    else
+    {
+        str->ptr[num] = '\0';
+        str->length = num;
+    }
+}
+
+inline
+void
 sowr_String_Clear( sowr_String *str )
 {
+    str->ptr = '\0';
     str->length = 0ULL;
 }
 

@@ -101,7 +101,7 @@ sowr_String_Expand( sowr_String *str );
 /// Expand the string until its capacity reaches the set limit.
 ///
 /// \param str String to expand
-/// \param size Target size for expanding
+/// \param new_size Target size for expanding
 ///
 void
 sowr_String_ExpandUntil( sowr_String *str, size_t new_size );
@@ -164,9 +164,52 @@ void
 sowr_String_PushS( sowr_String *str, const char *data );
 
 ///
+/// \brief Pop from a string
+///
+/// Pop a character from the end of string.
+///
+/// \param str String
+///
+void
+sowr_String_Pop( sowr_String *str );
+
+///
+/// \brief Pop from a string
+///
+/// Pop certain amount of characters from the end of string.
+///
+/// \param str String
+/// \param num Amount of characters to pop
+///
+void
+sowr_String_PopN( sowr_String *str, size_t num );
+
+///
+/// \brief Get a substring
+///
+/// Get a substring, the string before numth character is cut.
+///
+/// \param str String
+/// \param num Index of substring
+///
+void
+sowr_String_Sub( sowr_String *str, size_t num );
+
+///
+/// \brief Get a reserve string
+///
+/// Get a reserve string, the string after the numth character is cut.
+///
+/// \param str String
+/// \param num Index of reserve
+///
+void
+sowr_String_Res( sowr_String *str, size_t num );
+
+///
 /// \brief Clear a string
 ///
-/// Clear a string an release its resources.
+/// Clear a string's length.<BR />
 ///
 /// \param str String to clear
 ///
