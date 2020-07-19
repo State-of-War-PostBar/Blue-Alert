@@ -198,14 +198,16 @@ inline
 void
 sowr_String_Clear( sowr_String *str )
 {
-    str->ptr = '\0';
-    str->length = 0ULL;
+    if (str->length)
+    {
+        str->ptr[0ULL] = '\0';
+        str->length = 0ULL;
+    }
 }
 
 void
 sowr_String_Destroy( sowr_String *str )
 {
-    sowr_String_Clear(str);
     if (str->capacity)
         sowr_HeapFree(str->ptr);
     sowr_HeapFree(str);
@@ -214,7 +216,6 @@ sowr_String_Destroy( sowr_String *str )
 void
 sowr_String_DestroyS( sowr_String *str )
 {
-    sowr_String_Clear(str);
     if (str->capacity)
         sowr_HeapFree(str->ptr);
 }
