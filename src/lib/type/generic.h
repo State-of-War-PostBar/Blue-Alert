@@ -159,33 +159,33 @@ typedef struct sowr_GenericType
     sowr_GenericTypeData data;
 } sowr_GenericType;
 
-#define SOWR_MAKE_GENERIC(var) (sowr_GenericType)                                                  \
-                               {                                                                   \
-                                    .type_name = _Generic((var),                                   \
-                                                          bool: SOWR_TYPE_BOOL,                    \
-                                                          char: SOWR_TYPE_CHAR,                    \
-                                                          unsigned char: SOWR_TYPE_UCHAR,          \
-                                                          short: SOWR_TYPE_SHORT,                  \
-                                                          unsigned short: SOWR_TYPE_USHORT,        \
-                                                          int: SOWR_TYPE_INT,                      \
-                                                          unsigned int: SOWR_TYPE_UINT,            \
-                                                          long: SOWR_TYPE_LONG,                    \
-                                                          unsigned long: SOWR_TYPE_ULONG,          \
-                                                          long long: SOWR_TYPE_LONGLONG,           \
-                                                          unsigned long long: SOWR_TYPE_ULONGLONG, \
-                                                          float: SOWR_TYPE_FLOAT,                  \
-                                                          double: SOWR_TYPE_DOUBLE,                \
-                                                          long double: SOWR_TYPE_LDOUBLE,          \
-                                                          char *: SOWR_TYPE_STRING,                \
-                                                          void *: SOWR_TYPE_VOID_PTR,              \
-                                                          default: SOWR_TYPE_UNKNOWN               \
-                                                         ),                                        \
-                                    .data = _Generic((var),                                                                            \
-                                                     float: (sowr_GenericTypeData){ .as_float = SOWR_TO_WIDER_IF_PTR((var)) },         \
-                                                     double: (sowr_GenericTypeData){ .as_double = SOWR_TO_WIDER_IF_PTR((var)) },       \
-                                                     long double: (sowr_GenericTypeData){ .as_ldouble = SOWR_TO_WIDER_IF_PTR((var)) }, \
-                                                     default: (sowr_GenericTypeData){ .unknown = SOWR_TO_WIDER_IF_PTR((var)) }         \
-                                                    )                                                                                  \
+#define SOWR_MAKE_GENERIC(var) (sowr_GenericType)                                                    \
+                               {                                                                     \
+                                    .type_name = _Generic((var),                                     \
+                                                            bool: SOWR_TYPE_BOOL,                    \
+                                                            char: SOWR_TYPE_CHAR,                    \
+                                                            unsigned char: SOWR_TYPE_UCHAR,          \
+                                                            short: SOWR_TYPE_SHORT,                  \
+                                                            unsigned short: SOWR_TYPE_USHORT,        \
+                                                            int: SOWR_TYPE_INT,                      \
+                                                            unsigned int: SOWR_TYPE_UINT,            \
+                                                            long: SOWR_TYPE_LONG,                    \
+                                                            unsigned long: SOWR_TYPE_ULONG,          \
+                                                            long long: SOWR_TYPE_LONGLONG,           \
+                                                            unsigned long long: SOWR_TYPE_ULONGLONG, \
+                                                            float: SOWR_TYPE_FLOAT,                  \
+                                                            double: SOWR_TYPE_DOUBLE,                \
+                                                            long double: SOWR_TYPE_LDOUBLE,          \
+                                                            char *: SOWR_TYPE_STRING,                \
+                                                            void *: SOWR_TYPE_VOID_PTR,              \
+                                                            default: SOWR_TYPE_UNKNOWN               \
+                                                         ),                                          \
+                                    .data = _Generic((var),                                                                               \
+                                                        float: (sowr_GenericTypeData){ .as_float = SOWR_TO_WIDER_IF_PTR((var)) },         \
+                                                        double: (sowr_GenericTypeData){ .as_double = SOWR_TO_WIDER_IF_PTR((var)) },       \
+                                                        long double: (sowr_GenericTypeData){ .as_ldouble = SOWR_TO_WIDER_IF_PTR((var)) }, \
+                                                        default: (sowr_GenericTypeData){ .unknown = SOWR_TO_WIDER_IF_PTR((var)) }         \
+                                                    )                                                                                     \
                                }
 
 #endif // !SOWR_LIB_TYPE_GENERIC_H
