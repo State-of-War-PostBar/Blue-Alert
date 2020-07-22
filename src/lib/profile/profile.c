@@ -52,9 +52,9 @@ void
 sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_line )
 {
 #ifdef SOWR_BUILD_DEBUG
-    static thread_local double elapsed;
-    static thread_local bool first_called = true;
-    static thread_local int start_line;
+    thread_local static double elapsed;
+    thread_local static bool first_called = true;
+    thread_local static int start_line;
 
     #ifdef SOWR_TARGET_WINDOWS
         static thread_local LARGE_INTEGER start, stop;
@@ -71,7 +71,7 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
             SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #else
-        static thread_local sowr_PosixTimeVal start, stop;
+        thread_local static sowr_PosixTimeVal start, stop;
 
         if (first_called)
         {
