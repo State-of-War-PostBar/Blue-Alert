@@ -13,6 +13,7 @@ There are certain characters you may not use for identifiers (except some for th
 |Character|Usage|
 |:-:|:-:|
 |=|Assignment|
+|.|Sublayer mark|
 |[|Block identifier left|
 |]|Block identifier right|
 |"|_See **raw string**_|
@@ -24,7 +25,7 @@ There are certain characters you may not use for identifiers (except some for th
 
 ## Escape characters
 
-do not exist.
+Do not exist.
 
 ## Comments
 
@@ -32,6 +33,7 @@ do not exist.
     // This is also a comment
 
 Use # or // to comment. See below if you want to use these characters as values.
+Comments last for a line. There is no multiline comment.
 
 ## Flags
 
@@ -59,6 +61,11 @@ Sublayers are provided.
     world.seed = 12c329dd19f
     world.seed.use = less
 
+Do not use names like
+
+    world.gen... = 13492fj
+    .f4nvv.riv
+
 ## Blocks
 
 A support for sublayers, helps gathering.
@@ -83,10 +90,17 @@ If you want to end a region of a block to enter global field again, use
 
     []
 
+Spaces are not allowed in block names. E.g.
+
+    [building 321]
+
+Everything after g and before [ will be discarded.
+
 ## Raw Strings
 
 Use `"` to group a raw string. Anything, including line separators and comment characters will be
 treated as part of the raw string.
+_You cannot use `"` itself as a part of some value._
 
     speech = "yoU kNow i aLwaYs wA
     n //0---------251--14
@@ -98,7 +112,6 @@ treated as part of the raw string.
 
 If comment characters and `"` appear in the same line, the former one will override the latter one.  
 _Line separators will not be parsed as spaces; lines are simply connected._  
-_You cannot use `"` itself as a part of some value._
 
     talk = "He said: "I want that.""
 
@@ -116,4 +129,3 @@ And,
 will results in trash (the last `"` is unresolved) unless there's another `"` below it.  
 If the starting `"` reaches all the way to the end of file, everything inside the scope of the
 `"` will be discarded.  
-Empty raw strings are effectively spaces.
