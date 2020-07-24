@@ -168,6 +168,16 @@ sowr_File_ReadContent( sowr_FileDescriptor file, void *buffer, size_t sz );
 bool
 sowr_File_WriteContent( sowr_FileDescriptor file, const void *buffer, size_t sz );
 
+///
+/// \brief Read file content
+///
+/// Read bytes content from a file path directly.
+///
+/// \param path Path of the file to read
+///
+/// \return The byte array of the file if reading successful, or NULL otherwise.<BR />
+/// This array must be freed with \a sowr_HeapFree().
+///
 char *
 sowr_FileEx_ReadContent( const char *path );
 

@@ -237,7 +237,7 @@ sowr_FileEx_ReadContent( const char *path )
     char *content = sowr_HeapAlloc(sz + 1ULL);
     sowr_File_ReadContent(file, content, sz);
     content[sz] = '\0';
-    sowr_File_Close(file);
 
+    sowr_File_Close(file);
     return content;
 }
