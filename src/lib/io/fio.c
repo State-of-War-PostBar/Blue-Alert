@@ -86,7 +86,7 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
 #ifdef SOWR_TARGET_WINDOWS
             CreateDirectoryA(str.ptr, NULL);
 #else
-            _mkdir(str.ptr);
+            mkdir(str.ptr, S_IRWXU);
 #endif
             if (path_r == last_dir)
                 break;
@@ -129,7 +129,7 @@ sowr_File_Mkdir( const char *path )
 #ifdef SOWR_TARGET_WINDOWS
         CreateDirectoryA(str.ptr, NULL);
 #else
-        mkdir(str.ptr);
+        mkdir(str.ptr, S_IRWXU);
 #endif
         sowr_String_PushC(&str, '/');
         path++;

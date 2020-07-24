@@ -211,7 +211,7 @@ sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func )
         return;
 
     for (size_t i = 0ULL; i < map->buckets_count; i++)
-        sowr_LinkedList_Walk(sowr_Vector_PtrAt(&(map->buckets), i), func);
+        sowr_BinaryTree_Walk(sowr_Vector_PtrAt(&(map->buckets), i), func);
 }
 
 void
