@@ -1,9 +1,9 @@
 # SWM Format
 
-SWM stands for _**S**tate of **W**ar: Remastered **M**arking_.  
-It's an easy-to-use one-to-one string data format.  
+SWM stands for _**S**tate of **W**ar: Remastered **M**arking Language_.  
+It's an easy-to-use string data format.  
 I said it's easy-to-use because it is easy-to-use(?)...  
-SWM is parsed in a top-to-bottom case, latter values will override former ones.
+SWM is parsed in a top-to-bottom basis, latter values will override former ones.
 
 ## Identifier rules
 
@@ -13,7 +13,7 @@ There are certain characters you may not use for identifiers (except some for th
 |Character|Usage|
 |:-:|:-:|
 |=|Assignment|
-|.|Sublayer mark|
+|.|_See **Pairs**_|
 |[|Block identifier left|
 |]|Block identifier right|
 |"|_See **raw string**_|
@@ -21,6 +21,9 @@ There are certain characters you may not use for identifiers (except some for th
 |$|Reserved for future use|
 |<|Reserved for future use|
 |>|Reserved for future use|
+|{|Reserved for future use|
+|}|Reserved for future use|
+|@|Reserved for future use|
 |&#124;|Reserved for future use|
 
 ## Escape characters
@@ -63,8 +66,12 @@ Sublayers are provided.
 
 Do not use names like
 
-    world.gen... = 13492fj
+    world.gen... = ..13.49.2fj..
     .f4nvv.riv
+
+Sublayer mark in values of pair is allowed.
+
+    ip_address = 192.168.233.233
 
 ## Blocks
 
@@ -90,17 +97,11 @@ If you want to end a region of a block to enter global field again, use
 
     []
 
-Spaces are not allowed in block names. E.g.
-
-    [building 321]
-
-Everything after g and before [ will be discarded.
-
 ## Raw Strings
 
+_You cannot use `"` itself as a part of some value._  
 Use `"` to group a raw string. Anything, including line separators and comment characters will be
 treated as part of the raw string.
-_You cannot use `"` itself as a part of some value._
 
     speech = "yoU kNow i aLwaYs wA
     n //0---------251--14
@@ -126,6 +127,4 @@ And,
 
     saying = "I think we actually can use " as value for some point."
 
-will results in trash (the last `"` is unresolved) unless there's another `"` below it.  
-If the starting `"` reaches all the way to the end of file, everything inside the scope of the
-`"` will be discarded.  
+will results in trash (the last `"` is unresolved) unless there's another `"` below it.
