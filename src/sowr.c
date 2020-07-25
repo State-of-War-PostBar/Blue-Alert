@@ -41,7 +41,7 @@ main( int argc, char *argv[] )
 #endif
     sowr_InitLogger();
     sowr_InitProfiler();
-    SOWR_LOG_INFO("Starting %s %s (%s).", SOWR_PROG_NAME, SOWR_VERSION_STRING, SOWR_BUILD_STRING);
+    SOWR_LOG_INFO("Welcome to %s %s (%s)!", SOWR_PROG_NAME, SOWR_VERSION_STRING, SOWR_BUILD_STRING);
 
     SOWR_LOG_INFO("Bye.");
     sowr_DestroyLogger();

@@ -32,8 +32,8 @@
 #include "../lib/log/log.h"
 #include "../lib/sync/lock.h"
 
-const char *const    SOWR_PROG_ID               = "sowr";
-const char *const    SOWR_PROG_NAME             = "State of War: Remastered";
+const char *const    SOWR_PROG_ID          = "sowr";
+const char *const    SOWR_PROG_NAME        = "State of War: Remastered";
 
 const char *const    SOWR_VERSION_STAGE    = "Indev";
 const unsigned int   SOWR_VERSION_MAJOR    = 0U;
