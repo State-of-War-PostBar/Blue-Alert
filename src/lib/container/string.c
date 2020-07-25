@@ -92,6 +92,22 @@ sowr_String_ExpandUntil( sowr_String *str, size_t new_size )
         sowr_String_Expand(str);
 }
 
+inline
+void
+sowr_String_ExpandUntilOnce( sowr_String *str, size_t new_size )
+{
+    if (!str->capacity)
+    {
+        str->capacity = new_size;
+        str->ptr = sowr_HeapAlloc(sizeof(char) * new_size);
+    }
+    else if (str->capacity < new_size)
+    {
+        str->capacity = new_size;
+        str->ptr = sowr_ReAlloc(new_size, str->ptr);
+    }
+}
+
 void
 sowr_String_ShrinkToFit( sowr_String *str )
 {

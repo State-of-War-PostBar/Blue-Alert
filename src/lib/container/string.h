@@ -86,7 +86,7 @@ sowr_String
 sowr_String_FromS( const char *original );
 
 ///
-/// \brief Expand the string
+/// \brief Expand the string capacity
 ///
 /// Expand the string, usually doubling its capacity unless the length is 0.
 ///
@@ -96,7 +96,7 @@ void
 sowr_String_Expand( sowr_String *str );
 
 ///
-/// \brief Expand the string
+/// \brief Expand the string capacity
 ///
 /// Expand the string until its capacity reaches the set limit.
 ///
@@ -105,6 +105,19 @@ sowr_String_Expand( sowr_String *str );
 ///
 void
 sowr_String_ExpandUntil( sowr_String *str, size_t new_size );
+
+///
+/// \brief Expand the string
+///
+/// Expand the string until its capacity reaches the set limit.<BR />
+/// This function only allocate once instead of possible multiple doubling
+/// by \a sowr_String_ExpandUntil().
+///
+/// \param str String to expand
+/// \param new_size Target size for expanding
+///
+void
+sowr_String_ExpandUntilOnce( sowr_String *str, size_t new_size );
 
 ///
 /// \brief Shrink the string
