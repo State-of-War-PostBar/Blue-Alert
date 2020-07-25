@@ -16,7 +16,7 @@ There are certain characters you may not use for identifiers (except some for th
 |.|_See **Pairs**_|
 |[|Block identifier left|
 |]|Block identifier right|
-|"|_See **raw string**_|
+|"|_See **Raw Strings**_|
 |#|Comment|
 |$|Reserved for future use|
 |<|Reserved for future use|
@@ -35,8 +35,8 @@ Do not exist.
     # This is a comment
     // This is also a comment
 
-Use # or // to comment. See below if you want to use these characters as values.
-Comments last for a line. There is no multiline comment.
+Use # or // to comment. See below if you want to use these characters as values.  
+Comments last for a line. _There is no multiline comment._
 
 ## Flags
 
@@ -69,7 +69,7 @@ Do not use names like
     world.gen... = ..13.49.2fj..
     .f4nvv.riv
 
-Sublayer mark in values of pair is allowed.
+Sublayer mark in value of pairs is allowed.
 
     ip_address = 192.168.233.233
 
@@ -112,7 +112,7 @@ treated as part of the raw string.
     "btw this is a raw string flag"
 
 If comment characters and `"` appear in the same line, the former one will override the latter one.  
-_Line separators will not be parsed as spaces; lines are simply connected._  
+_Line separators will not be parsed as spaces; lines are simply connected._
 
     talk = "He said: "I want that.""
 
