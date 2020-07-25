@@ -35,16 +35,16 @@
 extern const char *const     SOWR_PROG_ID;
 extern const char *const     SOWR_PROG_NAME;
 
-extern const char *const     SOWR_PROG_VERSION_STAGE;
-extern const unsigned int    SOWR_PROG_VERSION_MAJOR;
-extern const unsigned int    SOWR_PROG_VERSION_MINOR;
-extern const unsigned int    SOWR_PROG_VERSION_REVISION;
-extern const char *const     SOWR_PROG_VERSION_STRING;
+extern const char *const     SOWR_VERSION_STAGE;
+extern const unsigned int    SOWR_VERSION_MAJOR;
+extern const unsigned int    SOWR_VERSION_MINOR;
+extern const unsigned int    SOWR_VERSION_REVISION;
+extern const char *const     SOWR_VERSION_STRING;
 
-extern const unsigned int    SOWR_PROG_BUILD_NUMBER;
-extern const char *const     SOWR_PROG_BUILD_STRING;
+extern const unsigned int    SOWR_BUILD_NUMBER;
+extern const char *const     SOWR_BUILD_STRING;
 
-extern const char *const     SOWR_PROG_DEFAULT_ENCODING;
+extern const char *const     SOWR_DEFAULT_ENCODING;
 
 ///
 /// \brief Initialize the logger

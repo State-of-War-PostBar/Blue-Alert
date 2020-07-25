@@ -35,16 +35,16 @@
 const char *const    SOWR_PROG_ID               = "sowr";
 const char *const    SOWR_PROG_NAME             = "State of War: Remastered";
 
-const char *const    SOWR_PROG_VERSION_STAGE    = "Indev";
-const unsigned int   SOWR_PROG_VERSION_MAJOR    = 0U;
-const unsigned int   SOWR_PROG_VERSION_MINOR    = 1U;
-const unsigned int   SOWR_PROG_VERSION_REVISION = 0U;
-const char *const    SOWR_PROG_VERSION_STRING   = "Indev 0.1 rev0";
+const char *const    SOWR_VERSION_STAGE    = "Indev";
+const unsigned int   SOWR_VERSION_MAJOR    = 0U;
+const unsigned int   SOWR_VERSION_MINOR    = 1U;
+const unsigned int   SOWR_VERSION_REVISION = 0U;
+const char *const    SOWR_VERSION_STRING   = "Indev 0.1 rev0";
 
-const unsigned int   SOWR_PROG_BUILD_NUMBER     = 1U;
-const char *const    SOWR_PROG_BUILD_STRING     = "Build 1";
+const unsigned int   SOWR_BUILD_NUMBER     = 1U;
+const char *const    SOWR_BUILD_STRING     = "Build 1";
 
-const char *const    SOWR_PROG_DEFAULT_ENCODING = "utf-8";
+const char *const    SOWR_DEFAULT_ENCODING = "utf-8";
 
 #ifdef SOWR_BUILD_DEBUG
     static const char *const SOWR_LOG_FILE_NAME = "sowr.log";
