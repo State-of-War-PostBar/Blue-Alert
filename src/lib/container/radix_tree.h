@@ -123,7 +123,7 @@ sowr_RadixTree_InsertS( sowr_RadixTree *tree, const sowr_String *index, size_t d
 /// \return The trie node containing data if found, NULL otherwise
 ///
 sowr_RadixTreeNode *
-sowr_RadixTree_Get( sowr_RadixTree *tree, const char *index );
+sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index );
 
 ///
 /// \brief Get an element from radix tree
@@ -136,7 +136,7 @@ sowr_RadixTree_Get( sowr_RadixTree *tree, const char *index );
 /// \return The trie node containing data if found, NULL otherwise
 ///
 sowr_RadixTreeNode *
-sowr_RadixTree_GetS( sowr_RadixTree *tree, const sowr_String *index );
+sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index );
 
 ///
 /// \brief Delete an element from radix tree

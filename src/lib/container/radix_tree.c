@@ -259,7 +259,7 @@ sowr_RadixTree_InsertS( sowr_RadixTree *tree, const sowr_String *index, size_t d
 }
 
 sowr_RadixTreeNode *
-sowr_RadixTree_Get( sowr_RadixTree *tree, const char *index )
+sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
 {
     if (!tree)
         return NULL;
@@ -298,7 +298,7 @@ sowr_RadixTree_Get( sowr_RadixTree *tree, const char *index )
 
 inline
 sowr_RadixTreeNode *
-sowr_RadixTree_GetS( sowr_RadixTree *tree, const sowr_String *index )
+sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index )
 {
     return sowr_RadixTree_Get(tree, index->ptr);
 }
