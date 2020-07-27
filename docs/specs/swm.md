@@ -13,7 +13,6 @@ There are certain characters you may not use for identifiers (except some for th
 |Character|Usage|
 |:-:|:-:|
 |=|Assignment|
-|.|_See **Pairs**_|
 |[|Block identifier left|
 |]|Block identifier right|
 |"|_See **Raw Strings**_|
