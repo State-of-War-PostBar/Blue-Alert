@@ -158,6 +158,38 @@ sowr_String_PushS( sowr_String *str, const char *data )
     str->length += target_len;
 }
 
+void
+sowr_String_PushFrontC( sowr_String *str, char data )
+{
+    sowr_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
+    if (str->length)
+    {
+        memmove(str->ptr + 1ULL, str->ptr, sizeof(char) * (str->length + 1ULL));
+        str->ptr[0] = data;
+    }
+    else
+    {
+        str->ptr[0] = data;
+        str->ptr[1] = '\0';
+    }
+    str->length++;
+}
+
+void
+sowr_String_PushFrontS( sowr_String *str, const char *data )
+{
+    if (!str->length)
+    {
+        sowr_String_PushS(str, data);
+        return;
+    }
+    size_t target_len = strlen(data);
+    sowr_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1ULL));
+    memmove(str->ptr + target_len, str->ptr, sizeof(char) * (str->length + 1ULL));
+    memcpy(str->ptr, data, sizeof(char) * target_len);
+    str->length += target_len;
+}
+
 inline
 void
 sowr_String_Pop( sowr_String *str )

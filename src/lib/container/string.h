@@ -177,6 +177,28 @@ void
 sowr_String_PushS( sowr_String *str, const char *data );
 
 ///
+/// \brief Push a character
+///
+/// Push a character into the front of string.
+///
+/// \param str String
+/// \param data Pushing character
+///
+void
+sowr_String_PushCFront( sowr_String *str, char data );
+
+///
+/// \brief Push a string
+///
+/// Push a string into the front of string.
+///
+/// \param str String
+/// \param data Pushing string (there is ambiguity... lol)
+///
+void
+sowr_String_PushFrontS( sowr_String *str, const char *data );
+
+///
 /// \brief Pop from a string
 ///
 /// Pop a character from the end of string.
