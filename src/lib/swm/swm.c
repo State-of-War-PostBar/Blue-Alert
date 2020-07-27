@@ -171,7 +171,7 @@ sowr_Swm_Load( const char *str )
                 if (state & SOWR_SWM_IN_BLOCK_NAME)
                 {
                     // Weird syntax like [abc.e      fdvnj]
-                    // Everything after e and before [ will be discarded.
+                    // Everything after e and before ] will be discarded.
                     state |= SOWR_SWM_DISCARD;
                     break;
                 }
@@ -216,7 +216,7 @@ sowr_Swm_Load( const char *str )
                 {
                     // Weird syntax like [abc.e     
                     //                      fdvnj]
-                    // Everything after e and before [ will be ignored.
+                    // Everything after e and before ] will be ignored.
                     state |= SOWR_SWM_DISCARD;
                     break;
                 }
