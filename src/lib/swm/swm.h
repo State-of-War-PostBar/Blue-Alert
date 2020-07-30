@@ -92,7 +92,7 @@ sowr_Swm_HasFlag( const sowr_Swm *swm, const char *flag );
 /// Get a value from swm.
 ///
 /// \param swm Swm to check
-/// \param flag Flag to check
+/// \param key Key for retrieving
 ///
 /// \return Value if exists, NULL otherwise
 ///
