@@ -56,7 +56,7 @@ sowr_GetHashI( const char *str )
 
 inline
 sowr_Hash
-sowr_GetHashS( sowr_String *str )
+sowr_GetHashS( const sowr_String *str )
 {
     return sowr_GetHash(str->length, str->ptr);
 }

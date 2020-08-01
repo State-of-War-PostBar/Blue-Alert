@@ -153,6 +153,8 @@ sowr_UC_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
         char ch = (char)cp;
         memcpy(output, &ch, sizeof(char));
     }
+    // Don't ask me why I don't use loops to optimize this,
+    // I encountered some weird bug!!!!
     else if (length == 2ULL)
     {
         char bytes[2] = { 0 };

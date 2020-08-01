@@ -36,7 +36,7 @@
         static LARGE_INTEGER sowr_win_profile_timer_frequency;
     #else
         #include <sys/time.h>
-        typedef struct timeval sowr_PosixTimeVal;
+        typedef struct timeval sowr_PosixTime;
     #endif
 #endif
 
@@ -57,7 +57,7 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
     thread_local static int start_line;
 
     #ifdef SOWR_TARGET_WINDOWS
-        static thread_local LARGE_INTEGER start, stop;
+        thread_local static LARGE_INTEGER start, stop;
 
         if (first_called)
         {
@@ -71,7 +71,7 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
             SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
         }
     #else
-        thread_local static sowr_PosixTimeVal start, stop;
+        thread_local static sowr_PosixTime start, stop;
 
         if (first_called)
         {

@@ -73,6 +73,6 @@ sowr_GetHashI( const char *str );
 /// \return Hashed result
 ///
 sowr_Hash
-sowr_GetHashS( sowr_String *str );
+sowr_GetHashS( const sowr_String *str );
 
 #endif // !SOWR_LIB_HASH_HASH_H
