@@ -221,6 +221,7 @@ void
 sowr_DestroyReadWriteLock( sowr_ReadWriteLock *rwl )
 {
     // Read-write lock does not need to be explicitly destroyed on Windows.
+    // However, you'll still need to deallocate the object yourself.
 #ifdef SOWR_TARGET_POSIX
     pthread_rwlock_destroy(rwl);
 #endif

@@ -155,7 +155,7 @@ typedef union sowr_GenericTypeData
 
 typedef enum sowr_GenericTypeExtraInfo
 {
-    SOWR_GENERIC_INFO_NONE = 0
+    SOWR_GENERIC_INFO_NONE
 } sowr_GenericTypeExtraInfo;
 
 typedef struct sowr_GenericType

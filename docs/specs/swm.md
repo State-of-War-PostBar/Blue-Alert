@@ -17,6 +17,7 @@ There are certain characters you may not use for identifiers (except some for th
 |]|Block identifier right|
 |"|_See **Raw Strings**_|
 |#|Comment|
+|/|Comment|
 |$|Reserved for future use|
 |<|Reserved for future use|
 |>|Reserved for future use|

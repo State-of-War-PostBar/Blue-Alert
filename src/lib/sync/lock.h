@@ -179,7 +179,7 @@ sowr_InitReadWriteLock( sowr_ReadWriteLock *rwl );
 ///
 /// \deprecated It sucks.
 ///
-/// \brief Lock a read-write lock in read mode.
+/// \brief Lock a read-write lock in read mode
 ///
 /// Lock a read-write lock in read mode, waiting infinitely until the acquisition.<BR />
 /// Multiple readers can lock it in read mode an the same time, but no reader or writer
@@ -187,7 +187,7 @@ sowr_InitReadWriteLock( sowr_ReadWriteLock *rwl );
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
-/// \param rwl The read-write lock to be locked.
+/// \param rwl The read-write lock to be locked
 ///
 void
 sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
@@ -195,14 +195,14 @@ sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 ///
 /// \deprecated It sucks.
 ///
-/// \brief Lock a read-write lock in write mode.
+/// \brief Lock a read-write lock in write mode
 ///
 /// Lock a read-write lock in write mode, waiting infinitely until the acquisition.<BR />
 /// No other reader or writer can obtain the read-write lock after the writer acquired it.
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
-/// \param rwl The read-write lock to be locked.
+/// \param rwl The read-write lock to be locked
 ///
 void
 sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
@@ -210,7 +210,7 @@ sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 ///
 /// \deprecated It sucks.
 ///
-/// \brief Lock a read-write lock in read mode.
+/// \brief Lock a read-write lock in read mode
 ///
 /// Lock a read-write lock in read mode, if the acquisition fails do nothing.<BR />
 /// Multiple readers can lock it in read mode an the same time, but no reader or writer
@@ -218,7 +218,7 @@ sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
-/// \param rwl The read-write lock to be locked.
+/// \param rwl The read-write lock to be locked
 ///
 void
 sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
@@ -226,14 +226,14 @@ sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 ///
 /// \deprecated It sucks.
 ///
-/// \brief Lock a read-write lock in write mode.
+/// \brief Lock a read-write lock in write mode
 ///
 /// Lock a read-write lock in write mode, if the acquisition fails continue immediately.<BR />
 /// No other reader or writer can obtain the read-write lock after the writer acquired it.
 ///
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
-/// \param rwl The read-write lock to be locked.
+/// \param rwl The read-write lock to be locked
 ///
 void
 sowr_TryLockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
@@ -248,7 +248,7 @@ sowr_TryLockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 /// \note On Posix, it has the same effect as \a sowr_UnlockReadWriteLockWrite() since you don't have to distinguish them when unlocking.
 ///
-/// \param rwl The read-write lock to be unlocked.
+/// \param rwl The read-write lock to be unlocked
 ///
 void
 sowr_UnlockReadWriteLockRead( sowr_ReadWriteLock *rwl );
@@ -263,7 +263,7 @@ sowr_UnlockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 /// \note On Windows, it has some weird compatibility because of SysWOW64. Try not to use it.
 /// \note On Posix, it has the same effect as \a sowr_UnlockReadWriteLockRead() since you don't have to distinguish them when unlocking.
 ///
-/// \param rwl The read-write lock to be unlocked.
+/// \param rwl The read-write lock to be unlocked
 ///
 void
 sowr_UnlockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
@@ -277,7 +277,7 @@ sowr_UnlockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 ///
 /// \note On Windows, this function does nothing. Also it has some weird compatibility because of SysWOW64. Try not to use it.
 ///
-/// \param rwl The read-write lock to be destroyed.
+/// \param rwl The read-write lock to be destroyed
 ///
 void
 sowr_DestroyReadWriteLock( sowr_ReadWriteLock *rwl );

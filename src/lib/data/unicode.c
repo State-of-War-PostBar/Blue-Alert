@@ -42,7 +42,7 @@ sowr_UC_CountUTF8CodePoints( const char *str )
 sowr_UTF8Sequence
 sowr_UC_NextUTF8Sequence( const char *str )
 {
-    size_t length = 0ULL;;
+    size_t length = 0ULL;
     char ch = 0;
     if (str && (ch = *str))
     {
@@ -53,7 +53,7 @@ sowr_UC_NextUTF8Sequence( const char *str )
         else
         {
             ch = (*str) & ~0x1f;
-            // TODO Checking the first 1... bits seems unnecessary, change later if bugs occur.
+            // Checking the first 1... bits seems unnecessary, change later if bugs occur.
             if (/* ch & 0xc0 && */ ~(ch & ~0xdf) & 0x20)
                 // Matches 110xxxxx byte head.
                 length = 2ULL;

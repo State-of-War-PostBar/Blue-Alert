@@ -44,7 +44,7 @@
     #include <sys/stat.h>
     #include <unistd.h>
 
-    typedef int         sowr_FileDescriptor;
+    typedef int sowr_FileDescriptor;
 
     #define SOWR_INVALID_FILE_DESCRIPTOR -1
 #endif
@@ -110,7 +110,7 @@ sowr_File_Close( sowr_FileDescriptor file );
 /// \brief Make directories
 ///
 /// Make directories.<BR />
-/// This function make directories recursively.
+/// This function makes directories recursively.
 ///
 /// \param path Path of the directories
 ///
@@ -176,7 +176,7 @@ sowr_File_WriteContent( sowr_FileDescriptor file, const void *buffer, size_t sz 
 /// \param path Path of the file to read
 ///
 /// \return The byte array of the file if reading successful, or NULL otherwise.<BR />
-/// This array must be freed with \a sowr_HeapFree().
+/// This array must be freed with \a sowr_HeapFree()
 ///
 char *
 sowr_FileEx_ReadContent( const char *path );

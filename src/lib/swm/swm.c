@@ -40,6 +40,7 @@ sowr_FreeSwmData( void *data )
 }
 
 static
+inline
 sowr_SwmData
 sowr_SwmData_Gen( void )
 {
@@ -51,7 +52,7 @@ sowr_SwmData_Gen( void )
 
 typedef enum sowr_Swm_ParsingState
 {
-    /// Ready to read next token.
+    /// Ready to read a token.
     SOWR_SWM_READY            = 1,
     /// Currently in a token.
     SOWR_SWM_IN_TOKEN         = 1 << 1,
@@ -359,8 +360,7 @@ sowr_Swm_Load( const char *str )
                 }
                 if (state & (SOWR_SWM_IN_BLOCK_NAME | SOWR_SWM_DISCARD))
                 {
-                    // End of block
-                    // Record block name
+                    // End of block, record block name.
                     sowr_String_Clear(&buffer_block_name);
                     if (token.length)
                     {
@@ -440,6 +440,7 @@ sowr_Swm_Load( const char *str )
                     sowr_String_PushC(&token, ch);
                     break;
                 }
+                // Reserved characters, ignored.
                 break;
             }
             default:
@@ -454,6 +455,7 @@ sowr_Swm_Load( const char *str )
                 }
                 if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
                 {
+                    // Start the assignment.
                     state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
                     state |= SOWR_SWM_ASSIGNING;
                     sowr_String_PushC(&token, ch);
