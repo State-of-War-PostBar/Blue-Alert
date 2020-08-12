@@ -4,6 +4,8 @@ A personal experimenting project.
 
 ## Used libraries
 
+- [Glad](https://github.com/Dav1dde/glad)
+- [Glfw](https://www.glfw.org)
 - [Log.c](https://github.com/rxi/log.c)
 
 ---
