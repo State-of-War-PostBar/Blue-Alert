@@ -31,7 +31,7 @@
 #define SOWR_PCH_H
 
 #if defined __cplusplus || __STDC_VERSION__ < 201710L
-    #error "wtf"
+    #error "This is a C++ compiler or your compiler does not support C18!"
 #endif
 
 #if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
