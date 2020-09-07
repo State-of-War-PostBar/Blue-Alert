@@ -53,7 +53,7 @@ sowr_UC_NextUTF8Sequence( const char *str )
         else
         {
             ch = (*str) & ~0x1f;
-            // Checking the first 1... bits seems unnecessary, change later if bugs occur.
+            // Checking the first 1... bit seems unnecessary, change later if bugs occur.
             if (/* ch & 0xc0 && */ ~(ch & ~0xdf) & 0x20)
                 // Matches 110xxxxx byte head.
                 length = 2ULL;

@@ -93,9 +93,9 @@ size_t
 sowr_UC_UTF8LengthOfCodePoint( sowr_Unicode cp );
 
 ///
-/// \brief Encode a unicode code point
+/// \brief Encode an unicode code point
 ///
-/// Encode a unicode code point to an utf-8 sequence.
+/// Encode an unicode code point to an utf-8 sequence.
 ///
 /// \param cp Code point
 /// \param output Buffer for output
