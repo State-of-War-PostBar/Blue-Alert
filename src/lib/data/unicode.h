@@ -34,13 +34,20 @@
 
 #include "../container/vector.h"
 
+typedef uint32_t sowr_Unicode;
+
 typedef struct sowr_UTF8Sequence
 {
     size_t length;
     const char *ptr;
 } sowr_UTF8Sequence;
 
-typedef uint32_t sowr_Unicode;
+typedef struct sowr_UTF16Sequence
+{
+    size_t length;
+    const char *ptr;
+    bool terminator;
+} sowr_UTF16Sequence;
 
 ///
 /// \brief Count utf-8 code points
@@ -53,7 +60,20 @@ typedef uint32_t sowr_Unicode;
 /// \return Number of unicode code points
 ///
 size_t
-sowr_UC_CountUTF8CodePoints( const char *str );
+sowr_Unicode_CountUTF8CodePoints( const char *str );
+
+///
+/// \brief Count utf-16 code points
+///
+/// Count the total number of unicode code points in the utf-16 string.<BR />
+/// <I>The string is assumed to be properly utf-16 encoded.</I>
+///
+/// \param str String to count
+///
+/// \return Number of unicode code points
+///
+size_t
+sowr_Unicode_CountUTF16CodePoints( const char *str );
 
 ///
 /// \brief Get the next utf-8 sequence
@@ -66,19 +86,44 @@ sowr_UC_CountUTF8CodePoints( const char *str );
 /// \return Utf-8 sequence information
 ///
 sowr_UTF8Sequence
-sowr_UC_NextUTF8Sequence( const char *str );
+sowr_Unicode_NextUTF8Sequence( const char *str );
+
+///
+/// \brief Get the next utf-16 sequence
+///
+/// Get the next utf-16 sequence in the string.<BR />
+/// <I>The string is assumed to be properly utf-16 encoded.</I>
+///
+/// \param str String
+///
+/// \return Utf-16 sequence information
+///
+sowr_UTF16Sequence
+sowr_Unicode_NextUTF16Sequence( const char *str );
 
 ///
 /// \brief Decode a utf-8 sequence
 ///
-/// Decode the utf-8 sequence into an utf-8 code point.
+/// Decode the utf-8 sequence into an unicode code point.
 ///
 /// \param seq Utf-8 sequence to decode
 ///
 /// \return Unicode code point of the sequence
 ///
 sowr_Unicode
-sowr_UC_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq );
+sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq );
+
+///
+/// \brief Decode a utf-16 sequence
+///
+/// Decode the utf-16 sequence into an unicode code point.
+///
+/// \param seq Utf-16 sequence to decode
+///
+/// \return Unicode code point of the sequence
+///
+sowr_Unicode
+sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq );
 
 ///
 /// \brief Length of unicode code point
@@ -90,7 +135,19 @@ sowr_UC_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq );
 /// \return Length of utf-8 sequence
 ///
 size_t
-sowr_UC_UTF8LengthOfCodePoint( sowr_Unicode cp );
+sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp );
+
+///
+/// \brief Length of unicode code point
+///
+/// Get the length of the utf-16 sequence of the unicode code point.
+///
+/// \param cp Code point
+///
+/// \return Length of utf-16 sequence
+///
+size_t
+sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp );
 
 ///
 /// \brief Encode an unicode code point
@@ -101,7 +158,18 @@ sowr_UC_UTF8LengthOfCodePoint( sowr_Unicode cp );
 /// \param output Buffer for output
 ///
 void
-sowr_UC_EncodeCodePointUTF8( sowr_Unicode cp, char *output );
+sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output );
+
+///
+/// \brief Encode an unicode code point
+///
+/// Encode an unicode code point to an utf-16 sequence.
+///
+/// \param cp Code point
+/// \param output Buffer for output
+///
+void
+sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output );
 
 ///
 /// \brief Decode an utf-8 string
@@ -113,6 +181,18 @@ sowr_UC_EncodeCodePointUTF8( sowr_Unicode cp, char *output );
 /// \param output Vector for output, it should be of sowr_Unicode type
 ///
 void
-sowr_UC_DecodeUTF8String( const char *str, sowr_Vector *output );
+sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output );
+
+///
+/// \brief Decode an utf-16 string
+///
+/// Decode an utf-16 string into a vector of unicode code points.<BR />
+/// <I>The string is assumed to be properly utf-16 encoded.</I>
+///
+/// \param str Utf-16 string
+/// \param output Vector for output, it should be of sowr_Unicode type
+///
+void
+sowr_Unicode_DecodeUTF16String( const char *str, sowr_Vector *output );
 
 #endif // !SOWR_LIB_DATA_UNICODE_H

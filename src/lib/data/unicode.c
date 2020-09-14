@@ -31,7 +31,7 @@
 
 inline
 size_t
-sowr_UC_CountUTF8CodePoints( const char *str )
+sowr_Unicode_CountUTF8CodePoints( const char *str )
 {
     size_t length = 0ULL;
     while (*str)
@@ -39,8 +39,23 @@ sowr_UC_CountUTF8CodePoints( const char *str )
     return length; 
 }
 
+inline
+size_t
+sowr_Unicode_CountUTF16CodePoints( const char *str )
+{
+    size_t length = 0ULL;
+    sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
+    while (!seq.terminator)
+    {
+        length++;
+        str += seq.length;
+        seq = sowr_Unicode_NextUTF16Sequence(str);
+    }
+    return length;
+}
+
 sowr_UTF8Sequence
-sowr_UC_NextUTF8Sequence( const char *str )
+sowr_Unicode_NextUTF8Sequence( const char *str )
 {
     size_t length = 0ULL;
     char ch = 0;
@@ -77,8 +92,33 @@ sowr_UC_NextUTF8Sequence( const char *str )
     };
 }
 
+sowr_UTF16Sequence
+sowr_Unicode_NextUTF16Sequence( const char *str )
+{
+    uint16_t *first_two = (uint16_t *)str;
+
+    if (*first_two <= 0xd7ff || (*first_two >= 0xe000 && *first_two <= 0xffff))
+    {
+        // Two bytes utf-16
+        return (sowr_UTF16Sequence)
+        {
+            .length = 2ULL,
+            .ptr = str,
+            .terminator = (!*first_two)
+        };
+    }
+    else
+        // Four bytes utf-16
+        return (sowr_UTF16Sequence)
+        {
+            .length = 4ULL,
+            .ptr = str,
+            .terminator = false
+        };
+}
+
 sowr_Unicode
-sowr_UC_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
+sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
 {
     if (!seq || !seq->ptr)
         return 0U;
@@ -86,7 +126,7 @@ sowr_UC_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     sowr_Unicode code = 0U;
     if (seq->length == 1ULL)
         code = *(seq->ptr);
-    // Don't ask me why I don't use loops to optimize this,
+    // Don't ask me why I don't use loops or pointers to optimize this,
     // I encountered some weird bug!!!!
     else if (seq->length == 2ULL)
     {
@@ -128,32 +168,60 @@ sowr_UC_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     return code;
 }
 
+sowr_Unicode
+sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq )
+{
+    if (!seq || !seq->ptr)
+        return 0U;
+
+    sowr_Unicode code = 0U;
+    if (seq->length == 2ULL)
+    {
+        uint16_t *bytes = (uint16_t *)(seq->ptr);
+        code += *bytes;
+    }
+    else
+    {
+        uint16_t *first_two = (uint16_t *)(seq->ptr), *last_two = (uint16_t *)(seq->ptr + 2ULL);
+        code = ((((*first_two) & 0x03ff) << 10) | ((*last_two) & 0x03ff)) + 0x10000;
+    }
+
+    return code;
+}
+
 inline
 size_t
-sowr_UC_UTF8LengthOfCodePoint( sowr_Unicode cp )
+sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp )
 {
-    if (cp < 0x7fU)
+    if (cp < 0x7f)
         return 1ULL;
-    else if (cp < 0x7ffU)
+    else if (cp < 0x7ff)
         return 2ULL;
-    else if (cp <= 0xffffU)
+    else if (cp <= 0xffff)
         return 3ULL;
     else
         return 4ULL;
 }
 
-void
-sowr_UC_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
+size_t
+sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp )
 {
-    size_t length = sowr_UC_UTF8LengthOfCodePoint(cp);
-    if (!length)
-        return;
-    else if (length == 1ULL)
+    if (cp <= 0xffff)
+        return 2ULL;
+    else
+        return 4ULL;
+}
+
+void
+sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
+{
+    size_t length = sowr_Unicode_UTF8LengthOfCodePoint(cp);
+    if (length == 1ULL)
     {
         char ch = (char)cp;
         memcpy(output, &ch, sizeof(char));
     }
-    // Don't ask me why I don't use loops to optimize this,
+    // Don't ask me why I don't use loops or pointers to optimize this,
     // I encountered some weird bug!!!!
     else if (length == 2ULL)
     {
@@ -182,15 +250,50 @@ sowr_UC_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
 }
 
 void
-sowr_UC_DecodeUTF8String( const char *str, sowr_Vector *output )
+sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output )
 {
-    sowr_UTF8Sequence seq = sowr_UC_NextUTF8Sequence(str);
+    size_t length = sowr_Unicode_UTF16LengthOfCodePoint(cp);
+    if (length == 2ULL)
+    {
+        uint16_t code = cp;
+        memcpy(output, &code, sizeof(char) * 2ULL);
+    }
+    else
+    {
+        cp -= 0x10000U;
+        uint16_t first_two = 0U, last_two = 0U;
+        first_two = (cp >> 10) | 0xd800;           // First 10 bits
+        last_two = (cp & 0x3ff) | 0xdc00;          // Last 10 bits
+        memcpy(output, &first_two, sizeof(char) * 2ULL);
+        memcpy(output + 2ULL, &last_two, sizeof(char) * 2ULL);
+    }
+}
+
+void
+sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output )
+{
+    sowr_UTF8Sequence seq = sowr_Unicode_NextUTF8Sequence(str);
     while (seq.length)
     {
-        sowr_Unicode cp = sowr_UC_DecodeUTF8Sequence(&seq);
+        sowr_Unicode cp = sowr_Unicode_DecodeUTF8Sequence(&seq);
         sowr_Vector_Push(output, &cp);
         str += seq.length;
-        seq = sowr_UC_NextUTF8Sequence(str);
+        seq = sowr_Unicode_NextUTF8Sequence(str);
+    }
+    sowr_Unicode c_0 = '\0';
+    sowr_Vector_Push(output, &c_0);
+}
+
+void
+sowr_Unicode_DecodeUTF16String( const char *str, sowr_Vector *output )
+{
+    sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
+    while (!seq.terminator)
+    {
+        sowr_Unicode cp = sowr_Unicode_DecodeUTF16Sequence(&seq);
+        sowr_Vector_Push(output, &cp);
+        str += seq.length;
+        seq = sowr_Unicode_NextUTF16Sequence(str);
     }
     sowr_Unicode c_0 = '\0';
     sowr_Vector_Push(output, &c_0);
