@@ -7,6 +7,7 @@ A personal experimenting project.
 - [Glad](https://github.com/Dav1dde/glad)
 - [Glfw](https://www.glfw.org)
 - [Log.c](https://github.com/rxi/log.c)
+- [STB](https://github.com/nothings/stb)
 
 ---
 
