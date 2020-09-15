@@ -34,25 +34,6 @@
     #error "This is a C++ compiler or your compiler does not support C18!"
 #endif
 
-#if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
-    #define SOWR_TARGET_WINDOWS
-#elif defined __MACH__ && defined __APPLE__
-    #define SOWR_TARGET_MACOS
-    #define SOWR_TARGET_POSIX
-#else
-    #define SOWR_TARGET_POSIX
-#endif
-
-#ifdef _DEBUG
-    #define SOWR_BUILD_DEBUG
-#else
-    #define SOWR_BUILD_RELEASE
-#endif
-
-#if -1 >> 1 == -1
-    #define SOWR_ARCH_RSHIFT_RESERVE_SIGN
-#endif
-
 #include <assert.h>
 #include <complex.h>
 #include <ctype.h>
@@ -86,6 +67,25 @@
 #include <uchar.h>
 #include <wchar.h>
 #include <wctype.h>
+
+#if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
+    #define SOWR_TARGET_WINDOWS
+#elif defined __MACH__ && defined __APPLE__
+    #define SOWR_TARGET_MACOS
+    #define SOWR_TARGET_POSIX
+#else
+    #define SOWR_TARGET_POSIX
+#endif
+
+#ifdef _DEBUG
+    #define SOWR_BUILD_DEBUG
+#else
+    #define SOWR_BUILD_RELEASE
+#endif
+
+#if -1 >> 1 == -1
+    #define SOWR_ARCH_RSHIFT_RESERVE_SIGN
+#endif
 
 #ifdef SOWR_TARGET_WINDOWS
     #include <windows.h>

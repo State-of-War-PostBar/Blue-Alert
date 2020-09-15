@@ -219,7 +219,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
     if (length == 1ULL)
     {
         char ch = (char)cp;
-        memcpy(output, &ch, sizeof(char));
+        memcpy(output, &ch, sizeof(uint8_t));
     }
     // Don't ask me why I don't use loops or pointers to optimize this,
     // I encountered some weird bug!!!!
@@ -228,7 +228,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
         char bytes[2] = { 0 };
         bytes[0] = (cp >> 6) | 0xc0;
         bytes[1] = (cp & ~0xc0) | 0x80;
-        memcpy(output, bytes, sizeof(char) * 2ULL);
+        memcpy(output, bytes, sizeof(uint16_t));
     }
     else if (length == 3ULL)
     {
@@ -236,7 +236,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
         bytes[0] = (cp >> 12) | 0xe0;
         bytes[1] = ((cp >> 6) & ~0xc0) | 0x80;
         bytes[2] = (cp & ~0xc0) | 0x80;
-        memcpy(output, bytes, sizeof(char) * 3ULL);
+        memcpy(output, bytes, sizeof(uint16_t) + sizeof(uint8_t));
     }
     else
     {
@@ -245,7 +245,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
         bytes[1] = ((cp >> 12) & ~0xc0) | 0x80;
         bytes[2] = ((cp >> 6) & ~0xc0) | 0x80;
         bytes[3] = (cp & ~0xc0) | 0x80;
-        memcpy(output, bytes, sizeof(char) * 4ULL);
+        memcpy(output, bytes, sizeof(uint32_t));
     }
 }
 
@@ -256,7 +256,7 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output )
     if (length == 2ULL)
     {
         uint16_t code = cp;
-        memcpy(output, &code, sizeof(char) * 2ULL);
+        memcpy(output, &code, sizeof(uint16_t));
     }
     else
     {
@@ -264,8 +264,8 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output )
         uint16_t first_two = 0U, last_two = 0U;
         first_two = (cp >> 10) | 0xd800;           // First 10 bits
         last_two = (cp & 0x3ff) | 0xdc00;          // Last 10 bits
-        memcpy(output, &first_two, sizeof(char) * 2ULL);
-        memcpy(output + 2ULL, &last_two, sizeof(char) * 2ULL);
+        memcpy(output, &first_two, sizeof(uint16_t));
+        memcpy(output + sizeof(uint16_t), &last_two, sizeof(uint16_t));
     }
 }
 
