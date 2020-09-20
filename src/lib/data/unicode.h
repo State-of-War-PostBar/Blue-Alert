@@ -172,6 +172,28 @@ void
 sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output );
 
 ///
+/// \brief Swap endianness of utf-16
+///
+/// Swap little-endian utf-16 string to big-endian.
+/// <I>The string is assumed to be properly utf-16 little-endian encoded.</I>
+///
+/// \param data Utf-16 string
+///
+void
+sowr_Unicode_UTF16LE2BE( char *data );
+
+///
+/// \brief Swap endianness of utf-16
+///
+/// Swap big-endian utf-16 string to little-endian.
+/// <I>The string is assumed to be properly utf-16 big-endian encoded.</I>
+///
+/// \param data Utf-16 string
+///
+void
+sowr_Unicode_UTF16BE2LE( char *data );
+
+///
 /// \brief Decode an utf-8 string
 ///
 /// Decode an utf-8 string into a vector of unicode code points.<BR />

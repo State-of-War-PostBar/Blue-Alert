@@ -29,6 +29,8 @@
 
 #include "unicode.h"
 
+#include "byte_order.h"
+
 inline
 size_t
 sowr_Unicode_CountUTF8CodePoints( const char *str )
@@ -266,6 +268,36 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output )
         last_two = (cp & 0x3ff) | 0xdc00;          // Last 10 bits
         memcpy(output, &first_two, sizeof(uint16_t));
         memcpy(output + sizeof(uint16_t), &last_two, sizeof(uint16_t));
+    }
+}
+
+void
+sowr_Unicode_UTF16LE2BE( char *data )
+{
+    uint16_t bytes = 0U;
+    while (true)
+    {
+        bytes += *((uint8_t *)(data + sizeof(uint8_t)));
+        bytes <<= 8;
+        bytes += *((uint8_t *)data);
+        if (!bytes)
+            break;
+        sowr_SwapEndian(sizeof(uint16_t), data);
+        data += sizeof(uint16_t);
+    }
+}
+
+void
+sowr_Unicode_UTF16BE2LE( char *data )
+{
+    uint16_t bytes = 0U;
+    while (true)
+    {
+        bytes += *((uint16_t *)data);
+        if (!bytes)
+            break;
+        sowr_SwapEndian(sizeof(uint16_t), data);
+        data += sizeof(uint16_t);
     }
 }
 
