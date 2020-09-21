@@ -29,7 +29,7 @@
 
 #include "unicode.h"
 
-#include "byte_order.h"
+#include "bytes.h"
 
 inline
 size_t
@@ -184,7 +184,7 @@ sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq )
     }
     else
     {
-        uint16_t *first_two = (uint16_t *)(seq->ptr), *last_two = (uint16_t *)(seq->ptr + 2ULL);
+        uint16_t *first_two = (uint16_t *)(seq->ptr), *last_two = (uint16_t *)(seq->ptr + sizeof(uint16_t));
         code = ((((*first_two) & 0x03ff) << 10) | ((*last_two) & 0x03ff)) + 0x10000;
     }
 

@@ -27,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_DATA_BYTE_ORDER_H
-#define SOWR_LIB_DATA_BYTE_ORDER_H
+#ifndef SOWR_LIB_DATA_BYTES_H
+#define SOWR_LIB_DATA_BYTES_H
 
 #include <pch.h>
 
@@ -79,4 +79,4 @@ sowr_SwapEndian32( uint32_t val );
 uint64_t
 sowr_SwapEndian64( uint64_t val );
 
-#endif // !SOWR_LIB_DATA_BYTE_ORDER_H
+#endif // !SOWR_LIB_DATA_BYTES_H
