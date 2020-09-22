@@ -312,8 +312,6 @@ sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output )
         str += seq.length;
         seq = sowr_Unicode_NextUTF8Sequence(str);
     }
-    sowr_Unicode c_0 = '\0';
-    sowr_Vector_Push(output, &c_0);
 }
 
 void
@@ -327,6 +325,4 @@ sowr_Unicode_DecodeUTF16String( const char *str, sowr_Vector *output )
         str += seq.length;
         seq = sowr_Unicode_NextUTF16Sequence(str);
     }
-    sowr_Unicode c_0 = '\0';
-    sowr_Vector_Push(output, &c_0);
 }
