@@ -245,7 +245,6 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
                 ch = (size_t)*index_r;
                 index = index_r;
                 iter = current;
-                continue;
             }
         }
     }
@@ -264,7 +263,7 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
     if (!tree)
         return NULL;
 
-    sowr_RadixTreeNode *iter = &(tree->head);
+    const sowr_RadixTreeNode *iter = &(tree->head);
     size_t ch = (size_t)*index;
     while (ch)
     {
@@ -272,7 +271,7 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
             return NULL;
         else
         {
-            sowr_RadixTreeNode *current = iter->characters[ch];
+            const sowr_RadixTreeNode *current = iter->characters[ch];
             const char *index_r = index;
             const char *target = current->key.ptr;
 
@@ -280,7 +279,7 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
                 index_r++, target++;
 
             if (!*target && !*index_r)
-                return current;
+                return (sowr_RadixTreeNode *)current;
             else if (!*target && *index_r)
             {
                 ch = (size_t)*index_r;

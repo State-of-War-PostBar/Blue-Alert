@@ -88,7 +88,7 @@ sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count, sowr_HashMapFreeF
 {
     sowr_HashMap *map = sowr_HeapAlloc(sizeof(sowr_HashMap));
 
-    map->buckets = sowr_Vector_CreateS(sizeof(sowr_BinaryTree), sowr_BinaryTree_DestroyS);
+    map->buckets = sowr_Vector_CreateS(sizeof(sowr_BinaryTree), (sowr_VectorFreeFunc)sowr_BinaryTree_DestroyS);
     sowr_Vector_ExpandUntil(&(map->buckets), buckets_count);
     for (size_t i = 0ULL; i < buckets_count; i++)
     {
@@ -108,7 +108,7 @@ sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, sowr_HashMapFree
 {
     sowr_HashMap map;
 
-    map.buckets = sowr_Vector_CreateS(sizeof(sowr_BinaryTree), sowr_BinaryTree_DestroyS);
+    map.buckets = sowr_Vector_CreateS(sizeof(sowr_BinaryTree), (sowr_VectorFreeFunc)sowr_BinaryTree_DestroyS);
     sowr_Vector_ExpandUntil(&(map.buckets), buckets_count);
     for (size_t i = 0ULL; i < buckets_count; i++)
     {
@@ -252,7 +252,7 @@ inline
 void
 sowr_HashMap_Clear( sowr_HashMap *map )
 {
-    sowr_Vector_Walk(&(map->buckets), sowr_BinaryTree_Clear);
+    sowr_Vector_Walk(&(map->buckets), (sowr_VectorWalkFunc)sowr_BinaryTree_Clear);
 }
 
 void
