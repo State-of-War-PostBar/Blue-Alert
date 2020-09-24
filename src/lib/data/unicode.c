@@ -277,7 +277,7 @@ sowr_Unicode_UTF16LE2BE( char *data )
     uint16_t bytes = 0U;
     while (true)
     {
-        bytes += *((uint8_t *)(data + sizeof(uint8_t)));
+        bytes = *((uint8_t *)(data + sizeof(uint8_t)));
         bytes <<= 8;
         bytes += *((uint8_t *)data);
         if (!bytes)
@@ -293,7 +293,7 @@ sowr_Unicode_UTF16BE2LE( char *data )
     uint16_t bytes = 0U;
     while (true)
     {
-        bytes += *((uint16_t *)data);
+        bytes = *((uint16_t *)data);
         if (!bytes)
             break;
         sowr_SwapEndian(sizeof(uint16_t), data);

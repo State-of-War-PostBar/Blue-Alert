@@ -33,11 +33,14 @@ inline
 void
 sowr_SwapEndian( size_t length, char *bytes )
 {
+    // Do not "play smart" like using xor exchange.
+    // It doesn't always help.
+    char byte = 0;
     for (size_t i = 0ULL, j = length - 1ULL; i < j; i++, j--)
     {
-        bytes[i] = bytes[i] ^ bytes[j];
-        bytes[j] = bytes[i] ^ bytes[j];
-        bytes[i] = bytes[i] ^ bytes[j];
+        byte = bytes[i];
+        bytes[i] = bytes[j];
+        bytes[j] = byte;
     }
 }
 
