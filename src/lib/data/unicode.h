@@ -39,13 +39,13 @@ typedef uint32_t sowr_Unicode;
 typedef struct sowr_UTF8Sequence
 {
     size_t length;
-    const char *ptr;
+    const unsigned char *ptr;
 } sowr_UTF8Sequence;
 
 typedef struct sowr_UTF16Sequence
 {
     size_t length;
-    const char *ptr;
+    const unsigned char *ptr;
     bool terminator;
 } sowr_UTF16Sequence;
 
@@ -60,7 +60,7 @@ typedef struct sowr_UTF16Sequence
 /// \return Number of unicode code points
 ///
 size_t
-sowr_Unicode_CountUTF8CodePoints( const char *str );
+sowr_Unicode_CountUTF8CodePoints( const unsigned char *str );
 
 ///
 /// \brief Count utf-16 code points
@@ -73,7 +73,7 @@ sowr_Unicode_CountUTF8CodePoints( const char *str );
 /// \return Number of unicode code points
 ///
 size_t
-sowr_Unicode_CountUTF16CodePoints( const char *str );
+sowr_Unicode_CountUTF16CodePoints( const unsigned char *str );
 
 ///
 /// \brief Get the next utf-8 sequence
@@ -86,7 +86,7 @@ sowr_Unicode_CountUTF16CodePoints( const char *str );
 /// \return Utf-8 sequence information
 ///
 sowr_UTF8Sequence
-sowr_Unicode_NextUTF8Sequence( const char *str );
+sowr_Unicode_NextUTF8Sequence( const unsigned char *str );
 
 ///
 /// \brief Get the next utf-16 sequence
@@ -99,7 +99,7 @@ sowr_Unicode_NextUTF8Sequence( const char *str );
 /// \return Utf-16 sequence information
 ///
 sowr_UTF16Sequence
-sowr_Unicode_NextUTF16Sequence( const char *str );
+sowr_Unicode_NextUTF16Sequence( const unsigned char *str );
 
 ///
 /// \brief Decode a utf-8 sequence
@@ -158,7 +158,7 @@ sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp );
 /// \param output Buffer for output
 ///
 void
-sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output );
+sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output );
 
 ///
 /// \brief Encode an unicode code point
@@ -169,7 +169,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output );
 /// \param output Buffer for output
 ///
 void
-sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output );
+sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output );
 
 ///
 /// \brief Swap endianness of utf-16
@@ -180,7 +180,7 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output );
 /// \param data Utf-16 string
 ///
 void
-sowr_Unicode_UTF16LE2BE( char *data );
+sowr_Unicode_UTF16LE2BE( unsigned char *data );
 
 ///
 /// \brief Swap endianness of utf-16
@@ -191,7 +191,7 @@ sowr_Unicode_UTF16LE2BE( char *data );
 /// \param data Utf-16 string
 ///
 void
-sowr_Unicode_UTF16BE2LE( char *data );
+sowr_Unicode_UTF16BE2LE( unsigned char *data );
 
 ///
 /// \brief Decode an utf-8 string
@@ -203,7 +203,7 @@ sowr_Unicode_UTF16BE2LE( char *data );
 /// \param output Vector for output, it should be of sowr_Unicode type
 ///
 void
-sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output );
+sowr_Unicode_DecodeUTF8String( const unsigned char *str, sowr_Vector *output );
 
 ///
 /// \brief Decode an utf-16 string
@@ -215,6 +215,30 @@ sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output );
 /// \param output Vector for output, it should be of sowr_Unicode type
 ///
 void
-sowr_Unicode_DecodeUTF16String( const char *str, sowr_Vector *output );
+sowr_Unicode_DecodeUTF16String( const unsigned char *str, sowr_Vector *output );
+
+///
+/// \brief Convert utf-8 to utf-16
+///
+/// Convert an utf-8 string to an utf-16 string.<BR />
+/// <I>The string is assumed to be properly utf-8 encoded.</I>
+///
+/// \param str UTF-8 string
+/// \param output Vector for output, it should be of unsigned char type
+///
+void
+sowr_Unicode_UTF8ToUTF16( const unsigned char *str, sowr_Vector *output );
+
+///
+/// \brief Convert utf-16 to utf-8
+///
+/// Convert an utf-16 string to an utf-8 string.<BR />
+/// <I>The string is assumed to be properly utf-16 encoded.</I>
+///
+/// \param str UTF-16 string
+/// \param output Vector for output, it should be of unsigned char type
+///
+void
+sowr_Unicode_UTF16ToUTF8( const unsigned char *str, sowr_Vector *output );
 
 #endif // !SOWR_LIB_DATA_UNICODE_H

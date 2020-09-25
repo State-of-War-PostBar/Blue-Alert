@@ -33,7 +33,7 @@
 
 inline
 size_t
-sowr_Unicode_CountUTF8CodePoints( const char *str )
+sowr_Unicode_CountUTF8CodePoints( const unsigned char *str )
 {
     size_t length = 0ULL;
     while (*str)
@@ -43,7 +43,7 @@ sowr_Unicode_CountUTF8CodePoints( const char *str )
 
 inline
 size_t
-sowr_Unicode_CountUTF16CodePoints( const char *str )
+sowr_Unicode_CountUTF16CodePoints( const unsigned char *str )
 {
     size_t length = 0ULL;
     sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
@@ -57,10 +57,10 @@ sowr_Unicode_CountUTF16CodePoints( const char *str )
 }
 
 sowr_UTF8Sequence
-sowr_Unicode_NextUTF8Sequence( const char *str )
+sowr_Unicode_NextUTF8Sequence( const unsigned char *str )
 {
     size_t length = 0ULL;
-    char ch = 0;
+    unsigned char ch = 0;
     if (str && (ch = *str))
     {
         // We check for the 0 mark after 1... in the byte.
@@ -95,7 +95,7 @@ sowr_Unicode_NextUTF8Sequence( const char *str )
 }
 
 sowr_UTF16Sequence
-sowr_Unicode_NextUTF16Sequence( const char *str )
+sowr_Unicode_NextUTF16Sequence( const unsigned char *str )
 {
     uint16_t *first_two = (uint16_t *)str;
 
@@ -132,7 +132,7 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     // I encountered some weird bug!!!!
     else if (seq->length == 2ULL)
     {
-        char bytes[2] = { 0 };
+        unsigned char bytes[2] = { 0U };
         bytes[0] = *(seq->ptr) & ~0xc0;
         bytes[1] = *(seq->ptr + 1) & ~0x80;
         code += bytes[0];
@@ -141,7 +141,7 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     }
     else if (seq->length == 3ULL)
     {
-        char bytes[3] = { 0 };
+        unsigned char bytes[3] = { 0U };
         bytes[0] = *(seq->ptr) & ~0xe0;
         bytes[1] = *(seq->ptr + 1) & ~0x80;
         bytes[2] = *(seq->ptr + 2) & ~0x80;
@@ -153,7 +153,7 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     }
     else
     {
-        char bytes[4] = { 0 };
+        unsigned char bytes[4] = { 0U };
         bytes[0] = *(seq->ptr) & ~0xf0;
         bytes[1] = *(seq->ptr + 1) & ~0x80;
         bytes[2] = *(seq->ptr + 2) & ~0x80;
@@ -215,26 +215,26 @@ sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp )
 }
 
 void
-sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
+sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output )
 {
     size_t length = sowr_Unicode_UTF8LengthOfCodePoint(cp);
     if (length == 1ULL)
     {
-        char ch = (char)cp;
+        unsigned char ch = (unsigned char)cp;
         memcpy(output, &ch, sizeof(uint8_t));
     }
     // Don't ask me why I don't use loops or pointers to optimize this,
     // I encountered some weird bug!!!!
     else if (length == 2ULL)
     {
-        char bytes[2] = { 0 };
+        unsigned char bytes[2] = { 0U };
         bytes[0] = (cp >> 6) | 0xc0;
         bytes[1] = (cp & ~0xc0) | 0x80;
         memcpy(output, bytes, sizeof(uint16_t));
     }
     else if (length == 3ULL)
     {
-        char bytes[3] = { 0 };
+        unsigned char bytes[3] = { 0U };
         bytes[0] = (cp >> 12) | 0xe0;
         bytes[1] = ((cp >> 6) & ~0xc0) | 0x80;
         bytes[2] = (cp & ~0xc0) | 0x80;
@@ -242,7 +242,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
     }
     else
     {
-        char bytes[4] = { 0 };
+        unsigned char bytes[4] = { 0U };
         bytes[0] = (cp >> 18) | 0xf0;
         bytes[1] = ((cp >> 12) & ~0xc0) | 0x80;
         bytes[2] = ((cp >> 6) & ~0xc0) | 0x80;
@@ -252,7 +252,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, char *output )
 }
 
 void
-sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output )
+sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output )
 {
     size_t length = sowr_Unicode_UTF16LengthOfCodePoint(cp);
     if (length == 2ULL)
@@ -272,7 +272,7 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, char *output )
 }
 
 void
-sowr_Unicode_UTF16LE2BE( char *data )
+sowr_Unicode_UTF16LE2BE( unsigned char *data )
 {
     uint16_t bytes = 0U;
     while (true)
@@ -282,13 +282,13 @@ sowr_Unicode_UTF16LE2BE( char *data )
         bytes += *((uint8_t *)data);
         if (!bytes)
             break;
-        sowr_SwapEndian(sizeof(uint16_t), data);
+        sowr_SwapEndian(sizeof(uint16_t), (char *)data);
         data += sizeof(uint16_t);
     }
 }
 
 void
-sowr_Unicode_UTF16BE2LE( char *data )
+sowr_Unicode_UTF16BE2LE( unsigned char *data )
 {
     uint16_t bytes = 0U;
     while (true)
@@ -296,13 +296,13 @@ sowr_Unicode_UTF16BE2LE( char *data )
         bytes = *((uint16_t *)data);
         if (!bytes)
             break;
-        sowr_SwapEndian(sizeof(uint16_t), data);
+        sowr_SwapEndian(sizeof(uint16_t), (char *)data);
         data += sizeof(uint16_t);
     }
 }
 
 void
-sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output )
+sowr_Unicode_DecodeUTF8String( const unsigned char *str, sowr_Vector *output )
 {
     sowr_UTF8Sequence seq = sowr_Unicode_NextUTF8Sequence(str);
     while (seq.length)
@@ -315,7 +315,7 @@ sowr_Unicode_DecodeUTF8String( const char *str, sowr_Vector *output )
 }
 
 void
-sowr_Unicode_DecodeUTF16String( const char *str, sowr_Vector *output )
+sowr_Unicode_DecodeUTF16String( const unsigned char *str, sowr_Vector *output )
 {
     sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
     while (!seq.terminator)
@@ -325,4 +325,43 @@ sowr_Unicode_DecodeUTF16String( const char *str, sowr_Vector *output )
         str += seq.length;
         seq = sowr_Unicode_NextUTF16Sequence(str);
     }
+}
+
+void
+sowr_Unicode_UTF8ToUTF16( const unsigned char *str, sowr_Vector *output )
+{
+    sowr_UTF8Sequence seq = sowr_Unicode_NextUTF8Sequence(str);
+    unsigned char buffer[4] = { 0 };
+    while (seq.length)
+    {
+        sowr_Unicode cp = sowr_Unicode_DecodeUTF8Sequence(&seq);
+        size_t cp_len = sowr_Unicode_UTF16LengthOfCodePoint(cp);
+        sowr_Unicode_EncodeCodePointUTF16(cp, buffer);
+        for (size_t i = 0ULL; i < cp_len; i++)
+            sowr_Vector_Push(output, buffer + i);
+        str += seq.length;
+        seq = sowr_Unicode_NextUTF8Sequence(str);
+    }
+    unsigned char c_0 = 0U;
+    sowr_Vector_Push(output, &c_0);
+    sowr_Vector_Push(output, &c_0);
+}
+
+void
+sowr_Unicode_UTF16ToUTF8( const unsigned char *str, sowr_Vector *output )
+{
+    sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
+    unsigned char buffer[4] = { 0 };
+    while (!seq.terminator)
+    {
+        sowr_Unicode cp = sowr_Unicode_DecodeUTF16Sequence(&seq);
+        size_t cp_len = sowr_Unicode_UTF8LengthOfCodePoint(cp);
+        sowr_Unicode_EncodeCodePointUTF8(cp, buffer);
+        for (size_t i = 0ULL; i < cp_len; i++)
+            sowr_Vector_Push(output, buffer + i);
+        str += seq.length;
+        seq = sowr_Unicode_NextUTF16Sequence(str);
+    }
+    unsigned char c_0 = 0U;
+    sowr_Vector_Push(output, &c_0);
 }
