@@ -30,33 +30,33 @@
 #include "hash.h"
 
 sowr_Hash
-sowr_GetHash( size_t length, const char *bytes )
+sowr_GetHash( size_t length, const unsigned char *bytes )
 {
     sowr_Hash res = 0ULL;
 
     size_t i = 0ULL;
     for (i = 0ULL; i < length / 4ULL; i++)
-        res += (bytes[i] * bytes[i] >> 5ULL) * 0x1070601686fULL;
+        res += (bytes[i] * bytes[i] >> 5) * 0x1070601686fULL;
     for (i = length / 4ULL; i < length / 2ULL; i++)
-        res += (bytes[i] * bytes[i] << 2ULL) * 0x405236496fULL;
+        res += (bytes[i] * bytes[i] << 2) * 0x405236496fULL;
     for (i = length / 2ULL; i < length * 3ULL / 4ULL; i++)
-        res += (bytes[i] * bytes[i] >> 1ULL) * 0x1966822847fULL;
+        res += (bytes[i] * bytes[i] >> 1) * 0x1966822847fULL;
     for (i = length * 3ULL / 4ULL; i < length; i++)
-        res += (bytes[i] * bytes[i] << 4ULL) * 0x732464301fULL;
+        res += (bytes[i] * bytes[i] << 4) * 0x732464301fULL;
 
     return res;
 }
 
 inline
 sowr_Hash
-sowr_GetHashI( const char *str )
+sowr_GetHashI( const unsigned char *str )
 {
-    return sowr_GetHash(strlen(str), str);
+    return sowr_GetHash(strlen((char *)str), str);
 }
 
 inline
 sowr_Hash
 sowr_GetHashS( const sowr_String *str )
 {
-    return sowr_GetHash(str->length, str->ptr);
+    return sowr_GetHash(str->length, (unsigned char *)(str->ptr));
 }

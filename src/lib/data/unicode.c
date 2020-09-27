@@ -134,7 +134,7 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     {
         unsigned char bytes[2] = { 0U };
         bytes[0] = *(seq->ptr) & ~0xc0;
-        bytes[1] = *(seq->ptr + 1) & ~0x80;
+        bytes[1] = *(seq->ptr + sizeof(uint8_t)) & ~0x80;
         code += bytes[0];
         code <<= 6;
         code += bytes[1];
@@ -143,8 +143,8 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     {
         unsigned char bytes[3] = { 0U };
         bytes[0] = *(seq->ptr) & ~0xe0;
-        bytes[1] = *(seq->ptr + 1) & ~0x80;
-        bytes[2] = *(seq->ptr + 2) & ~0x80;
+        bytes[1] = *(seq->ptr + sizeof(uint8_t)) & ~0x80;
+        bytes[2] = *(seq->ptr + sizeof(uint8_t) * 2ULL) & ~0x80;
         code += bytes[0];
         code <<= 6;
         code += bytes[1];
@@ -155,9 +155,9 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     {
         unsigned char bytes[4] = { 0U };
         bytes[0] = *(seq->ptr) & ~0xf0;
-        bytes[1] = *(seq->ptr + 1) & ~0x80;
-        bytes[2] = *(seq->ptr + 2) & ~0x80;
-        bytes[3] = *(seq->ptr + 3) & ~0x80;
+        bytes[1] = *(seq->ptr + sizeof(uint8_t)) & ~0x80;
+        bytes[2] = *(seq->ptr + sizeof(uint8_t) * 2ULL) & ~0x80;
+        bytes[3] = *(seq->ptr + sizeof(uint8_t) * 3ULL) & ~0x80;
         code += bytes[0];
         code <<= 6;
         code += bytes[1];
@@ -282,7 +282,7 @@ sowr_Unicode_UTF16LE2BE( unsigned char *data )
         bytes += *((uint8_t *)data);
         if (!bytes)
             break;
-        sowr_SwapEndian(sizeof(uint16_t), (char *)data);
+        sowr_SwapEndian(sizeof(uint16_t), data);
         data += sizeof(uint16_t);
     }
 }
@@ -296,7 +296,7 @@ sowr_Unicode_UTF16BE2LE( unsigned char *data )
         bytes = *((uint16_t *)data);
         if (!bytes)
             break;
-        sowr_SwapEndian(sizeof(uint16_t), (char *)data);
+        sowr_SwapEndian(sizeof(uint16_t), data);
         data += sizeof(uint16_t);
     }
 }

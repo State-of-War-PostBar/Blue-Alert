@@ -31,11 +31,11 @@
 
 inline
 void
-sowr_SwapEndian( size_t length, char *bytes )
+sowr_SwapEndian( size_t length, unsigned char *bytes )
 {
     // Do not "play smart" like using xor exchange.
     // It doesn't always help.
-    char byte = 0;
+    unsigned char byte = 0;
     for (size_t i = 0ULL, j = length - 1ULL; i < j; i++, j--)
     {
         byte = bytes[i];
@@ -48,7 +48,7 @@ inline
 uint16_t
 sowr_SwapEndian16( uint16_t val )
 {
-    return (val & 0xff00U) >> 010 | (val & 0x00ffU) << 010;
+    return (val & 0xff00) >> 010 | (val & 0x00ffU) << 010;
 }
 
 inline

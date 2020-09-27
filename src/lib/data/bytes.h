@@ -41,7 +41,7 @@
 /// \param bytes Value to be swapped
 ///
 void
-sowr_SwapEndian( size_t length, char *bytes );
+sowr_SwapEndian( size_t length, unsigned char *bytes );
 
 ///
 /// \brief Swap endianness of a 16-bit value

@@ -48,7 +48,7 @@ typedef size_t sowr_Hash;
 /// \return Hashed result
 ///
 sowr_Hash
-sowr_GetHash( size_t length, const char *bytes );
+sowr_GetHash( size_t length, const unsigned char *bytes );
 
 ///
 /// \brief Hash a string
@@ -61,7 +61,7 @@ sowr_GetHash( size_t length, const char *bytes );
 /// \return Hashed result
 ///
 sowr_Hash
-sowr_GetHashI( const char *str );
+sowr_GetHashI( const unsigned char *str );
 
 ///
 /// \brief Hash a string

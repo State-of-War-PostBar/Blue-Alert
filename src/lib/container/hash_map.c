@@ -131,7 +131,7 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
     memcpy(block.data, value, val_length);
     block.free_func = map->free_func;
 
-    sowr_Hash index_hash = sowr_GetHash(index_length, index);
+    sowr_Hash index_hash = sowr_GetHash(index_length, (unsigned char *)index);
     block.index_hash = index_hash;
 
     size_t slot = index_hash % map->buckets_count;
@@ -174,7 +174,7 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index )
     if (!map->length)
         return NULL;
 
-    sowr_Hash hash = sowr_GetHash(index_length, index);
+    sowr_Hash hash = sowr_GetHash(index_length, (unsigned char *)index);
     size_t slot = hash % map->buckets_count;
     sowr_BinaryTree *bucket = sowr_Vector_PtrAt(&(map->buckets), slot);
 
@@ -220,7 +220,7 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
     if (!map->length)
         return;
 
-    sowr_Hash hash = sowr_GetHash(index_length, index);
+    sowr_Hash hash = sowr_GetHash(index_length, (unsigned char *)index);
     size_t slot = hash % map->buckets_count;
     sowr_BinaryTree *tree = sowr_Vector_PtrAt(&(map->buckets), slot);
 
