@@ -30,17 +30,21 @@
 #include "fio.h"
 
 #include "../container/string.h"
+#include "../data/unicode.h"
 #include "../memory/heap_memory.h"
 
 inline
 sowr_FileDescriptor
 sowr_File_OpenR( const char *path )
 {
-    return
 #ifdef SOWR_TARGET_WINDOWS
-        CreateFileA(path, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+    sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+    sowr_FileDescriptor hdl = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    sowr_Vector_DestroyS(&utf16);
+    return hdl;
 #else
-        open(path, O_RDONLY);
+    return open(path, O_RDONLY);
 #endif
 }
 
@@ -48,15 +52,18 @@ inline
 sowr_FileDescriptor
 sowr_File_OpenW( const char *path, sowr_FileWriteMode mode )
 {
-    return
 #ifdef SOWR_TARGET_WINDOWS
-        CreateFileA(path,
+    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+    sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+    sowr_FileDescriptor hdl = CreateFileW((wchar_t *)(utf16.ptr),
                         GENERIC_READ | (mode == SOWR_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
                         0, NULL,
                         mode == SOWR_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL, NULL);
+    sowr_Vector_DestroyS(&utf16);
+    return hdl;
 #else
-        open(path, O_RDWR | (mode == SOWR_FIO_WRITE_APPEND ? O_APPEND :
+    return open(path, O_RDWR | (mode == SOWR_FIO_WRITE_APPEND ? O_APPEND :
                               (mode == SOWR_FIO_WRITE_TRUNCATE ? O_TRUNC : O_RDWR)));
 #endif
 }
@@ -65,6 +72,9 @@ sowr_FileDescriptor
 sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
 {
     sowr_FileDescriptor file = sowr_File_OpenW(path, mode);
+#ifdef SOWR_TARGET_WINDOWS
+    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+#endif
     if (file != SOWR_INVALID_FILE_DESCRIPTOR)
         return file;
 
@@ -84,7 +94,8 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
             while (*path_r != '/')
                 sowr_String_PushC(&str, *path_r++);
 #ifdef SOWR_TARGET_WINDOWS
-            CreateDirectoryA(str.ptr, NULL);
+            sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+            CreateDirectoryW((wchar_t *)(utf16.ptr), NULL);
 #else
             mkdir(str.ptr, S_IRWXU);
 #endif
@@ -94,12 +105,17 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
             path_r++;
         }
 #ifdef SOWR_TARGET_WINDOWS
-        file = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+        sowr_Vector_Clear(&utf16);
+        sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+        file = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
 #else
         file = open(path, O_RDWR | O_CREAT, S_IRWXU);
 #endif
         sowr_String_DestroyS(&str);
     }
+#ifdef SOWR_TARGET_WINDOWS
+    sowr_Vector_DestroyS(&utf16);
+#endif
     return file;
 }
 
@@ -119,6 +135,9 @@ void
 sowr_File_Mkdir( const char *path )
 {
     sowr_String str = sowr_String_CreateS();
+#ifdef SOWR_TARGET_WINDOWS
+    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+#endif
     while (*path)
     {
         while (*path != '/')
@@ -127,13 +146,18 @@ sowr_File_Mkdir( const char *path )
             path++;
         }
 #ifdef SOWR_TARGET_WINDOWS
-        CreateDirectoryA(str.ptr, NULL);
+        sowr_Vector_Clear(&utf16);
+        sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+        CreateDirectoryW((wchar_t *)(utf16.ptr), NULL);
 #else
         mkdir(str.ptr, S_IRWXU);
 #endif
         sowr_String_PushC(&str, '/');
         path++;
     }
+#ifdef SOWR_TARGET_WINDOWS
+    sowr_Vector_DestroyS(&utf16);
+#endif
     sowr_String_DestroyS(&str);
 }
 
@@ -142,26 +166,37 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
 {
     sowr_String str = sowr_String_FromS(path);
 #ifdef SOWR_TARGET_WINDOWS
+    sowr_Vector utf8 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+    sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
     sowr_String_PushS(&str, "/*");
-    WIN32_FIND_DATAA find_data;
-    HANDLE f_entry = FindFirstFileA(str.ptr, &find_data);
+    WIN32_FIND_DATAW find_data;
+    HANDLE f_entry = FindFirstFileW((wchar_t *)(utf16.ptr), &find_data);
     if (f_entry == INVALID_HANDLE_VALUE)
+    {
+#ifdef SOWR_TARGET_WINDOWS
+        sowr_Vector_DestroyS(&utf16);
+        sowr_Vector_DestroyS(&utf8);
+#endif
+        sowr_String_DestroyS(&str);
         return;
+    }
 
     do
     {
-        if (!strcmp(find_data.cFileName, ".") || !strcmp(find_data.cFileName, ".."))
+        sowr_Unicode_UTF16ToUTF8((unsigned char *)find_data.cFileName, &utf8);
+        if (!strcmp(utf8.ptr, ".") || !strcmp(utf8.ptr, ".."))
             continue;
 
         sowr_String_Clear(&str);
         sowr_String_PushS(&str, path);
         sowr_String_PushC(&str, '/');
-        sowr_String_PushS(&str, find_data.cFileName);
+        sowr_String_PushS(&str, utf8.ptr);
         if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             sowr_File_WalkDir(str.ptr, func);
         else
             func(str.ptr);
-    } while (FindNextFile(f_entry, &find_data));
+    } while (FindNextFileW(f_entry, &find_data));
 
     FindClose(f_entry);
 #else
@@ -188,6 +223,10 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
     } while ((f_entry = readdir(dir)));
 
     closedir(dir);
+#endif
+#ifdef SOWR_TARGET_WINDOWS
+    sowr_Vector_DestroyS(&utf16);
+    sowr_Vector_DestroyS(&utf8);
 #endif
     sowr_String_DestroyS(&str);
 }

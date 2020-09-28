@@ -205,6 +205,7 @@ sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp )
         return 4ULL;
 }
 
+inline
 size_t
 sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp )
 {
@@ -271,6 +272,7 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output )
     }
 }
 
+inline
 void
 sowr_Unicode_UTF16LE2BE( unsigned char *data )
 {
@@ -287,6 +289,7 @@ sowr_Unicode_UTF16LE2BE( unsigned char *data )
     }
 }
 
+inline
 void
 sowr_Unicode_UTF16BE2LE( unsigned char *data )
 {
