@@ -178,7 +178,7 @@ sowr_File_WriteContent( sowr_FileDescriptor file, const void *buffer, size_t sz 
 /// \return The byte array of the file if reading successful, or NULL otherwise.<BR />
 /// This array must be freed with \a sowr_HeapFree()
 ///
-char *
+unsigned char *
 sowr_FileEx_ReadContent( const char *path );
 
 #endif // !SOWR_LIB_IO_FIO_H

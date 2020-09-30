@@ -29,9 +29,9 @@
 
 #include "fio.h"
 
-#include "../container/string.h"
-#include "../data/unicode.h"
-#include "../memory/heap_memory.h"
+#include "../../container/string.h"
+#include "../../data/unicode.h"
+#include "../../memory/heap_memory.h"
 
 sowr_FileDescriptor
 sowr_File_OpenR( const char *path )
@@ -263,7 +263,7 @@ sowr_File_WriteContent( sowr_FileDescriptor file, const void *buffer, size_t sz 
 #endif
 }
 
-char *
+unsigned char *
 sowr_FileEx_ReadContent( const char *path )
 {
     sowr_FileDescriptor file = sowr_File_OpenR(path);
@@ -271,7 +271,7 @@ sowr_FileEx_ReadContent( const char *path )
         return NULL;
 
     size_t sz = sowr_File_GetSize(file);
-    char *content = sowr_HeapAlloc(sz);
+    unsigned char *content = sowr_HeapAlloc(sz);
     sowr_File_ReadContent(file, content, sz);
 
     sowr_File_Close(file);
