@@ -92,7 +92,6 @@ sowr_String_ExpandUntil( sowr_String *str, size_t new_size )
         sowr_String_Expand(str);
 }
 
-inline
 void
 sowr_String_ExpandUntilOnce( sowr_String *str, size_t new_size )
 {
@@ -242,7 +241,6 @@ sowr_String_Res( sowr_String *str, size_t num )
     }
 }
 
-inline
 void
 sowr_String_Clear( sowr_String *str )
 {

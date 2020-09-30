@@ -33,7 +33,6 @@
 #include "../data/unicode.h"
 #include "../memory/heap_memory.h"
 
-inline
 sowr_FileDescriptor
 sowr_File_OpenR( const char *path )
 {
@@ -48,7 +47,6 @@ sowr_File_OpenR( const char *path )
 #endif
 }
 
-inline
 sowr_FileDescriptor
 sowr_File_OpenW( const char *path, sowr_FileWriteMode mode )
 {
@@ -119,7 +117,6 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
     return file;
 }
 
-inline
 void
 sowr_File_Close( sowr_FileDescriptor file )
 {
@@ -174,10 +171,8 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
     HANDLE f_entry = FindFirstFileW((wchar_t *)(utf16.ptr), &find_data);
     if (f_entry == INVALID_HANDLE_VALUE)
     {
-#ifdef SOWR_TARGET_WINDOWS
         sowr_Vector_DestroyS(&utf16);
         sowr_Vector_DestroyS(&utf8);
-#endif
         sowr_String_DestroyS(&str);
         return;
     }
@@ -205,7 +200,10 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
     struct stat64 f_stat;
 
     if (!dir || !f_entry)
+    {
+        sowr_String_DestroyS(&str);
         return;
+    }
 
     do
     {

@@ -95,7 +95,6 @@ sowr_Vector_Find( const sowr_Vector *vec, const void *elem, sowr_VectorCmpFunc c
     return NULL;
 }
 
-inline
 void
 sowr_Vector_Expand( sowr_Vector *vec )
 {
@@ -146,7 +145,6 @@ sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func )
         func((void *)ptr);
 }
 
-inline
 void
 sowr_Vector_Clear( sowr_Vector *vec )
 {

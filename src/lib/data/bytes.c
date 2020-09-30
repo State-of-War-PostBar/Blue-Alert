@@ -29,7 +29,6 @@
 
 #include "bytes.h"
 
-inline
 void
 sowr_SwapEndian( size_t length, unsigned char *bytes )
 {

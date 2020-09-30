@@ -31,7 +31,6 @@
 
 #include "bytes.h"
 
-inline
 size_t
 sowr_Unicode_CountUTF8CodePoints( const unsigned char *str )
 {
@@ -41,7 +40,6 @@ sowr_Unicode_CountUTF8CodePoints( const unsigned char *str )
     return length; 
 }
 
-inline
 size_t
 sowr_Unicode_CountUTF16CodePoints( const unsigned char *str )
 {
@@ -272,7 +270,6 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output )
     }
 }
 
-inline
 void
 sowr_Unicode_UTF16LE2BE( unsigned char *data )
 {
@@ -289,7 +286,6 @@ sowr_Unicode_UTF16LE2BE( unsigned char *data )
     }
 }
 
-inline
 void
 sowr_Unicode_UTF16BE2LE( unsigned char *data )
 {

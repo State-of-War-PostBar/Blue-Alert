@@ -32,7 +32,6 @@
 #include "../memory/heap_memory.h"
 
 static
-inline
 sowr_RadixTreeNode *
 sowr_RadixTreeNode_Gen( void )
 {
