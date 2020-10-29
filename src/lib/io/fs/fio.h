@@ -33,8 +33,6 @@
 #include <pch.h>
 
 #ifdef SOWR_TARGET_WINDOWS
-    #include <direct.h>
-
     typedef HANDLE sowr_FileDescriptor;
 
     #define SOWR_INVALID_FILE_DESCRIPTOR INVALID_HANDLE_VALUE

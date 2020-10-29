@@ -70,19 +70,27 @@ sowr_FileDescriptor
 sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
 {
     sowr_FileDescriptor file = sowr_File_OpenW(path, mode);
+    if (file != SOWR_INVALID_FILE_DESCRIPTOR)
+        return file;
 #ifdef SOWR_TARGET_WINDOWS
     sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
 #endif
-    if (file != SOWR_INVALID_FILE_DESCRIPTOR)
-        return file;
 
     char *last_dir = strrchr(path, '/');
     if (!last_dir)
+    {
+    // If path doesn't have the / sign, create the file directly.
 #ifdef SOWR_TARGET_WINDOWS
-        file = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+        sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+        file = CreateFileW((wchar_t *)(utf16.ptr),
+                        GENERIC_READ | (mode == SOWR_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
+                        0, NULL,
+                        mode == SOWR_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
+                        FILE_ATTRIBUTE_NORMAL, NULL);
 #else
         file = open(path, O_RDWR | O_CREAT, S_IRWXU);
 #endif
+    }
     else
     {
         sowr_String str = sowr_String_CreateS();
@@ -90,13 +98,20 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
         while (*path_r)
         {
             while (*path_r != '/')
-                sowr_String_PushC(&str, *path_r++);
+            {
+                sowr_String_PushC(&str, *path_r);
+                path_r++;
+            }
+            if (strcmp(str.ptr, "."))
+            {
 #ifdef SOWR_TARGET_WINDOWS
-            sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
-            CreateDirectoryW((wchar_t *)(utf16.ptr), NULL);
+                sowr_Vector_Clear(&utf16);
+                sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+                CreateDirectoryW((wchar_t *)(utf16.ptr), NULL);
 #else
-            mkdir(str.ptr, S_IRWXU);
+                mkdir(str.ptr, S_IRWXU);
 #endif
+            }
             if (path_r == last_dir)
                 break;
             sowr_String_PushC(&str, '/');
@@ -165,15 +180,15 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
 #ifdef SOWR_TARGET_WINDOWS
     sowr_Vector utf8 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
     sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
-    sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
     sowr_String_PushS(&str, "/*");
+    sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
     WIN32_FIND_DATAW find_data;
     HANDLE f_entry = FindFirstFileW((wchar_t *)(utf16.ptr), &find_data);
     if (f_entry == INVALID_HANDLE_VALUE)
     {
-        sowr_Vector_DestroyS(&utf16);
-        sowr_Vector_DestroyS(&utf8);
         sowr_String_DestroyS(&str);
+        sowr_Vector_DestroyS(&utf8);
+        sowr_Vector_DestroyS(&utf16);
         return;
     }
 
@@ -196,7 +211,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
     FindClose(f_entry);
 #else
     DIR *dir = opendir(str.ptr);
-    struct dirent *f_entry = readdir(dir);
+    struct dirent64 *f_entry = readdir64(dir);
     struct stat64 f_stat;
 
     if (!dir || !f_entry)
