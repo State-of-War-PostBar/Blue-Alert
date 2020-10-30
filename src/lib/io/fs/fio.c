@@ -233,7 +233,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
             sowr_File_WalkDir(str.ptr, func);
         else
             func(str.ptr);
-    } while ((f_entry = readdir(dir)));
+    } while ((f_entry = readdir64(dir)));
 
     closedir(dir);
 #endif
