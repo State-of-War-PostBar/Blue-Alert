@@ -32,7 +32,7 @@
 sowr_Hash
 sowr_GetHash( size_t length, const unsigned char *bytes )
 {
-    sowr_Hash res = 0ULL;
+    sowr_Hash res = 1ULL;
 
     size_t i = 0ULL;
     for (i = 0ULL; i < length / 4ULL; i++)
