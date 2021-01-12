@@ -32,6 +32,7 @@
 
 #include <pch.h>
 
+#include "hash_map.h"
 #include "string.h"
 
 typedef void (*sowr_RadixTreeFreeFunc)( void * );
@@ -138,6 +139,19 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index );
 ///
 sowr_RadixTreeNode *
 sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index );
+
+///
+/// \brief List all the children of a node
+///
+/// List all children of a radix tree node to a hash map, including the node itself.
+///
+/// \param node Node to operate
+/// \param output Hash map for output. If this is NULL, only children counting will be returned
+///
+/// \return The number of children listed
+///
+size_t
+sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *output );
 
 ///
 /// \brief Delete an element from radix tree

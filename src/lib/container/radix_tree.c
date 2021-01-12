@@ -308,6 +308,27 @@ sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index )
     return sowr_RadixTree_Get(tree, index->ptr);
 }
 
+size_t
+sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *output )
+{
+    if (!node)
+        return 0ULL;
+
+    size_t children = 0ULL;
+
+    for (size_t i = 0ULL; i < CHAR_MAX; i++)
+        children += sowr_RadixTree_ListAllChildren(node->characters[i], output);
+
+    if (node->data)
+    {
+        if (output)
+            sowr_HashMap_InsertCV(output, node->full_key.ptr, node->data_size, node->data);
+        children++;
+    }
+
+    return children;
+}
+
 bool
 sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index )
 {
