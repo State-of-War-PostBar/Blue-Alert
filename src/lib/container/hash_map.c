@@ -128,6 +128,7 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
 {
     sowr_HashMapValue block;
     block.data = sowr_HeapAlloc(val_length);
+    block.data_size = val_length;
     memcpy(block.data, value, val_length);
     block.free_func = map->free_func;
 
