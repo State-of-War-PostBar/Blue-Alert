@@ -42,6 +42,7 @@ typedef struct sowr_RadixTreeNode
     size_t data_size;
     void *data;
     sowr_String key;
+    sowr_String full_key;
     struct sowr_RadixTreeNode *characters[CHAR_MAX];
 } sowr_RadixTreeNode;
 

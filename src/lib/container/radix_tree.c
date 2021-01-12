@@ -37,6 +37,7 @@ sowr_RadixTreeNode_Gen( void )
 {
     sowr_RadixTreeNode *node = sowr_HeapZeroAlloc(sizeof(sowr_RadixTreeNode));
     node->key = sowr_String_CreateS();
+    node->full_key = sowr_String_CreateS();
     return node;
 }
 
@@ -63,6 +64,7 @@ sowr_RadixTreeNode_DeleteAfter( sowr_RadixTreeNode *node, sowr_RadixTreeFreeFunc
         sowr_HeapFree(node->data);
     }
     sowr_String_DestroyS(&(node->key));
+    sowr_String_DestroyS(&(node->full_key));
     sowr_HeapFree(node);
 }
 
@@ -92,6 +94,7 @@ sowr_RadixTree_Create( sowr_RadixTreeFreeFunc free_func )
         .data_size = 0ULL,
         .data = NULL,
         .key = {},
+        .full_key = {},
         .characters = { NULL }
     };
     sowr_RadixTree *tree = sowr_HeapAlloc(sizeof(sowr_RadixTree));
@@ -109,6 +112,7 @@ sowr_RadixTree_CreateS( sowr_RadixTreeFreeFunc free_func )
         .data_size = 0ULL,
         .data = NULL,
         .key = {},
+        .full_key = {},
         .characters = { NULL }
     };
     sowr_RadixTree tree =
@@ -137,14 +141,16 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
     if (!tree)
         return;
 
+    const char *index_o = index;
     sowr_RadixTreeNode *iter = &(tree->head);
-    size_t ch = (size_t)*index;
+    size_t ch = (size_t)*index_o;
     while (ch)
     {
         if (!iter->characters[ch])
         {
             sowr_RadixTreeNode *node = sowr_RadixTreeNode_Gen();
-            sowr_String_PushS(&(node->key), index);
+            sowr_String_PushS(&(node->key), index_o);
+            sowr_String_PushS(&(node->full_key), index);
             node->data_size = data_size;
             node->data = sowr_HeapAlloc(data_size);
             memcpy(node->data, data, data_size);
@@ -156,7 +162,7 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
         {
             sowr_RadixTreeNode *current = iter->characters[ch];
             size_t compared = 0ULL;
-            const char *index_r = index;
+            const char *index_r = index_o;
             const char *target = current->key.ptr;
 
             // Eat up the target key and index string.
@@ -193,7 +199,7 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
             else if (!*target && *index_r)
             {
                 ch = (size_t)*index_r;
-                index = index_r;
+                index_o = index_r;
                 iter = current;
                 continue;
             }
@@ -227,6 +233,7 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
                 // Create new node to hold the remaining key of the target node
                 sowr_RadixTreeNode *new_node = sowr_RadixTreeNode_Gen();
                 sowr_String_PushS(&(new_node->key), target);
+                sowr_String_PushS(&(new_node->full_key), current->full_key.ptr);
                 if (current->data)
                 {
                     new_node->data_size = current->data_size;
@@ -242,7 +249,7 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
                 sowr_String_Res(&(current->key), compared);
 
                 ch = (size_t)*index_r;
-                index = index_r;
+                index_o = index_r;
                 iter = current;
             }
         }

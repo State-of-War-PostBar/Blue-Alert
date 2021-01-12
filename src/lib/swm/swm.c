@@ -431,6 +431,8 @@ sowr_Swm_Load( const char *str )
             }
             case ('$'): case ('|'):
             case ('<'): case ('>'):
+            case ('{'): case ('}'):
+            case ('@'):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
                 if (state & (SOWR_SWM_COMMENT | SOWR_SWM_DISCARD))
