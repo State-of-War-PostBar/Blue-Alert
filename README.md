@@ -1,10 +1,11 @@
 # State of War: Remastered
 
-Remaking an old game, _State of War_.
+Remaking an old game, _State of War_.  
+An experiment on programming by [Texerap](https://github.com/Taxerap).
 
 ## Who are you?
 
-We are a group of fans of a game named _State of War_, published by ~[Cypron-Studios](www.cypron-studios.com)~.
+We are a group of fans of a game named _State of War_, published by ~[Cypron-Studios](http://www.cypron-studios.com)~.
 
 ## What are you doing?
 
@@ -22,6 +23,10 @@ Also, it contains some dreams the maintainer, Taxerap, had when he played this g
 ## How are you goint to do this?
 
 Creating a game is not a trivial task. This is a complicated topic and will be fully explained through documents under the [docs](/docs) folder.
+
+Reference points:
+
+* [Q&A](docs/qna.md)
 
 ## When are you finishing this?
 
