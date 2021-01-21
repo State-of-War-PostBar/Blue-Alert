@@ -1,37 +1,31 @@
 # State of War: Remastered
 
 Remaking an old game, _State of War_.  
-An experiment on programming by [Texerap](https://github.com/Taxerap).
+Also a programming experiment by [Taxerap](https://github.com/Taxerap).
 
-## Who are you?
+## Quick Start
 
-We are a group of fans of a game named _State of War_, published by ~[Cypron-Studios](http://www.cypron-studios.com)~.
+This project is not even in Alpha phase yet, please be patient.
 
-## What are you doing?
+## Discussion
 
-We are trying to remake this game into a better one.
+[![Join our Gitter](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/State-of-War-PostBar)  
+[![Join our QQ Group](https://pub.idqqimg.com/wpa/images/group.png)](https://qm.qq.com/cgi-bin/qm/qr?k=fR7D07D2wcXB66H8E5aUMXp0x6PHst9D&jump_from=webapi)  
+You may join our discussion at our official [Baidu Postbar](https://tieba.baidu.com/f?kw=%E8%93%9D%E8%89%B2%E8%AD%A6%E6%88%92).
 
-## Why are you doing this?
+## Developing & Contribution
 
-State of War is a very impressive game. However, since it's developer had stopped technical support on
-the game long ago, attempting to create community content for the game is extremely hard. By reverse
-engineering game files, we are capable of creating custom map, terrian etc. But that is not enough, and
-we seek a game with better support of community content.
+We appreciate any kind of help. You may request new features, give suggestions on code and talk about designs at the [issues](https://github.com/State-of-War-PostBar/sowr/issues) page.  
+You may also contribute directly to the code base by sending a [pull request](https://github.com/State-of-War-PostBar/sowr/pulls).
 
-Also, it contains some dreams the maintainer, Taxerap, had when he played this game when he was 8.
+To start, you may take a look at our [designing](docs/design.md) and [regulations](docs/regulation.md) first (WIP).
 
-## How are you goint to do this?
+## License & Copyright, those kind of boring stuff
 
-Creating a game is not a trivial task. This is a complicated topic and will be fully explained through documents under the [docs](/docs) folder.
-
-Reference points:
-
-* [Q&A](docs/qna.md)
-
-## When are you finishing this?
-
-Probably before 2100.
+State of War: Remastered is published under the [Just Don't Bother Me Public License](https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM)
+by [mhtvsSFrpHdE](https://github.com/mhtvsSFrpHdE). See [LICENSE](LICENSE) for details.  
+However, community-created plugins and maps are allowed to be close-sourced. To see how this works, you may reference to [GNU LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) and see how it's different to the [GNU GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 ---
 
-Published under [JDBM License](https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM), some rights reserved.
+State of War Postbar, Taxerap/DragoonKiller, State of War Remastering Project, 2017 - 2021.
