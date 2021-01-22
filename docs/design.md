@@ -4,7 +4,7 @@
 
 The core program is written in C2x.  
 For properties and settings, we will create a [simple marking language](specs/swm.md).  
-For map and modding script, we will create a [script language](specs/ssc.md).
+For map and modding script, we will create a [script language](specs/sws.md).
 
 ## Structure
 
@@ -13,4 +13,4 @@ It will also provide a C plugin interface for plugins.
 
 The elements of game is provided by plugins, duch as game logics, units and buildings.  
 
-A custom map can also consists of its own script, which is written in the [ssc](specs/ssc.md) language.
+A custom map can also consists of its own script, which is written in the [sws](specs/sws.md) language.
