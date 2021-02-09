@@ -38,6 +38,8 @@
 
     #define SOWR_CURRENT_PROC NULL
 #else
+    #include <dlfcn.h>
+
     typedef void *sowr_DLib;
     typedef void *sowr_ExFunc;
 
