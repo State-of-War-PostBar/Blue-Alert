@@ -178,12 +178,13 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
 {
     sowr_String str = sowr_String_FromS(path);
 #ifdef SOWR_TARGET_WINDOWS
+    sowr_String_PushS(&str, "/*");
     sowr_Vector utf8 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
     sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
-    sowr_String_PushS(&str, "/*");
     sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+
     WIN32_FIND_DATAW find_data;
-    HANDLE f_entry = FindFirstFileW((wchar_t *)(utf16.ptr), &find_data);
+    HANDLE f_entry = FindFirstFileW(utf16.ptr, &find_data);
     if (f_entry == INVALID_HANDLE_VALUE)
     {
         sowr_String_DestroyS(&str);
@@ -196,7 +197,10 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
     {
         sowr_Unicode_UTF16ToUTF8((unsigned char *)find_data.cFileName, &utf8);
         if (!strcmp(utf8.ptr, ".") || !strcmp(utf8.ptr, ".."))
+        {
+            sowr_Vector_Clear(&utf8);
             continue;
+        }
 
         sowr_String_Clear(&str);
         sowr_String_PushS(&str, path);
@@ -206,6 +210,8 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
             sowr_File_WalkDir(str.ptr, func);
         else
             func(str.ptr);
+
+        sowr_Vector_Clear(&utf8);
     } while (FindNextFileW(f_entry, &find_data));
 
     FindClose(f_entry);
