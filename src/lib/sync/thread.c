@@ -104,6 +104,6 @@ sowr_Thread_Join( sowr_Thread thr )
     WaitForSingleObject(thr, INFINITE);
     CloseHandle(thr);
 #else
-    pthread_join(thrd, NULL);
+    pthread_join(thr, NULL);
 #endif
 }
