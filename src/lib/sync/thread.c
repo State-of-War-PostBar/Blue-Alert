@@ -62,7 +62,7 @@ sowr_Thread_Sleep( const struct timespec *duration )
 #ifdef SOWR_TARGET_WINDOWS
     Sleep(duration->tv_sec * 1000.0 + duration->tv_nsec / 0.000001);
 #else
-    sleep(duration);
+    nanosleep(duration, NULL);
 #endif
 }
 
@@ -104,6 +104,6 @@ sowr_Thread_Join( sowr_Thread thr )
     WaitForSingleObject(thr, INFINITE);
     CloseHandle(thr);
 #else
-    pthread_join(thrd, &res);
+    pthread_join(thrd, NULL);
 #endif
 }
