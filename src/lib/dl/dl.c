@@ -32,13 +32,13 @@
 #include "../container/vector.h"
 #include "../data/unicode.h"
 
-sowr_DLib
-sowr_LoadDynamicLibrary(const char *path)
+sowr_DL
+sowr_DL_Load(const char *path)
 {
 #ifdef SOWR_TARGET_WINDOWS
     sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
     sowr_Unicode_UTF8ToUTF16((unsigned char *) path, &utf16);
-    sowr_DLib dl = LoadLibraryW(utf16.ptr);
+    sowr_DL dl = LoadLibraryW(utf16.ptr);
     sowr_Vector_DestroyS(&utf16);
     return dl;
 #else
@@ -47,7 +47,7 @@ sowr_LoadDynamicLibrary(const char *path)
 }
 
 sowr_ExFunc
-sowr_GetDLSymbol(sowr_DLib lib, const char *sym)
+sowr_DL_Addr(sowr_DL lib, const char *sym)
 {
 #ifdef SOWR_TARGET_WINDOWS
     return GetProcAddress(lib, sym);
@@ -57,7 +57,7 @@ sowr_GetDLSymbol(sowr_DLib lib, const char *sym)
 }
 
 int
-sowr_FreeDynamicLibrary(sowr_DLib lib)
+sowr_DL_Unload(sowr_DL lib)
 {
 #ifdef SOWR_TARGET_WINDOWS
     return FreeLibrary(lib);

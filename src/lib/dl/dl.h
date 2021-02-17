@@ -33,14 +33,14 @@
 #include <pch.h>
 
 #ifdef SOWR_TARGET_WINDOWS
-    typedef HMODULE sowr_DLib;
+    typedef HMODULE sowr_DL;
     typedef FARPROC sowr_ExFunc;
 
     #define SOWR_CURRENT_PROC NULL
 #else
     #include <dlfcn.h>
 
-    typedef void *sowr_DLib;
+    typedef void *sowr_DL;
     typedef void *sowr_ExFunc;
 
     #define SOWR_CURRENT_PROC RTLD_DEFAULT
@@ -55,8 +55,8 @@
 ///
 /// \return Handle of the library, or NULL if errors occur
 ///
-sowr_DLib
-sowr_LoadDynamicLibrary(const char *path);
+sowr_DL
+sowr_DL_Load(const char *path);
 
 ///
 /// \brief Get a process symbol of the library
@@ -71,7 +71,7 @@ sowr_LoadDynamicLibrary(const char *path);
 /// \return Retrieved symbol
 ///
 sowr_ExFunc
-sowr_GetDLSymbol(sowr_DLib lib, const char *sym);
+sowr_DL_Addr(sowr_DL lib, const char *sym);
 
 ///
 /// \brief Free a library
@@ -83,6 +83,6 @@ sowr_GetDLSymbol(sowr_DLib lib, const char *sym);
 /// \return 0 if success
 ///
 int
-sowr_FreeDynamicLibrary(sowr_DLib lib);
+sowr_DL_Unload(sowr_DL lib);
 
 #endif // !SOWR_LIB_DL_DL_H
