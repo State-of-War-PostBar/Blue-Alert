@@ -91,4 +91,15 @@
     #include <windows.h>
 #endif
 
+#if defined _MSC_VER || defined __MINGW32__
+    #define SOWR_IMPORT __declspec(dllimport)
+    #define SOWR_EXPORT __declspec(dllexport)
+#elif defined __GNUC__ || defined __clang__
+    #define SOWR_IMPORT
+    #define SOWR_EXPORT __attribute__((visibility("default")))
+#else
+    #define SOWR_IMPORT
+    #define SOWR_EXPORT
+#endif
+
 #endif // !SOWR_PCH_H
