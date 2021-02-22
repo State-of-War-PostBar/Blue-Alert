@@ -47,7 +47,7 @@ typedef struct sowr_LinkedList
 {
     size_t length;
     sowr_LinkedListFreeFunc free_func;
-    sowr_LinkedListNode *head;
+    sowr_LinkedListNode head;
 } sowr_LinkedList;
 
 ///

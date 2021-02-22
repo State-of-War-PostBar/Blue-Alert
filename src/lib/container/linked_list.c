@@ -37,7 +37,7 @@ sowr_LinkedList_Create( sowr_LinkedListFreeFunc free_func )
     sowr_LinkedList *list = sowr_HeapAlloc(sizeof(sowr_LinkedList));
     list->length = 0ULL;
     list->free_func = free_func;
-    list->head = NULL;
+    list->head = (sowr_LinkedListNode){ 0 };
     return list;
 }
 
@@ -48,7 +48,7 @@ sowr_LinkedList_CreateS( sowr_LinkedListFreeFunc free_func )
     {
         .length = 0ULL,
         .free_func = free_func,
-        .head = NULL
+        .head = (sowr_LinkedListNode){ 0 }
     };
     return list;
 }
@@ -59,7 +59,7 @@ sowr_LinkedList_Walk( sowr_LinkedList *list, sowr_LinkedListWalkFunc func )
     if (!list->length)
         return;
 
-    for (sowr_LinkedListNode *iter = list->head; iter; iter = iter->next)
+    for (sowr_LinkedListNode *iter = &(list->head); iter; iter = iter->next)
         func(iter->data);
 }
 
@@ -69,28 +69,36 @@ sowr_LinkedList_Clear( sowr_LinkedList *list )
     if (!list->length)
         return;
 
-    sowr_LinkedListNode *iter = list->head, *next = NULL;
+    sowr_LinkedListNode *iter = &(list->head), *next = NULL;
     while (iter)
     {
         next = iter->next;
         if (list->free_func)
             list->free_func(iter->data);
         sowr_HeapFree(iter->data);
-        sowr_HeapFree(iter);
+        if (iter != &(list->head))
+            sowr_HeapFree(iter);
         iter = next;
     }
-    list->head = NULL;
+    list->head = (sowr_LinkedListNode){ 0 };
     list->length = 0ULL;
 }
 
 void
 sowr_LinkedList_Insert( sowr_LinkedList *list, size_t data_size, const void *data )
 {
-    sowr_LinkedListNode *node = sowr_HeapAlloc(sizeof(sowr_LinkedListNode));
-    node->data = sowr_HeapAlloc(data_size);
-    node->data_size = data_size;
-    memcpy(node->data, data, data_size);
-    node->next = list->length ? list->head : NULL;
+    sowr_LinkedListNode node;
+    node.data = sowr_HeapAlloc(data_size);
+    node.data_size = data_size;
+    memcpy(node.data, data, data_size);
+    if (!list->length)
+        node.next = NULL;
+    else
+    {
+        sowr_LinkedListNode *old_head = sowr_HeapAlloc(sizeof(sowr_LinkedListNode));
+        memcpy(old_head, &(list->head), sizeof(sowr_LinkedListNode));
+        node.next = old_head;
+    }
     list->head = node;
     list->length++;
 }
@@ -101,15 +109,19 @@ sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve )
     if (!list->length)
         return;
 
-    sowr_LinkedListNode *target = list->head;
-    list->head = target->next ? target->next : NULL;
-
     if (ptr_retrieve)
-        memcpy(ptr_retrieve, target->data, target->data_size);
+        memcpy(ptr_retrieve, list->head.data, list->head.data_size);
     else if (list->free_func)
-        list->free_func(target->data);
-    sowr_HeapFree(target->data);
-    sowr_HeapFree(target);
+        list->free_func(list->head.data);
+    sowr_HeapFree(list->head.data);
+
+    if (list->head.next)
+    {
+
+        sowr_LinkedListNode *next = list->head.next;
+        list->head = *next;
+        sowr_HeapFree(next);
+    }
 
     list->length--;
 }
@@ -120,9 +132,9 @@ sowr_LinkedList_Find( const sowr_LinkedList *list, const void *data, sowr_Linked
     if (!list->length)
         return NULL;
 
-    for (sowr_LinkedListNode *iter = list->head; iter; iter = iter->next)
+    for (const sowr_LinkedListNode *iter = &(list->head); iter; iter = iter->next)
         if (cmp(iter->data, data))
-            return iter;
+            return (sowr_LinkedListNode *)iter;
 
     return NULL;
 }
@@ -134,18 +146,13 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
         return 0ULL;
 
     size_t count = 0ULL;
-    sowr_LinkedListNode *iter = list->head, *previous = NULL;
+    sowr_LinkedListNode *iter = &(list->head), *previous = NULL;
     bool copied = false;
 
     while (iter)
     {
         if (cmp(iter->data, data))
         {
-            if (previous)
-                previous->next = iter->next;
-            else
-                list->head = iter->next;
-
             if (ptr_retrieve && !copied)
             {
                 memcpy(ptr_retrieve, iter->data, iter->data_size);
@@ -153,22 +160,25 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
             }
             else if (list->free_func)
                 list->free_func(iter->data);
-
             sowr_HeapFree(iter->data);
-            sowr_HeapFree(iter);
+
+            if (previous)
+                previous->next = iter->next;
+            else
+                list->head = *(iter->next);
+
+            if (iter != &(list->head))
+                sowr_HeapFree(iter);
             count++;
             list->length--;
 
             if (!list->length)
-            {
-                list->head = NULL;
                 return count;
-            }
 
             if (previous)
                 iter = previous->next;
             else
-                iter = list->head;
+                iter = &(list->head);
         }
         else
         {
