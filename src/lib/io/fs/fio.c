@@ -33,13 +33,13 @@
 #include "../../data/unicode.h"
 #include "../../memory/heap_memory.h"
 
-sowr_FileDescriptor
+sowr_File
 sowr_File_OpenR( const char *path )
 {
 #ifdef SOWR_TARGET_WINDOWS
     sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
     sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
-    sowr_FileDescriptor hdl = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    sowr_File hdl = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     sowr_Vector_DestroyS(&utf16);
     return hdl;
 #else
@@ -47,13 +47,13 @@ sowr_File_OpenR( const char *path )
 #endif
 }
 
-sowr_FileDescriptor
+sowr_File
 sowr_File_OpenW( const char *path, sowr_FileWriteMode mode )
 {
 #ifdef SOWR_TARGET_WINDOWS
     sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
     sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
-    sowr_FileDescriptor hdl = CreateFileW((wchar_t *)(utf16.ptr),
+    sowr_File hdl = CreateFileW((wchar_t *)(utf16.ptr),
                         GENERIC_READ | (mode == SOWR_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
                         0, NULL,
                         mode == SOWR_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
@@ -66,10 +66,10 @@ sowr_File_OpenW( const char *path, sowr_FileWriteMode mode )
 #endif
 }
 
-sowr_FileDescriptor
+sowr_File
 sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
 {
-    sowr_FileDescriptor file = sowr_File_OpenW(path, mode);
+    sowr_File file = sowr_File_OpenW(path, mode);
     if (file != SOWR_INVALID_FILE_DESCRIPTOR)
         return file;
 #ifdef SOWR_TARGET_WINDOWS
@@ -133,7 +133,7 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
 }
 
 void
-sowr_File_Close( sowr_FileDescriptor file )
+sowr_File_Close( sowr_File file )
 {
     if (file != SOWR_INVALID_FILE_DESCRIPTOR)
 #ifdef SOWR_TARGET_WINDOWS
@@ -251,7 +251,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
 }
 
 size_t
-sowr_File_GetSize( sowr_FileDescriptor file )
+sowr_File_GetSize( sowr_File file )
 {
 #ifdef SOWR_TARGET_WINDOWS
     LARGE_INTEGER sz;
@@ -265,7 +265,7 @@ sowr_File_GetSize( sowr_FileDescriptor file )
 }
 
 bool
-sowr_File_ReadContent( sowr_FileDescriptor file, void *buffer, size_t sz )
+sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz )
 {
 #ifdef SOWR_TARGET_WINDOWS
     return ReadFile(file, buffer, sz, NULL, NULL);
@@ -275,26 +275,11 @@ sowr_File_ReadContent( sowr_FileDescriptor file, void *buffer, size_t sz )
 }
 
 bool
-sowr_File_WriteContent( sowr_FileDescriptor file, const void *buffer, size_t sz )
+sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz )
 {
 #ifdef SOWR_TARGET_WINDOWS
     return WriteFile(file, buffer, sz, NULL, NULL);
 #else
     return write(file, buffer, sz);
 #endif
-}
-
-unsigned char *
-sowr_FileEx_ReadContent( const char *path )
-{
-    sowr_FileDescriptor file = sowr_File_OpenR(path);
-    if (file == SOWR_INVALID_FILE_DESCRIPTOR)
-        return NULL;
-
-    size_t sz = sowr_File_GetSize(file);
-    unsigned char *content = sowr_HeapAlloc(sz);
-    sowr_File_ReadContent(file, content, sz);
-
-    sowr_File_Close(file);
-    return content;
 }

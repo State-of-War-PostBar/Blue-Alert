@@ -33,7 +33,7 @@
 #include <pch.h>
 
 #ifdef SOWR_TARGET_WINDOWS
-    typedef HANDLE sowr_FileDescriptor;
+    typedef HANDLE sowr_File;
 
     #define SOWR_INVALID_FILE_DESCRIPTOR INVALID_HANDLE_VALUE
 #else
@@ -65,7 +65,7 @@ typedef enum sowr_FileWriteMode
 ///
 /// \return File descriptor of the opened file, or \a SOWR_INVALID_FILE_DESCRIPTOR if failed
 ///
-sowr_FileDescriptor
+sowr_File
 sowr_File_OpenR( const char *path );
 
 ///
@@ -78,7 +78,7 @@ sowr_File_OpenR( const char *path );
 ///
 /// \return File descriptor of the opened file, or \a SOWR_INVALID_FILE_DESCRIPTOR if failed
 ///
-sowr_FileDescriptor
+sowr_File
 sowr_File_OpenW( const char *path, sowr_FileWriteMode mode );
 
 ///
@@ -91,7 +91,7 @@ sowr_File_OpenW( const char *path, sowr_FileWriteMode mode );
 ///
 /// \return File descriptor of the opened file
 ///
-sowr_FileDescriptor
+sowr_File
 sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode );
 
 ///
@@ -102,7 +102,7 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode );
 /// \param file Opened file descriptor
 ///
 void
-sowr_File_Close( sowr_FileDescriptor file );
+sowr_File_Close( sowr_File file );
 
 ///
 /// \brief Make directories
@@ -136,7 +136,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func );
 /// \return Size of the file
 ///
 size_t
-sowr_File_GetSize( sowr_FileDescriptor file );
+sowr_File_GetSize( sowr_File file );
 
 ///
 /// \brief Read the content of a file
@@ -150,7 +150,7 @@ sowr_File_GetSize( sowr_FileDescriptor file );
 /// \return If the reading succeeded
 ///
 bool
-sowr_File_ReadContent( sowr_FileDescriptor file, void *buffer, size_t sz );
+sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz );
 
 ///
 /// \brief Write content to a file
@@ -164,20 +164,6 @@ sowr_File_ReadContent( sowr_FileDescriptor file, void *buffer, size_t sz );
 /// \return If the writing succeeded
 ///
 bool
-sowr_File_WriteContent( sowr_FileDescriptor file, const void *buffer, size_t sz );
-
-///
-/// \brief Read file content
-///
-/// Read bytes content from a file path directly.
-///
-/// \param path Path of the file to read
-///
-/// \return The byte array of the file if reading successful, or NULL otherwise.<BR />
-/// This array must be freed with \a sowr_HeapFree()
-///
-[[deprecated]]
-unsigned char *
-sowr_FileEx_ReadContent( const char *path );
+sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz );
 
 #endif // !SOWR_LIB_IO_FIO_H
