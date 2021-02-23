@@ -165,10 +165,12 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
             if (previous)
                 previous->next = iter->next;
             else
-                list->head = *(iter->next);
+            {
+                sowr_LinkedListNode *next = iter->next;
+                list->head = *next;
+                sowr_HeapFree(next);
+            }
 
-            if (iter != &(list->head))
-                sowr_HeapFree(iter);
             count++;
             list->length--;
 

@@ -42,7 +42,7 @@
     #include <sys/stat.h>
     #include <unistd.h>
 
-    typedef int sowr_FileDescriptor;
+    typedef int sowr_File;
 
     #define SOWR_INVALID_FILE_DESCRIPTOR -1
 #endif
