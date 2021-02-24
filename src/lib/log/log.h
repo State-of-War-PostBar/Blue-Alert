@@ -41,13 +41,6 @@
     #define SOWR_LOG_WARN(...)   log_warn(__VA_ARGS__)
     #define SOWR_LOG_ERROR(...)  log_error(__VA_ARGS__)
     #define SOWR_LOG_FATAL(...)  log_fatal(__VA_ARGS__)
-
-    #define SOWR_LOG_LEVEL_TRACE LOG_TRACE
-    #define SOWR_LOG_LEVEL_INFO  LOG_INFO
-    #define SOWR_LOG_LEVEL_DEBUG LOG_DEBUG
-    #define SOWR_LOG_LEVEL_WARN  LOG_WARN
-    #define SOWR_LOG_LEVEL_ERROR LOG_ERROR
-    #define SOWR_LOG_LEVEL_FATAL LOG_FATAL
 #else
     #define SOWR_LOG_TRACE(...)
     #define SOWR_LOG_INFO(...)

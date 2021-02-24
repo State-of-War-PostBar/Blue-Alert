@@ -153,20 +153,14 @@ typedef union sowr_GenericTypeData
     sowr_Ptr unknown;
 } sowr_GenericTypeData;
 
-typedef enum sowr_GenericTypeExtraInfo
-{
-    SOWR_GENERIC_INFO_NONE
-} sowr_GenericTypeExtraInfo;
-
 typedef struct sowr_GenericType
 {
     sowr_Type type_name;
     size_t data_size;
-    sowr_GenericTypeExtraInfo extra;
     sowr_GenericTypeData data;
 } sowr_GenericType;
 
-#define SOWR_MAKE_GENERIC(var, info) (sowr_GenericType)                                              \
+#define SOWR_MAKE_GENERIC(var) (sowr_GenericType)                                              \
                                {                                                                     \
                                     .type_name = _Generic((var),                                     \
                                                             bool: SOWR_TYPE_BOOL,                    \
@@ -193,8 +187,7 @@ typedef struct sowr_GenericType
                                                         double: (sowr_GenericTypeData){ .as_double = SOWR_TO_WIDER_IF_PTR((var)) },       \
                                                         long double: (sowr_GenericTypeData){ .as_ldouble = SOWR_TO_WIDER_IF_PTR((var)) }, \
                                                         default: (sowr_GenericTypeData){ .unknown = SOWR_TO_WIDER_IF_PTR((var)) }         \
-                                                    ),                                                                                    \
-                                    .info = ((info))                                                                                      \
+                                                    )                                                                                     \
                                }
 
 #endif // !SOWR_LIB_TYPE_GENERIC_H

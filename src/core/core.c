@@ -85,7 +85,7 @@ sowr_InitLogger( void )
 
     sowr_log_available = true;
     sowr_InitCriticalSection(&sowr_log_file_mtx);
-    log_add_fp(sowr_log_file, SOWR_LOG_LEVEL_TRACE);
+    log_add_fp(sowr_log_file, LOG_TRACE);
     log_set_lock(sowr_LockLogFile, NULL);
 #endif
 }
