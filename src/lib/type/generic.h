@@ -95,7 +95,6 @@ typedef enum sowr_Type
 } sowr_Type;
 
 extern const char *const SOWR_TYPENAMES[];
-#define SOWR_TYPENAME_STR(T) SOWR_TYPENAMES[(T)]
 
 typedef union sowr_GenericTypeData
 {
@@ -160,7 +159,7 @@ typedef struct sowr_GenericType
     sowr_GenericTypeData data;
 } sowr_GenericType;
 
-#define SOWR_MAKE_GENERIC(var) (sowr_GenericType)                                              \
+#define SOWR_MAKE_GENERIC(var) (sowr_GenericType)                                                    \
                                {                                                                     \
                                     .type_name = _Generic((var),                                     \
                                                             bool: SOWR_TYPE_BOOL,                    \
@@ -189,5 +188,24 @@ typedef struct sowr_GenericType
                                                         default: (sowr_GenericTypeData){ .unknown = SOWR_TO_WIDER_IF_PTR((var)) }         \
                                                     )                                                                                     \
                                }
+
+#define SOWR_MAKE_GENERIC_T(var, T) (sowr_GenericType)                                               \
+                                    {                                                                \
+                                        .type_name = (T),                                            \
+                                        .data_size = sizeof((var)),                                  \
+                                        .data = _Generic((var),                                                                           \
+                                                        float: (sowr_GenericTypeData){ .as_float = SOWR_TO_WIDER_IF_PTR((var)) },         \
+                                                        double: (sowr_GenericTypeData){ .as_double = SOWR_TO_WIDER_IF_PTR((var)) },       \
+                                                        long double: (sowr_GenericTypeData){ .as_ldouble = SOWR_TO_WIDER_IF_PTR((var)) }, \
+                                                        default: (sowr_GenericTypeData){ .unknown = SOWR_TO_WIDER_IF_PTR((var)) }         \
+                                                    )                                                                                     \
+                                    }
+
+#define SOWR_MAKE_GENERIC_ARRAY(var, len) (sowr_GenericType)                                         \
+                                            {                                                        \
+                                                .type_name = SOWR_TYPE_ARRAY,                        \
+                                                .data_size = len,                                    \
+                                                .data = (sowr_GenericTypeData){ .as_arr = SOWR_TO_WIDER_IF_PTR((var)) }                   \
+                                            }
 
 #endif // !SOWR_LIB_TYPE_GENERIC_H

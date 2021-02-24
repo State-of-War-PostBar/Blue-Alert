@@ -166,4 +166,17 @@ sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz );
 bool
 sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz );
 
+///
+/// \brief Write contents to a file
+///
+/// Write a series of contents into a file.
+///
+/// \param file File to write into
+/// \param count Parameters that needs to be written
+///
+/// \return If the writing succeeded
+///
+void
+sowr_File_WriteContents( sowr_File file, size_t count, ... );
+
 #endif // !SOWR_LIB_IO_FIO_H

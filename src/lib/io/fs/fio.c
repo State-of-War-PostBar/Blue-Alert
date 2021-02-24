@@ -32,6 +32,7 @@
 #include "../../container/string.h"
 #include "../../data/unicode.h"
 #include "../../memory/heap_memory.h"
+#include "../../type/generic.h"
 
 sowr_File
 sowr_File_OpenR( const char *path )
@@ -282,4 +283,36 @@ sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz )
 #else
     return write(file, buffer, sz);
 #endif
+}
+
+void
+sowr_File_WriteContents( sowr_File file, size_t count, ... )
+{
+    va_list args;
+    va_start(args, count);
+    for (size_t i = 0ULL; i < count; i++)
+    {
+        sowr_GenericType data = va_arg(args, sowr_GenericType);
+        switch (data.type_name)
+        {
+            // We'll have to wait for C2X for bool to be a concrete type but yeah.
+            case (SOWR_TYPE_BOOL):
+            {
+                bool bol = data.data.as_bool;
+                sowr_File_WriteContent(file, bol ? "true" : "false", sizeof(char) * (bol ? 4ULL : 5ULL));
+                break;
+            }
+            case (SOWR_TYPE_STRING):
+            {
+                char *str = data.data.as_string;
+                size_t len = strlen(str);
+                sowr_File_WriteContent(file, str, len);
+                break;
+            }
+            // TODO Other data types
+            default:
+                sowr_File_WriteContent(file, "?", sizeof(char));
+        }
+    }
+    va_end(args);
 }
