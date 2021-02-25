@@ -37,43 +37,46 @@
     static sowr_LogLockFunc lock_func;
 
     thread_local static sowr_String message_buf;
+
+    static const char *const SOWR_LOGLVL_STRINGS[] =
+    {
+        "TRACE",
+        "DEBUG",
+        "INFO ",
+        "WARN ",
+        "ERROR",
+        "FATAL"
+    };
+
+    static const char *const SOWR_LOG_COLORCODES[] =
+    {
+        "\x1b[90m",
+        "\x1b[32m",
+        "\x1b[94m",
+        "\x1b[33m",
+        "\x1b[31m",
+        "\x1b[35m"
+    };
+
+    static const char *const SOWR_LOG_COLORCODE_RESET = "\x1b[0m";
 #endif
-
-static const char *const SOWR_LOGLVL_STRINGS[] =
-{
-    "TRACE",
-    "DEBUG",
-    "INFO ",
-    "WARN ",
-    "ERROR",
-    "FATAL"
-};
-
-static const char *const SOWR_LOG_COLORCODES[] =
-{
-    "\x1b[90m",
-    "\x1b[32m",
-    "\x1b[94m",
-    "\x1b[33m",
-    "\x1b[31m",
-    "\x1b[35m"
-};
-
-static const char *const SOWR_LOG_COLORCODE_RESET = "\x1b[0m";
 
 void
 sowr_Logger_Init( sowr_File file, sowr_LogLockFunc lock )
 {
+#ifdef SOWR_BUILD_DEBUG
     log_file = file;
     log_console = (sowr_File) SOWR_FILE_STDOUT;
     lock_func = lock;
     message_buf = sowr_String_CreateS();
     sowr_String_ExpandUntilOnce(&message_buf, 64ULL);
+#endif
 }
 
 void
 sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *message )
 {
+#ifdef SOWR_BUILD_DEBUG
     time_t raw_time = time(NULL);
     struct tm *loc_time = localtime(&raw_time);
 
@@ -101,11 +104,13 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
     sowr_File_WriteContent(log_console, message_buf.ptr, message_buf.length);
 
     sowr_String_Clear(&message_buf);
+#endif
 }
 
 void
 sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count, ... )
 {
+#ifdef SOWR_BUILD_DEBUG
     time_t raw_time = time(NULL);
     struct tm *loc_time = localtime(&raw_time);
 
@@ -139,11 +144,14 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
 
     va_end(args);
     sowr_String_Clear(&message_buf);
+#endif
 }
 
 void
 sowr_Logger_Destroy( void )
 {
+#ifdef SOWR_BUILD_DEBUG
     lock_func(false);
     sowr_String_DestroyS(&message_buf);
+#endif
 }

@@ -306,7 +306,7 @@ sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args )
         {
             case (SOWR_TYPE_STRING):
             {
-                char *str = data.data.as_string;
+                char *str = data.data.reg.as_string;
                 size_t len = strlen(str);
                 sowr_File_WriteContent(file, str, len);
                 break;

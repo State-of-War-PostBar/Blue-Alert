@@ -53,7 +53,7 @@ sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args )
         {
             case (SOWR_TYPE_STRING):
             {
-                sowr_String_PushS(output, data.data.as_string);
+                sowr_String_PushS(output, data.data.reg.as_string);
                 break;
             }
 
