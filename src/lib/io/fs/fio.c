@@ -295,13 +295,6 @@ sowr_File_WriteContents( sowr_File file, size_t count, ... )
         sowr_GenericType data = va_arg(args, sowr_GenericType);
         switch (data.type_name)
         {
-            // We'll have to wait for C2X for bool to be a concrete type but yeah.
-            case (SOWR_TYPE_BOOL):
-            {
-                bool bol = data.data.as_bool;
-                sowr_File_WriteContent(file, bol ? "true" : "false", sizeof(char) * (bol ? 4ULL : 5ULL));
-                break;
-            }
             case (SOWR_TYPE_STRING):
             {
                 char *str = data.data.as_string;
