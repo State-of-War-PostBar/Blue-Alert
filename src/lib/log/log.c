@@ -88,9 +88,7 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
     sowr_String_PushS(&message_buf, file);
     sowr_String_PushC(&message_buf, ':');
 
-    // Temporary solution
-    sowr_String_ExpandUntil(&message_buf, message_buf.length + 3ULL);
-    message_buf.length += snprintf(message_buf.ptr + message_buf.length, message_buf.length + 3ULL, "%d", line);
+    sowr_String_PushC(&message_buf, '?');
 
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, message);
@@ -122,9 +120,7 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
     sowr_String_PushS(&message_buf, file);
     sowr_String_PushC(&message_buf, ':');
 
-    // Temporary solution
-    sowr_String_ExpandUntil(&message_buf, message_buf.length + 3ULL);
-    message_buf.length += snprintf(message_buf.ptr + message_buf.length, message_buf.length + 3ULL, "%d", line);
+    sowr_String_PushC(&message_buf, '?');
 
     sowr_String_PushC(&message_buf, ' ');
 
