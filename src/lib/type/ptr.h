@@ -43,7 +43,7 @@
                                            const char *: (sowr_Ptr)(ptr), \
                                            void *: (sowr_Ptr)(ptr),       \
                                            const void *: (sowr_Ptr)(ptr), \
-                                           default: ptr                 \
+                                           default: (ptr)                 \
                                           )
 
 #endif // !SOWR_LIB_TYPE_PTR_H

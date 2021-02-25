@@ -43,7 +43,9 @@
 void
 sowr_InitProfiler( void )
 {
+#ifdef SOWR_TARGET_WINDOWS
     QueryPerformanceFrequency(&sowr_win_profile_timer_frequency);
+#endif
 }
 
 void
@@ -75,7 +77,7 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
                              SOWR_MAKE_GENERIC(" in "),
                              SOWR_MAKE_GENERIC(caller_file),
                              SOWR_MAKE_GENERIC(") took "),
-                             SOWR_MAKE_GENERIC(elapsed),
+                             SOWR_MAKE_GENERIC_F(elapsed),
                              SOWR_MAKE_GENERIC(" ms.")
                             );
         }
@@ -101,7 +103,7 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
                              SOWR_MAKE_GENERIC(" in "),
                              SOWR_MAKE_GENERIC(caller_file),
                              SOWR_MAKE_GENERIC(") took "),
-                             SOWR_MAKE_GENERIC(elapsed),
+                             SOWR_MAKE_GENERIC_F(elapsed),
                              SOWR_MAKE_GENERIC(" ms.")
                             );
         }
