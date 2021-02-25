@@ -36,6 +36,10 @@
     typedef HANDLE sowr_File;
 
     #define SOWR_INVALID_FILE_DESCRIPTOR INVALID_HANDLE_VALUE
+
+    #define SOWR_FILE_STDIN  STD_INPUT_HANDLE
+    #define SOWR_FILE_STDOUT STD_OUTPUT_HANDLE
+    #define SOWR_FILE_STDERR STD_ERROR_HANDLE
 #else
     #include <dirent.h>
     #include <fcntl.h>
@@ -45,6 +49,10 @@
     typedef int sowr_File;
 
     #define SOWR_INVALID_FILE_DESCRIPTOR -1
+
+    #define SOWR_FILE_STDIN  STDIN_FILENO
+    #define SOWR_FILE_STDOUT STDOUT_FILENO
+    #define SOWR_FILE_STDERR STDERR_FILENO
 #endif
 
 typedef void (*sowr_DirWalkFunc)( const char * );
@@ -174,9 +182,19 @@ sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz );
 /// \param file File to write into
 /// \param count Parameters that needs to be written
 ///
-/// \return If the writing succeeded
-///
 void
 sowr_File_WriteContents( sowr_File file, size_t count, ... );
+
+///
+/// \brief Write contents to a file
+///
+/// Write a series of contents into a file.
+///
+/// \param file File to write into
+/// \param count Parameters that needs to be written
+/// \param args Arguments for writing
+///
+void
+sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args );
 
 #endif // !SOWR_LIB_IO_FIO_H

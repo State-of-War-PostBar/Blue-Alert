@@ -290,9 +290,18 @@ sowr_File_WriteContents( sowr_File file, size_t count, ... )
 {
     va_list args;
     va_start(args, count);
+    sowr_File_WriteContentsV(file, count, &args);
+    va_end(args);
+}
+
+void
+sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args )
+{
+    va_list args_cpy;
+    va_copy(args_cpy, *args);
     for (size_t i = 0ULL; i < count; i++)
     {
-        sowr_GenericType data = va_arg(args, sowr_GenericType);
+        sowr_GenericType data = va_arg(args_cpy, sowr_GenericType);
         switch (data.type_name)
         {
             case (SOWR_TYPE_STRING):
@@ -302,10 +311,12 @@ sowr_File_WriteContents( sowr_File file, size_t count, ... )
                 sowr_File_WriteContent(file, str, len);
                 break;
             }
+
             // TODO Other data types
+
             default:
                 sowr_File_WriteContent(file, "?", sizeof(char));
         }
     }
-    va_end(args);
+    va_end(args_cpy);
 }

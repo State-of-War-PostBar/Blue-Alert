@@ -29,21 +29,16 @@
 
 #include "heap_memory.h"
 
-#include "../log/log.h"
-
 inline
 void *
 sowr_HeapAlloc( size_t size )
 {
     void *ptr = malloc(size);
-#ifdef SOWR_BUILD_DEBUG
     if (!ptr)
     {
         perror("Failed to allocate memory");
-        SOWR_LOG_FATAL("Failed to allocate %zu bytes of memory, program failing.", size);
         abort();
     }
-#endif
     return ptr;
 }
 
@@ -56,14 +51,11 @@ sowr_HeapAlignedAlloc( size_t alignment, size_t size )
 #else
     void *ptr = aligned_alloc(alignment, size);
 #endif
-#ifdef SOWR_BUILD_DEBUG
     if (!ptr)
     {
         perror("Failed to allocate aligned memory");
-        SOWR_LOG_FATAL("Failed to aligned allocating %zu bytes of memory, program failing.", size);
         abort();
     }
-#endif
     return ptr;
 }
 
@@ -72,14 +64,11 @@ void *
 sowr_HeapZeroAlloc( size_t size )
 {
     void *ptr = calloc(1ULL, size);
-#ifdef SOWR_BUILD_DEBUG
     if (!ptr)
     {
         perror("Failed to allocate memory with zeroing out");
-        SOWR_LOG_FATAL("Failed to initialize allocate %zu bytes of memory, program failing.", size);
         abort();
     }
-#endif
     return ptr;
 }
 
@@ -95,13 +84,10 @@ void *
 sowr_ReAlloc( size_t size, void *ptr )
 {
     void *new_memory = realloc(ptr, size);
-#ifdef SOWR_BUILD_DEBUG
     if (!new_memory)
     {
         perror("Failed to reallocate memory");
-        SOWR_LOG_FATAL("Failed to reallocate %zu bytes of memory for %p, program failing.", ptr, size);
         abort();
     }
-#endif
     return new_memory;
 }

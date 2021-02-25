@@ -91,7 +91,6 @@ sowr_Thread_Yield( void );
 ///
 /// Exit current thread.
 ///
-noreturn
 void
 sowr_Thread_Exit( void );
 

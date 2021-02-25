@@ -199,6 +199,30 @@ void
 sowr_String_PushFrontS( sowr_String *str, const char *data );
 
 ///
+/// \brief Insert into string
+///
+/// Insert a character into the middle of string.
+///
+/// \param str String
+/// \param index Index to push into (the index character later claims)
+/// \param data Character to push
+///
+void
+sowr_String_InsertC( sowr_String *str, size_t index, char data );
+
+///
+/// \brief Insert into string
+///
+/// Insert a string into the middle of string.
+///
+/// \param str String
+/// \param index Index to push into (the index string segment later claims)
+/// \param data String segment to push
+///
+void
+sowr_String_InsertS( sowr_String *str, size_t index, const char *data );
+
+///
 /// \brief Pop from a string
 ///
 /// Pop a character from the end of string.

@@ -30,6 +30,7 @@
 #include "mod.h"
 
 #include "../lib/log/log.h"
+#include "../lib/type/generic.h"
 
 sowr_Mod
 sowr_Mod_Load(sowr_DL lib)

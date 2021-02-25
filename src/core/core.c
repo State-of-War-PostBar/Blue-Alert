@@ -29,6 +29,7 @@
 
 #include "core.h"
 
+#include "../lib/io/fs/fio.h"
 #include "../lib/log/log.h"
 #include "../lib/sync/lock.h"
 
@@ -47,9 +48,9 @@ const char *const    SOWR_BUILD_STRING     = "Build 1";
 const char *const    SOWR_DEFAULT_ENCODING = "utf-8";
 
 #ifdef SOWR_BUILD_DEBUG
-    static const char *const SOWR_LOG_FILE_NAME = "sowr.log";
+    static const char *const SOWR_LOG_FILE_NAME = "./sowr.log";
     static bool sowr_log_available;
-    static FILE *sowr_log_file;
+    static sowr_File sowr_log_file;
     static sowr_CriticalSection sowr_log_file_mtx;
 
     ///
@@ -62,7 +63,7 @@ const char *const    SOWR_DEFAULT_ENCODING = "utf-8";
     ///
     static
     void
-    sowr_LockLogFile( bool lock, void *user_data )
+    sowr_LockLogFile( bool lock )
     {
         lock ?
             sowr_EnterCriticalSection(&sowr_log_file_mtx)
@@ -75,7 +76,7 @@ void
 sowr_InitLogger( void )
 {
 #ifdef SOWR_BUILD_DEBUG
-    sowr_log_file = fopen(SOWR_LOG_FILE_NAME, "w");
+    sowr_log_file = sowr_File_OpenOrCreate(SOWR_LOG_FILE_NAME, SOWR_FIO_WRITE_TRUNCATE);
     if (!sowr_log_file)
     {
         perror("Failed to create a log file, logging will not be availalbe");
@@ -85,8 +86,7 @@ sowr_InitLogger( void )
 
     sowr_log_available = true;
     sowr_InitCriticalSection(&sowr_log_file_mtx);
-    log_add_fp(sowr_log_file, LOG_TRACE);
-    log_set_lock(sowr_LockLogFile, NULL);
+    sowr_Logger_Init(sowr_log_file, sowr_LockLogFile);
 #endif
 }
 
@@ -96,9 +96,7 @@ sowr_DestroyLogger( void )
 #ifdef SOWR_BUILD_DEBUG
     if (sowr_log_available)
     {
-        sowr_LockLogFile(true, NULL);
-        fclose(sowr_log_file);
-        sowr_LockLogFile(false, NULL);
+        sowr_Logger_Destroy();
         sowr_DestroyCriticalSection(&sowr_log_file_mtx);
         sowr_log_file = NULL;
         sowr_log_available = false;

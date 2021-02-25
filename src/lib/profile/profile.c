@@ -30,6 +30,7 @@
 #include "profile.h"
 
 #include "../log/log.h"
+#include "../type/generic.h"
 
 #ifdef SOWR_TARGET_WINDOWS
     static LARGE_INTEGER sowr_win_profile_timer_frequency;
@@ -64,7 +65,19 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
         {
             QueryPerformanceCounter(&stop);
             elapsed = (stop.QuadPart - start.QuadPart) * 1000.0f / sowr_win_profile_timer_frequency.QuadPart;
-            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
+            SOWR_LOG_DEBUG_G(11,
+                             SOWR_MAKE_GENERIC("Profiling "),
+                             SOWR_MAKE_GENERIC(caller_func),
+                             SOWR_MAKE_GENERIC(" (Line "),
+                             SOWR_MAKE_GENERIC(start_line + 1),
+                             SOWR_MAKE_GENERIC(" - "),
+                             SOWR_MAKE_GENERIC(called_line - 1),
+                             SOWR_MAKE_GENERIC(" in "),
+                             SOWR_MAKE_GENERIC(caller_file),
+                             SOWR_MAKE_GENERIC(") took "),
+                             SOWR_MAKE_GENERIC(elapsed),
+                             SOWR_MAKE_GENERIC(" ms.")
+                            );
         }
     #else
         thread_local static sowr_PosixTime start, stop;
@@ -78,7 +91,19 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
         {
             gettimeofday(&stop, NULL);
             elapsed = (stop.tv_sec - start.tv_sec) * 1000.0f + (stop.tv_usec - start.tv_usec) / 1000.0f;
-            SOWR_LOG_DEBUG("Profiling %s (Line %d - %d in %s) took %lf ms.", caller_func, start_line + 1, called_line - 1, caller_file, elapsed);
+            SOWR_LOG_DEBUG_G(11,
+                             SOWR_MAKE_GENERIC("Profiling "),
+                             SOWR_MAKE_GENERIC(caller_func),
+                             SOWR_MAKE_GENERIC(" (Line "),
+                             SOWR_MAKE_GENERIC(start_line + 1),
+                             SOWR_MAKE_GENERIC(" - "),
+                             SOWR_MAKE_GENERIC(called_line - 1),
+                             SOWR_MAKE_GENERIC(" in "),
+                             SOWR_MAKE_GENERIC(caller_file),
+                             SOWR_MAKE_GENERIC(") took "),
+                             SOWR_MAKE_GENERIC(elapsed),
+                             SOWR_MAKE_GENERIC(" ms.")
+                            );
         }
     #endif
     first_called = !first_called;

@@ -27,82 +27,42 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#include "thread.h"
+#include "cstring.h"
 
-int
-sowr_Thread_Create( sowr_Thread *thr, sowr_ThreadFunc func, void *arg )
+#include "../type/generic.h"
+
+void
+sowr_CString_Compose( sowr_String *output, size_t count, ... )
 {
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Thread thrd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, arg, 0, NULL);
-    if (!thrd)
+    va_list args;
+    va_start(args, count);
+    sowr_CString_ComposeV(output, count, &args);
+    va_end(args);
+}
+
+void
+sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args )
+{
+    va_list args_cpy;
+    va_copy(args_cpy, *args);
+
+    for (size_t i = 0ULL; i < count; i++)
     {
-        *thr = NULL;
-        return -1;
+        sowr_GenericType data = va_arg(args_cpy, sowr_GenericType);
+        switch (data.type_name)
+        {
+            case (SOWR_TYPE_STRING):
+            {
+                sowr_String_PushS(output, data.data.as_string);
+                break;
+            }
+
+            // TODO: Other data types
+
+            default:
+                sowr_String_PushC(output, '?');
+        }
     }
-    *thr = thrd;
-    return 0;
-#else
-    return pthread_create(thr, NULL, func, arg);
-#endif
-}
 
-sowr_Thread
-sowr_Thread_Current( void )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    return GetCurrentThread();
-#else
-    return pthread_self();
-#endif
-}
-
-void
-sowr_Thread_Sleep( const struct timespec *duration )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    Sleep(duration->tv_sec * 1000.0 + duration->tv_nsec / 0.000001);
-#else
-    nanosleep(duration, NULL);
-#endif
-}
-
-void
-sowr_Thread_Yield( void )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    SwitchToThread();
-#else
-    pthread_yield();
-#endif
-}
-
-void
-sowr_Thread_Exit( void )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    ExitThread(0);
-#else
-    pthread_exit(NULL);
-#endif
-}
-
-void
-sowr_Thread_Detach( sowr_Thread thr )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    CloseHandle(thr);
-#else
-    pthread_detach(thr);
-#endif
-}
-
-void
-sowr_Thread_Join( sowr_Thread thr )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    WaitForSingleObject(thr, INFINITE);
-    CloseHandle(thr);
-#else
-    pthread_join(thr, NULL);
-#endif
+    va_end(args_cpy);
 }

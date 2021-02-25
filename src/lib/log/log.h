@@ -32,21 +32,89 @@
 
 #include <pch.h>
 
-#include <logger/log.h>
+#include "../io/fs/fio.h"
+
+typedef enum sowr_LogLevel
+{
+    SOWR_LOGLVL_TRACE,
+    SOWR_LOGLVL_DEBUG,
+    SOWR_LOGLVL_INFO,
+    SOWR_LOGLVL_WARN,
+    SOWR_LOGLVL_ERROR,
+    SOWR_LOGLVL_FATAL
+} sowr_LogLevel;
+
+typedef void (*sowr_LogLockFunc)( bool );
+
+///
+/// \brief Initialize logger
+///
+/// Initialize the logger.
+///
+/// \param file File for log output
+/// \param lock Locking function for writing to the file
+///
+void
+sowr_Logger_Init( sowr_File file, sowr_LogLockFunc lock );
+
+///
+/// \brief Log an event
+///
+/// Log an event.
+///
+/// \param level Level of the event
+/// \param file Source file of the event
+/// \param line Line of the source file of the event
+/// \param message Message to log
+///
+void
+sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *message );
+
+///
+/// \param Log an event
+///
+/// \param level Level of the event
+/// \param file Source file of the event
+/// \param line Line of the source file of the event
+///
+void
+sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count, ... );
+
+///
+/// \brief Destroy the logger
+///
+/// Destroy the logger.
+///
+void
+sowr_Logger_Destroy( void );
 
 #ifdef SOWR_BUILD_DEBUG
-    #define SOWR_LOG_TRACE(...)  log_trace(__VA_ARGS__)
-    #define SOWR_LOG_DEBUG(...)  log_debug(__VA_ARGS__)
-    #define SOWR_LOG_INFO(...)   log_info(__VA_ARGS__)
-    #define SOWR_LOG_WARN(...)   log_warn(__VA_ARGS__)
-    #define SOWR_LOG_ERROR(...)  log_error(__VA_ARGS__)
-    #define SOWR_LOG_FATAL(...)  log_fatal(__VA_ARGS__)
+    #define SOWR_LOG_TRACE(str) sowr_Logger_Log(SOWR_LOGLVL_TRACE, __FILE__, __LINE__, str)
+    #define SOWR_LOG_DEBUG(str) sowr_Logger_Log(SOWR_LOGLVL_DEBUG, __FILE__, __LINE__, str)
+    #define SOWR_LOG_INFO(str) sowr_Logger_Log(SOWR_LOGLVL_INFO, __FILE__, __LINE__, str)
+    #define SOWR_LOG_WARN(str) sowr_Logger_Log(SOWR_LOGLVL_WARN, __FILE__, __LINE__, str)
+    #define SOWR_LOG_ERROR(str) sowr_Logger_Log(SOWR_LOGLVL_ERROR, __FILE__, __LINE__, str)
+    #define SOWR_LOG_FATAL(str) sowr_Logger_Log(SOWR_LOGLVL_FATAL, __FILE__, __LINE__, str)
+
+    #define SOWR_LOG_TRACE_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_TRACE, __FILE__, __LINE__, (count), __VA_ARGS__)
+    #define SOWR_LOG_DEBUG_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_DEBUG, __FILE__, __LINE__, (count), __VA_ARGS__)
+    #define SOWR_LOG_INFO_G(count, ...)   sowr_Logger_LogG(SOWR_LOGLVL_INFO, __FILE__, __LINE__, (count), __VA_ARGS__)
+    #define SOWR_LOG_WARN_G(count, ...)   sowr_Logger_LogG(SOWR_LOGLVL_WARN, __FILE__, __LINE__, (count), __VA_ARGS__)
+    #define SOWR_LOG_ERROR_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_ERROR, __FILE__, __LINE__, (count), __VA_ARGS__)
+    #define SOWR_LOG_FATAL_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_FATAL, __FILE__, __LINE__, (count), __VA_ARGS__)
 #else
-    #define SOWR_LOG_TRACE(...)
-    #define SOWR_LOG_INFO(...)
-    #define SOWR_LOG_WARN(...)
-    #define SOWR_LOG_ERROR(...)
-    #define SOWR_LOG_FATAL(...)
+    #define SOWR_LOG_TRACE(str)
+    #define SOWR_LOG_INFO(str)
+    #define SOWR_LOG_WARN(str)
+    #define SOWR_LOG_ERROR(str)
+    #define SOWR_LOG_FATAL(str)
+
+    #define SOWR_LOG_TRACE_G(count, ...)
+    #define SOWR_LOG_DEBUG_G(count, ...)
+    #define SOWR_LOG_INFO_G(count, ...)
+    #define SOWR_LOG_WARN_G(count, ...)
+    #define SOWR_LOG_ERROR_G(count, ...)
+    #define SOWR_LOG_FATAL_G(count, ...)
 #endif
 
 #endif // !SOWR_LIB_LOG_LOG_H

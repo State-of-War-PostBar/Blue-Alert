@@ -181,7 +181,7 @@ typedef struct sowr_GenericType
                                                             default: SOWR_TYPE_UNKNOWN               \
                                                          ),                                          \
                                     .data_size = sizeof((var)),                                      \
-                                    .data = _Generic((var),                                                                               \
+                                   .data = _Generic((var),                                                                                \
                                                         float: (sowr_GenericTypeData){ .as_float = SOWR_TO_WIDER_IF_PTR((var)) },         \
                                                         double: (sowr_GenericTypeData){ .as_double = SOWR_TO_WIDER_IF_PTR((var)) },       \
                                                         long double: (sowr_GenericTypeData){ .as_ldouble = SOWR_TO_WIDER_IF_PTR((var)) }, \

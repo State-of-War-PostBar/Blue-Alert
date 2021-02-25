@@ -27,82 +27,17 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#include "thread.h"
+#ifndef SOWR_LIB_DATA_CSTRING_H
+#define SOWR_LIB_DATA_CSTRING_H
 
-int
-sowr_Thread_Create( sowr_Thread *thr, sowr_ThreadFunc func, void *arg )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Thread thrd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, arg, 0, NULL);
-    if (!thrd)
-    {
-        *thr = NULL;
-        return -1;
-    }
-    *thr = thrd;
-    return 0;
-#else
-    return pthread_create(thr, NULL, func, arg);
-#endif
-}
+#include <pch.h>
 
-sowr_Thread
-sowr_Thread_Current( void )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    return GetCurrentThread();
-#else
-    return pthread_self();
-#endif
-}
+#include "../container/string.h"
 
 void
-sowr_Thread_Sleep( const struct timespec *duration )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    Sleep(duration->tv_sec * 1000.0 + duration->tv_nsec / 0.000001);
-#else
-    nanosleep(duration, NULL);
-#endif
-}
+sowr_CString_Compose( sowr_String *output, size_t count, ... );
 
 void
-sowr_Thread_Yield( void )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    SwitchToThread();
-#else
-    pthread_yield();
-#endif
-}
+sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args );
 
-void
-sowr_Thread_Exit( void )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    ExitThread(0);
-#else
-    pthread_exit(NULL);
-#endif
-}
-
-void
-sowr_Thread_Detach( sowr_Thread thr )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    CloseHandle(thr);
-#else
-    pthread_detach(thr);
-#endif
-}
-
-void
-sowr_Thread_Join( sowr_Thread thr )
-{
-#ifdef SOWR_TARGET_WINDOWS
-    WaitForSingleObject(thr, INFINITE);
-    CloseHandle(thr);
-#else
-    pthread_join(thr, NULL);
-#endif
-}
+#endif // !SOWR_LIB_DATA_CSTRING_H
