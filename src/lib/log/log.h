@@ -58,6 +58,14 @@ void
 sowr_Logger_Init( sowr_File file, sowr_LogLockFunc lock );
 
 ///
+/// \brief Initialize logger
+///
+/// Initialize the logger thread-locally.
+///
+void
+sowr_Logger_ThrdInit(void);
+
+///
 /// \brief Log an event
 ///
 /// Log an event.
@@ -88,6 +96,14 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
 ///
 void
 sowr_Logger_Destroy( void );
+
+///
+/// \brief Destroy the logger
+///
+/// Destroy the logger thread-locally.
+///
+void
+sowr_Logger_ThrdDestroy(void);
 
 #ifdef SOWR_BUILD_DEBUG
     #define SOWR_LOG_TRACE(str) sowr_Logger_Log(SOWR_LOGLVL_TRACE, __FILE__, __LINE__, str)

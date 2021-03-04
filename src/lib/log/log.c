@@ -75,6 +75,15 @@ sowr_Logger_Init( sowr_File file, sowr_LogLockFunc lock )
 }
 
 void
+sowr_Logger_ThrdInit(void)
+{
+#ifdef SOWR_BUILD_DEBUG
+    message_buf = sowr_String_CreateS();
+    sowr_String_ExpandUntilOnce(&message_buf, 64ULL);
+#endif
+}
+
+void
 sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *message )
 {
 #ifdef SOWR_BUILD_DEBUG
@@ -142,7 +151,14 @@ void
 sowr_Logger_Destroy( void )
 {
 #ifdef SOWR_BUILD_DEBUG
-    lock_func(false);
+    sowr_String_DestroyS(&message_buf);
+#endif
+}
+
+void
+sowr_Logger_ThrdDestroy(void)
+{
+#ifdef SOWR_BUILD_DEBUG
     sowr_String_DestroyS(&message_buf);
 #endif
 }
