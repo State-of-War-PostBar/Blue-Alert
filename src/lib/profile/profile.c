@@ -66,7 +66,7 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
         else
         {
             QueryPerformanceCounter(&stop);
-            elapsed = (stop.QuadPart - start.QuadPart) * 1000.0f / sowr_win_profile_timer_frequency.QuadPart;
+            elapsed = (stop.QuadPart - start.QuadPart) * 1000.0 / sowr_win_profile_timer_frequency.QuadPart;
             SOWR_LOG_DEBUG_G(11,
                              SOWR_MAKE_GENERIC("Profiling "),
                              SOWR_MAKE_GENERIC(caller_func),
