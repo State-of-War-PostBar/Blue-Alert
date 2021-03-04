@@ -32,7 +32,7 @@
 #include "../log/log.h"
 #include "../type/generic.h"
 
-#ifdef SOWR_TARGET_WINDOWS
+#if defined SOWR_BUILD_DEBUG && defined SOWR_TARGET_WINDOWS
     static LARGE_INTEGER sowr_win_profile_timer_frequency;
 #else
     #include <sys/time.h>
@@ -43,7 +43,7 @@
 void
 sowr_InitProfiler( void )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#if defined SOWR_BUILD_DEBUG && defined SOWR_TARGET_WINDOWS
     QueryPerformanceFrequency(&sowr_win_profile_timer_frequency);
 #endif
 }
@@ -51,6 +51,7 @@ sowr_InitProfiler( void )
 void
 sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_line )
 {
+#ifdef SOWR_BUILD_DEBUG
     thread_local static double elapsed;
     thread_local static bool first_called = true;
     thread_local static int start_line;
@@ -109,4 +110,5 @@ sowr_ProfileFunc( const char *caller_file, const char *caller_func, int called_l
         }
     #endif
     first_called = !first_called;
+#endif
 }
