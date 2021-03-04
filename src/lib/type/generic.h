@@ -191,10 +191,10 @@ typedef struct sowr_GenericType
                                     .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  SOWR_TO_WIDER_IF_PTR((var)) } } \
                                }
 
-#define SOWR_MAKE_GENERIC_T(var, T) (sowr_GenericType)                                               \
-                                    {                                                                \
-                                        .type_name = (T),                                            \
-                                        .data_size = sizeof((var)),                                  \
+#define SOWR_MAKE_GENERIC_T(var, T) (sowr_GenericType)              \
+                                    {                               \
+                                        .type_name = (T),           \
+                                        .data_size = sizeof((var)), \
                                         .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  SOWR_TO_WIDER_IF_PTR((var)) } } \
                                     }
 
@@ -213,7 +213,7 @@ typedef struct sowr_GenericType
                                                                                     long double: (sowr_GenericDataFloat){ .as_ldouble = (varf) }, \
                                                                                     default: (sowr_GenericDataFloat){ .as_float = (varf) }        \
                                                                                    )                                                              \
-                                                                  }                         \
+                                                                  }                       \
                                   }
 
 #define SOWR_MAKE_GENERIC_A(var, len) (sowr_GenericType)              \
