@@ -304,18 +304,253 @@ sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args )
         sowr_GenericType data = va_arg(args_cpy, sowr_GenericType);
         switch (data.type_name)
         {
-            case (SOWR_TYPE_STRING):
+            case SOWR_TYPE_BOOL:
             {
-                char *str = data.data.reg.as_string;
+                sowr_File_WriteContent(file, &(data.data.reg.as_bool), sizeof(bool));
+                break;
+            }
+            case SOWR_TYPE_CHAR:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_char), sizeof(char));
+                break;
+            }
+            case SOWR_TYPE_UCHAR:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uchar), sizeof(unsigned char));
+                break;
+            }
+            case SOWR_TYPE_SHORT:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_short), sizeof(short));
+                break;
+            }
+            case SOWR_TYPE_USHORT:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_ushort), sizeof(unsigned short));
+                break;
+            }
+            case SOWR_TYPE_INT:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int), sizeof(int));
+                break;
+            }
+            case SOWR_TYPE_UINT:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint), sizeof(unsigned int));
+                break;
+            }
+            case SOWR_TYPE_LONG:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_long), sizeof(long));
+                break;
+            }
+            case SOWR_TYPE_ULONG:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_ulong), sizeof(unsigned long));
+                break;
+            }
+            case SOWR_TYPE_LONGLONG:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_long_long), sizeof(long long));
+                break;
+            }
+            case SOWR_TYPE_ULONGLONG:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_ulong_long), sizeof(unsigned long long));
+                break;
+            }
+            case SOWR_TYPE_CHAR16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_char16), sizeof(char16_t));
+                break;
+            }
+            case SOWR_TYPE_CHAR32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_char32), sizeof(char32_t));
+                break;
+            }
+            case SOWR_TYPE_INT_8:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_8), sizeof(int8_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_8:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_8), sizeof(uint8_t));
+                break;
+            }
+            case SOWR_TYPE_INT_16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_16), sizeof(int16_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_16), sizeof(uint16_t));
+                break;
+            }
+            case SOWR_TYPE_INT_32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_32), sizeof(int32_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_32), sizeof(uint32_t));
+                break;
+            }
+            case SOWR_TYPE_INT_64:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_64), sizeof(int64_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_64:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_64), sizeof(uint64_t));
+                break;
+            }
+            case SOWR_TYPE_INT_LEAST_8:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_least8), sizeof(int_least8_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_LEAST_8:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least8), sizeof(uint_least8_t));
+                break;
+            }
+            case SOWR_TYPE_INT_LEAST_16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_least16), sizeof(int_least16_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_LEAST_16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least16), sizeof(uint_least16_t));
+                break;
+            }
+            case SOWR_TYPE_INT_LEAST_32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_least32), sizeof(int_least32_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_LEAST_32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least32), sizeof(uint_least32_t));
+                break;
+            }
+            case SOWR_TYPE_INT_LEAST_64:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_least64), sizeof(int_least64_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_LEAST_64:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least64), sizeof(uint_least64_t));
+                break;
+            }
+            case SOWR_TYPE_INT_FAST_8:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast8), sizeof(int_fast8_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_FAST_8:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast8), sizeof(uint_fast8_t));
+                break;
+            }
+            case SOWR_TYPE_INT_FAST_16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast16), sizeof(int_fast16_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_FAST_16:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast16), sizeof(uint_fast16_t));
+                break;
+            }
+            case SOWR_TYPE_INT_FAST_32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast32), sizeof(int_fast32_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_FAST_32:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast32), sizeof(uint_fast32_t));
+                break;
+            }
+            case SOWR_TYPE_INT_FAST_64:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast64), sizeof(int_fast64_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_FAST_64:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast64), sizeof(uint_fast64_t));
+                break;
+            }
+            case SOWR_TYPE_SIZE:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_size), sizeof(size_t));
+                break;
+            }
+            case SOWR_TYPE_PTR_DIFF:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_ptr_diff), sizeof(ptrdiff_t));
+                break;
+            }
+            case SOWR_TYPE_INT_MAX:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_int_max), sizeof(intmax_t));
+                break;
+            }
+            case SOWR_TYPE_UINT_MAX:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_uint_max), sizeof(uintmax_t));
+                break;
+            }
+
+            case SOWR_TYPE_FLOAT:
+            {
+                sowr_File_WriteContent(file, &(data.data.flt.as_float), sizeof(float));
+                break;
+            }
+            case SOWR_TYPE_DOUBLE:
+            {
+                sowr_File_WriteContent(file, &(data.data.flt.as_double), sizeof(double));
+                break;
+            }
+            case SOWR_TYPE_LDOUBLE:
+            {
+                sowr_File_WriteContent(file, &(data.data.flt.as_ldouble), sizeof(long double));
+                break;
+            }
+
+            case SOWR_TYPE_STRING:
+            {
+                const char *str = data.data.reg.as_string;
                 size_t len = strlen(str);
                 sowr_File_WriteContent(file, str, len);
                 break;
             }
-
-            // TODO Other data types
-
+            case SOWR_TYPE_FUNC_PTR:
+            case SOWR_TYPE_VOID_PTR:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_void_ptr), sizeof(void *));
+                break;
+            }
+            case SOWR_TYPE_PTR:
+            {
+                sowr_File_WriteContent(file, &(data.data.reg.as_ptr), sizeof(sowr_Ptr));
+                break;
+            }
+            case SOWR_TYPE_ARRAY:
+            {
+                sowr_File_WriteContent(file, data.data.reg.as_arr, data.data_size);
+                break;
+            }
             default:
-                sowr_File_WriteContent(file, "?", sizeof(char));
+                sowr_File_WriteContent(file, &(data.data), sizeof(sowr_GenericTypeData));
         }
     }
     va_end(args_cpy);

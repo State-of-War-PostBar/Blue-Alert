@@ -49,7 +49,6 @@ const char *const SOWR_TYPENAMES[] =
 //  "char8",
     "char16",
     "char32",
-    "wide char",
     "int of 8 bits",
     "unsigned int of 8 bits",
     "int of 16 bits",

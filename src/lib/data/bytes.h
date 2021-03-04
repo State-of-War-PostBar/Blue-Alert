@@ -33,6 +33,16 @@
 #include <pch.h>
 
 ///
+/// \brief Check endianness
+///
+/// Check the endianness of the system.
+///
+/// \return True if little endian, false if big endian
+///
+bool
+sowr_Endianness(void);
+
+///
 /// \brief Swap endianness of some bytes
 ///
 /// Swap the endianness of a sequence of bytes.

@@ -30,6 +30,7 @@
 #include "log.h"
 
 #include "../container/string.h"
+#include "../data/cstring.h"
 
 #ifdef SOWR_BUILD_DEBUG
     static sowr_File log_file;
@@ -87,9 +88,7 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, file);
     sowr_String_PushC(&message_buf, ':');
-
-    sowr_String_PushC(&message_buf, '?');
-
+    sowr_CString_IToA(&message_buf, line, 10U);
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, message);
     sowr_String_PushC(&message_buf, '\n');
@@ -119,24 +118,20 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, file);
     sowr_String_PushC(&message_buf, ':');
-
-    sowr_String_PushC(&message_buf, '?');
-
+    sowr_CString_IToA(&message_buf, line, 10U);
     sowr_String_PushC(&message_buf, ' ');
 
     va_list args;
     va_start(args, count);
 
+    sowr_CString_ComposeV(&message_buf, count, &args);
+    sowr_String_PushC(&message_buf, '\n');
     lock_func(true);
     sowr_File_WriteContent(log_file, message_buf.ptr, message_buf.length);
-    sowr_File_WriteContentsV(log_file, count, &args);
-    sowr_File_WriteContent(log_file, "\n", sizeof(char));
     lock_func(false);
     sowr_String_InsertS(&message_buf, colorcode, SOWR_LOG_COLORCODES[level]);
     sowr_String_InsertS(&message_buf, colorcode + 5ULL + 5ULL, SOWR_LOG_COLORCODE_RESET);
     sowr_File_WriteContent(log_console, message_buf.ptr, message_buf.length);
-    sowr_File_WriteContentsV(log_console, count, &args);
-    sowr_File_WriteContent(log_console, "\n", sizeof(char));
 
     va_end(args);
     sowr_String_Clear(&message_buf);

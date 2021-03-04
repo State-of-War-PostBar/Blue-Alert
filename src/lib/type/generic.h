@@ -53,7 +53,6 @@ typedef enum sowr_Type
 //  SOWR_TYPE_CHAR8,
     SOWR_TYPE_CHAR16,
     SOWR_TYPE_CHAR32,
-    SOWR_TYPE_WCHAR,
     SOWR_TYPE_INT_8,
     SOWR_TYPE_UINT_8,
     SOWR_TYPE_INT_16,
@@ -112,7 +111,6 @@ typedef union sowr_GenericDataRegular
 //  char8_t as_char8;
     char16_t as_char16;
     char32_t as_char32;
-    wchar_t as_wchar;
     int8_t as_int_8;
     uint8_t as_uint_8;
     int16_t as_int_16;

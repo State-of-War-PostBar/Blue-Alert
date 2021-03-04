@@ -71,11 +71,12 @@ void
 sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *message );
 
 ///
-/// \param Log an event
+/// \brief Log an event
 ///
 /// \param level Level of the event
 /// \param file Source file of the event
 /// \param line Line of the source file of the event
+/// \param count Number of parameters
 ///
 void
 sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count, ... );

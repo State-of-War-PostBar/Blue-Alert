@@ -98,4 +98,6 @@
     #define SOWR_EXPORT
 #endif
 
+#define SOWR_STRINGIFY(s) #s
+
 #endif // !SOWR_PCH_H
