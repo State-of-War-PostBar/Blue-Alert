@@ -49,7 +49,7 @@ typedef struct sowr_BinaryTree
 {
     size_t length;
     sowr_BinaryTreeFreeFunc free_func;
-    sowr_BinaryTreeNode *head;
+    sowr_BinaryTreeNode head;
 } sowr_BinaryTree;
 
 ///

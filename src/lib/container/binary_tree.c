@@ -77,7 +77,7 @@ sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func )
 {
     sowr_BinaryTree *tree = sowr_HeapAlloc(sizeof(sowr_BinaryTree));
     tree->free_func = free_func;
-    tree->head = NULL;
+    tree->head = (sowr_BinaryTreeNode){ 0 };
     tree->length = 0ULL;
     return tree;
 }
@@ -88,7 +88,7 @@ sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func )
     sowr_BinaryTree tree =
     {
         .free_func = free_func,
-        .head = NULL,
+        .head = (sowr_BinaryTreeNode){ 0 },
         .length = 0ULL
     };
     return tree;
@@ -99,16 +99,14 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
 {
     if (!tree->length)
     {
-        sowr_BinaryTreeNode *node = sowr_HeapAlloc(sizeof(sowr_BinaryTreeNode));
-        node->data_size = data_size;
-        node->data = sowr_HeapAlloc(data_size);
-        memcpy(node->data, data, data_size);
-        node->left = node->right = NULL;
-        tree->head = node;
+        tree->head.data_size = data_size;
+        tree->head.data = sowr_HeapAlloc(data_size);
+        memcpy(tree->head.data, data, data_size);
+        tree->head.left = tree->head.right = NULL;
     }
     else
     {
-        sowr_BinaryTreeNode *iter = tree->head, *previous = NULL;
+        sowr_BinaryTreeNode *iter = &(tree->head), *previous = NULL;
         int result = 0;
         while (iter)
         {
@@ -142,7 +140,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTree
     if (!tree->length)
         return false;
 
-    sowr_BinaryTreeNode *iter = tree->head;
+    sowr_BinaryTreeNode *iter = &(tree->head);
     sowr_BinaryTreeNode *previous = NULL;
     bool left_of_previous = true;
     int result = 0;
@@ -177,7 +175,8 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTree
                         previous->right = successor;
                 }
                 else
-                    tree->head = successor;
+                    // No previous node
+                    tree->head = *successor;
                 successor->left = iter->left;
                 successor->right = iter != presuccessor ? iter->right : successor->right;
             }
@@ -193,7 +192,9 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTree
                         previous->right = child;
                 }
                 else
-                    tree->head = child;
+                {
+                    tree->head = *child;
+                }
             }
             else
             {
@@ -206,13 +207,21 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTree
                         previous->right = NULL;
                 }
                 else
-                    tree->head = NULL;
+                {
+                    if (tree->free_func)
+                        tree->free_func(tree->head.data);
+                    sowr_HeapFree(tree->head.data);
+                    tree->head = (sowr_BinaryTreeNode){ 0 };
+                }
             }
 
-            if (tree->free_func)
-                tree->free_func(iter->data);
-            sowr_HeapFree(iter->data);
-            sowr_HeapFree(iter);
+            if (iter != &(tree->head))
+            {
+                if (tree->free_func)
+                    tree->free_func(iter->data);
+                sowr_HeapFree(iter->data);
+                sowr_HeapFree(iter);
+            }
             tree->length--;
             return true;
         }
@@ -240,7 +249,7 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func )
     if (!tree->length)
         return;
 
-    sowr_BinaryTreeNode_Walk(tree->head, func);
+    sowr_BinaryTreeNode_Walk(&(tree->head), func);
 }
 
 sowr_BinaryTreeNode *
@@ -249,13 +258,13 @@ sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data, sowr_Binary
     if (!tree->length)
         return NULL;
 
-    sowr_BinaryTreeNode *iter = tree->head;
+    const sowr_BinaryTreeNode *iter = &(tree->head);
     int result = 0;
     while (iter)
     {
         result = cmp_func(iter->data, data);
         if (!result)
-            return iter;
+            return (sowr_BinaryTreeNode *)iter;
         else if (result < 0)
             iter = iter->left;
         else
@@ -271,7 +280,17 @@ sowr_BinaryTree_Clear( sowr_BinaryTree *tree )
     if (!tree->length)
         return;
 
-    sowr_BinaryTreeNode_Clear(tree->head, tree->free_func);
+    sowr_BinaryTreeNode_Clear(tree->head.left, tree->free_func);
+    sowr_BinaryTreeNode_Clear(tree->head.right, tree->free_func);
+
+    if (tree->head.data_size)
+    {
+        if (tree->free_func)
+            tree->free_func(tree->head.data);
+        sowr_HeapFree(tree->head.data);
+    }
+
+    tree->head = (sowr_BinaryTreeNode){ 0 };
     tree->length = 0ULL;
 }
 
@@ -281,7 +300,7 @@ sowr_BinaryTree_Height( const sowr_BinaryTree *tree )
     if (!tree->length)
         return 0ULL;
 
-    return sowr_BinaryTreeNode_Height(tree->head);
+    return sowr_BinaryTreeNode_Height(&(tree->head));
 }
 
 void
