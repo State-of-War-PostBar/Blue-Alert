@@ -98,7 +98,7 @@ sowr_DestroyLogger( void )
     {
         sowr_Logger_Destroy();
         sowr_DestroyCriticalSection(&sowr_log_file_mtx);
-        sowr_log_file = NULL;
+        sowr_log_file = SOWR_INVALID_FILE_DESCRIPTOR;
         sowr_log_available = false;
     }
 #endif

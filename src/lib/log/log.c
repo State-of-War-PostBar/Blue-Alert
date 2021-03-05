@@ -89,7 +89,12 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
 #ifdef SOWR_BUILD_DEBUG
     time_t raw_time = time(NULL);
     struct tm loc_time = { 0 };
+#ifdef SOWR_TARGET_WINDOWS
     localtime_s(&loc_time, &raw_time);
+#else
+    localtime_r(&raw_time, &loc_time);
+#endif
+    
 
     message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", &loc_time);
     sowr_String_PushC(&message_buf, ' ');
@@ -120,7 +125,11 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
 #ifdef SOWR_BUILD_DEBUG
     time_t raw_time = time(NULL);
     struct tm loc_time = { 0 };
+#ifdef SOWR_TARGET_WINDOWS
     localtime_s(&loc_time, &raw_time);
+#else
+    localtime_r(&raw_time, &loc_time);
+#endif
 
     message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", &loc_time);
     sowr_String_PushC(&message_buf, ' ');
