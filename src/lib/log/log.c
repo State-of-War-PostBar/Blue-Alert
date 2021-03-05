@@ -88,9 +88,10 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
 {
 #ifdef SOWR_BUILD_DEBUG
     time_t raw_time = time(NULL);
-    struct tm *loc_time = localtime(&raw_time);
+    struct tm loc_time = { 0 };
+    localtime_s(&loc_time, &raw_time);
 
-    message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", loc_time);
+    message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", &loc_time);
     sowr_String_PushC(&message_buf, ' ');
     size_t colorcode = message_buf.length;
     sowr_String_PushS(&message_buf, SOWR_LOGLVL_STRINGS[level]);
@@ -118,9 +119,10 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
 {
 #ifdef SOWR_BUILD_DEBUG
     time_t raw_time = time(NULL);
-    struct tm *loc_time = localtime(&raw_time);
+    struct tm loc_time = { 0 };
+    localtime_s(&loc_time, &raw_time);
 
-    message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", loc_time);
+    message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", &loc_time);
     sowr_String_PushC(&message_buf, ' ');
     size_t colorcode = message_buf.length;
     sowr_String_PushS(&message_buf, SOWR_LOGLVL_STRINGS[level]);
