@@ -95,7 +95,6 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
     localtime_r(&raw_time, &loc_time);
 #endif
     
-
     message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", &loc_time);
     sowr_String_PushC(&message_buf, ' ');
     size_t colorcode = message_buf.length;
