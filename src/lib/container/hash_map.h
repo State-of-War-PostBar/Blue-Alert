@@ -34,7 +34,7 @@
 
 #include "string.h"
 #include "vector.h"
-#include "../hash/hash.h"
+#include "../data/hash.h"
 
 typedef void (*sowr_HashMapWalkFunc)( void * );
 typedef void (*sowr_HashMapFreeFunc)( void * );

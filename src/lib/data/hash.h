@@ -27,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_HASH_HASH_H
-#define SOWR_LIB_HASH_HASH_H
+#ifndef SOWR_LIB_DATA_HASH_H
+#define SOWR_LIB_DATA_HASH_H
 
 #include <pch.h>
 
@@ -75,4 +75,4 @@ sowr_GetHashI( const unsigned char *str );
 sowr_Hash
 sowr_GetHashS( const sowr_String *str );
 
-#endif // !SOWR_LIB_HASH_HASH_H
+#endif // !SOWR_LIB_DATA_HASH_H
