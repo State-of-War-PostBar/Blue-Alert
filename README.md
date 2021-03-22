@@ -22,8 +22,7 @@ To start, you may take a look at our [designing](docs/design.md) and [regulation
 
 ## License & Copyright, those kind of boring stuff
 
-State of War: Remastered is published under the _Just Don't Bother Me Public License_ by [mhtvsSFrpHdE](https://github.com/mhtvsSFrpHdE). See [LICENSE](LICENSE) for details.  
-However, community-created plugins and maps are allowed to be close-sourced. To see how this works, you may reference to [GNU LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html) and see how it's different to the [GNU GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
+State of War: Remastered is published under the _Just Don't Bother Me Public License_ by [mhtvsSFrpHdE](https://github.com/mhtvsSFrpHdE). See [LICENSE](LICENSE) for details.
 
 ---
 
