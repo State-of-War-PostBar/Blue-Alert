@@ -32,8 +32,8 @@
 bool
 sowr_Endianness(void)
 {
-    static const short num = 1;
-    static const signed char *const ptr = (const signed char *const)&num;
+    short num = 1;
+    const signed char *const ptr = (const signed char *const) &num;
     return ptr[0] == 1;
 }
 
@@ -55,29 +55,29 @@ inline
 uint16_t
 sowr_SwapEndian16( uint16_t val )
 {
-    return (val & 0xff00) >> 010 | (val & 0x00ffU) << 010;
+    return (val << 010U) | (val >> 010U);
 }
 
 inline
 uint32_t
 sowr_SwapEndian32( uint32_t val )
 {
-    return (val & 0xff000000) >>  030 |
-            (val & 0x00ff0000) >> 010 |
-            (val & 0x0000ff00) << 010 |
-            (val & 0x000000ff) << 030;
+    return (val & 0xff000000U) >>  030U |
+            (val & 0x00ff0000U) >> 010U |
+            (val & 0x0000ff00U) << 010U |
+            (val & 0x000000ffU) << 030U;
 }
 
 inline
 uint64_t
 sowr_SwapEndian64( uint64_t val )
 {
-    return (val & 0xff00000000000000) >>  070 |
-            (val & 0x00ff000000000000) >> 050 |
-            (val & 0x0000ff0000000000) >> 030 |
-            (val & 0x000000ff00000000) >> 010 |
-            (val & 0x00000000ff000000) << 010 |
-            (val & 0x0000000000ff0000) << 030 |
-            (val & 0x000000000000ff00) << 050 |
-            (val & 0x00000000000000ff) << 070;
+    return (val & 0xff00000000000000ULL) >>  070U |
+            (val & 0x00ff000000000000ULL) >> 050U |
+            (val & 0x0000ff0000000000ULL) >> 030U |
+            (val & 0x000000ff00000000ULL) >> 010U |
+            (val & 0x00000000ff000000ULL) << 010U |
+            (val & 0x0000000000ff0000ULL) << 030U |
+            (val & 0x000000000000ff00ULL) << 050U |
+            (val & 0x00000000000000ffULL) << 070U;
 }
