@@ -1,7 +1,7 @@
 # State of War: Remastered
 
 Remaking an old game, _State of War_.  
-Also a programming experiment by [Taxerap](https://github.com/Taxerap).
+Also a programming experiment of [Taxerap](https://github.com/Taxerap).
 
 ## ~~Quick Start~~
 
@@ -18,7 +18,7 @@ You may also join our discussion at our official [Baidu Postbar](https://tieba.b
 We appreciate any kind of help. You may request new features, give suggestions on code and talk about designs at the [issues](https://github.com/State-of-War-PostBar/sowr/issues) page.  
 You may also contribute directly to the code base by sending a [pull request](https://github.com/State-of-War-PostBar/sowr/pulls).
 
-To start, you may take a look at our [designing](docs/design.md) and [regulations](docs/regulation.md) first _(WIP)_.
+To start, you may take a look at our [design](docs/design.md) and [regulation](docs/regulation.md) documents first.
 
 ## License & Copyright, those kind of boring stuff
 
