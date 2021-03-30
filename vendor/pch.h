@@ -68,7 +68,7 @@
 #include <wchar.h>
 #include <wctype.h>
 
-#if defined _WIN32 || (!defined _WIN32 && defined __CYGWIN__)
+#ifdef _WIN32
     #define SOWR_TARGET_WINDOWS
 #elif defined __MACH__ && defined __APPLE__
     #define SOWR_TARGET_MACOS

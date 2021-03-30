@@ -29,21 +29,8 @@
 
 #include <pch.h>
 
-#include "core/core.h"
-#include "lib/log/log.h"
-#include "lib/profile/profile.h"
-
 int
 main( int argc, char *argv[] )
 {
-#if defined SOWR_BUILD_RELEASE && defined SOWR_TARGET_WINDOWS
-    FreeConsole();
-#endif
-    sowr_InitLogger();
-    sowr_InitProfiler();
-
-
-
-    sowr_DestroyLogger();
     return EXIT_SUCCESS;
 }

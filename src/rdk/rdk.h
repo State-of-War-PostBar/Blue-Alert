@@ -30,9 +30,9 @@
 #ifndef RDK_H
 #define RDK_H
 
-//  You may feel free to choose to include the the pch.h from sowr or not,
-//  respects to your convenience when using C standards.
-//  But if so, you have to include it before the next #ifndef!!!
+// You may feel free to choose to include the the pch.h from sowr or not,
+// respects to your convenience when using C standards.
+// But if so, you have to include it before the next #ifndef!!!
 
 #ifndef SOWR_PCH_H
     #if defined _MSC_VER || defined __MINGW32__
@@ -61,7 +61,7 @@ typedef struct rdk_ModInfo
 ///
 SOWR_EXPORT
 void
-rdk_ModMain(void);
+rdk_ModMain( void );
 
 ///
 /// \brief Get the mod's info
@@ -72,7 +72,7 @@ rdk_ModMain(void);
 ///
 SOWR_EXPORT
 rdk_ModInfo
-rdk_GetModInfo(void);
+rdk_GetModInfo( void );
 
 ///
 /// \brief Mod uninitialize function
@@ -81,6 +81,6 @@ rdk_GetModInfo(void);
 ///
 SOWR_EXPORT
 void
-rdk_ModExit(void);
+rdk_ModExit( void );
 
 #endif // !RDK_H

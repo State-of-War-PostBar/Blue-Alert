@@ -75,7 +75,7 @@ sowr_Logger_Init( sowr_File file, sowr_LogLockFunc lock )
 }
 
 void
-sowr_Logger_ThrdInit(void)
+sowr_Logger_ThrdInit( void )
 {
 #ifdef SOWR_BUILD_DEBUG
     message_buf = sowr_String_CreateS();
@@ -166,7 +166,7 @@ sowr_Logger_Destroy( void )
 }
 
 void
-sowr_Logger_ThrdDestroy(void)
+sowr_Logger_ThrdDestroy( void )
 {
 #ifdef SOWR_BUILD_DEBUG
     sowr_String_DestroyS(&message_buf);

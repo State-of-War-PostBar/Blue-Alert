@@ -40,9 +40,7 @@
 
 #define SOWR_TO_WIDER_IF_PTR(ptr) _Generic((ptr),                            \
                                            char *: (sowr_Ptr)(ptr),          \
-                                           const char *: (sowr_Ptr)(ptr),    \
                                            void *: (sowr_Ptr)(ptr),          \
-                                           const void *: (sowr_Ptr)(ptr),    \
                                            default: (ptr)                    \
                                           )
 

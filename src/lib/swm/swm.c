@@ -554,6 +554,6 @@ sowr_Swm_GetValue( const sowr_Swm *swm, const char *key )
 {
     sowr_RadixTreeNode *node = sowr_RadixTree_Get(&(swm->contents), key);
     if (!node || !node->data)
-        return false;
+        return NULL;
     return ((sowr_SwmData *)(node->data))->data.ptr;
 }

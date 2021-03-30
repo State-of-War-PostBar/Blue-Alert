@@ -63,7 +63,7 @@ sowr_Logger_Init( sowr_File file, sowr_LogLockFunc lock );
 /// Initialize the logger thread-locally.
 ///
 void
-sowr_Logger_ThrdInit(void);
+sowr_Logger_ThrdInit( void );
 
 ///
 /// \brief Log an event
@@ -103,15 +103,15 @@ sowr_Logger_Destroy( void );
 /// Destroy the logger thread-locally.
 ///
 void
-sowr_Logger_ThrdDestroy(void);
+sowr_Logger_ThrdDestroy( void );
 
 #ifdef SOWR_BUILD_DEBUG
-    #define SOWR_LOG_TRACE(str) sowr_Logger_Log(SOWR_LOGLVL_TRACE, __FILE__, __LINE__, str)
-    #define SOWR_LOG_DEBUG(str) sowr_Logger_Log(SOWR_LOGLVL_DEBUG, __FILE__, __LINE__, str)
-    #define SOWR_LOG_INFO(str) sowr_Logger_Log(SOWR_LOGLVL_INFO, __FILE__, __LINE__, str)
-    #define SOWR_LOG_WARN(str) sowr_Logger_Log(SOWR_LOGLVL_WARN, __FILE__, __LINE__, str)
-    #define SOWR_LOG_ERROR(str) sowr_Logger_Log(SOWR_LOGLVL_ERROR, __FILE__, __LINE__, str)
-    #define SOWR_LOG_FATAL(str) sowr_Logger_Log(SOWR_LOGLVL_FATAL, __FILE__, __LINE__, str)
+    #define SOWR_LOG_TRACE(str) sowr_Logger_Log(SOWR_LOGLVL_TRACE, __FILE__, __LINE__, (str))
+    #define SOWR_LOG_DEBUG(str) sowr_Logger_Log(SOWR_LOGLVL_DEBUG, __FILE__, __LINE__, (str))
+    #define SOWR_LOG_INFO(str)  sowr_Logger_Log(SOWR_LOGLVL_INFO, __FILE__, __LINE__, (str))
+    #define SOWR_LOG_WARN(str)  sowr_Logger_Log(SOWR_LOGLVL_WARN, __FILE__, __LINE__, (str))
+    #define SOWR_LOG_ERROR(str) sowr_Logger_Log(SOWR_LOGLVL_ERROR, __FILE__, __LINE__, (str))
+    #define SOWR_LOG_FATAL(str) sowr_Logger_Log(SOWR_LOGLVL_FATAL, __FILE__, __LINE__, (str))
 
     #define SOWR_LOG_TRACE_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_TRACE, __FILE__, __LINE__, (count), __VA_ARGS__)
     #define SOWR_LOG_DEBUG_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_DEBUG, __FILE__, __LINE__, (count), __VA_ARGS__)
@@ -121,6 +121,7 @@ sowr_Logger_ThrdDestroy(void);
     #define SOWR_LOG_FATAL_G(count, ...)  sowr_Logger_LogG(SOWR_LOGLVL_FATAL, __FILE__, __LINE__, (count), __VA_ARGS__)
 #else
     #define SOWR_LOG_TRACE(str)
+    #define SOWR_LOG_DEBUG(str)
     #define SOWR_LOG_INFO(str)
     #define SOWR_LOG_WARN(str)
     #define SOWR_LOG_ERROR(str)

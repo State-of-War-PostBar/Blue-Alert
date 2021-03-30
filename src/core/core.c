@@ -45,8 +45,6 @@ const char *const    SOWR_VERSION_STRING   = "Indev 0.1 rev0";
 const unsigned int   SOWR_BUILD_NUMBER     = 1U;
 const char *const    SOWR_BUILD_STRING     = "Build 1";
 
-const char *const    SOWR_DEFAULT_ENCODING = "utf-8";
-
 #ifdef SOWR_BUILD_DEBUG
     static const char *const SOWR_LOG_FILE_NAME = "./sowr.log";
     static bool sowr_log_available;
@@ -56,7 +54,7 @@ const char *const    SOWR_DEFAULT_ENCODING = "utf-8";
     ///
     /// \brief Lock the log file
     ///
-    /// Locking function for the log file, feed to log.c.
+    /// Locking function for the log file, feed to logger.
     ///
     /// \param lock To lock or to unlock the log file. False for unlock.
     /// \param user_data Unused.

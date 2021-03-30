@@ -302,7 +302,7 @@ sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args )
     for (size_t i = 0ULL; i < count; i++)
     {
         sowr_GenericType data = va_arg(args_cpy, sowr_GenericType);
-        switch (data.type_name)
+        switch (data.type)
         {
             case SOWR_TYPE_BOOL:
             {

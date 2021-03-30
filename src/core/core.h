@@ -44,8 +44,6 @@ extern const char *const     SOWR_VERSION_STRING;
 extern const unsigned int    SOWR_BUILD_NUMBER;
 extern const char *const     SOWR_BUILD_STRING;
 
-extern const char *const     SOWR_DEFAULT_ENCODING;
-
 ///
 /// \brief Initialize the logger
 ///
