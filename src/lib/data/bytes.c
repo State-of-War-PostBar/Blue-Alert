@@ -42,12 +42,13 @@ sowr_SwapEndian( size_t length, unsigned char *bytes )
 {
     // Do not "play smart" like using xor exchange.
     // It doesn't always help.
-    unsigned char byte = 0;
+    unsigned char byte1 = 0, byte2 = 0;
     for (size_t i = 0ULL, j = length - 1ULL; i < j; i++, j--)
     {
-        byte = bytes[i];
-        bytes[i] = bytes[j];
-        bytes[j] = byte;
+        byte1 = bytes[i];
+        byte2 = bytes[j];
+        bytes[i] = byte2;
+        bytes[j] = byte1;
     }
 }
 
