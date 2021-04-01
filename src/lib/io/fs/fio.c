@@ -278,10 +278,26 @@ sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz )
 bool
 sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz )
 {
+    size_t written = 0ULL;
 #ifdef SOWR_TARGET_WINDOWS
-    return WriteFile(file, buffer, sz, NULL, NULL);
+    bool succeed = false;
+    do
+    {
+        succeed = WriteFile(file, buffer + written, sz, (LPDWORD) &written, NULL);
+        if (!succeed)
+            return false;
+        written = sz - written;
+    } while (written && written <= sz);
+    return true;
 #else
-    return write(file, buffer, sz);
+    do
+    {
+        written = write(file, buffer + written, sz);
+        if (!written)
+            return false;
+        written = sz - written;
+    } while (written && written <= sz);
+    return true;
 #endif
 }
 

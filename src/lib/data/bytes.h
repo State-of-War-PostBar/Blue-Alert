@@ -40,7 +40,7 @@
 /// \return True if little endian, false if big endian
 ///
 bool
-sowr_Endianness(void);
+sowr_Endianness( void );
 
 ///
 /// \brief Swap endianness of some bytes

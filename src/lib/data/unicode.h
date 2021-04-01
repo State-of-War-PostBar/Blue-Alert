@@ -154,6 +154,8 @@ sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp );
 ///
 /// Encode an unicode code point to an utf-8 sequence.
 ///
+/// \warning This function is unsafe. Make sure the output buffer has at least 4 bytes writable!
+///
 /// \param cp Code point
 /// \param output Buffer for output
 ///
@@ -164,6 +166,8 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output );
 /// \brief Encode an unicode code point
 ///
 /// Encode an unicode code point to an utf-16 sequence.
+///
+/// \warning This function is unsafe. Make sure the output buffer has at least 4 bytes writable!
 ///
 /// \param cp Code point
 /// \param output Buffer for output

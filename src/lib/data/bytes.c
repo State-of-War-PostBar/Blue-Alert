@@ -30,9 +30,9 @@
 #include "bytes.h"
 
 bool
-sowr_Endianness(void)
+sowr_Endianness( void )
 {
-    short num = 1;
+    const short num = 1;
     const signed char *const ptr = (const signed char *const) &num;
     return ptr[0] == 1;
 }
