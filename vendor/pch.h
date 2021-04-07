@@ -30,8 +30,12 @@
 #ifndef SOWR_PCH_H
 #define SOWR_PCH_H
 
-#if defined __cplusplus || __STDC_VERSION__ < 201710L
-    #error "This is a C++ compiler or your compiler does not support C17!"
+#if __STDC_VERSION__ < 201710L
+    #error "Your compiler does not support the newest C standard (C17)!"
+#endif
+
+#ifdef __cplusplus
+    #warning "Possible error since you are using a C++ compiler!"
 #endif
 
 #include <assert.h>
