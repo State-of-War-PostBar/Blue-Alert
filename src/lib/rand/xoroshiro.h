@@ -37,6 +37,8 @@
 ///
 /// Initialize the Xoroshiro256** with a 128-bit seed.
 ///
+/// \note States are independent for threads, so make sure to call this for every thread!
+///
 /// \param seed_hi Higher bits of the seed
 /// \param seed_lo Lower bits of the seed
 ///

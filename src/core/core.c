@@ -31,7 +31,7 @@
 
 #include "../lib/io/fs/fio.h"
 #include "../lib/log/log.h"
-#include "../lib/sync/lock.h"
+#include "../lib/thread/lock.h"
 
 const char *const    SOWR_PROG_ID          = "sowr";
 const char *const    SOWR_PROG_NAME        = "State of War: Remastered";

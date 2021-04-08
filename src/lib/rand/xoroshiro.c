@@ -31,8 +31,9 @@
 
 #include "../data/bytes.h"
 
-static uint64_t sowr_rng_xoroshiro_space[4];
 static const uint64_t SOWR_RNG_XOROSHIRO_SEED_SALT = 0xacbcdc10706ULL;
+
+thread_local static uint64_t sowr_rng_xoroshiro_space[4];
 
 static inline uint64_t rotate(uint64_t x, int k)
 {
