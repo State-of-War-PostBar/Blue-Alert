@@ -27,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_SYNC_LOCK_H
-#define SOWR_LIB_SYNC_LOCK_H
+#ifndef SOWR_LIB_THREAD_LOCK_H
+#define SOWR_LIB_THREAD_LOCK_H
 
 #include <pch.h>
 
@@ -282,4 +282,4 @@ sowr_UnlockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 void
 sowr_DestroyReadWriteLock( sowr_ReadWriteLock *rwl );
 
-#endif // !SOWR_LIB_SYNC_LOCK_H
+#endif // !SOWR_LIB_THREAD_LOCK_H

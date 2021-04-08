@@ -27,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_SYNC_THREAD_H
-#define SOWR_LIB_SYNC_THREAD_H
+#ifndef SOWR_LIB_THREAD_THREAD_H
+#define SOWR_LIB_THREAD_THREAD_H
 
 #include <pch.h>
 
@@ -114,4 +114,4 @@ sowr_Thread_Detach( sowr_Thread thr );
 void
 sowr_Thread_Join( sowr_Thread thr );
 
-#endif // !SOWR_LIB_SYNC_THREAD_H
+#endif // !SOWR_LIB_THREAD_THREAD_H
