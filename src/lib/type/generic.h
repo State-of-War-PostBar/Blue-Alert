@@ -189,14 +189,14 @@ typedef struct sowr_GenericType
                                                      default: SOWR_TYPE_UNKNOWN               \
                                                     ),                                        \
                                     .data_size = sizeof((var)),                               \
-                                    .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  SOWR_TO_WIDER_IF_PTR((var)) } } \
+                                    .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  (sowr_Ptr)(var) } } \
                                }
 
 #define SOWR_MAKE_GENERIC_T(var, T) (sowr_GenericType)              \
                                     {                               \
                                         .type = (T),                \
                                         .data_size = sizeof((var)), \
-                                        .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  SOWR_TO_WIDER_IF_PTR((var)) } } \
+                                        .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  (sowr_Ptr)(var) } } \
                                     }
 
 #define SOWR_MAKE_GENERIC_F(varf) (sowr_GenericType)                                 \
@@ -214,21 +214,21 @@ typedef struct sowr_GenericType
                                                                                     long double: (sowr_GenericDataFloat){ .as_ldouble = (varf) }, \
                                                                                     default: (sowr_GenericDataFloat){ .as_float = (varf) }        \
                                                                                    )                                                              \
-                                                                  }                       \
+                                                                  }                  \
                                   }
 
 #define SOWR_MAKE_GENERIC_P(var) (sowr_GenericType)          \
                                  {                           \
                                     .type = SOWR_TYPE_PTR,   \
                                     .data_size = sizeof(var) \
-                                    .data = (sowr_GenericTypeData) { .reg = (sowr_GenericDataRegular) { .as_ptr = SOWR_TO_WIDER_IF_PTR((var)) } } \
+                                    .data = (sowr_GenericTypeData) { .reg = (sowr_GenericDataRegular) { .as_ptr = (sowr_Ptr)(var) } } \
                                  }
 
 #define SOWR_MAKE_GENERIC_A(var, len) (sowr_GenericType)         \
                                       {                          \
                                         .type = SOWR_TYPE_ARRAY, \
                                         .data_size = len,        \
-                                        .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .as_arr =  SOWR_TO_WIDER_IF_PTR((var)) } } \
+                                        .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .as_arr =  (void *)(var) } } \
                                       }
 
 #endif // !SOWR_LIB_TYPE_GENERIC_H

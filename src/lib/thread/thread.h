@@ -33,8 +33,6 @@
 #include <pch.h>
 
 #ifdef SOWR_TARGET_WINDOWS
-    #include <processthreadsapi.h>
-
     typedef HANDLE sowr_Thread;
 #else
     #include <pthread.h>

@@ -163,8 +163,6 @@ void
 sowr_DestroyCriticalSection( sowr_CriticalSection *cs );
 
 ///
-/// \deprecated It sucks.
-///
 /// \brief Initialize a read-write lock
 ///
 /// Initialize a read-write lock.
@@ -176,8 +174,6 @@ sowr_DestroyCriticalSection( sowr_CriticalSection *cs );
 void
 sowr_InitReadWriteLock( sowr_ReadWriteLock *rwl );
 
-///
-/// \deprecated It sucks.
 ///
 /// \brief Lock a read-write lock in read mode
 ///
@@ -193,8 +189,6 @@ void
 sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks.
-///
 /// \brief Lock a read-write lock in write mode
 ///
 /// Lock a read-write lock in write mode, waiting infinitely until the acquisition.<BR />
@@ -207,8 +201,6 @@ sowr_LockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 void
 sowr_LockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
-///
-/// \deprecated It sucks.
 ///
 /// \brief Lock a read-write lock in read mode
 ///
@@ -224,8 +216,6 @@ void
 sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks.
-///
 /// \brief Lock a read-write lock in write mode
 ///
 /// Lock a read-write lock in write mode, if the acquisition fails continue immediately.<BR />
@@ -238,8 +228,6 @@ sowr_TryLockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 void
 sowr_TryLockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
-///
-/// \deprecated It sucks.
 ///
 /// \brief Unlock a read mode read-write lock
 ///
@@ -254,8 +242,6 @@ void
 sowr_UnlockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 
 ///
-/// \deprecated It sucks.
-///
 /// \brief Unlock a write mode read-write lock
 ///
 /// Unlock a writer mode read-write lock. It must be the writer to unlock.
@@ -268,8 +254,6 @@ sowr_UnlockReadWriteLockRead( sowr_ReadWriteLock *rwl );
 void
 sowr_UnlockReadWriteLockWrite( sowr_ReadWriteLock *rwl );
 
-///
-/// \deprecated It sucks.
 ///
 /// \brief Destroy a read-write lock
 ///

@@ -99,13 +99,14 @@ sowr_Swm_Load( const char *str )
         {
             case ('\r'):
             {
+                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
                 // Carriage return is always ignored.
                 break;
             }
             case ('\"'):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & SOWR_SWM_COMMENT)
+                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
@@ -113,48 +114,44 @@ sowr_Swm_Load( const char *str )
                     state &= ~SOWR_SWM_RAW_STRING;
                     break;
                 }
-                else
+                // Start of raw string section.
+                state |= SOWR_SWM_RAW_STRING;
+                if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
                 {
-                    // Start of raw string section.
-                    state |= SOWR_SWM_RAW_STRING;
-                    if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
-                    {
-                        // If it's waiting for assignment, start the assignment.
-                        state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
-                        state |= SOWR_SWM_ASSIGNING;
-                        break;
-                    }
-                    if (state & SOWR_SWM_TOKEN_EATEN)
-                    {
-                        // Raw string after eaten token and a space means that last token is a flag.
-                        state &= ~SOWR_SWM_TOKEN_EATEN;
-                        state |= SOWR_SWM_IN_TOKEN;
-                        sowr_SwmData node = sowr_SwmData_Gen();
-                        node.data_type = SOWR_SWM_FLAG;
-                        if (buffer_block_name.length)
-                            sowr_String_PushFrontS(&token, buffer_block_name.ptr);
-                        sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
-                        sowr_String_Clear(&token);
-                        break;
-                    }
-                    if (state & SOWR_SWM_IN_BLOCK_NAME)
-                    {
-                        // WTF? Raw string in block names?
-                        // Well, it's allowed anyways as long as there are no spaces.
-                        break;
-                    }
-                    if (state & (SOWR_SWM_IN_TOKEN | SOWR_SWM_ASSIGNING))
-                    {
-                        // Token conj. with raw string is allowed.
-                        break;
-                    }
-                    if (state & SOWR_SWM_READY)
-                    {
-                        // Cancel ready state.
-                        state &= ~SOWR_SWM_READY;
-                        state |= SOWR_SWM_IN_TOKEN;
-                        break;
-                    }
+                    // If it's waiting for assignment, start the assignment.
+                    state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
+                    state |= SOWR_SWM_ASSIGNING;
+                    break;
+                }
+                if (state & SOWR_SWM_TOKEN_EATEN)
+                {
+                    // Raw string after eaten token and a space means that last token is a flag.
+                    state &= ~SOWR_SWM_TOKEN_EATEN;
+                    state |= SOWR_SWM_IN_TOKEN;
+                    sowr_SwmData node = sowr_SwmData_Gen();
+                    node.data_type = SOWR_SWM_FLAG;
+                    if (buffer_block_name.length)
+                        sowr_String_PushFrontS(&token, buffer_block_name.ptr);
+                    sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
+                    sowr_String_Clear(&token);
+                    break;
+                }
+                if (state & SOWR_SWM_IN_BLOCK_NAME)
+                {
+                    // WTF? Raw string in block names?
+                    // Well, it's allowed anyways as long as there are no spaces.
+                    break;
+                }
+                if ((state & SOWR_SWM_IN_TOKEN) || (state & SOWR_SWM_ASSIGNING))
+                {
+                    // Conjunction with raw string is allowed.
+                    break;
+                }
+                if (state & SOWR_SWM_READY)
+                {
+                    // Cancel ready state.
+                    state &= ~SOWR_SWM_READY;
+                    state |= SOWR_SWM_IN_TOKEN;
                     break;
                 }
                 break;
@@ -162,7 +159,7 @@ sowr_Swm_Load( const char *str )
             case (' '):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & (SOWR_SWM_COMMENT | SOWR_SWM_DISCARD))
+                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
@@ -184,7 +181,17 @@ sowr_Swm_Load( const char *str )
                 if (state & SOWR_SWM_ASSIGNING)
                 {
                     // Assignment finished, write values.
-                    state = SOWR_SWM_READY;
+                    state &= ~SOWR_SWM_ASSIGNING;
+                    state |= SOWR_SWM_READY;
+                    sowr_SwmData node = sowr_SwmData_Gen();
+                    node.data_type = SOWR_SWM_PAIR;
+                    sowr_String_PushS(&(node.data), token.ptr);
+                    if (buffer_block_name.length)
+                        sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                    sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+
+                    sowr_String_Clear(&buffer_key);
+                    sowr_String_Clear(&token);
                     break;
                 }
                 if (state & SOWR_SWM_IN_TOKEN)
@@ -206,11 +213,17 @@ sowr_Swm_Load( const char *str )
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
+                    sowr_String_PushC(&token, ch);
+                    break;
+                }
+                if (state & SOWR_SWM_DISCARD)
+                {
                     break;
                 }
                 if (state & SOWR_SWM_COMMENT)
                 {
                     // Stop the line of comment.
+                    state &= ~SOWR_SWM_COMMENT;
                     break;
                 }
                 if (state & SOWR_SWM_IN_BLOCK_NAME)
@@ -238,7 +251,8 @@ sowr_Swm_Load( const char *str )
 
                     sowr_String_Clear(&buffer_key);
                     sowr_String_Clear(&token);
-                    state = SOWR_SWM_READY;
+                    state &= ~SOWR_SWM_ASSIGNING;
+                    state |= SOWR_SWM_READY;
                     break;
                 }
                 if (state & SOWR_SWM_IN_TOKEN)
@@ -265,8 +279,8 @@ sowr_Swm_Load( const char *str )
                     sowr_String_PushC(&token, ch);
                     break;
                 }
-                state = SOWR_SWM_COMMENT;
                 // Start comment section immediately.
+                state |= SOWR_SWM_COMMENT;
                 break;
             }
             case ('/'):
@@ -282,7 +296,8 @@ sowr_Swm_Load( const char *str )
                 {
                     // If the possible comment flag is set, clear out all flags.
                     // and begin comment section.
-                    state = SOWR_SWM_COMMENT;
+                    state &= ~SOWR_SWM_POSSIBLE_COMMENT;
+                    state |= SOWR_SWM_COMMENT;
                     break;
                 }
                 else
@@ -296,17 +311,21 @@ sowr_Swm_Load( const char *str )
             case ('['):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & (SOWR_SWM_COMMENT | SOWR_SWM_DISCARD))
+                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
                     sowr_String_PushC(&token, ch);
                     break;
                 }
-                if (state & (SOWR_SWM_READY | SOWR_SWM_IN_TOKEN | SOWR_SWM_TOKEN_EATEN | SOWR_SWM_AWAIT_ASSIGNMENT | SOWR_SWM_ASSIGNING))
+                state |= SOWR_SWM_IN_BLOCK_NAME;
+                if ((state & SOWR_SWM_READY) ||
+                    (state & SOWR_SWM_IN_TOKEN) ||
+                    (state & SOWR_SWM_TOKEN_EATEN) ||
+                    (state & SOWR_SWM_AWAIT_ASSIGNMENT) ||
+                    (state & SOWR_SWM_ASSIGNING))
                 {
                     // Block starting. Process previous flag/assignment.
-                    state = SOWR_SWM_IN_BLOCK_NAME;
                     if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
                     {
                         // Block start after a = without value, treat the key as flag.
@@ -317,6 +336,7 @@ sowr_Swm_Load( const char *str )
                         sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
                         sowr_String_Clear(&token);
                         sowr_String_Clear(&buffer_block_name);
+                        state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
                         break;
                     }
                     if (state & SOWR_SWM_ASSIGNING)
@@ -331,9 +351,11 @@ sowr_Swm_Load( const char *str )
                         sowr_String_Clear(&buffer_key);
                         sowr_String_Clear(&token);
                         sowr_String_Clear(&buffer_block_name);
+                        state &= ~SOWR_SWM_ASSIGNING;
+                        state &= ~SOWR_SWM_IN_TOKEN;
                         break;
                     }
-                    if (state & (SOWR_SWM_IN_TOKEN | SOWR_SWM_TOKEN_EATEN))
+                    if ((state & SOWR_SWM_IN_TOKEN) || (state & SOWR_SWM_TOKEN_EATEN))
                     {
                         // Block start right after previous token, treat it as flag.
                         sowr_SwmData node = sowr_SwmData_Gen();
@@ -343,6 +365,8 @@ sowr_Swm_Load( const char *str )
                         sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
                         sowr_String_Clear(&token);
                         sowr_String_Clear(&buffer_block_name);
+                        state &= ~SOWR_SWM_IN_TOKEN;
+                        state &= ~SOWR_SWM_TOKEN_EATEN;
                         break;
                     }
                 }
@@ -351,14 +375,14 @@ sowr_Swm_Load( const char *str )
             case (']'):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & (SOWR_SWM_COMMENT))
+                if (state & SOWR_SWM_COMMENT)
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
                     sowr_String_PushC(&token, ch);
                     break;
                 }
-                if (state & (SOWR_SWM_IN_BLOCK_NAME | SOWR_SWM_DISCARD))
+                if ((state & SOWR_SWM_IN_BLOCK_NAME) || (state & SOWR_SWM_DISCARD))
                 {
                     // End of block, record block name.
                     sowr_String_Clear(&buffer_block_name);
@@ -378,14 +402,14 @@ sowr_Swm_Load( const char *str )
             case ('='):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & (SOWR_SWM_COMMENT | SOWR_SWM_DISCARD))
+                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
                     sowr_String_PushC(&token, ch);
                     break;
                 }
-                if (state & (SOWR_SWM_TOKEN_EATEN | SOWR_SWM_IN_TOKEN))
+                if ((state & SOWR_SWM_TOKEN_EATEN) || (state & SOWR_SWM_IN_TOKEN))
                 {
                     // Token waiting for assignment, start assigning process.
                     state &= ~(SOWR_SWM_TOKEN_EATEN | SOWR_SWM_IN_TOKEN);
@@ -435,7 +459,7 @@ sowr_Swm_Load( const char *str )
             case ('@'):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & (SOWR_SWM_COMMENT | SOWR_SWM_DISCARD))
+                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
@@ -448,11 +472,17 @@ sowr_Swm_Load( const char *str )
             default:
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & (SOWR_SWM_COMMENT | SOWR_SWM_DISCARD))
+                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
                     break;
                 if (state & SOWR_SWM_RAW_STRING)
                 {
                     sowr_String_PushC(&token, ch);
+                    break;
+                }
+                if (state & SOWR_SWM_IN_BLOCK_NAME)
+                {
+                    sowr_String_PushC(&token, ch);
+                    state &= ~SOWR_SWM_TOKEN_EATEN;
                     break;
                 }
                 if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
@@ -466,8 +496,6 @@ sowr_Swm_Load( const char *str )
                 if (state & SOWR_SWM_TOKEN_EATEN)
                 {
                     // An eaten token means that the previous token is a flag.
-                    state &= ~SOWR_SWM_TOKEN_EATEN;
-                    state |= SOWR_SWM_IN_TOKEN;
 
                     // Record the flag
                     sowr_SwmData node = sowr_SwmData_Gen();
@@ -479,6 +507,8 @@ sowr_Swm_Load( const char *str )
                     // Clear current token and start a new recording.
                     sowr_String_Clear(&token);
                     sowr_String_PushC(&token, ch);
+                    state &= ~SOWR_SWM_TOKEN_EATEN;
+                    state |= SOWR_SWM_IN_TOKEN;
                     break;
                 }
                 if (state & SOWR_SWM_READY)
@@ -518,7 +548,7 @@ sowr_Swm_Load( const char *str )
             sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
         sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
     }
-    else if (state & (SOWR_SWM_IN_TOKEN | SOWR_SWM_TOKEN_EATEN))
+    else if ((state & SOWR_SWM_IN_TOKEN) || (state & SOWR_SWM_TOKEN_EATEN))
     {
         // Left over token, treat as flag.
         sowr_SwmData node = sowr_SwmData_Gen();

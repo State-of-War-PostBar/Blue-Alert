@@ -38,10 +38,4 @@
     typedef void *sowr_Ptr;
 #endif
 
-#define SOWR_TO_WIDER_IF_PTR(ptr) _Generic((ptr),                            \
-                                           char *: (sowr_Ptr)(ptr),          \
-                                           void *: (sowr_Ptr)(ptr),          \
-                                           default: (ptr)                    \
-                                          )
-
 #endif // !SOWR_LIB_TYPE_PTR_H
