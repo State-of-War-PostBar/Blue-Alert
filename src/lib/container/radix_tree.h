@@ -36,6 +36,7 @@
 #include "string.h"
 
 typedef void (*sowr_RadixTreeFreeFunc)( void * );
+typedef void (*sowr_RadixTreeWalkFunc)( void * );
 
 typedef struct sowr_RadixTreeNode
 {
@@ -139,6 +140,17 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index );
 ///
 sowr_RadixTreeNode *
 sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index );
+
+///
+/// Walk the radix tree
+///
+/// Walk the radix tree.
+///
+/// \param node Node to start walking
+/// \param func Function for walking
+///
+void
+sowr_RadixTree_Walk( const sowr_RadixTreeNode *node, sowr_RadixTreeWalkFunc func );
 
 ///
 /// \brief List all the children of a node

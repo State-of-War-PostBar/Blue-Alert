@@ -308,6 +308,19 @@ sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index )
     return sowr_RadixTree_Get(tree, index->ptr);
 }
 
+void
+sowr_RadixTree_Walk( const sowr_RadixTreeNode *node, sowr_RadixTreeWalkFunc func )
+{
+    if (!node)
+        return;
+
+    for (size_t i = 0ULL; i < CHAR_MAX; i++)
+        sowr_RadixTree_Walk(node->characters[i], func);
+
+    if (node->data)
+        func((void *)node);
+}
+
 size_t
 sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *output )
 {
