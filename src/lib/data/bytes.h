@@ -43,6 +43,20 @@ bool
 sowr_Endianness( void );
 
 ///
+/// \brief Swap two values
+///
+/// Swap two values. Two values should have the same size.
+///
+/// \param sz_l Size of the values
+/// \param b_l Address of left op
+/// \param b_r Address of right op
+///
+void
+sowr_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r );
+
+#define SOWR_SWAP(l, r) sowr_Swap(sizeof(l) == sizeof(r) ? sizeof(l) : 0ULL, (unsigned char *) &(l), (unsigned char *) &(r))
+
+///
 /// \brief Swap endianness of some bytes
 ///
 /// Swap the endianness of a sequence of bytes.

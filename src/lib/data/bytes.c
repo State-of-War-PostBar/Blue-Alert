@@ -37,6 +37,20 @@ sowr_Endianness( void )
     return ptr[0] == 1;
 }
 
+inline
+void
+sowr_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r )
+{
+    if (!sz)
+        return;
+
+    unsigned char b_lr[sz], b_rl[sz];
+    memcpy(b_lr, b_l, sz);
+    memcpy(b_rl, b_r, sz);
+    memcpy(b_l, b_rl, sz);
+    memcpy(b_r, b_lr, sz);
+}
+
 void
 sowr_SwapEndian( size_t length, unsigned char *bytes )
 {
