@@ -47,17 +47,30 @@
     #endif
 #endif
 
+typedef enum rdk_VersionTestResult
+{
+    /// Mod version matches exactly
+    RDK_VERSION_MATCH,
+    /// Mod is newer than comparing version, and not compatible
+    RDK_VERSION_NEWER,
+    /// Mod is newer than comparing version, but compatible
+    RDK_VERSION_BKWD_COMPAT,
+    /// Mod is older than comparing version, and not compatible
+    RDK_VERSION_OLDER,
+    /// Mod is older than comparing version, but compatible
+    RDK_VERSION_FWRD_COMPAT
+} rdk_VersionTestResult;
+
 typedef struct rdk_ModInfo
 {
     const char *modid;
-    const char *modname;
     const char *version;
 } rdk_ModInfo;
 
 ///
 /// \brief Mod initialize function
 ///
-/// Initialize the mod. A mod will still be valid without this function defined.
+/// Initialize the mod.
 ///
 SOWR_EXPORT
 void
@@ -75,9 +88,22 @@ rdk_ModInfo
 rdk_GetModInfo( void );
 
 ///
+/// \brief Check version
+///
+/// Check the mod's version with a duplicate one.
+///
+/// \param other_version Duplicated mod's version
+///
+/// \return Result of comparision
+///
+SOWR_EXPORT
+rdk_VersionTestResult
+rdk_CompareVersion( const char *other_version );
+
+///
 /// \brief Mod uninitialize function
 ///
-/// Uninitialize the mod. A mod will still be valid without this function defined.
+/// Uninitialize the mod.
 ///
 SOWR_EXPORT
 void
