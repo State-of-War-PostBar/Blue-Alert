@@ -18,7 +18,7 @@ You may also join our discussion at our official [Baidu Postbar](https://tieba.b
 We appreciate any kind of help. You may request new features, give suggestions on code and talk about designs at the [issues](https://github.com/State-of-War-PostBar/sowr/issues) page.  
 You may also contribute directly to the code base by sending a [pull request](https://github.com/State-of-War-PostBar/sowr/pulls).
 
-To start, you may take a look at our [design](docs/design.md) and [regulation](docs/regulation.md) documents first.
+To start, you may take a look at our [program design](docs/program_design.md) and [regulation](docs/regulation.md) documents first.
 
 ## License & Copyright, those kind of boring stuff
 
