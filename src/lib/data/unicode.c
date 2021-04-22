@@ -271,36 +271,6 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output )
 }
 
 void
-sowr_Unicode_UTF16LE2BE( unsigned char *data )
-{
-    uint16_t bytes = 0U;
-    while (true)
-    {
-        bytes = *((uint8_t *)(data + sizeof(uint8_t)));
-        bytes <<= 8;
-        bytes += *((uint8_t *)data);
-        if (!bytes)
-            break;
-        sowr_SwapEndian(sizeof(uint16_t), data);
-        data += sizeof(uint16_t);
-    }
-}
-
-void
-sowr_Unicode_UTF16BE2LE( unsigned char *data )
-{
-    uint16_t bytes = 0U;
-    while (true)
-    {
-        bytes = *((uint16_t *)data);
-        if (!bytes)
-            break;
-        sowr_SwapEndian(sizeof(uint16_t), data);
-        data += sizeof(uint16_t);
-    }
-}
-
-void
 sowr_Unicode_DecodeUTF8String( const unsigned char *str, sowr_Vector *output )
 {
     sowr_UTF8Sequence seq = sowr_Unicode_NextUTF8Sequence(str);
