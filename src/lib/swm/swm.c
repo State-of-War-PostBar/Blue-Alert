@@ -157,6 +157,7 @@ sowr_Swm_Load( const char *str )
                 break;
             }
             case (' '):
+            case ('\t'):
             {
                 state &= ~SOWR_SWM_POSSIBLE_COMMENT;
                 if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
@@ -451,22 +452,6 @@ sowr_Swm_Load( const char *str )
                     // = without key, ignored.
                     break;
                 }
-                break;
-            }
-            case ('$'): case ('|'):
-            case ('<'): case ('>'):
-            case ('{'): case ('}'):
-            case ('@'):
-            {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
-                    break;
-                if (state & SOWR_SWM_RAW_STRING)
-                {
-                    sowr_String_PushC(&token, ch);
-                    break;
-                }
-                // Reserved characters, ignored.
                 break;
             }
             default:

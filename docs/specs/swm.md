@@ -18,13 +18,6 @@ There are certain characters you may not use for identifiers (except some for th
 |"|_See **Raw Strings**_|
 |#|Comment|
 |/|Comment|
-|$|Reserved for future use|
-|<|Reserved for future use|
-|>|Reserved for future use|
-|{|Reserved for future use|
-|}|Reserved for future use|
-|@|Reserved for future use|
-|&#124;|Reserved for future use|
 
 ## Escape characters
 
