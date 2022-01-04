@@ -5,43 +5,46 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
 **************************************************************************************************/
 
-#include "cstring.h"
+#include "compose.h"
 
-#include "bytes.h"
-#include "../type/generic.h"
+#include "../../data/bytes.h"
+#include "../../type/generic.h"
 
 void
-sowr_CString_IToA( sowr_String *output, intmax_t i, unsigned int base )
+sowr_StringCompose_IToA( sowr_String *output, intmax_t i, unsigned int base )
 {
     if (i < 0)
         sowr_String_PushC(output, '-');
-    sowr_CString_UToA(output, imaxabs(i), base);
+    sowr_StringCompose_UToA(output, imaxabs(i), base);
 }
 
 void
-sowr_CString_UToA( sowr_String *output, uintmax_t u, unsigned int base )
+sowr_StringCompose_UToA( sowr_String *output, uintmax_t u, unsigned int base )
 {
     if (!u)
     {
@@ -68,7 +71,7 @@ sowr_CString_UToA( sowr_String *output, uintmax_t u, unsigned int base )
 }
 
 void
-sowr_CString_FToA( sowr_String *output, float f, size_t max_significant )
+sowr_StringCompose_FToA( sowr_String *output, float f, size_t max_significant )
 {
     switch (fpclassify(f))
     {
@@ -109,10 +112,10 @@ sowr_CString_FToA( sowr_String *output, float f, size_t max_significant )
 
             f = modff(f, &buf);
             integer_part = (uintmax_t)buf;
-            sowr_CString_UToA(output, integer_part, 10U);
+            sowr_StringCompose_UToA(output, integer_part, 10U);
             sowr_String_PushC(output, '.');
 
-            // Comparing with eplisoned floating is nearly meaningless in our program.
+            // Comparing eplisoned floating is meaningless for this program.
             if (!f)
             {
                 sowr_String_PushC(output, '0');
@@ -124,7 +127,7 @@ sowr_CString_FToA( sowr_String *output, float f, size_t max_significant )
                 f *= 10.0f;
                 f = modff(f, &buf);
                 integer_part = (uintmax_t)buf;
-                sowr_CString_UToA(output, integer_part, 10U);
+                sowr_StringCompose_UToA(output, integer_part, 10U);
                 max_significant--;
             }
             break;
@@ -135,7 +138,7 @@ sowr_CString_FToA( sowr_String *output, float f, size_t max_significant )
 }
 
 void
-sowr_CString_DToA( sowr_String *output, double d, size_t max_significant )
+sowr_StringCompose_DToA( sowr_String *output, double d, size_t max_significant )
 {
     switch (fpclassify(d))
     {
@@ -176,7 +179,7 @@ sowr_CString_DToA( sowr_String *output, double d, size_t max_significant )
 
             d = modf(d, &buf);
             integer_part = (uintmax_t)buf;
-            sowr_CString_UToA(output, integer_part, 10U);
+            sowr_StringCompose_UToA(output, integer_part, 10U);
             sowr_String_PushC(output, '.');
 
             // Comparing with eplisoned floating is nearly meaningless in our program.
@@ -191,7 +194,7 @@ sowr_CString_DToA( sowr_String *output, double d, size_t max_significant )
                 d *= 10.0;
                 d = modf(d, &buf);
                 integer_part = (uintmax_t)buf;
-                sowr_CString_UToA(output, integer_part, 10U);
+                sowr_StringCompose_UToA(output, integer_part, 10U);
                 max_significant--;
             }
             break;
@@ -202,7 +205,7 @@ sowr_CString_DToA( sowr_String *output, double d, size_t max_significant )
 }
 
 void
-sowr_CString_LDToA( sowr_String *output, long double ld, size_t max_significant )
+sowr_StringCompose_LDToA( sowr_String *output, long double ld, size_t max_significant )
 {
     switch (fpclassify(ld))
     {
@@ -242,7 +245,7 @@ sowr_CString_LDToA( sowr_String *output, long double ld, size_t max_significant 
 
             ld = modfl(ld, &buf);
             integer_part = (uintmax_t)buf;
-            sowr_CString_UToA(output, integer_part, 10U);
+            sowr_StringCompose_UToA(output, integer_part, 10U);
             sowr_String_PushC(output, '.');
 
             // Comparing with eplisoned floating is nearly meaningless in our program.
@@ -257,7 +260,7 @@ sowr_CString_LDToA( sowr_String *output, long double ld, size_t max_significant 
                 ld *= 10.0L;
                 ld = modfl(ld, &buf);
                 integer_part = (uintmax_t)buf;
-                sowr_CString_UToA(output, integer_part, 10U);
+                sowr_StringCompose_UToA(output, integer_part, 10U);
                 max_significant--;
             }
             break;
@@ -268,16 +271,16 @@ sowr_CString_LDToA( sowr_String *output, long double ld, size_t max_significant 
 }
 
 void
-sowr_CString_Compose( sowr_String *output, size_t count, ... )
+sowr_StringCompose_Compose( sowr_String *output, size_t count, ... )
 {
     va_list args;
     va_start(args, count);
-    sowr_CString_ComposeV(output, count, &args);
+    sowr_StringCompose_ComposeV(output, count, &args);
     va_end(args);
 }
 
 void
-sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args )
+sowr_StringCompose_ComposeV( sowr_String *output, size_t count, va_list *args )
 {
     va_list args_cpy;
     va_copy(args_cpy, *args);
@@ -309,7 +312,7 @@ sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args )
             case SOWR_TYPE_INT_FAST_8: case SOWR_TYPE_INT_FAST_16: case SOWR_TYPE_INT_FAST_32: case SOWR_TYPE_INT_FAST_64:
             case SOWR_TYPE_INT_MAX:
             {
-                sowr_CString_IToA(output, data.data.reg.as_int_max, 10U);
+                sowr_StringCompose_IToA(output, data.data.reg.as_int_max, 10U);
                 break;
             }
             case SOWR_TYPE_USHORT: case SOWR_TYPE_UINT: case SOWR_TYPE_ULONG: case SOWR_TYPE_ULONGLONG:
@@ -318,23 +321,23 @@ sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args )
             case SOWR_TYPE_UINT_FAST_8: case SOWR_TYPE_UINT_FAST_16: case SOWR_TYPE_UINT_FAST_32: case SOWR_TYPE_UINT_FAST_64:
             case SOWR_TYPE_SIZE: case SOWR_TYPE_PTR_DIFF: case SOWR_TYPE_UINT_MAX:
             {
-                sowr_CString_UToA(output, data.data.reg.as_uint_max, 10U);
+                sowr_StringCompose_UToA(output, data.data.reg.as_uint_max, 10U);
                 break;
             }
 
             case SOWR_TYPE_FLOAT:
             {
-                sowr_CString_FToA(output, data.data.flt.as_float, 5ULL);
+                sowr_StringCompose_FToA(output, data.data.flt.as_float, 5ULL);
                 break;
             }
             case SOWR_TYPE_DOUBLE:
             {
-                sowr_CString_DToA(output, data.data.flt.as_double, 7ULL);
+                sowr_StringCompose_DToA(output, data.data.flt.as_double, 7ULL);
                 break;
             }
             case SOWR_TYPE_LDOUBLE:
             {
-                sowr_CString_LDToA(output, data.data.flt.as_ldouble, 12ULL);
+                sowr_StringCompose_LDToA(output, data.data.flt.as_ldouble, 12ULL);
                 break;
             }
 
@@ -343,7 +346,7 @@ sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args )
             case SOWR_TYPE_PTR:
             {
                 sowr_String_PushS(output, "0x");
-                sowr_CString_UToA(output, (sowr_Ptr)(data.data.reg.as_ptr), 16U);
+                sowr_StringCompose_UToA(output, (sowr_Ptr)(data.data.reg.as_ptr), 16U);
                 break;
             }
 

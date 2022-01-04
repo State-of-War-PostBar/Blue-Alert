@@ -5,34 +5,37 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_DATA_CSTRING_H
-#define SOWR_LIB_DATA_CSTRING_H
+#ifndef SOWR_LIB_TEXT_COMPOSE_H
+#define SOWR_LIB_TEXT_COMPOSE_H
 
 #include <pch.h>
 
-#include "../container/string.h"
+#include "../../container/string.h"
 
 ///
 /// \brief Convert integer to string
@@ -44,7 +47,7 @@
 /// \param base Base for the converted product
 ///
 void
-sowr_CString_IToA( sowr_String *output, intmax_t i, unsigned int base );
+sowr_StringCompose_IToA( sowr_String *output, intmax_t i, unsigned int base );
 
 ///
 /// \brief Convert unsigned integer to string
@@ -56,7 +59,7 @@ sowr_CString_IToA( sowr_String *output, intmax_t i, unsigned int base );
 /// \param base Base for the converted product
 ///
 void
-sowr_CString_UToA( sowr_String *output, uintmax_t u, unsigned int base );
+sowr_StringCompose_UToA( sowr_String *output, uintmax_t u, unsigned int base );
 
 ///
 /// \brief Convert floating point number to string
@@ -68,7 +71,7 @@ sowr_CString_UToA( sowr_String *output, uintmax_t u, unsigned int base );
 /// \param max_significant Maximum amount of characters after decimal point
 ///
 void
-sowr_CString_FToA( sowr_String *output, float f, size_t max_significant );
+sowr_StringCompose_FToA( sowr_String *output, float f, size_t max_significant );
 
 ///
 /// \brief Convert floating point number to string
@@ -80,7 +83,7 @@ sowr_CString_FToA( sowr_String *output, float f, size_t max_significant );
 /// \param max_significant Maximum amount of characters after decimal point
 ///
 void
-sowr_CString_DToA( sowr_String *output, double d, size_t max_significant );
+sowr_StringCompose_DToA( sowr_String *output, double d, size_t max_significant );
 
 ///
 /// \brief Convert floating point number to string
@@ -92,7 +95,7 @@ sowr_CString_DToA( sowr_String *output, double d, size_t max_significant );
 /// \param max_significant Maximum amount of characters after decimal point
 ///
 void
-sowr_CString_LDToA( sowr_String *output, long double ld, size_t max_significant );
+sowr_StringCompose_LDToA( sowr_String *output, long double ld, size_t max_significant );
 
 // Wait for C2X to add the floating extension for LDToA.
 
@@ -106,7 +109,7 @@ sowr_CString_LDToA( sowr_String *output, long double ld, size_t max_significant 
 /// \param count Number of generic parameters
 ///
 void
-sowr_CString_Compose( sowr_String *output, size_t count, ... );
+sowr_StringCompose_Compose( sowr_String *output, size_t count, ... );
 
 ///
 /// \brief Compose string
@@ -119,6 +122,6 @@ sowr_CString_Compose( sowr_String *output, size_t count, ... );
 /// \param args Actual arguments
 ///
 void
-sowr_CString_ComposeV( sowr_String *output, size_t count, va_list *args );
+sowr_StringCompose_ComposeV( sowr_String *output, size_t count, va_list *args );
 
-#endif // !SOWR_LIB_DATA_CSTRING_H
+#endif // !SOWR_LIB_TEXT_COMPOSE_H

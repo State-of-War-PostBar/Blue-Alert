@@ -5,23 +5,26 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
@@ -30,36 +33,36 @@
 #include "log.h"
 
 #include "../container/string.h"
-#include "../data/cstring.h"
+#include "../text/literal/compose.h"
+
+static const char *const SOWR_LOGLVL_STRINGS[] =
+{
+    "TRACE",
+    "DEBUG",
+    "INFO ",
+    "WARN ",
+    "ERROR",
+    "FATAL"
+};
+
+static const char *const SOWR_LOG_COLORCODES[] =
+{
+    "\x1b[90m",
+    "\x1b[32m",
+    "\x1b[94m",
+    "\x1b[33m",
+    "\x1b[31m",
+    "\x1b[35m"
+};
+
+static const char *const SOWR_LOG_COLORCODE_RESET = "\x1b[0m";
+
+thread_local static sowr_String message_buf;
 
 #ifdef SOWR_BUILD_DEBUG
     static sowr_File log_file;
     static sowr_File log_console;
     static sowr_LogLockFunc lock_func;
-
-    thread_local static sowr_String message_buf;
-
-    static const char *const SOWR_LOGLVL_STRINGS[] =
-    {
-        "TRACE",
-        "DEBUG",
-        "INFO ",
-        "WARN ",
-        "ERROR",
-        "FATAL"
-    };
-
-    static const char *const SOWR_LOG_COLORCODES[] =
-    {
-        "\x1b[90m",
-        "\x1b[32m",
-        "\x1b[94m",
-        "\x1b[33m",
-        "\x1b[31m",
-        "\x1b[35m"
-    };
-
-    static const char *const SOWR_LOG_COLORCODE_RESET = "\x1b[0m";
 #endif
 
 void
@@ -94,7 +97,7 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
 #else
     localtime_r(&raw_time, &loc_time);
 #endif
-    
+
     message_buf.length += strftime(message_buf.ptr, message_buf.capacity, "%d-%m-%y %H:%M:%S", &loc_time);
     sowr_String_PushC(&message_buf, ' ');
     size_t colorcode = message_buf.length;
@@ -102,14 +105,16 @@ sowr_Logger_Log( sowr_LogLevel level, const char *file, int line, const char *me
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, file);
     sowr_String_PushC(&message_buf, ':');
-    sowr_CString_IToA(&message_buf, line, 10U);
+    sowr_StringCompose_IToA(&message_buf, line, 10U);
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, message);
     sowr_String_PushC(&message_buf, '\n');
 
-    lock_func(true);
+    if (lock_func)
+        lock_func(true);
     sowr_File_WriteContent(log_file, message_buf.ptr, message_buf.length);
-    lock_func(false);
+    if (lock_func)
+        lock_func(false);
     sowr_String_InsertS(&message_buf, colorcode, SOWR_LOG_COLORCODES[level]);
     sowr_String_InsertS(&message_buf, colorcode + 6ULL + 5ULL, SOWR_LOG_COLORCODE_RESET);
     sowr_File_WriteContent(log_console, message_buf.ptr, message_buf.length);
@@ -137,17 +142,19 @@ sowr_Logger_LogG( sowr_LogLevel level, const char *file, int line, size_t count,
     sowr_String_PushC(&message_buf, ' ');
     sowr_String_PushS(&message_buf, file);
     sowr_String_PushC(&message_buf, ':');
-    sowr_CString_IToA(&message_buf, line, 10U);
+    sowr_StringCompose_IToA(&message_buf, line, 10U);
     sowr_String_PushC(&message_buf, ' ');
 
     va_list args;
     va_start(args, count);
 
-    sowr_CString_ComposeV(&message_buf, count, &args);
+    sowr_StringCompose_ComposeV(&message_buf, count, &args);
     sowr_String_PushC(&message_buf, '\n');
-    lock_func(true);
+    if (lock_func)
+        lock_func(true);
     sowr_File_WriteContent(log_file, message_buf.ptr, message_buf.length);
-    lock_func(false);
+    if (lock_func)
+        lock_func(false);
     sowr_String_InsertS(&message_buf, colorcode, SOWR_LOG_COLORCODES[level]);
     sowr_String_InsertS(&message_buf, colorcode + 5ULL + 5ULL, SOWR_LOG_COLORCODE_RESET);
     sowr_File_WriteContent(log_console, message_buf.ptr, message_buf.length);

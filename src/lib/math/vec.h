@@ -30,100 +30,225 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#include "stack.h"
+#ifndef SOWR_LIB_MATH_VEC_H
+#define SOWR_LIB_MATH_VEC_H
 
-inline
-sowr_Stack *
-sowr_Stack_Create ( size_t elem_size, sowr_StackFreeFunc free_func )
+#include <pch.h>
+
+typedef union sowr_Vec2
 {
-    return sowr_Vector_Create(elem_size, free_func);
-}
+    struct
+    {
+        float x, y;
+    };
+    struct
+    {
+        float u, v;
+    };
+    struct
+    {
+        float w, h;
+    };
 
-inline
-sowr_Stack
-sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func )
+    float data[2];
+} sowr_Vec2;
+
+typedef union sowr_Vec2D
 {
-    return sowr_Vector_CreateS(elem_size, free_func);
-}
+    struct
+    {
+        double x, y;
+    };
+    struct
+    {
+        double u, v;
+    };
+    struct
+    {
+        double w, h;
+    };
 
-inline
-void *
-sowr_Stack_Last( const sowr_Stack *stack )
+    double data[2];
+} sowr_Vec2D;
+
+typedef union sowr_Vec2I
 {
-    return sowr_Vector_Last(stack);
-}
+    struct
+    {
+        int x, y;
+    };
+    struct
+    {
+        int u, v;
+    };
+    struct
+    {
+        int w, h;
+    };
 
-inline
-void *
-sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cmp )
+    int data[2];
+} sowr_Vec2I;
+
+typedef union sowr_Vec2U
 {
-    return sowr_Vector_Find(stack, data, cmp);
-}
+    struct
+    {
+        unsigned int x, y;
+    };
+    struct
+    {
+        unsigned int u, v;
+    };
+    struct
+    {
+        unsigned int w, h;
+    };
 
-inline
-void
-sowr_Stack_Expand( sowr_Stack *stack )
+    unsigned int data[2];
+} sowr_Vec2U;
+
+typedef union sowr_Vec3
 {
-    sowr_Vector_Expand(stack);
-}
+    struct
+    {
+        float x, y, z;
+    };
+    struct
+    {
+        float u, v, ignored_0;
+    };
+    struct
+    {
+        float r, g, b;
+    };
 
-inline
-void
-sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size )
+    float data[3];
+} sowr_Vec3;
+
+typedef union sowr_Vec3D
 {
-    sowr_Vector_ExpandUntil(stack, size);
-}
+    struct
+    {
+        double x, y, z;
+    };
+    struct
+    {
+        double u, v, ignored_0;
+    };
+    struct
+    {
+        double r, g, b;
+    };
 
-void
-sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func )
+    double data[3];
+} sowr_Vec3D;
+
+typedef union sowr_Vec3I
 {
-    if (!stack->length)
-        return;
+    struct
+    {
+        int x, y, z;
+    };
+    struct
+    {
+        int u, v, ignored_0;
+    };
+    struct
+    {
+        int r, g, b;
+    };
 
-    for (size_t i = stack->length - 1ULL; i > 0ULL; i--)
-        func(sowr_Vector_PtrAt(stack, i));
-    func(sowr_Vector_First(stack));
-    sowr_Stack_Clear(stack);
-}
+    int data[3];
+} sowr_Vec3I;
 
-inline
-void
-sowr_Stack_Clear( sowr_Stack *stack )
+typedef union sowr_Vec3U
 {
-    sowr_Vector_Clear(stack);
-}
+    struct
+    {
+        unsigned int x, y, z;
+    };
+    struct
+    {
+        unsigned int u, v, ignored_0;
+    };
+    struct
+    {
+        unsigned int r, g, b;
+    };
 
-inline
-void
-sowr_Stack_ShrinkToFit( sowr_Stack *stack )
-{
-    sowr_Vector_ShrinkToFit(stack);
-}
+    unsigned int data[3];
+} sowr_Vec3U;
 
-inline
-void
-sowr_Stack_Push( sowr_Stack *stack, const void *elem )
+typedef union sowr_Vec4
 {
-    sowr_Vector_Push(stack, elem);
-}
+    struct
+    {
+        float x, y, z, w;
+    };
+    struct
+    {
+        float u, v, s, t;
+    };
+    struct
+    {
+        float r, g, b, a;
+    };
 
-inline
-void
-sowr_Stack_Pop( sowr_Stack *stack, void *ptr_retrieve )
-{
-    sowr_Vector_Pop(stack, ptr_retrieve);
-}
+    float data[4];
+} sowr_Vec4;
 
-inline
-void
-sowr_Stack_Destroy( sowr_Stack *stack )
+typedef union sowr_Vec4D
 {
-    sowr_Vector_Destroy(stack);
-}
+    struct
+    {
+        double x, y, z, w;
+    };
+    struct
+    {
+        double u, v, s, t;
+    };
+    struct
+    {
+        double r, g, b, a;
+    };
 
-inline
-void
-sowr_Stack_DestroyS( sowr_Stack *stack )
+    double data[4];
+} sowr_Vec4D;
+
+typedef union sowr_Vec4I
 {
-    sowr_Vector_DestroyS(stack);
-}
+    struct
+    {
+        int x, y, z, w;
+    };
+    struct
+    {
+        int u, v, s, t;
+    };
+    struct
+    {
+        int r, g, b, a;
+    };
+
+    int data[4];
+} sowr_Vec4I;
+
+typedef union sowr_Vec4U
+{
+    struct
+    {
+        unsigned int x, y, z, w;
+    };
+    struct
+    {
+        unsigned int u, v, s, t;
+    };
+    struct
+    {
+        unsigned int r, g, b, a;
+    };
+
+    unsigned int data[4];
+} sowr_Vec4U;
+
+#endif // !SOWR_LIB_MATH_VEC_H

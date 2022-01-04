@@ -30,100 +30,18 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#include "stack.h"
+#ifndef SOWR_LIB_SECURITY_SHA256_H
+#define SOWR_LIB_SECURITY_SHA256_H
 
-inline
-sowr_Stack *
-sowr_Stack_Create ( size_t elem_size, sowr_StackFreeFunc free_func )
+#include <pch.h>
+
+typedef union sowr_SHA256
 {
-    return sowr_Vector_Create(elem_size, free_func);
-}
+    uint32_t dword[8];
+    uint8_t byte[32];
+} sowr_SHA256;
 
-inline
-sowr_Stack
-sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func )
-{
-    return sowr_Vector_CreateS(elem_size, free_func);
-}
+sowr_SHA256
+sowr_SHA256_Generate( uint64_t length, const unsigned char *data );
 
-inline
-void *
-sowr_Stack_Last( const sowr_Stack *stack )
-{
-    return sowr_Vector_Last(stack);
-}
-
-inline
-void *
-sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cmp )
-{
-    return sowr_Vector_Find(stack, data, cmp);
-}
-
-inline
-void
-sowr_Stack_Expand( sowr_Stack *stack )
-{
-    sowr_Vector_Expand(stack);
-}
-
-inline
-void
-sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size )
-{
-    sowr_Vector_ExpandUntil(stack, size);
-}
-
-void
-sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func )
-{
-    if (!stack->length)
-        return;
-
-    for (size_t i = stack->length - 1ULL; i > 0ULL; i--)
-        func(sowr_Vector_PtrAt(stack, i));
-    func(sowr_Vector_First(stack));
-    sowr_Stack_Clear(stack);
-}
-
-inline
-void
-sowr_Stack_Clear( sowr_Stack *stack )
-{
-    sowr_Vector_Clear(stack);
-}
-
-inline
-void
-sowr_Stack_ShrinkToFit( sowr_Stack *stack )
-{
-    sowr_Vector_ShrinkToFit(stack);
-}
-
-inline
-void
-sowr_Stack_Push( sowr_Stack *stack, const void *elem )
-{
-    sowr_Vector_Push(stack, elem);
-}
-
-inline
-void
-sowr_Stack_Pop( sowr_Stack *stack, void *ptr_retrieve )
-{
-    sowr_Vector_Pop(stack, ptr_retrieve);
-}
-
-inline
-void
-sowr_Stack_Destroy( sowr_Stack *stack )
-{
-    sowr_Vector_Destroy(stack);
-}
-
-inline
-void
-sowr_Stack_DestroyS( sowr_Stack *stack )
-{
-    sowr_Vector_DestroyS(stack);
-}
+#endif // !SOWR_LIB_SECURITY_SHA256_H

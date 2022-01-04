@@ -5,7 +5,7 @@ Also a programming experiment of [Taxerap](https://github.com/Taxerap).
 
 ## ~~Quick Start~~
 
-This project is not even in Alpha phase yet, please be patient.
+This project is not even in Alpha phase yet, lolololol.
 
 ## Discussion
 
@@ -16,8 +16,7 @@ You may also join our discussion at our official [Baidu Postbar](https://tieba.b
 ## Developing & Contribution
 
 We appreciate any kind of help. You may request new features, give suggestions on code and talk about designs at the [issues](https://github.com/State-of-War-PostBar/sowr/issues) page.  
-You may also contribute directly to the code base by sending a [pull request](https://github.com/State-of-War-PostBar/sowr/pulls).
-
+You may also contribute directly to the code base by sending a [pull request](https://github.com/State-of-War-PostBar/sowr/pulls).  
 To start, you may take a look at our [program design](docs/program_design.md) and [regulation](docs/regulation.md) documents first.
 
 ## License & Copyright, those kind of boring stuff
@@ -26,4 +25,4 @@ State of War: Remastered is published under the _Just Don't Bother Me Public Lic
 
 ---
 
-_State of War Remastering Project, State of War Postbar, Taxerap/DragoonKiller, 2017 - 2021._
+_State of War Remastering Project, State of War Postbar, Taxerap/DragoonKiller, 2017 - 2022._

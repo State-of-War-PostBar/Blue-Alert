@@ -5,23 +5,26 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
@@ -245,8 +248,6 @@ sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem )
 {
     sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
     memmove(sowr_Vector_PtrAt(vec, 1ULL), vec->ptr, vec->elem_size * vec->length);
-    char *new_head = (char *)(vec->ptr) - vec->elem_size;
-    vec->ptr = new_head;
     memcpy(vec->ptr, elem, vec->elem_size);
     vec->length++;
 }

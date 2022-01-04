@@ -5,23 +5,26 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
@@ -40,7 +43,7 @@
 /// \return True if little endian, false if big endian
 ///
 bool
-sowr_Endianness( void );
+sowr_IsLittleEndian( void );
 
 ///
 /// \brief Swap two values
@@ -102,5 +105,27 @@ sowr_SwapEndian32( uint32_t val );
 ///
 uint64_t
 sowr_SwapEndian64( uint64_t val );
+
+///
+/// \brief Flip an atomic bool variable
+///
+/// Flip an atomic bool. True -> False, False -> True.
+///
+/// \param val Value to be flipped
+///
+void
+sowr_FlipAtomicBool( atomic_bool *val );
+
+uint32_t
+sowr_RotateLeft32( uint32_t x, unsigned int n );
+
+uint32_t
+sowr_RotateRight32( uint32_t x, unsigned int n );
+
+uint64_t
+sowr_RotateLeft64( uint64_t x, unsigned int n );
+
+uint64_t
+sowr_RotateRight64( uint64_t x, unsigned int n );
 
 #endif // !SOWR_LIB_DATA_BYTES_H

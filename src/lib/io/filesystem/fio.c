@@ -5,23 +5,26 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
@@ -218,10 +221,17 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
     FindClose(f_entry);
 #else
     DIR *dir = opendir(str.ptr);
-    struct dirent64 *f_entry = readdir64(dir);
-    struct stat64 f_stat;
 
-    if (!dir || !f_entry)
+    if (!dir)
+    {
+        sowr_String_DestroyS(&str);
+        return;
+    }
+
+    struct dirent *f_entry = readdir(dir);
+    struct stat f_stat;
+
+    if (!f_entry)
     {
         sowr_String_DestroyS(&str);
         return;
@@ -236,11 +246,11 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
         sowr_String_PushS(&str, path);
         sowr_String_PushC(&str, '/');
         sowr_String_PushS(&str, f_entry->d_name);
-        if (!stat64(str.ptr, &f_stat) && S_ISDIR(f_stat.st_mode))
+        if (!stat(str.ptr, &f_stat) && S_ISDIR(f_stat.st_mode))
             sowr_File_WalkDir(str.ptr, func);
         else
             func(str.ptr);
-    } while ((f_entry = readdir64(dir)));
+    } while ((f_entry = readdir(dir)));
 
     closedir(dir);
 #endif
@@ -259,8 +269,8 @@ sowr_File_GetSize( sowr_File file )
     GetFileSizeEx(file, &sz);
     return sz.QuadPart;
 #else
-    struct stat64 f_stat;
-    fstat64(file, &f_stat);
+    struct stat f_stat;
+    fstat(file, &f_stat);
     return f_stat.st_size;
 #endif
 }

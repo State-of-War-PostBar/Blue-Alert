@@ -5,23 +5,26 @@
 **************************************************************************************************
 *                                                                                                *
 *                  A free, open-source software project recreating an old game.                  *
-*               (c) 2017 - 2021 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *    State of War: Remastered is a free software. You can freely do whatever you want with it    *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
-*                                   published by mhtvsSFrpHdE.                                   *
+*                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
 *  By the time this line is written, the version of the license document is 1, but you may use   *
-* any later version of the document released by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.  *
+*                  any later version of the document released by mhtvsSFrpHdE.                   *
 *                                                                                                *
 *     State of War: Remastered is created, intended to be useful, but without any warranty.      *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
-*       You should have received a copy of the license along with the source code of this        *
-*  program. If not, please see https://github.com/mhtvsSFrpHdE/ipcui/blob/master/LICENSE_JDBM.   *
+*                 You should have received a copy of the license along with the                  *
+*                        source code of this program. If not, please see                         *
+*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                         https://github.com/State-of-War-PostBar/sowr.                          *
+*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                                                                                                *
+**************************************************************************************************
 *                                                                                                *
 *                               Mission is successfully completed.                               *
 *                                                                                                *
@@ -30,7 +33,7 @@
 #include "bytes.h"
 
 bool
-sowr_Endianness( void )
+sowr_IsLittleEndian( void )
 {
     const short num = 1;
     const signed char *const ptr = (const signed char *const) &num;
@@ -93,4 +96,43 @@ sowr_SwapEndian64( uint64_t val )
             (val & 0x0000000000ff0000ULL) << 030U |
             (val & 0x000000000000ff00ULL) << 050U |
             (val & 0x00000000000000ffULL) << 070U;
+}
+
+inline
+void
+sowr_FlipAtomicBool( atomic_bool *val )
+{
+    bool old = false;
+    do
+    {
+        old = atomic_load(val);
+    } while (!atomic_compare_exchange_strong(val, &old, !old));
+}
+
+inline
+uint32_t
+sowr_RotateLeft32( uint32_t x, unsigned int n )
+{
+    return (x << n) | (x >> (32 - n));
+}
+
+inline
+uint32_t
+sowr_RotateRight32( uint32_t x, unsigned int n )
+{
+    return (x >> n) | (x << (32 - n));
+}
+
+inline
+uint64_t
+sowr_RotateLeft64( uint64_t x, unsigned int n )
+{
+    return (x << n) | (x >> (64 - n));
+}
+
+inline
+uint64_t
+sowr_RotateRight64( uint64_t x, unsigned int n )
+{
+    return (x >> n) | (x << (64 - n));
 }
