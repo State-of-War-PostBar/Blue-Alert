@@ -47,7 +47,6 @@
 
     typedef pthread_mutex_t         sowr_Mutex;
     typedef pthread_mutex_t         sowr_CriticalSection;
-    typedef pthread_rwlock_t        sowr_ReadWriteLock;
 
     typedef pthread_mutexattr_t     sowr_MutexAttribute;
 #endif
