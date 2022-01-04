@@ -36,7 +36,7 @@ int
 sowr_Thread_Create( sowr_Thread *thr, sowr_ThreadFunc func, void *arg )
 {
 #ifdef SOWR_TARGET_WINDOWS
-    sowr_Thread thrd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)func, arg, 0, NULL);
+    sowr_Thread thrd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, arg, 0, NULL);
     if (!thrd)
     {
         *thr = NULL;

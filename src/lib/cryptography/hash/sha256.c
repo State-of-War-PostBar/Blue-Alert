@@ -32,8 +32,8 @@
 
 #include "sha256.h"
 
-#include "../data/bytes.h"
-#include "../memory/heap_memory.h"
+#include "../../data/bytes.h"
+#include "../../memory/heap_memory.h"
 
 static
 const uint32_t SOWR_SHA256_K[] =

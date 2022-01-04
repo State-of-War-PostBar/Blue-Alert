@@ -32,8 +32,8 @@
 
 #include "compose.h"
 
-#include "../../data/bytes.h"
-#include "../../type/generic.h"
+#include "../data/bytes.h"
+#include "../type/generic.h"
 
 void
 sowr_StringCompose_IToA( sowr_String *output, intmax_t i, unsigned int base )

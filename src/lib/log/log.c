@@ -33,7 +33,7 @@
 #include "log.h"
 
 #include "../container/string.h"
-#include "../text/literal/compose.h"
+#include "../text/compose.h"
 
 static const char *const SOWR_LOGLVL_STRINGS[] =
 {

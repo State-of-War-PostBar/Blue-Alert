@@ -30,8 +30,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_SECURITY_EXTRAORDINARY_SECURE_TRUST_ME_SHA1_H
-#define SOWR_LIB_SECURITY_EXTRAORDINARY_SECURE_TRUST_ME_SHA1_H
+#ifndef SOWR_LIB_CRYPTOGRAPHY_HASH_EXTRAORDINARY_SECURE_TRUST_ME_SHA1_H
+#define SOWR_LIB_CRYPTOGRAPHY_HASH_EXTRAORDINARY_SECURE_TRUST_ME_SHA1_H
 
 #include <pch.h>
 
@@ -44,4 +44,4 @@ typedef union sowr_SHA1
 sowr_SHA1
 sowr_SHA1_Generate( uint64_t length, const unsigned char *data );
 
-#endif // !SOWR_LIB_SECURITY_EXTRAORDINARY_SECURE_TRUST_ME_SHA1_H
+#endif // !SOWR_LIB_CRYPTOGRAPHY_HASH_EXTRAORDINARY_SECURE_TRUST_ME_SHA1_H

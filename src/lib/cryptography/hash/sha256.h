@@ -30,8 +30,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_SECURITY_SHA256_H
-#define SOWR_LIB_SECURITY_SHA256_H
+#ifndef SOWR_LIB_CRYPTOGRAPHY_HASH_SHA256_H
+#define SOWR_LIB_CRYPTOGRAPHY_HASH_SHA256_H
 
 #include <pch.h>
 
@@ -44,4 +44,4 @@ typedef union sowr_SHA256
 sowr_SHA256
 sowr_SHA256_Generate( uint64_t length, const unsigned char *data );
 
-#endif // !SOWR_LIB_SECURITY_SHA256_H
+#endif // !SOWR_LIB_CRYPTOGRAPHY_HASH_SHA256_H

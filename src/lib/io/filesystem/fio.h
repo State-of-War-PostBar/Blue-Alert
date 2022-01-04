@@ -30,8 +30,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_IO_FIO_H
-#define SOWR_LIB_IO_FIO_H
+#ifndef SOWR_LIB_IO_FILESYSTEM_FIO_H
+#define SOWR_LIB_IO_FILESYSTEM_FIO_H
 
 #include <pch.h>
 
@@ -200,4 +200,4 @@ sowr_File_WriteContents( sowr_File file, size_t count, ... );
 void
 sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args );
 
-#endif // !SOWR_LIB_IO_FIO_H
+#endif // !SOWR_LIB_IO_FILESYSTEM_FIO_H
