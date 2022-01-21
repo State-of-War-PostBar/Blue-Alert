@@ -29,15 +29,8 @@
 
 #include <pch.h>
 
-#include "log/log.h"
-#include "log/profile.h"
-
 int
 main( int argc, char *argv[] )
 {
-    blrt_Logger_Init();
-    BLRT_LOG_INFO("Hello, world!");
-    blrt_Logger_Destroy();
-
     return EXIT_SUCCESS;
 }
