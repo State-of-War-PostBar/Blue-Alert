@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,25 +27,25 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_THREAD_LOCK_H
-#define SOWR_LIB_THREAD_LOCK_H
+#ifndef BLRT_LIB_THREAD_LOCK_H
+#define BLRT_LIB_THREAD_LOCK_H
 
 #include <pch.h>
 
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     #include <synchapi.h>
 
-    typedef HANDLE                  sowr_Mutex;
-    typedef CRITICAL_SECTION        sowr_CriticalSection;
+    typedef HANDLE                  blrt_Mutex;
+    typedef CRITICAL_SECTION        blrt_CriticalSection;
 
-    typedef SECURITY_ATTRIBUTES     sowr_MutexAttribute;
+    typedef SECURITY_ATTRIBUTES     blrt_MutexAttribute;
 #else
     #include <pthread.h>
 
-    typedef pthread_mutex_t         sowr_Mutex;
-    typedef pthread_mutex_t         sowr_CriticalSection;
+    typedef pthread_mutex_t         blrt_Mutex;
+    typedef pthread_mutex_t         blrt_CriticalSection;
 
-    typedef pthread_mutexattr_t     sowr_MutexAttribute;
+    typedef pthread_mutexattr_t     blrt_MutexAttribute;
 #endif
 
 ///
@@ -62,7 +59,7 @@
 /// \param attr The mutex attribute for the mutex object
 ///
 void
-sowr_InitMutex( sowr_Mutex *mtx, sowr_MutexAttribute *attr );
+blrt_InitMutex( blrt_Mutex *mtx, blrt_MutexAttribute *attr );
 
 ///
 /// \brief Lock a mutex
@@ -72,7 +69,7 @@ sowr_InitMutex( sowr_Mutex *mtx, sowr_MutexAttribute *attr );
 /// \param mtx The mutex object to be locked
 ///
 void
-sowr_LockMutex( sowr_Mutex *mtx );
+blrt_LockMutex( blrt_Mutex *mtx );
 
 ///
 /// \brief Try to lock a mutex
@@ -82,7 +79,7 @@ sowr_LockMutex( sowr_Mutex *mtx );
 /// \param mtx The mutex object to be locked
 ///
 void
-sowr_TryLockMutex( sowr_Mutex *mtx );
+blrt_TryLockMutex( blrt_Mutex *mtx );
 
 ///
 /// \brief Unlock a mutex
@@ -92,7 +89,7 @@ sowr_TryLockMutex( sowr_Mutex *mtx );
 /// \param mtx The mutex object to be unlocked
 ///
 void
-sowr_UnlockMutex( sowr_Mutex *mtx );
+blrt_UnlockMutex( blrt_Mutex *mtx );
 
 ///
 /// \brief Destroy a mutex
@@ -104,63 +101,63 @@ sowr_UnlockMutex( sowr_Mutex *mtx );
 /// \param mtx The mutex object to be destroyed
 ///
 void
-sowr_DestroyMutex( sowr_Mutex *mtx );
+blrt_DestroyMutex( blrt_Mutex *mtx );
 
 ///
 /// \brief Initialize a critical section
 ///
 /// Initialize a critical section, a lock on Windows that is way faster than WinMutex.<BR />
-/// <B>If used on Posix systems, it has the same effect as \a sowr_InitMutex(), except that attributes cannot be applied to it.</B>
+/// <B>If used on Posix systems, it has the same effect as \a blrt_InitMutex(), except that attributes cannot be applied to it.</B>
 ///
 /// \param cs The critical section to be initialized. <I>It must be allocated first!</I>
 ///
 void
-sowr_InitCriticalSection( sowr_CriticalSection *cs );
+blrt_InitCriticalSection( blrt_CriticalSection *cs );
 
 ///
 /// \brief Enter a critical section
 ///
 /// Enter <I>(that is, lock)</I> a critical section, waiting infinitely until entrance of the critical section.<BR />
-/// <B>If used on Posix systems, it has the same effect as \a sowr_LockMutex().</B>
+/// <B>If used on Posix systems, it has the same effect as \a blrt_LockMutex().</B>
 ///
 /// \param cs The critical section to be locked
 ///
 void
-sowr_EnterCriticalSection( sowr_CriticalSection *cs );
+blrt_EnterCriticalSection( blrt_CriticalSection *cs );
 
 ///
 /// \brief Try to enter a critical section
 ///
 /// Attempt to enter a critical section. If the entrance failed do nothing.<BR />
-/// <B>If used on Posix systems, it has the same effect as \a sowr_TryLockMutex().</B>
+/// <B>If used on Posix systems, it has the same effect as \a blrt_TryLockMutex().</B>
 ///
 /// \param cs The critical section to be locked
 ///
 void
-sowr_TryEnterCriticalSection( sowr_CriticalSection *cs );
+blrt_TryEnterCriticalSection( blrt_CriticalSection *cs );
 
 ///
 /// \brief Leave a critical section
 ///
 /// Leave a previously entered critical section.<BR />
-/// <B>If used on Posix systems, it has the same effect as \a sowr_UnlockMutex().</B>
+/// <B>If used on Posix systems, it has the same effect as \a blrt_UnlockMutex().</B>
 ///
 /// \param cs The critical section to be unlocked
 /// 
 void
-sowr_LeaveCriticalSection( sowr_CriticalSection *cs );
+blrt_LeaveCriticalSection( blrt_CriticalSection *cs );
 
 ///
 /// \brief Destroy a critical section
 ///
 /// Destroy a critical section, it will be no longer usable.<BR />
-/// <B>If used on Posix systems, it has the same effect as \a sowr_DestroyMutex().</B>
+/// <B>If used on Posix systems, it has the same effect as \a blrt_DestroyMutex().</B>
 ///
 /// \note This function does not deallocate the critical section, you have to do it yourself if you wish so.
 ///
 /// \param cs The critical section to be destroyed
 ///
 void
-sowr_DestroyCriticalSection( sowr_CriticalSection *cs );
+blrt_DestroyCriticalSection( blrt_CriticalSection *cs );
 
-#endif // !SOWR_LIB_THREAD_LOCK_H
+#endif // !BLRT_LIB_THREAD_LOCK_H

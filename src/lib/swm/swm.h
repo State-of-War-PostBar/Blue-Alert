@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,29 +27,29 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_SWM_SWM_H
-#define SOWR_LIB_SWM_SWM_H
+#ifndef BLRT_LIB_SWM_SWM_H
+#define BLRT_LIB_SWM_SWM_H
 
 #include <pch.h>
 
 #include "../container/radix_tree.h"
 
-typedef struct sowr_Swm
+typedef struct blrt_Swm
 {
-    sowr_RadixTree contents;
-} sowr_Swm;
+    blrt_RadixTree contents;
+} blrt_Swm;
 
-typedef enum sowr_Swm_DataType
+typedef enum blrt_Swm_DataType
 {
-    SOWR_SWM_FLAG,
-    SOWR_SWM_PAIR
-} sowr_Swm_DataType;
+    BLRT_SWM_FLAG,
+    BLRT_SWM_PAIR
+} blrt_Swm_DataType;
 
-typedef struct sowr_SwmData
+typedef struct blrt_SwmData
 {
-    sowr_Swm_DataType data_type;
-    sowr_String data;
-} sowr_SwmData;
+    blrt_Swm_DataType data_type;
+    blrt_String data;
+} blrt_SwmData;
 
 ///
 /// \brief Load a swm
@@ -63,8 +60,8 @@ typedef struct sowr_SwmData
 ///
 /// \return Loaded swm
 ///
-sowr_Swm
-sowr_Swm_Load( const char *str );
+blrt_Swm
+blrt_Swm_Load( const char *str );
 
 ///
 /// \brief Destroy a swm
@@ -74,7 +71,7 @@ sowr_Swm_Load( const char *str );
 /// \param swm Swm to destroy
 ///
 void
-sowr_Swm_Destroy( sowr_Swm *swm );
+blrt_Swm_Destroy( blrt_Swm *swm );
 
 ///
 /// \brief Check a flag in swm
@@ -87,7 +84,7 @@ sowr_Swm_Destroy( sowr_Swm *swm );
 /// \return If the flag exists
 ///
 bool
-sowr_Swm_HasFlag( const sowr_Swm *swm, const char *flag );
+blrt_Swm_HasFlag( const blrt_Swm *swm, const char *flag );
 
 ///
 /// \brief Get a value from swm
@@ -100,6 +97,6 @@ sowr_Swm_HasFlag( const sowr_Swm *swm, const char *flag );
 /// \return Value if exists, NULL otherwise
 ///
 char *
-sowr_Swm_GetValue( const sowr_Swm *swm, const char *key );
+blrt_Swm_GetValue( const blrt_Swm *swm, const char *key );
 
-#endif // !SOWR_LIB_SWM_SWM_H
+#endif // !BLRT_LIB_SWM_SWM_H

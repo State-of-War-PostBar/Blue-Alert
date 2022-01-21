@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_HASH_MAP_H
-#define SOWR_LIB_CONTAINER_HASH_MAP_H
+#ifndef BLRT_LIB_CONTAINER_HASH_MAP_H
+#define BLRT_LIB_CONTAINER_HASH_MAP_H
 
 #include <pch.h>
 
@@ -39,24 +36,24 @@
 #include "vector.h"
 #include "../data/hash.h"
 
-typedef void (*sowr_HashMapWalkFunc)( void * );
-typedef void (*sowr_HashMapFreeFunc)( void * );
+typedef void (*blrt_HashMapWalkFunc)( void * );
+typedef void (*blrt_HashMapFreeFunc)( void * );
 
-typedef struct sowr_HashMapValue
+typedef struct blrt_HashMapValue
 {
-    sowr_Hash index_hash;
+    blrt_Hash index_hash;
     size_t data_size;
-    sowr_HashMapFreeFunc free_func;
+    blrt_HashMapFreeFunc free_func;
     void *data;
-} sowr_HashMapValue;
+} blrt_HashMapValue;
 
-typedef struct sowr_HashMap
+typedef struct blrt_HashMap
 {
     size_t buckets_count;
     size_t length;
-    sowr_Vector buckets;
-    sowr_HashMapFreeFunc free_func;
-} sowr_HashMap;
+    blrt_Vector buckets;
+    blrt_HashMapFreeFunc free_func;
+} blrt_HashMap;
 
 ///
 /// \brief Create a hashmap
@@ -67,21 +64,21 @@ typedef struct sowr_HashMap
 ///
 /// \return A hashmap
 ///
-sowr_HashMap *
-sowr_HashMap_Create( sowr_HashMapFreeFunc free_func );
+blrt_HashMap *
+blrt_HashMap_Create( blrt_HashMapFreeFunc free_func );
 
 ///
 /// \brief Create a hashmap
 ///
 /// Create a hashmap by stack, with default buckets, ready to use.<BR />
-/// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
+/// <B>The created hashmap must be destroyed with \a blrt_HashMap_DestroyS().</B>
 ///
 /// \param free_func Function to call when freeing an element
 ///
 /// \return A hashmap
 ///
-sowr_HashMap
-sowr_HashMap_CreateS( sowr_HashMapFreeFunc free_func );
+blrt_HashMap
+blrt_HashMap_CreateS( blrt_HashMapFreeFunc free_func );
 
 ///
 /// \brief Create a hashmap
@@ -93,22 +90,22 @@ sowr_HashMap_CreateS( sowr_HashMapFreeFunc free_func );
 ///
 /// \return A hashmap
 ///
-sowr_HashMap *
-sowr_HashMap_Create_SuggestBucketsCount( size_t buckets_count, sowr_HashMapFreeFunc free_func );
+blrt_HashMap *
+blrt_HashMap_Create_SuggestBucketsCount( size_t buckets_count, blrt_HashMapFreeFunc free_func );
 
 ///
 /// \brief Create a hashmap
 ///
 /// Create a hashmap with custom number of buckets by stack, ready to use.<BR />
-/// <B>The created hashmap must be destroyed with \a sowr_HashMap_DestroyS().</B>
+/// <B>The created hashmap must be destroyed with \a blrt_HashMap_DestroyS().</B>
 ///
 /// \param buckets_count Suggested buckets count
 /// \param free_func Function to call when freeing an element
 ///
 /// \return A hashmap
 ///
-sowr_HashMap
-sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, sowr_HashMapFreeFunc free_func );
+blrt_HashMap
+blrt_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, blrt_HashMapFreeFunc free_func );
 
 ///
 /// \brief Insert an element to hashmap
@@ -122,7 +119,7 @@ sowr_HashMap_Create_SuggestBucketsCountS( size_t buckets_count, sowr_HashMapFree
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, size_t val_length, const void *value );
+blrt_HashMap_Insert( blrt_HashMap *map, size_t index_length, const char *index, size_t val_length, const void *value );
 
 ///
 /// \brief Insert an element to hashmap
@@ -135,7 +132,7 @@ sowr_HashMap_Insert( sowr_HashMap *map, size_t index_length, const char *index, 
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_InsertCC( sowr_HashMap *map, const char *index, const char *value );
+blrt_HashMap_InsertCC( blrt_HashMap *map, const char *index, const char *value );
 
 ///
 /// \brief Insert an element to hashmap
@@ -149,7 +146,7 @@ sowr_HashMap_InsertCC( sowr_HashMap *map, const char *index, const char *value )
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_InsertCV( sowr_HashMap *map, const char *index, size_t val_length, const void *value );
+blrt_HashMap_InsertCV( blrt_HashMap *map, const char *index, size_t val_length, const void *value );
 
 ///
 /// \brief Insert an element to hashmap
@@ -161,7 +158,7 @@ sowr_HashMap_InsertCV( sowr_HashMap *map, const char *index, size_t val_length, 
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_InsertSS( sowr_HashMap *map, const sowr_String *index, const sowr_String *value );
+blrt_HashMap_InsertSS( blrt_HashMap *map, const blrt_String *index, const blrt_String *value );
 
 ///
 /// \brief Insert an element to hashmap
@@ -175,7 +172,7 @@ sowr_HashMap_InsertSS( sowr_HashMap *map, const sowr_String *index, const sowr_S
 /// \param value Value to insert
 ///
 void
-sowr_HashMap_InsertSV( sowr_HashMap *map, const sowr_String *index, size_t val_length, const void *value );
+blrt_HashMap_InsertSV( blrt_HashMap *map, const blrt_String *index, size_t val_length, const void *value );
 
 ///
 /// \brief Get a value from the map
@@ -188,8 +185,8 @@ sowr_HashMap_InsertSV( sowr_HashMap *map, const sowr_String *index, size_t val_l
 ///
 /// \return The value from key, NULL if not found
 ///
-sowr_HashMapValue *
-sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index );
+blrt_HashMapValue *
+blrt_HashMap_Get( blrt_HashMap *map, size_t index_length, const char *index );
 
 ///
 /// \brief Get a value from the map
@@ -202,8 +199,8 @@ sowr_HashMap_Get( sowr_HashMap *map, size_t index_length, const char *index );
 ///
 /// \return The value from key, NULL if not found
 ///
-sowr_HashMapValue *
-sowr_HashMap_GetC( sowr_HashMap *map, const char *index );
+blrt_HashMapValue *
+blrt_HashMap_GetC( blrt_HashMap *map, const char *index );
 
 
 ///
@@ -216,8 +213,8 @@ sowr_HashMap_GetC( sowr_HashMap *map, const char *index );
 ///
 /// \return The value from index, NULL if not found
 ///
-sowr_HashMapValue *
-sowr_HashMap_GetS( sowr_HashMap *map, const sowr_String *index );
+blrt_HashMapValue *
+blrt_HashMap_GetS( blrt_HashMap *map, const blrt_String *index );
 
 ///
 /// \brief Walk the map
@@ -228,7 +225,7 @@ sowr_HashMap_GetS( sowr_HashMap *map, const sowr_String *index );
 /// \param func Function to use
 ///
 void
-sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func );
+blrt_HashMap_Walk( blrt_HashMap *map, const blrt_HashMapWalkFunc func );
 
 ///
 /// \brief Delete a value from the map
@@ -240,7 +237,7 @@ sowr_HashMap_Walk( sowr_HashMap *map, const sowr_HashMapWalkFunc func );
 /// \param index Index
 ///
 void
-sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index );
+blrt_HashMap_Delete( blrt_HashMap *map, size_t index_length, const char *index );
 
 ///
 /// \brief Delete a value from the map
@@ -252,7 +249,7 @@ sowr_HashMap_Delete( sowr_HashMap *map, size_t index_length, const char *index )
 /// \param index Index
 ///
 void
-sowr_HashMap_DeleteC( sowr_HashMap *map, const char *index );
+blrt_HashMap_DeleteC( blrt_HashMap *map, const char *index );
 
 ///
 /// \brief Delete a value from the map
@@ -263,7 +260,7 @@ sowr_HashMap_DeleteC( sowr_HashMap *map, const char *index );
 /// \param index Index
 ///
 void
-sowr_HashMap_DeleteS( sowr_HashMap *map, const sowr_String *index );
+blrt_HashMap_DeleteS( blrt_HashMap *map, const blrt_String *index );
 
 ///
 /// \brief Clear the hashmap
@@ -273,7 +270,7 @@ sowr_HashMap_DeleteS( sowr_HashMap *map, const sowr_String *index );
 /// \param map Map to clear
 ///
 void
-sowr_HashMap_Clear( sowr_HashMap *map );
+blrt_HashMap_Clear( blrt_HashMap *map );
 
 ///
 /// \brief Destroy the hashmap
@@ -283,16 +280,16 @@ sowr_HashMap_Clear( sowr_HashMap *map );
 /// \param map Map to destroy
 ///
 void
-sowr_HashMap_Destroy( sowr_HashMap *map );
+blrt_HashMap_Destroy( blrt_HashMap *map );
 
 ///
 /// \brief Destroy the hashmap
 ///
-/// Destroy the hashmap created by \a sowr_HashMap_CreateS() or \a sowr_HashMap_Create_SuggestBucketsCountS().
+/// Destroy the hashmap created by \a blrt_HashMap_CreateS() or \a blrt_HashMap_Create_SuggestBucketsCountS().
 ///
 /// \param map Map to destroy
 ///
 void
-sowr_HashMap_DestroyS( sowr_HashMap *map );
+blrt_HashMap_DestroyS( blrt_HashMap *map );
 
-#endif //!SOWR_LIB_CONTAINER_HASH_MAP_H
+#endif //!BLRT_LIB_CONTAINER_HASH_MAP_H

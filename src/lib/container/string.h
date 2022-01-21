@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,17 +27,17 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_STRING_H
-#define SOWR_LIB_CONTAINER_STRING_H
+#ifndef BLRT_LIB_CONTAINER_STRING_H
+#define BLRT_LIB_CONTAINER_STRING_H
 
 #include <pch.h>
 
-typedef struct sowr_String
+typedef struct blrt_String
 {
     size_t capacity;
     size_t length;
     char *ptr;
-} sowr_String;
+} blrt_String;
 
 ///
 /// \brief Create a string
@@ -49,19 +46,19 @@ typedef struct sowr_String
 ///
 /// \return Created string
 ///
-sowr_String *
-sowr_String_Create( void );
+blrt_String *
+blrt_String_Create( void );
 
 ///
 /// \brief Create a string
 ///
 /// Create a string on stack, ready to use.<BR />
-/// The created string must be destroyed by \a sowr_String_DestroyS().
+/// The created string must be destroyed by \a blrt_String_DestroyS().
 ///
 /// \return Created string
 ///
-sowr_String
-sowr_String_CreateS( void );
+blrt_String
+blrt_String_CreateS( void );
 
 ///
 /// \brief Duplicate a string
@@ -72,21 +69,21 @@ sowr_String_CreateS( void );
 ///
 /// \return Duplicated string
 ///
-sowr_String *
-sowr_String_From( const char *original );
+blrt_String *
+blrt_String_From( const char *original );
 
 ///
 /// \brief Duplicate a string
 ///
 /// Create a string from an existing one on stack.<BR />
-/// <B>The created string must be destroyed by \a sowr_String_DestroyS().</B>
+/// <B>The created string must be destroyed by \a blrt_String_DestroyS().</B>
 ///
 /// \param original String to duplicate from
 ///
 /// \return Duplicated string
 ///
-sowr_String
-sowr_String_FromS( const char *original );
+blrt_String
+blrt_String_FromS( const char *original );
 
 ///
 /// \brief Expand the string capacity
@@ -96,7 +93,7 @@ sowr_String_FromS( const char *original );
 /// \param str String to expand
 ///
 void
-sowr_String_Expand( sowr_String *str );
+blrt_String_Expand( blrt_String *str );
 
 ///
 /// \brief Expand the string capacity
@@ -107,20 +104,20 @@ sowr_String_Expand( sowr_String *str );
 /// \param new_size Target size for expanding
 ///
 void
-sowr_String_ExpandUntil( sowr_String *str, size_t new_size );
+blrt_String_ExpandUntil( blrt_String *str, size_t new_size );
 
 ///
 /// \brief Expand the string
 ///
 /// Expand the string until its capacity reaches the set limit.<BR />
 /// This function only allocate once instead of possible multiple doubling
-/// by \a sowr_String_ExpandUntil().
+/// by \a blrt_String_ExpandUntil().
 ///
 /// \param str String to expand
 /// \param new_size Target size for expanding
 ///
 void
-sowr_String_ExpandUntilOnce( sowr_String *str, size_t new_size );
+blrt_String_ExpandUntilOnce( blrt_String *str, size_t new_size );
 
 ///
 /// \brief Shrink the string
@@ -130,7 +127,7 @@ sowr_String_ExpandUntilOnce( sowr_String *str, size_t new_size );
 /// \param str String to shrink
 ///
 void
-sowr_String_ShrinkToFit( sowr_String *str );
+blrt_String_ShrinkToFit( blrt_String *str );
 
 ///
 /// \brief Get the first character
@@ -142,7 +139,7 @@ sowr_String_ShrinkToFit( sowr_String *str );
 /// \return Pointer to the first character, NULL if string is empty
 ///
 char *
-sowr_String_First( const sowr_String *str );
+blrt_String_First( const blrt_String *str );
 
 ///
 /// \brief Get the last character
@@ -155,7 +152,7 @@ sowr_String_First( const sowr_String *str );
 /// \return Pointer to the last character, NULL if string is empty
 ///
 char *
-sowr_String_Last( const sowr_String *str );
+blrt_String_Last( const blrt_String *str );
 
 ///
 /// \brief Push a character
@@ -166,7 +163,7 @@ sowr_String_Last( const sowr_String *str );
 /// \param data Pushing character
 ///
 void
-sowr_String_PushC( sowr_String *str, char data );
+blrt_String_PushC( blrt_String *str, char data );
 
 ///
 /// \brief Push a string
@@ -177,7 +174,7 @@ sowr_String_PushC( sowr_String *str, char data );
 /// \param data Pushing string (there is ambiguity... lol)
 ///
 void
-sowr_String_PushS( sowr_String *str, const char *data );
+blrt_String_PushS( blrt_String *str, const char *data );
 
 ///
 /// \brief Push a character
@@ -188,7 +185,7 @@ sowr_String_PushS( sowr_String *str, const char *data );
 /// \param data Pushing character
 ///
 void
-sowr_String_PushCFront( sowr_String *str, char data );
+blrt_String_PushCFront( blrt_String *str, char data );
 
 ///
 /// \brief Push a string
@@ -199,7 +196,7 @@ sowr_String_PushCFront( sowr_String *str, char data );
 /// \param data Pushing string (there is ambiguity... lol)
 ///
 void
-sowr_String_PushFrontS( sowr_String *str, const char *data );
+blrt_String_PushFrontS( blrt_String *str, const char *data );
 
 ///
 /// \brief Insert into string
@@ -211,7 +208,7 @@ sowr_String_PushFrontS( sowr_String *str, const char *data );
 /// \param data Character to push
 ///
 void
-sowr_String_InsertC( sowr_String *str, size_t index, char data );
+blrt_String_InsertC( blrt_String *str, size_t index, char data );
 
 ///
 /// \brief Insert into string
@@ -223,7 +220,7 @@ sowr_String_InsertC( sowr_String *str, size_t index, char data );
 /// \param data String segment to push
 ///
 void
-sowr_String_InsertS( sowr_String *str, size_t index, const char *data );
+blrt_String_InsertS( blrt_String *str, size_t index, const char *data );
 
 ///
 /// \brief Pop from a string
@@ -233,7 +230,7 @@ sowr_String_InsertS( sowr_String *str, size_t index, const char *data );
 /// \param str String
 ///
 void
-sowr_String_Pop( sowr_String *str );
+blrt_String_Pop( blrt_String *str );
 
 ///
 /// \brief Pop from a string
@@ -244,7 +241,7 @@ sowr_String_Pop( sowr_String *str );
 /// \param num Amount of characters to pop
 ///
 void
-sowr_String_PopN( sowr_String *str, size_t num );
+blrt_String_PopN( blrt_String *str, size_t num );
 
 ///
 /// \brief Get a substring
@@ -255,7 +252,7 @@ sowr_String_PopN( sowr_String *str, size_t num );
 /// \param num Index of substring
 ///
 void
-sowr_String_Sub( sowr_String *str, size_t num );
+blrt_String_Sub( blrt_String *str, size_t num );
 
 ///
 /// \brief Get a reserve string
@@ -266,7 +263,7 @@ sowr_String_Sub( sowr_String *str, size_t num );
 /// \param num Index of reserve
 ///
 void
-sowr_String_Res( sowr_String *str, size_t num );
+blrt_String_Res( blrt_String *str, size_t num );
 
 ///
 /// \brief Clear a string
@@ -276,7 +273,7 @@ sowr_String_Res( sowr_String *str, size_t num );
 /// \param str String to clear
 ///
 void
-sowr_String_Clear( sowr_String *str );
+blrt_String_Clear( blrt_String *str );
 
 ///
 /// \brief Destroy a string
@@ -286,16 +283,16 @@ sowr_String_Clear( sowr_String *str );
 /// \param str String to destroy
 ///
 void
-sowr_String_Destroy( sowr_String *str );
+blrt_String_Destroy( blrt_String *str );
 
 ///
 /// \brief Destroy a string
 ///
-/// Destroy a string created by \a sowr_String_CreateS().
+/// Destroy a string created by \a blrt_String_CreateS().
 ///
 /// \param str String to destroy
 ///
 void
-sowr_String_DestroyS( sowr_String *str );
+blrt_String_DestroyS( blrt_String *str );
 
-#endif // !SOWR_LIB_CONTAINER_STRING_H
+#endif // !BLRT_LIB_CONTAINER_STRING_H

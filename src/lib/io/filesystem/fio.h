@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,42 +27,42 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_IO_FILESYSTEM_FIO_H
-#define SOWR_LIB_IO_FILESYSTEM_FIO_H
+#ifndef BLRT_LIB_IO_FILESYSTEM_FIO_H
+#define BLRT_LIB_IO_FILESYSTEM_FIO_H
 
 #include <pch.h>
 
-#ifdef SOWR_TARGET_WINDOWS
-    typedef HANDLE sowr_File;
+#ifdef BLRT_TARGET_WINDOWS
+    typedef HANDLE blrt_File;
 
-    #define SOWR_INVALID_FILE_DESCRIPTOR INVALID_HANDLE_VALUE
+    #define BLRT_INVALID_FILE_DESCRIPTOR INVALID_HANDLE_VALUE
 
-    #define SOWR_FILE_STDIN  STD_INPUT_HANDLE
-    #define SOWR_FILE_STDOUT STD_OUTPUT_HANDLE
-    #define SOWR_FILE_STDERR STD_ERROR_HANDLE
+    #define BLRT_FILE_STDIN  STD_INPUT_HANDLE
+    #define BLRT_FILE_STDOUT STD_OUTPUT_HANDLE
+    #define BLRT_FILE_STDERR STD_ERROR_HANDLE
 #else
     #include <dirent.h>
     #include <fcntl.h>
     #include <sys/stat.h>
     #include <unistd.h>
 
-    typedef int sowr_File;
+    typedef int blrt_File;
 
-    #define SOWR_INVALID_FILE_DESCRIPTOR -1
+    #define BLRT_INVALID_FILE_DESCRIPTOR -1
 
-    #define SOWR_FILE_STDIN  STDIN_FILENO
-    #define SOWR_FILE_STDOUT STDOUT_FILENO
-    #define SOWR_FILE_STDERR STDERR_FILENO
+    #define BLRT_FILE_STDIN  STDIN_FILENO
+    #define BLRT_FILE_STDOUT STDOUT_FILENO
+    #define BLRT_FILE_STDERR STDERR_FILENO
 #endif
 
-typedef void (*sowr_DirWalkFunc)( const char * );
+typedef void (*blrt_DirWalkFunc)( const char * );
 
-typedef enum sowr_FileWriteMode
+typedef enum blrt_FileWriteMode
 {
-    SOWR_FIO_WRITE_NORMAL,
-    SOWR_FIO_WRITE_TRUNCATE,
-    SOWR_FIO_WRITE_APPEND
-} sowr_FileWriteMode;
+    BLRT_FIO_WRITE_NORMAL,
+    BLRT_FIO_WRITE_TRUNCATE,
+    BLRT_FIO_WRITE_APPEND
+} blrt_FileWriteMode;
 
 ///
 /// \brief Open a file for reading
@@ -74,10 +71,10 @@ typedef enum sowr_FileWriteMode
 ///
 /// \param path Path of the file
 ///
-/// \return File descriptor of the opened file, or \a SOWR_INVALID_FILE_DESCRIPTOR if failed
+/// \return File descriptor of the opened file, or \a BLRT_INVALID_FILE_DESCRIPTOR if failed
 ///
-sowr_File
-sowr_File_OpenR( const char *path );
+blrt_File
+blrt_File_OpenR( const char *path );
 
 ///
 /// \brief Open a file for writing
@@ -87,10 +84,10 @@ sowr_File_OpenR( const char *path );
 /// \param path Path of the file
 /// \param mode Mode for writing
 ///
-/// \return File descriptor of the opened file, or \a SOWR_INVALID_FILE_DESCRIPTOR if failed
+/// \return File descriptor of the opened file, or \a BLRT_INVALID_FILE_DESCRIPTOR if failed
 ///
-sowr_File
-sowr_File_OpenW( const char *path, sowr_FileWriteMode mode );
+blrt_File
+blrt_File_OpenW( const char *path, blrt_FileWriteMode mode );
 
 ///
 /// \brief Open a file for reading
@@ -102,8 +99,8 @@ sowr_File_OpenW( const char *path, sowr_FileWriteMode mode );
 ///
 /// \return File descriptor of the opened file
 ///
-sowr_File
-sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode );
+blrt_File
+blrt_File_OpenOrCreate( const char *path, blrt_FileWriteMode mode );
 
 ///
 /// \brief Close an opened file
@@ -113,7 +110,7 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode );
 /// \param file Opened file descriptor
 ///
 void
-sowr_File_Close( sowr_File file );
+blrt_File_Close( blrt_File file );
 
 ///
 /// \brief Make directories
@@ -124,7 +121,7 @@ sowr_File_Close( sowr_File file );
 /// \param path Path of the directories
 ///
 void
-sowr_File_Mkdir( const char *path );
+blrt_File_Mkdir( const char *path );
 
 ///
 /// \brief Walk a directory
@@ -135,7 +132,7 @@ sowr_File_Mkdir( const char *path );
 /// \param func Function for walking
 ///
 void
-sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func );
+blrt_File_WalkDir( const char *path, blrt_DirWalkFunc func );
 
 ///
 /// \brief Get the size of a file
@@ -147,7 +144,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func );
 /// \return Size of the file
 ///
 size_t
-sowr_File_GetSize( sowr_File file );
+blrt_File_GetSize( blrt_File file );
 
 ///
 /// \brief Read the content of a file
@@ -161,7 +158,7 @@ sowr_File_GetSize( sowr_File file );
 /// \return If the reading succeeded
 ///
 bool
-sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz );
+blrt_File_ReadContent( blrt_File file, void *buffer, size_t sz );
 
 ///
 /// \brief Write content to a file
@@ -175,7 +172,7 @@ sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz );
 /// \return If the writing succeeded
 ///
 bool
-sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz );
+blrt_File_WriteContent( blrt_File file, const void *buffer, size_t sz );
 
 ///
 /// \brief Write contents to a file
@@ -186,7 +183,7 @@ sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz );
 /// \param count Parameters that needs to be written
 ///
 void
-sowr_File_WriteContents( sowr_File file, size_t count, ... );
+blrt_File_WriteContents( blrt_File file, size_t count, ... );
 
 ///
 /// \brief Write contents to a file
@@ -198,6 +195,6 @@ sowr_File_WriteContents( sowr_File file, size_t count, ... );
 /// \param args Arguments for writing
 ///
 void
-sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args );
+blrt_File_WriteContentsV( blrt_File file, size_t count, va_list *args );
 
-#endif // !SOWR_LIB_IO_FILESYSTEM_FIO_H
+#endif // !BLRT_LIB_IO_FILESYSTEM_FIO_H

@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -34,10 +31,10 @@
 
 #include "../memory/heap_memory.h"
 
-sowr_Vector *
-sowr_Vector_Create( size_t elem_size, sowr_VectorFreeFunc free_func )
+blrt_Vector *
+blrt_Vector_Create( size_t elem_size, blrt_VectorFreeFunc free_func )
 {
-    sowr_Vector *vec = sowr_HeapAlloc(sizeof(sowr_Vector));
+    blrt_Vector *vec = blrt_HeapAlloc(sizeof(blrt_Vector));
     vec->length = 0ULL;
     vec->capacity = 0ULL;
     vec->elem_size = elem_size;
@@ -46,10 +43,10 @@ sowr_Vector_Create( size_t elem_size, sowr_VectorFreeFunc free_func )
     return vec;
 }
 
-sowr_Vector
-sowr_Vector_CreateS( size_t elem_size, sowr_VectorFreeFunc free_func )
+blrt_Vector
+blrt_Vector_CreateS( size_t elem_size, blrt_VectorFreeFunc free_func )
 {
-    sowr_Vector vec =
+    blrt_Vector vec =
     {
         .length = 0ULL,
         .capacity = 0ULL,
@@ -62,14 +59,14 @@ sowr_Vector_CreateS( size_t elem_size, sowr_VectorFreeFunc free_func )
 
 inline
 void *
-sowr_Vector_First( const sowr_Vector *vec )
+blrt_Vector_First( const blrt_Vector *vec )
 {
     return vec->ptr;
 }
 
 inline
 void *
-sowr_Vector_Last( const sowr_Vector *vec )
+blrt_Vector_Last( const blrt_Vector *vec )
 {
     if (!vec->length)
         return NULL;
@@ -79,13 +76,13 @@ sowr_Vector_Last( const sowr_Vector *vec )
 
 inline
 void *
-sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index )
+blrt_Vector_PtrAt( const blrt_Vector *vec, size_t index )
 {
     return (void *)((char *)(vec->ptr) + vec->elem_size * index);
 }
 
 void *
-sowr_Vector_Find( const sowr_Vector *vec, const void *elem, sowr_VectorCmpFunc cmp )
+blrt_Vector_Find( const blrt_Vector *vec, const void *elem, blrt_VectorCmpFunc cmp )
 {
     if (!vec->length)
         return NULL;
@@ -99,46 +96,46 @@ sowr_Vector_Find( const sowr_Vector *vec, const void *elem, sowr_VectorCmpFunc c
 }
 
 void
-sowr_Vector_Expand( sowr_Vector *vec )
+blrt_Vector_Expand( blrt_Vector *vec )
 {
     if (!vec->capacity)
     {
         vec->capacity = 1ULL;
-        vec->ptr = sowr_HeapAlloc(vec->elem_size);
+        vec->ptr = blrt_HeapAlloc(vec->elem_size);
     }
     else
     {
         vec->capacity *= 2ULL;
-        vec->ptr = sowr_ReAlloc(vec->elem_size * vec->capacity, vec->ptr);
+        vec->ptr = blrt_ReAlloc(vec->elem_size * vec->capacity, vec->ptr);
     }
 }
 
 inline
 void
-sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size )
+blrt_Vector_ExpandUntil( blrt_Vector *vec, size_t size )
 {
     while (vec->capacity < size)
-        sowr_Vector_Expand(vec);
+        blrt_Vector_Expand(vec);
 }
 
 inline
 void
-sowr_Vector_ShrinkToFit( sowr_Vector *vec )
+blrt_Vector_ShrinkToFit( blrt_Vector *vec )
 {
     if (vec->capacity > vec->length && vec->length)
     {
-        vec->ptr = sowr_ReAlloc(vec->length * vec->elem_size, vec->ptr);
+        vec->ptr = blrt_ReAlloc(vec->length * vec->elem_size, vec->ptr);
         vec->capacity = vec->length;
     }
     else if (vec->capacity && !vec->length)
     {
-        sowr_HeapFree(vec->ptr);
+        blrt_HeapFree(vec->ptr);
         vec->capacity = 0ULL;
     }
 }
 
 void
-sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func )
+blrt_Vector_Walk( blrt_Vector *vec, blrt_VectorWalkFunc func )
 {
     if (!vec->length)
         return;
@@ -149,23 +146,23 @@ sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func )
 }
 
 void
-sowr_Vector_Clear( sowr_Vector *vec )
+blrt_Vector_Clear( blrt_Vector *vec )
 {
     if (vec->free_func)
-        sowr_Vector_Walk(vec, vec->free_func);
+        blrt_Vector_Walk(vec, vec->free_func);
     vec->length = 0ULL;
 }
 
 void
-sowr_Vector_Insert( sowr_Vector *vec, size_t index, const void *elem )
+blrt_Vector_Insert( blrt_Vector *vec, size_t index, const void *elem )
 {
     if (index >= vec->length)
-        sowr_Vector_Push(vec, elem);
+        blrt_Vector_Push(vec, elem);
     else
     {
-        sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
-        void *ptr_inserting = sowr_Vector_PtrAt(vec, index);
-        void *ptr_shifting = sowr_Vector_PtrAt(vec, index + 1ULL);
+        blrt_Vector_ExpandUntil(vec, vec->length + 1ULL);
+        void *ptr_inserting = blrt_Vector_PtrAt(vec, index);
+        void *ptr_shifting = blrt_Vector_PtrAt(vec, index + 1ULL);
         size_t bytes_to_shift = vec->elem_size * (vec->length - index);
         memmove(ptr_shifting, ptr_inserting, bytes_to_shift);
         memcpy(ptr_inserting, elem, vec->elem_size);
@@ -174,13 +171,13 @@ sowr_Vector_Insert( sowr_Vector *vec, size_t index, const void *elem )
 }
 
 void
-sowr_Vector_Replace( sowr_Vector *vec, size_t index, const void *elem )
+blrt_Vector_Replace( blrt_Vector *vec, size_t index, const void *elem )
 {
     if (index >= vec->length)
-        sowr_Vector_Push(vec, elem);
+        blrt_Vector_Push(vec, elem);
     else
     {
-        void *ptr = sowr_Vector_PtrAt(vec, index);
+        void *ptr = blrt_Vector_PtrAt(vec, index);
         if (vec->free_func)
             vec->free_func(ptr);
         memcpy(ptr, elem, vec->elem_size);
@@ -188,31 +185,31 @@ sowr_Vector_Replace( sowr_Vector *vec, size_t index, const void *elem )
 }
 
 void
-sowr_Vector_Delete( sowr_Vector *vec, size_t index )
+blrt_Vector_Delete( blrt_Vector *vec, size_t index )
 {
     if (index >= vec->length)
         return;
 
-    void *ptr_shifting = sowr_Vector_PtrAt(vec, index);
+    void *ptr_shifting = blrt_Vector_PtrAt(vec, index);
     if (vec->free_func)
         vec->free_func(ptr_shifting);
-    void *ptr_data = sowr_Vector_PtrAt(vec, index + 1ULL);
+    void *ptr_data = blrt_Vector_PtrAt(vec, index + 1ULL);
     size_t bytes_to_shift = vec->elem_size * (vec->length - index - 1ULL);
     memmove(ptr_shifting, ptr_data, bytes_to_shift);
     vec->length--;
 }
 
 void
-sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve )
+blrt_Vector_Take( blrt_Vector *vec, size_t index, void *ptr_retrieve )
 {
     if (!vec->length)
         return;
     if (index >= vec->length)
-        sowr_Vector_Pop(vec, ptr_retrieve);
+        blrt_Vector_Pop(vec, ptr_retrieve);
     else
     {
-        void *ptr_shifting = sowr_Vector_PtrAt(vec, index);
-        void *ptr_data = sowr_Vector_PtrAt(vec, index + 1ULL);
+        void *ptr_shifting = blrt_Vector_PtrAt(vec, index);
+        void *ptr_data = blrt_Vector_PtrAt(vec, index + 1ULL);
         size_t bytes_to_shift = vec->elem_size * (vec->length - index - 1ULL);
         if (ptr_retrieve)
             memcpy(ptr_retrieve, ptr_shifting, vec->elem_size);
@@ -224,36 +221,36 @@ sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve )
 }
 
 void
-sowr_Vector_Push( sowr_Vector *vec, const void *elem )
+blrt_Vector_Push( blrt_Vector *vec, const void *elem )
 {
-    sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
-    memcpy(sowr_Vector_PtrAt(vec, vec->length), elem, vec->elem_size);
+    blrt_Vector_ExpandUntil(vec, vec->length + 1ULL);
+    memcpy(blrt_Vector_PtrAt(vec, vec->length), elem, vec->elem_size);
     vec->length++;
 }
 
 void
-sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve )
+blrt_Vector_Pop( blrt_Vector *vec, void *ptr_retrieve )
 {
     if (!vec->length)
         return;
     if (ptr_retrieve)
-        memcpy(ptr_retrieve, sowr_Vector_PtrAt(vec, vec->length), vec->elem_size);
+        memcpy(ptr_retrieve, blrt_Vector_PtrAt(vec, vec->length), vec->elem_size);
     else if (vec->free_func)
-        vec->free_func(sowr_Vector_PtrAt(vec, vec->length));
+        vec->free_func(blrt_Vector_PtrAt(vec, vec->length));
     vec->length--;
 }
 
 void
-sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem )
+blrt_Vector_Push_Front( blrt_Vector *vec, const void *elem )
 {
-    sowr_Vector_ExpandUntil(vec, vec->length + 1ULL);
-    memmove(sowr_Vector_PtrAt(vec, 1ULL), vec->ptr, vec->elem_size * vec->length);
+    blrt_Vector_ExpandUntil(vec, vec->length + 1ULL);
+    memmove(blrt_Vector_PtrAt(vec, 1ULL), vec->ptr, vec->elem_size * vec->length);
     memcpy(vec->ptr, elem, vec->elem_size);
     vec->length++;
 }
 
 void
-sowr_Vector_Pop_Front( sowr_Vector *vec, void *ptr_retrieve )
+blrt_Vector_Pop_Front( blrt_Vector *vec, void *ptr_retrieve )
 {
     if (!vec->length)
         return;
@@ -262,22 +259,22 @@ sowr_Vector_Pop_Front( sowr_Vector *vec, void *ptr_retrieve )
     else if (vec->free_func)
         vec->free_func(vec->ptr);
     vec->length--;
-    memmove(vec->ptr, sowr_Vector_PtrAt(vec, 1ULL), vec->elem_size * vec->length);
+    memmove(vec->ptr, blrt_Vector_PtrAt(vec, 1ULL), vec->elem_size * vec->length);
 }
 
 void
-sowr_Vector_Destroy( sowr_Vector *vec )
+blrt_Vector_Destroy( blrt_Vector *vec )
 {
-    sowr_Vector_Clear(vec);
+    blrt_Vector_Clear(vec);
     if (vec->capacity)
-        sowr_HeapFree(vec->ptr);
-    sowr_HeapFree(vec);
+        blrt_HeapFree(vec->ptr);
+    blrt_HeapFree(vec);
 }
 
 void
-sowr_Vector_DestroyS( sowr_Vector *vec )
+blrt_Vector_DestroyS( blrt_Vector *vec )
 {
-    sowr_Vector_Clear(vec);
+    blrt_Vector_Clear(vec);
     if (vec->capacity)
-        sowr_HeapFree(vec->ptr);
+        blrt_HeapFree(vec->ptr);
 }

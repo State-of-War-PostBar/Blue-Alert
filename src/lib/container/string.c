@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -34,16 +31,16 @@
 
 #include "../memory/heap_memory.h"
 
-sowr_String *
-sowr_String_Create( void )
+blrt_String *
+blrt_String_Create( void )
 {
-    return sowr_HeapZeroAlloc(sizeof(sowr_String));
+    return blrt_HeapZeroAlloc(sizeof(blrt_String));
 }
 
-sowr_String
-sowr_String_CreateS( void )
+blrt_String
+blrt_String_CreateS( void )
 {
-    sowr_String str =
+    blrt_String str =
     {
         .capacity = 0ULL,
         .length = 0ULL,
@@ -52,20 +49,20 @@ sowr_String_CreateS( void )
     return str;
 }
 
-sowr_String *
-sowr_String_From( const char *original )
+blrt_String *
+blrt_String_From( const char *original )
 {
-    sowr_String *str = sowr_HeapAlloc(sizeof(sowr_String));
+    blrt_String *str = blrt_HeapAlloc(sizeof(blrt_String));
     str->length = str->capacity = strlen(original);
     str->capacity++;
     str->ptr = strdup(original);
     return str;
 }
 
-sowr_String
-sowr_String_FromS( const char *original )
+blrt_String
+blrt_String_FromS( const char *original )
 {
-    sowr_String str;
+    blrt_String str;
     str.length = str.capacity = strlen(original);
     str.capacity++;
     str.ptr = strdup(original);
@@ -73,68 +70,68 @@ sowr_String_FromS( const char *original )
 }
 
 void
-sowr_String_Expand( sowr_String *str )
+blrt_String_Expand( blrt_String *str )
 {
     if (!str->capacity)
     {
         str->capacity = 2ULL;
-        str->ptr = sowr_HeapAlloc(sizeof(char) * 2ULL);
+        str->ptr = blrt_HeapAlloc(sizeof(char) * 2ULL);
     }
     else
     {
         str->capacity *= 2ULL;
-        str->ptr = sowr_ReAlloc(str->capacity, str->ptr);
+        str->ptr = blrt_ReAlloc(str->capacity, str->ptr);
     }
 }
 
 inline
 void
-sowr_String_ExpandUntil( sowr_String *str, size_t new_size )
+blrt_String_ExpandUntil( blrt_String *str, size_t new_size )
 {
     while (str->capacity < new_size)
-        sowr_String_Expand(str);
+        blrt_String_Expand(str);
 }
 
 void
-sowr_String_ExpandUntilOnce( sowr_String *str, size_t new_size )
+blrt_String_ExpandUntilOnce( blrt_String *str, size_t new_size )
 {
     if (!str->capacity)
     {
         str->capacity = new_size;
-        str->ptr = sowr_HeapAlloc(sizeof(char) * new_size);
+        str->ptr = blrt_HeapAlloc(sizeof(char) * new_size);
     }
     else if (str->capacity < new_size)
     {
         str->capacity = new_size;
-        str->ptr = sowr_ReAlloc(new_size, str->ptr);
+        str->ptr = blrt_ReAlloc(new_size, str->ptr);
     }
 }
 
 void
-sowr_String_ShrinkToFit( sowr_String *str )
+blrt_String_ShrinkToFit( blrt_String *str )
 {
     if (str->capacity > str->length && str->length)
     {
-        str->ptr = sowr_ReAlloc(sizeof(char) * (str->length + 1ULL), str->ptr);
+        str->ptr = blrt_ReAlloc(sizeof(char) * (str->length + 1ULL), str->ptr);
         str->capacity = str->length + 1ULL;
     }
     else if (str->capacity && !str->length)
     {
-        sowr_HeapFree(str->ptr);
+        blrt_HeapFree(str->ptr);
         str->capacity = 0ULL;
     }
 }
 
 inline
 char *
-sowr_String_First( const sowr_String *str )
+blrt_String_First( const blrt_String *str )
 {
     return str->ptr;
 }
 
 inline
 char *
-sowr_String_Last( const sowr_String *str )
+blrt_String_Last( const blrt_String *str )
 {
     if (!str->length)
         return NULL;
@@ -143,27 +140,27 @@ sowr_String_Last( const sowr_String *str )
 }
 
 void
-sowr_String_PushC( sowr_String *str, char data )
+blrt_String_PushC( blrt_String *str, char data )
 {
-    sowr_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
+    blrt_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
     str->ptr[str->length] = data;
     str->ptr[str->length + 1ULL] = '\0';
     str->length++;
 }
 
 void
-sowr_String_PushS( sowr_String *str, const char *data )
+blrt_String_PushS( blrt_String *str, const char *data )
 {
     size_t target_len = strlen(data);
-    sowr_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1ULL));
+    blrt_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1ULL));
     memcpy(str->length ? str->ptr + str->length : str->ptr, data, sizeof(char) * (target_len + 1ULL));
     str->length += target_len;
 }
 
 void
-sowr_String_PushFrontC( sowr_String *str, char data )
+blrt_String_PushFrontC( blrt_String *str, char data )
 {
-    sowr_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
+    blrt_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
     if (str->length)
     {
         memmove(str->ptr + 1ULL, str->ptr, sizeof(char) * (str->length + 1ULL));
@@ -178,28 +175,28 @@ sowr_String_PushFrontC( sowr_String *str, char data )
 }
 
 void
-sowr_String_PushFrontS( sowr_String *str, const char *data )
+blrt_String_PushFrontS( blrt_String *str, const char *data )
 {
     if (!str->length)
     {
-        sowr_String_PushS(str, data);
+        blrt_String_PushS(str, data);
         return;
     }
     size_t target_len = strlen(data);
-    sowr_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1ULL));
+    blrt_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1ULL));
     memmove(str->ptr + target_len, str->ptr, sizeof(char) * (str->length + 1ULL));
     memcpy(str->ptr, data, sizeof(char) * target_len);
     str->length += target_len;
 }
 
 void
-sowr_String_InsertC( sowr_String *str, size_t index, char data )
+blrt_String_InsertC( blrt_String *str, size_t index, char data )
 {
     if (index >= str->length)
-        sowr_String_PushC(str, data);
+        blrt_String_PushC(str, data);
     else
     {
-        sowr_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
+        blrt_String_ExpandUntil(str, sizeof(char) * (str->length + 2ULL));
         memmove(str->ptr + index + 1ULL, str->ptr + index, sizeof(char) * (str->length - index + 1ULL));
         str->ptr[index] = data;
         str->length++;
@@ -207,14 +204,14 @@ sowr_String_InsertC( sowr_String *str, size_t index, char data )
 }
 
 void
-sowr_String_InsertS( sowr_String *str, size_t index, const char *data )
+blrt_String_InsertS( blrt_String *str, size_t index, const char *data )
 {
     if (index >= str->length)
-        sowr_String_PushS(str, data);
+        blrt_String_PushS(str, data);
     else
     {
         size_t target_len = strlen(data);
-        sowr_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1UL));
+        blrt_String_ExpandUntil(str, sizeof(char) * (str->length + target_len + 1UL));
         memmove(str->ptr + index + target_len, str->ptr + index, sizeof(char) * (str->length - index + 1ULL));
         memcpy(str->ptr + index, data, sizeof(char) * target_len);
         str->length += target_len;
@@ -223,19 +220,19 @@ sowr_String_InsertS( sowr_String *str, size_t index, const char *data )
 
 inline
 void
-sowr_String_Pop( sowr_String *str )
+blrt_String_Pop( blrt_String *str )
 {
-    sowr_String_PopN(str, 1ULL);
+    blrt_String_PopN(str, 1ULL);
 }
 
 void
-sowr_String_PopN( sowr_String *str, size_t num )
+blrt_String_PopN( blrt_String *str, size_t num )
 {
     if (!str->length || !num)
         return;
 
     if (str->length <= num)
-        sowr_String_Clear(str);
+        blrt_String_Clear(str);
     else
     {
         str->ptr[str->length - num] = '\0';
@@ -244,13 +241,13 @@ sowr_String_PopN( sowr_String *str, size_t num )
 }
 
 void
-sowr_String_Sub( sowr_String *str, size_t num )
+blrt_String_Sub( blrt_String *str, size_t num )
 {
     if (!str->length || !num)
         return;
 
     if (str->length <= num)
-        sowr_String_Clear(str);
+        blrt_String_Clear(str);
     else
     {
         memmove(str->ptr, str->ptr + sizeof(char) * num, sizeof(char) * (str->length - num + 1ULL));
@@ -259,7 +256,7 @@ sowr_String_Sub( sowr_String *str, size_t num )
 }
 
 void
-sowr_String_Res( sowr_String *str, size_t num )
+blrt_String_Res( blrt_String *str, size_t num )
 {
     if (!str->length || !num)
         return;
@@ -274,7 +271,7 @@ sowr_String_Res( sowr_String *str, size_t num )
 }
 
 void
-sowr_String_Clear( sowr_String *str )
+blrt_String_Clear( blrt_String *str )
 {
     if (str->length)
     {
@@ -284,16 +281,16 @@ sowr_String_Clear( sowr_String *str )
 }
 
 void
-sowr_String_Destroy( sowr_String *str )
+blrt_String_Destroy( blrt_String *str )
 {
     if (str->capacity)
-        sowr_HeapFree(str->ptr);
-    sowr_HeapFree(str);
+        blrt_HeapFree(str->ptr);
+    blrt_HeapFree(str);
 }
 
 void
-sowr_String_DestroyS( sowr_String *str )
+blrt_String_DestroyS( blrt_String *str )
 {
     if (str->capacity)
-        sowr_HeapFree(str->ptr);
+        blrt_HeapFree(str->ptr);
 }

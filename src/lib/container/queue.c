@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -33,96 +30,96 @@
 #include "queue.h"
 
 inline
-sowr_Queue *
-sowr_Queue_Create ( size_t elem_size, sowr_QueueFreeFunc free_func )
+blrt_Queue *
+blrt_Queue_Create ( size_t elem_size, blrt_QueueFreeFunc free_func )
 {
-    return sowr_Vector_Create(elem_size, free_func);
+    return blrt_Vector_Create(elem_size, free_func);
 }
 
 inline
-sowr_Queue
-sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func )
+blrt_Queue
+blrt_Queue_CreateS ( size_t elem_size, blrt_QueueFreeFunc free_func )
 {
-    return sowr_Vector_CreateS(elem_size, free_func);
+    return blrt_Vector_CreateS(elem_size, free_func);
 }
 
 inline
 void *
-sowr_Queue_First( const sowr_Queue *queue )
+blrt_Queue_First( const blrt_Queue *queue )
 {
     return queue->ptr;
 }
 
 inline
 void *
-sowr_Queue_Find( const sowr_Queue *queue, const void *data, sowr_QueueCmpFunc cmp )
+blrt_Queue_Find( const blrt_Queue *queue, const void *data, blrt_QueueCmpFunc cmp )
 {
-    return sowr_Vector_Find(queue, data, cmp);
+    return blrt_Vector_Find(queue, data, cmp);
 }
 
 inline
 void
-sowr_Queue_Expand( sowr_Queue *queue )
+blrt_Queue_Expand( blrt_Queue *queue )
 {
-    sowr_Vector_Expand(queue);
+    blrt_Vector_Expand(queue);
 }
 
 inline
 void
-sowr_Queue_ExpandUntil( sowr_Queue *queue, size_t size )
+blrt_Queue_ExpandUntil( blrt_Queue *queue, size_t size )
 {
-    sowr_Vector_ExpandUntil(queue, size);
+    blrt_Vector_ExpandUntil(queue, size);
 }
 
 void
-sowr_Queue_Eat( sowr_Queue *queue, sowr_QueueEatFunc func )
+blrt_Queue_Eat( blrt_Queue *queue, blrt_QueueEatFunc func )
 {
     if (!queue->length)
         return;
 
     for (size_t i = 0ULL; i < queue->length; i++)
-        func(sowr_Vector_PtrAt(queue, i));
-    sowr_Queue_Clear(queue);
+        func(blrt_Vector_PtrAt(queue, i));
+    blrt_Queue_Clear(queue);
 }
 
 inline
 void
-sowr_Queue_Clear( sowr_Queue *queue )
+blrt_Queue_Clear( blrt_Queue *queue )
 {
-    sowr_Vector_Clear(queue);
+    blrt_Vector_Clear(queue);
 }
 
 inline
 void
-sowr_Queue_ShrinkToFit( sowr_Queue *queue )
+blrt_Queue_ShrinkToFit( blrt_Queue *queue )
 {
-    sowr_Vector_ShrinkToFit(queue);
+    blrt_Vector_ShrinkToFit(queue);
 }
 
 inline
 void
-sowr_Queue_Push( sowr_Queue *queue, const void *elem )
+blrt_Queue_Push( blrt_Queue *queue, const void *elem )
 {
-    sowr_Vector_Push(queue, elem);
+    blrt_Vector_Push(queue, elem);
 }
 
 inline
 void
-sowr_Queue_Pop( sowr_Queue *queue, void *ptr_retrieve )
+blrt_Queue_Pop( blrt_Queue *queue, void *ptr_retrieve )
 {
-    sowr_Vector_Pop_Front(queue, ptr_retrieve);
+    blrt_Vector_Pop_Front(queue, ptr_retrieve);
 }
 
 inline
 void
-sowr_Queue_Destroy( sowr_Queue *queue )
+blrt_Queue_Destroy( blrt_Queue *queue )
 {
-    sowr_Vector_Destroy(queue);
+    blrt_Vector_Destroy(queue);
 }
 
 inline
 void
-sowr_Queue_DestroyS( sowr_Queue *queue )
+blrt_Queue_DestroyS( blrt_Queue *queue )
 {
-    sowr_Vector_DestroyS(queue);
+    blrt_Vector_DestroyS(queue);
 }

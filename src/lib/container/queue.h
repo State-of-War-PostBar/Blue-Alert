@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,18 +27,18 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_QUEUE_H
-#define SOWR_LIB_CONTAINER_QUEUE_H
+#ifndef BLRT_LIB_CONTAINER_QUEUE_H
+#define BLRT_LIB_CONTAINER_QUEUE_H
 
 #include <pch.h>
 
 #include "vector.h"
 
-typedef void (*sowr_QueueFreeFunc)( void * );
-typedef void (*sowr_QueueEatFunc)( void * );
-typedef bool (*sowr_QueueCmpFunc)( const void *, const void * );
+typedef void (*blrt_QueueFreeFunc)( void * );
+typedef void (*blrt_QueueEatFunc)( void * );
+typedef bool (*blrt_QueueCmpFunc)( const void *, const void * );
 
-typedef sowr_Vector sowr_Queue;
+typedef blrt_Vector blrt_Queue;
 
 ///
 /// \brief Create a queue
@@ -53,22 +50,22 @@ typedef sowr_Vector sowr_Queue;
 ///
 /// \return Created queue
 ///
-sowr_Queue *
-sowr_Queue_Create ( size_t elem_size, sowr_QueueFreeFunc free_func );
+blrt_Queue *
+blrt_Queue_Create ( size_t elem_size, blrt_QueueFreeFunc free_func );
 
 ///
 /// \brief Create a queue
 ///
 /// Create a queue by stack.<BR />
-/// <B>The created queue must be freed by \a sowr_Queue_DestroyS().</B>
+/// <B>The created queue must be freed by \a blrt_Queue_DestroyS().</B>
 ///
 /// \param elem_size Size of queue's elements
 /// \param free_func Function to call when the queue frees an element
 ///
 /// \return Created queue
 ///
-sowr_Queue
-sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func );
+blrt_Queue
+blrt_Queue_CreateS ( size_t elem_size, blrt_QueueFreeFunc free_func );
 
 ///
 /// \brief Get the first element
@@ -80,7 +77,7 @@ sowr_Queue_CreateS ( size_t elem_size, sowr_QueueFreeFunc free_func );
 /// \return Pointer to the first element
 ///
 void *
-sowr_Queue_First( const sowr_Queue *queue );
+blrt_Queue_First( const blrt_Queue *queue );
 
 ///
 /// \brief Find an element in the queue
@@ -94,7 +91,7 @@ sowr_Queue_First( const sowr_Queue *queue );
 /// \return Pointer to the found element, NULL otherwise.
 ///
 void *
-sowr_Queue_Find( const sowr_Queue *queue, const void *data, sowr_QueueCmpFunc cmp );
+blrt_Queue_Find( const blrt_Queue *queue, const void *data, blrt_QueueCmpFunc cmp );
 
 ///
 /// \brief Expand the queue
@@ -104,7 +101,7 @@ sowr_Queue_Find( const sowr_Queue *queue, const void *data, sowr_QueueCmpFunc cm
 /// \param queue Queue to expand
 ///
 void
-sowr_Queue_Expand( sowr_Queue *queue );
+blrt_Queue_Expand( blrt_Queue *queue );
 
 ///
 /// \brief Expand the queue
@@ -115,7 +112,7 @@ sowr_Queue_Expand( sowr_Queue *queue );
 /// \param size Target size for expanding
 ///
 void
-sowr_Queue_ExpandUntil( sowr_Queue *queue, size_t size );
+blrt_Queue_ExpandUntil( blrt_Queue *queue, size_t size );
 
 ///
 /// \brief Eat the queue
@@ -126,7 +123,7 @@ sowr_Queue_ExpandUntil( sowr_Queue *queue, size_t size );
 /// \param func Function for eating
 ///
 void
-sowr_Queue_Eat( sowr_Queue *queue, sowr_QueueEatFunc func );
+blrt_Queue_Eat( blrt_Queue *queue, blrt_QueueEatFunc func );
 
 ///
 /// \brief Clear out a queue
@@ -136,7 +133,7 @@ sowr_Queue_Eat( sowr_Queue *queue, sowr_QueueEatFunc func );
 /// \param queue Queue to clear
 ///
 void
-sowr_Queue_Clear( sowr_Queue *queue );
+blrt_Queue_Clear( blrt_Queue *queue );
 
 ///
 /// \brief Shrink the queue
@@ -146,7 +143,7 @@ sowr_Queue_Clear( sowr_Queue *queue );
 /// \param queue Queue to shrink
 ///
 void
-sowr_Queue_ShrinkToFit( sowr_Queue *queue );
+blrt_Queue_ShrinkToFit( blrt_Queue *queue );
 
 ///
 /// \brief Push an element
@@ -157,7 +154,7 @@ sowr_Queue_ShrinkToFit( sowr_Queue *queue );
 /// \param elem Element to be pushed
 ///
 void
-sowr_Queue_Push( sowr_Queue *queue, const void *elem );
+blrt_Queue_Push( blrt_Queue *queue, const void *elem );
 
 ///
 /// \brief Pop the first element of queue
@@ -169,7 +166,7 @@ sowr_Queue_Push( sowr_Queue *queue, const void *elem );
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Queue_Pop( sowr_Queue *queue, void *ptr_retrieve );
+blrt_Queue_Pop( blrt_Queue *queue, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a queue
@@ -179,16 +176,16 @@ sowr_Queue_Pop( sowr_Queue *queue, void *ptr_retrieve );
 /// \param queue Queue to destroy
 ///
 void
-sowr_Queue_Destroy( sowr_Queue *queue );
+blrt_Queue_Destroy( blrt_Queue *queue );
 
 ///
 /// \brief Destroy a queue
 ///
-/// Destroy a queue created by \a sowr_Queue_CreateS(), freeing all its elements.
+/// Destroy a queue created by \a blrt_Queue_CreateS(), freeing all its elements.
 ///
 /// \param queue Queue to destroy
 ///
 void
-sowr_Queue_DestroyS( sowr_Queue *queue );
+blrt_Queue_DestroyS( blrt_Queue *queue );
 
-#endif //!SOWR_LIB_CONTAINER_QUEUE_H
+#endif //!BLRT_LIB_CONTAINER_QUEUE_H

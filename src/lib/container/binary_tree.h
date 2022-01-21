@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,28 +27,28 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_BINARY_TREE_H
-#define SOWR_LIB_CONTAINER_BINARY_TREE_H
+#ifndef BLRT_LIB_CONTAINER_BINARY_TREE_H
+#define BLRT_LIB_CONTAINER_BINARY_TREE_H
 
 #include <pch.h>
 
-typedef void (*sowr_BinaryTreeFreeFunc)( void * );
-typedef void (*sowr_BinaryTreeWalkFunc)( void * );
-typedef int  (*sowr_BinaryTreeCmpFunc)( const void *, const void * );
+typedef void (*blrt_BinaryTreeFreeFunc)( void * );
+typedef void (*blrt_BinaryTreeWalkFunc)( void * );
+typedef int  (*blrt_BinaryTreeCmpFunc)( const void *, const void * );
 
-typedef struct sowr_BinaryTreeNode
+typedef struct blrt_BinaryTreeNode
 {
     size_t data_size;
     void *data;
-    struct sowr_BinaryTreeNode *left, *right;
-} sowr_BinaryTreeNode;
+    struct blrt_BinaryTreeNode *left, *right;
+} blrt_BinaryTreeNode;
 
-typedef struct sowr_BinaryTree
+typedef struct blrt_BinaryTree
 {
     size_t length;
-    sowr_BinaryTreeFreeFunc free_func;
-    sowr_BinaryTreeNode head;
-} sowr_BinaryTree;
+    blrt_BinaryTreeFreeFunc free_func;
+    blrt_BinaryTreeNode head;
+} blrt_BinaryTree;
 
 ///
 /// \brief Create a binary tree
@@ -62,21 +59,21 @@ typedef struct sowr_BinaryTree
 ///
 /// \return Created tree
 ///
-sowr_BinaryTree *
-sowr_BinaryTree_Create( sowr_BinaryTreeFreeFunc free_func );
+blrt_BinaryTree *
+blrt_BinaryTree_Create( blrt_BinaryTreeFreeFunc free_func );
 
 ///
 /// \brief Create a binary tree
 ///
 /// Create a binary tree on stack ready to use.
-/// <B>The created tree must be destroyed with \a sowr_BinaryTree_DestroyS().</B>
+/// <B>The created tree must be destroyed with \a blrt_BinaryTree_DestroyS().</B>
 ///
 /// \param free_func Function to call when freeing an element
 ///
 /// \return Created tree
 ///
-sowr_BinaryTree
-sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func );
+blrt_BinaryTree
+blrt_BinaryTree_CreateS( blrt_BinaryTreeFreeFunc free_func );
 
 ///
 /// \brief Insert data to binary tree
@@ -89,7 +86,7 @@ sowr_BinaryTree_CreateS( sowr_BinaryTreeFreeFunc free_func );
 /// \param cmp_func Function for comparision
 ///
 void
-sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *data, sowr_BinaryTreeCmpFunc cmp_func );
+blrt_BinaryTree_Insert( blrt_BinaryTree *tree, size_t data_size, const void *data, blrt_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Delete element in tree
@@ -103,7 +100,7 @@ sowr_BinaryTree_Insert( sowr_BinaryTree *tree, size_t data_size, const void *dat
 /// \return If anything is deleted
 ///
 bool
-sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTreeCmpFunc cmp_func );
+blrt_BinaryTree_Delete( blrt_BinaryTree *tree, const void *data, blrt_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Walk the binary tree
@@ -114,7 +111,7 @@ sowr_BinaryTree_Delete( sowr_BinaryTree *tree, const void *data, sowr_BinaryTree
 /// \param func Function for walking
 ///
 void
-sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func );
+blrt_BinaryTree_Walk( blrt_BinaryTree *tree, blrt_BinaryTreeWalkFunc func );
 
 ///
 /// \brief Find an element in tree
@@ -127,8 +124,8 @@ sowr_BinaryTree_Walk( sowr_BinaryTree *tree, sowr_BinaryTreeWalkFunc func );
 ///
 /// \return The node if found
 ///
-sowr_BinaryTreeNode *
-sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data, sowr_BinaryTreeCmpFunc cmp_func );
+blrt_BinaryTreeNode *
+blrt_BinaryTree_Find( const blrt_BinaryTree *tree, const void *data, blrt_BinaryTreeCmpFunc cmp_func );
 
 ///
 /// \brief Clear a tree
@@ -138,7 +135,7 @@ sowr_BinaryTree_Find( const sowr_BinaryTree *tree, const void *data, sowr_Binary
 /// \param tree Tree to clear
 ///
 void
-sowr_BinaryTree_Clear( sowr_BinaryTree *tree );
+blrt_BinaryTree_Clear( blrt_BinaryTree *tree );
 
 ///
 /// \brief Get the height of tree
@@ -150,7 +147,7 @@ sowr_BinaryTree_Clear( sowr_BinaryTree *tree );
 /// \return Accumulated height
 ///
 size_t
-sowr_BinaryTree_Height( const sowr_BinaryTree *tree );
+blrt_BinaryTree_Height( const blrt_BinaryTree *tree );
 
 ///
 /// \brief Destroy a tree
@@ -160,15 +157,15 @@ sowr_BinaryTree_Height( const sowr_BinaryTree *tree );
 /// \param tree tree to destroy
 ///
 void
-sowr_BinaryTree_Destroy( sowr_BinaryTree *tree );
+blrt_BinaryTree_Destroy( blrt_BinaryTree *tree );
 
 /// \brief Destroy a tree
 ///
-/// Destroy a binary tree created by \a sowr_BinaryTree_CreateS().
+/// Destroy a binary tree created by \a blrt_BinaryTree_CreateS().
 ///
 /// \param tree Tree to destroy
 ///
 void
-sowr_BinaryTree_DestroyS( sowr_BinaryTree *tree );
+blrt_BinaryTree_DestroyS( blrt_BinaryTree *tree );
 
-#endif //!SOWR_LIB_CONTAINER_BINARY_TREE_H
+#endif //!BLRT_LIB_CONTAINER_BINARY_TREE_H

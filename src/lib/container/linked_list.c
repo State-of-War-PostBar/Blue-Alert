@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -34,72 +31,72 @@
 
 #include "../memory/heap_memory.h"
 
-sowr_LinkedList *
-sowr_LinkedList_Create( sowr_LinkedListFreeFunc free_func )
+blrt_LinkedList *
+blrt_LinkedList_Create( blrt_LinkedListFreeFunc free_func )
 {
-    sowr_LinkedList *list = sowr_HeapAlloc(sizeof(sowr_LinkedList));
+    blrt_LinkedList *list = blrt_HeapAlloc(sizeof(blrt_LinkedList));
     list->length = 0ULL;
     list->free_func = free_func;
-    list->head = (sowr_LinkedListNode){ 0 };
+    list->head = (blrt_LinkedListNode){ 0 };
     return list;
 }
 
-sowr_LinkedList
-sowr_LinkedList_CreateS( sowr_LinkedListFreeFunc free_func )
+blrt_LinkedList
+blrt_LinkedList_CreateS( blrt_LinkedListFreeFunc free_func )
 {
-    sowr_LinkedList list =
+    blrt_LinkedList list =
     {
         .length = 0ULL,
         .free_func = free_func,
-        .head = (sowr_LinkedListNode){ 0 }
+        .head = (blrt_LinkedListNode){ 0 }
     };
     return list;
 }
 
 void
-sowr_LinkedList_Walk( sowr_LinkedList *list, sowr_LinkedListWalkFunc func )
+blrt_LinkedList_Walk( blrt_LinkedList *list, blrt_LinkedListWalkFunc func )
 {
     if (!list->length)
         return;
 
-    for (sowr_LinkedListNode *iter = &(list->head); iter; iter = iter->next)
+    for (blrt_LinkedListNode *iter = &(list->head); iter; iter = iter->next)
         func(iter->data);
 }
 
 void
-sowr_LinkedList_Clear( sowr_LinkedList *list )
+blrt_LinkedList_Clear( blrt_LinkedList *list )
 {
     if (!list->length)
         return;
 
-    sowr_LinkedListNode *iter = &(list->head), *next = NULL;
+    blrt_LinkedListNode *iter = &(list->head), *next = NULL;
     while (iter)
     {
         next = iter->next;
         if (list->free_func)
             list->free_func(iter->data);
-        sowr_HeapFree(iter->data);
+        blrt_HeapFree(iter->data);
         if (iter != &(list->head))
-            sowr_HeapFree(iter);
+            blrt_HeapFree(iter);
         iter = next;
     }
-    list->head = (sowr_LinkedListNode){ 0 };
+    list->head = (blrt_LinkedListNode){ 0 };
     list->length = 0ULL;
 }
 
 void
-sowr_LinkedList_Insert( sowr_LinkedList *list, size_t data_size, const void *data )
+blrt_LinkedList_Insert( blrt_LinkedList *list, size_t data_size, const void *data )
 {
-    sowr_LinkedListNode node;
-    node.data = sowr_HeapAlloc(data_size);
+    blrt_LinkedListNode node;
+    node.data = blrt_HeapAlloc(data_size);
     node.data_size = data_size;
     memcpy(node.data, data, data_size);
     if (!list->length)
         node.next = NULL;
     else
     {
-        sowr_LinkedListNode *old_head = sowr_HeapAlloc(sizeof(sowr_LinkedListNode));
-        memcpy(old_head, &(list->head), sizeof(sowr_LinkedListNode));
+        blrt_LinkedListNode *old_head = blrt_HeapAlloc(sizeof(blrt_LinkedListNode));
+        memcpy(old_head, &(list->head), sizeof(blrt_LinkedListNode));
         node.next = old_head;
     }
     list->head = node;
@@ -107,7 +104,7 @@ sowr_LinkedList_Insert( sowr_LinkedList *list, size_t data_size, const void *dat
 }
 
 void
-sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve )
+blrt_LinkedList_Pop( blrt_LinkedList *list, void *ptr_retrieve )
 {
     if (!list->length)
         return;
@@ -116,40 +113,40 @@ sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve )
         memcpy(ptr_retrieve, list->head.data, list->head.data_size);
     else if (list->free_func)
         list->free_func(list->head.data);
-    sowr_HeapFree(list->head.data);
+    blrt_HeapFree(list->head.data);
 
     if (list->head.next)
     {
 
-        sowr_LinkedListNode *next = list->head.next;
+        blrt_LinkedListNode *next = list->head.next;
         list->head = *next;
-        sowr_HeapFree(next);
+        blrt_HeapFree(next);
     }
 
     list->length--;
 }
 
-sowr_LinkedListNode *
-sowr_LinkedList_Find( const sowr_LinkedList *list, const void *data, sowr_LinkedListCmpFunc cmp )
+blrt_LinkedListNode *
+blrt_LinkedList_Find( const blrt_LinkedList *list, const void *data, blrt_LinkedListCmpFunc cmp )
 {
     if (!list->length)
         return NULL;
 
-    for (const sowr_LinkedListNode *iter = &(list->head); iter; iter = iter->next)
+    for (const blrt_LinkedListNode *iter = &(list->head); iter; iter = iter->next)
         if (cmp(iter->data, data))
-            return (sowr_LinkedListNode *)iter;
+            return (blrt_LinkedListNode *)iter;
 
     return NULL;
 }
 
 size_t
-sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCmpFunc cmp, void *ptr_retrieve )
+blrt_LinkedList_Take( blrt_LinkedList *list, const void *data, blrt_LinkedListCmpFunc cmp, void *ptr_retrieve )
 {
     if (!list->length)
         return 0ULL;
 
     size_t count = 0ULL;
-    sowr_LinkedListNode *iter = &(list->head), *previous = NULL;
+    blrt_LinkedListNode *iter = &(list->head), *previous = NULL;
     bool copied = false;
 
     while (iter)
@@ -163,15 +160,15 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
             }
             else if (list->free_func)
                 list->free_func(iter->data);
-            sowr_HeapFree(iter->data);
+            blrt_HeapFree(iter->data);
 
             if (previous)
                 previous->next = iter->next;
             else
             {
-                sowr_LinkedListNode *next = iter->next;
+                blrt_LinkedListNode *next = iter->next;
                 list->head = *next;
-                sowr_HeapFree(next);
+                blrt_HeapFree(next);
             }
 
             count++;
@@ -195,14 +192,14 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
 }
 
 void
-sowr_LinkedList_Destroy( sowr_LinkedList *list )
+blrt_LinkedList_Destroy( blrt_LinkedList *list )
 {
-    sowr_LinkedList_Clear(list);
-    sowr_HeapFree(list);
+    blrt_LinkedList_Clear(list);
+    blrt_HeapFree(list);
 }
 
 void
-sowr_LinkedList_DestroyS( sowr_LinkedList *list )
+blrt_LinkedList_DestroyS( blrt_LinkedList *list )
 {
-    sowr_LinkedList_Clear(list);
+    blrt_LinkedList_Clear(list);
 }

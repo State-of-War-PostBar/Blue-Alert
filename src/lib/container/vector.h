@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,23 +27,23 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_VECTOR_H
-#define SOWR_LIB_CONTAINER_VECTOR_H
+#ifndef BLRT_LIB_CONTAINER_VECTOR_H
+#define BLRT_LIB_CONTAINER_VECTOR_H
 
 #include <pch.h>
 
-typedef void (*sowr_VectorFreeFunc)( void * );
-typedef void (*sowr_VectorWalkFunc)( void * );
-typedef bool (*sowr_VectorCmpFunc)( const void *, const void * );
+typedef void (*blrt_VectorFreeFunc)( void * );
+typedef void (*blrt_VectorWalkFunc)( void * );
+typedef bool (*blrt_VectorCmpFunc)( const void *, const void * );
 
-typedef struct sowr_Vector
+typedef struct blrt_Vector
 {
     size_t elem_size;
     size_t capacity;
     size_t length;
-    sowr_VectorFreeFunc free_func;
+    blrt_VectorFreeFunc free_func;
     void *ptr;
-} sowr_Vector;
+} blrt_Vector;
 
 ///
 /// \brief Create a vector
@@ -58,22 +55,22 @@ typedef struct sowr_Vector
 ///
 /// \return Created vector
 ///
-sowr_Vector *
-sowr_Vector_Create( size_t elem_size, sowr_VectorFreeFunc free_func );
+blrt_Vector *
+blrt_Vector_Create( size_t elem_size, blrt_VectorFreeFunc free_func );
 
 ///
 /// \brief Create a vector
 ///
 /// Create a vector by stack.<BR />
-/// <B>The created vector must be freed by \a sowr_Vector_DestroyS().</B>
+/// <B>The created vector must be freed by \a blrt_Vector_DestroyS().</B>
 ///
 /// \param elem_size Size of vector's elements
 /// \param free_func Function to call when the vector frees an element
 ///
 /// \return Created vector
 ///
-sowr_Vector
-sowr_Vector_CreateS( size_t elem_size, sowr_VectorFreeFunc free_func );
+blrt_Vector
+blrt_Vector_CreateS( size_t elem_size, blrt_VectorFreeFunc free_func );
 
 ///
 /// \brief Get the first element
@@ -85,7 +82,7 @@ sowr_Vector_CreateS( size_t elem_size, sowr_VectorFreeFunc free_func );
 /// \return Pointer to the first element
 ///
 void *
-sowr_Vector_First( const sowr_Vector *vec );
+blrt_Vector_First( const blrt_Vector *vec );
 
 ///
 /// \brief Get the last element
@@ -97,7 +94,7 @@ sowr_Vector_First( const sowr_Vector *vec );
 /// \return Pointer to the last element
 ///
 void *
-sowr_Vector_Last( const sowr_Vector *vec );
+blrt_Vector_Last( const blrt_Vector *vec );
 
 ///
 /// \brief Get the indexed element
@@ -111,7 +108,7 @@ sowr_Vector_Last( const sowr_Vector *vec );
 /// \return Pointer to the location after index
 ///
 void *
-sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index );
+blrt_Vector_PtrAt( const blrt_Vector *vec, size_t index );
 
 ///
 /// \brief Find an element in the vector
@@ -125,7 +122,7 @@ sowr_Vector_PtrAt( const sowr_Vector *vec, size_t index );
 /// \return Pointer to the found element, NULL otherwise.
 ///
 void *
-sowr_Vector_Find( const sowr_Vector *vec, const void *data, sowr_VectorCmpFunc cmp );
+blrt_Vector_Find( const blrt_Vector *vec, const void *data, blrt_VectorCmpFunc cmp );
 
 ///
 /// \brief Expand the vector
@@ -135,7 +132,7 @@ sowr_Vector_Find( const sowr_Vector *vec, const void *data, sowr_VectorCmpFunc c
 /// \param vec Vector to expand
 ///
 void
-sowr_Vector_Expand( sowr_Vector *vec );
+blrt_Vector_Expand( blrt_Vector *vec );
 
 ///
 /// \brief Expand the vector
@@ -146,7 +143,7 @@ sowr_Vector_Expand( sowr_Vector *vec );
 /// \param size Target size for expanding
 ///
 void
-sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size );
+blrt_Vector_ExpandUntil( blrt_Vector *vec, size_t size );
 
 ///
 /// \brief Walkthrough the vector
@@ -157,7 +154,7 @@ sowr_Vector_ExpandUntil( sowr_Vector *vec, size_t size );
 /// \param func Function for walking
 ///
 void
-sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func );
+blrt_Vector_Walk( blrt_Vector *vec, blrt_VectorWalkFunc func );
 
 ///
 /// \brief Clear out a vector
@@ -167,7 +164,7 @@ sowr_Vector_Walk( sowr_Vector *vec, sowr_VectorWalkFunc func );
 /// \param vec Vector to clear
 ///
 void
-sowr_Vector_Clear( sowr_Vector *vec );
+blrt_Vector_Clear( blrt_Vector *vec );
 
 ///
 /// \brief Shrink the vector
@@ -177,7 +174,7 @@ sowr_Vector_Clear( sowr_Vector *vec );
 /// \param vec Vector to shrink
 ///
 void
-sowr_Vector_ShrinkToFit( sowr_Vector *vec );
+blrt_Vector_ShrinkToFit( blrt_Vector *vec );
 
 ///
 /// \brief Insert element to vector
@@ -190,7 +187,7 @@ sowr_Vector_ShrinkToFit( sowr_Vector *vec );
 /// \param elem Element to insert
 ///
 void
-sowr_Vector_Insert( sowr_Vector *vec, size_t index, const void *elem );
+blrt_Vector_Insert( blrt_Vector *vec, size_t index, const void *elem );
 
 ///
 /// \brief Replace an element
@@ -203,7 +200,7 @@ sowr_Vector_Insert( sowr_Vector *vec, size_t index, const void *elem );
 /// \param elem Element to replace
 ///
 void
-sowr_Vector_Replace( sowr_Vector *vec, size_t index, const void *elem );
+blrt_Vector_Replace( blrt_Vector *vec, size_t index, const void *elem );
 
 ///
 /// \brief Delete an element
@@ -215,7 +212,7 @@ sowr_Vector_Replace( sowr_Vector *vec, size_t index, const void *elem );
 /// \param index Index to delete
 ///
 void
-sowr_Vector_Delete( sowr_Vector *vec, size_t index );
+blrt_Vector_Delete( blrt_Vector *vec, size_t index );
 
 ///
 /// \brief Take an element
@@ -229,7 +226,7 @@ sowr_Vector_Delete( sowr_Vector *vec, size_t index );
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve );
+blrt_Vector_Take( blrt_Vector *vec, size_t index, void *ptr_retrieve );
 
 ///
 /// \brief Push an element
@@ -240,7 +237,7 @@ sowr_Vector_Take( sowr_Vector *vec, size_t index, void *ptr_retrieve );
 /// \param elem Element to be pushed
 ///
 void
-sowr_Vector_Push( sowr_Vector *vec, const void *elem );
+blrt_Vector_Push( blrt_Vector *vec, const void *elem );
 
 ///
 /// \brief Pop the last element of vector
@@ -252,7 +249,7 @@ sowr_Vector_Push( sowr_Vector *vec, const void *elem );
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve );
+blrt_Vector_Pop( blrt_Vector *vec, void *ptr_retrieve );
 
 ///
 /// \brief Push an element to front
@@ -263,7 +260,7 @@ sowr_Vector_Pop( sowr_Vector *vec, void *ptr_retrieve );
 /// \param elem Element to be pushed
 ///
 void
-sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem );
+blrt_Vector_Push_Front( blrt_Vector *vec, const void *elem );
 
 ///
 /// \brief Pop the first element of vector
@@ -275,7 +272,7 @@ sowr_Vector_Push_Front( sowr_Vector *vec, const void *elem );
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Vector_Pop_Front( sowr_Vector *vec, void *ptr_retrieve );
+blrt_Vector_Pop_Front( blrt_Vector *vec, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a vector
@@ -285,16 +282,16 @@ sowr_Vector_Pop_Front( sowr_Vector *vec, void *ptr_retrieve );
 /// \param vec Vector to destroy
 ///
 void
-sowr_Vector_Destroy( sowr_Vector *vec );
+blrt_Vector_Destroy( blrt_Vector *vec );
 
 ///
 /// \brief Destroy a vector
 ///
-/// Destroy a vector created by \a sowr_Vector_CreateS(), freeing all its elements.
+/// Destroy a vector created by \a blrt_Vector_CreateS(), freeing all its elements.
 ///
 /// \param vec Vector to destroy
 ///
 void
-sowr_Vector_DestroyS( sowr_Vector *vec );
+blrt_Vector_DestroyS( blrt_Vector *vec );
 
-#endif // !SOWR_LIB_CONTAINER_VECTOR_H
+#endif // !BLRT_LIB_CONTAINER_VECTOR_H

@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -33,10 +30,10 @@
 #include "thread.h"
 
 int
-sowr_Thread_Create( sowr_Thread *thr, sowr_ThreadFunc func, void *arg )
+blrt_Thread_Create( blrt_Thread *thr, blrt_ThreadFunc func, void *arg )
 {
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Thread thrd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, arg, 0, NULL);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Thread thrd = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, arg, 0, NULL);
     if (!thrd)
     {
         *thr = NULL;
@@ -49,10 +46,10 @@ sowr_Thread_Create( sowr_Thread *thr, sowr_ThreadFunc func, void *arg )
 #endif
 }
 
-sowr_Thread
-sowr_Thread_Current( void )
+blrt_Thread
+blrt_Thread_Current( void )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     return GetCurrentThread();
 #else
     return pthread_self();
@@ -60,9 +57,9 @@ sowr_Thread_Current( void )
 }
 
 void
-sowr_Thread_Sleep( const struct timespec *duration )
+blrt_Thread_Sleep( const struct timespec *duration )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     Sleep(duration->tv_sec * 1000.0 + duration->tv_nsec / 0.000001);
 #else
     nanosleep(duration, NULL);
@@ -70,9 +67,9 @@ sowr_Thread_Sleep( const struct timespec *duration )
 }
 
 void
-sowr_Thread_Exit( void )
+blrt_Thread_Exit( void )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     ExitThread(0);
 #else
     pthread_exit(NULL);
@@ -80,9 +77,9 @@ sowr_Thread_Exit( void )
 }
 
 void
-sowr_Thread_Detach( sowr_Thread thr )
+blrt_Thread_Detach( blrt_Thread thr )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     CloseHandle(thr);
 #else
     pthread_detach(thr);
@@ -90,9 +87,9 @@ sowr_Thread_Detach( sowr_Thread thr )
 }
 
 void
-sowr_Thread_Join( sowr_Thread thr )
+blrt_Thread_Join( blrt_Thread thr )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     WaitForSingleObject(thr, INFINITE);
     CloseHandle(thr);
 #else

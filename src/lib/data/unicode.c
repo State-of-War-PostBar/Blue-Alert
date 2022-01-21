@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -35,7 +32,7 @@
 #include "bytes.h"
 
 size_t
-sowr_Unicode_CountUTF8CodePoints( const unsigned char *str )
+blrt_Unicode_CountUTF8CodePoints( const unsigned char *str )
 {
     size_t length = 0ULL;
     while (*str)
@@ -44,21 +41,21 @@ sowr_Unicode_CountUTF8CodePoints( const unsigned char *str )
 }
 
 size_t
-sowr_Unicode_CountUTF16CodePoints( const unsigned char *str )
+blrt_Unicode_CountUTF16CodePoints( const unsigned char *str )
 {
     size_t length = 0ULL;
-    sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
+    blrt_UTF16Sequence seq = blrt_Unicode_NextUTF16Sequence(str);
     while (!seq.terminator)
     {
         length++;
         str += seq.length;
-        seq = sowr_Unicode_NextUTF16Sequence(str);
+        seq = blrt_Unicode_NextUTF16Sequence(str);
     }
     return length;
 }
 
-sowr_UTF8Sequence
-sowr_Unicode_NextUTF8Sequence( const unsigned char *str )
+blrt_UTF8Sequence
+blrt_Unicode_NextUTF8Sequence( const unsigned char *str )
 {
     size_t length = 0ULL;
     unsigned char ch = 0;
@@ -88,22 +85,22 @@ sowr_Unicode_NextUTF8Sequence( const unsigned char *str )
         }
     }
 
-    return (sowr_UTF8Sequence)
+    return (blrt_UTF8Sequence)
     {
         .length = length,
         .ptr = str
     };
 }
 
-sowr_UTF16Sequence
-sowr_Unicode_NextUTF16Sequence( const unsigned char *str )
+blrt_UTF16Sequence
+blrt_Unicode_NextUTF16Sequence( const unsigned char *str )
 {
     uint16_t *first_two = (uint16_t *)str;
 
     if (*first_two <= 0xd7ff || (*first_two >= 0xe000 && *first_two <= 0xffff))
     {
         // Two bytes utf-16
-        return (sowr_UTF16Sequence)
+        return (blrt_UTF16Sequence)
         {
             .length = 2ULL,
             .ptr = str,
@@ -112,7 +109,7 @@ sowr_Unicode_NextUTF16Sequence( const unsigned char *str )
     }
     else
         // Four bytes utf-16
-        return (sowr_UTF16Sequence)
+        return (blrt_UTF16Sequence)
         {
             .length = 4ULL,
             .ptr = str,
@@ -120,13 +117,13 @@ sowr_Unicode_NextUTF16Sequence( const unsigned char *str )
         };
 }
 
-sowr_Unicode
-sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
+blrt_Unicode
+blrt_Unicode_DecodeUTF8Sequence( const blrt_UTF8Sequence *seq )
 {
     if (!seq || !seq->ptr)
         return 0U;
 
-    sowr_Unicode code = 0U;
+    blrt_Unicode code = 0U;
     if (seq->length == 1ULL)
         code = *(seq->ptr);
     // Don't ask me why I don't use loops or pointers to optimize this,
@@ -171,13 +168,13 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq )
     return code;
 }
 
-sowr_Unicode
-sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq )
+blrt_Unicode
+blrt_Unicode_DecodeUTF16Sequence( const blrt_UTF16Sequence *seq )
 {
     if (!seq || !seq->ptr)
         return 0U;
 
-    sowr_Unicode code = 0U;
+    blrt_Unicode code = 0U;
     if (seq->length == 2ULL)
     {
         uint16_t *bytes = (uint16_t *)(seq->ptr);
@@ -194,7 +191,7 @@ sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq )
 
 inline
 size_t
-sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp )
+blrt_Unicode_UTF8LengthOfCodePoint( blrt_Unicode cp )
 {
     if (cp < 0x7f)
         return 1ULL;
@@ -208,7 +205,7 @@ sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp )
 
 inline
 size_t
-sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp )
+blrt_Unicode_UTF16LengthOfCodePoint( blrt_Unicode cp )
 {
     if (cp <= 0xffff)
         return 2ULL;
@@ -217,9 +214,9 @@ sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp )
 }
 
 void
-sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output )
+blrt_Unicode_EncodeCodePointUTF8( blrt_Unicode cp, unsigned char *output )
 {
-    size_t length = sowr_Unicode_UTF8LengthOfCodePoint(cp);
+    size_t length = blrt_Unicode_UTF8LengthOfCodePoint(cp);
     if (length == 1ULL)
     {
         unsigned char ch = (unsigned char)cp;
@@ -254,9 +251,9 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output )
 }
 
 void
-sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output )
+blrt_Unicode_EncodeCodePointUTF16( blrt_Unicode cp, unsigned char *output )
 {
-    size_t length = sowr_Unicode_UTF16LengthOfCodePoint(cp);
+    size_t length = blrt_Unicode_UTF16LengthOfCodePoint(cp);
     if (length == 2ULL)
     {
         uint16_t code = cp;
@@ -274,66 +271,66 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output )
 }
 
 void
-sowr_Unicode_DecodeUTF8String( const unsigned char *str, sowr_Vector *output )
+blrt_Unicode_DecodeUTF8String( const unsigned char *str, blrt_Vector *output )
 {
-    sowr_UTF8Sequence seq = sowr_Unicode_NextUTF8Sequence(str);
+    blrt_UTF8Sequence seq = blrt_Unicode_NextUTF8Sequence(str);
     while (seq.length)
     {
-        sowr_Unicode cp = sowr_Unicode_DecodeUTF8Sequence(&seq);
-        sowr_Vector_Push(output, &cp);
+        blrt_Unicode cp = blrt_Unicode_DecodeUTF8Sequence(&seq);
+        blrt_Vector_Push(output, &cp);
         str += seq.length;
-        seq = sowr_Unicode_NextUTF8Sequence(str);
+        seq = blrt_Unicode_NextUTF8Sequence(str);
     }
 }
 
 void
-sowr_Unicode_DecodeUTF16String( const unsigned char *str, sowr_Vector *output )
+blrt_Unicode_DecodeUTF16String( const unsigned char *str, blrt_Vector *output )
 {
-    sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
+    blrt_UTF16Sequence seq = blrt_Unicode_NextUTF16Sequence(str);
     while (!seq.terminator)
     {
-        sowr_Unicode cp = sowr_Unicode_DecodeUTF16Sequence(&seq);
-        sowr_Vector_Push(output, &cp);
+        blrt_Unicode cp = blrt_Unicode_DecodeUTF16Sequence(&seq);
+        blrt_Vector_Push(output, &cp);
         str += seq.length;
-        seq = sowr_Unicode_NextUTF16Sequence(str);
+        seq = blrt_Unicode_NextUTF16Sequence(str);
     }
 }
 
 void
-sowr_Unicode_UTF8ToUTF16( const unsigned char *str, sowr_Vector *output )
+blrt_Unicode_UTF8ToUTF16( const unsigned char *str, blrt_Vector *output )
 {
-    sowr_UTF8Sequence seq = sowr_Unicode_NextUTF8Sequence(str);
+    blrt_UTF8Sequence seq = blrt_Unicode_NextUTF8Sequence(str);
     unsigned char buffer[4] = { 0 };
     while (seq.length)
     {
-        sowr_Unicode cp = sowr_Unicode_DecodeUTF8Sequence(&seq);
-        size_t cp_len = sowr_Unicode_UTF16LengthOfCodePoint(cp);
-        sowr_Unicode_EncodeCodePointUTF16(cp, buffer);
+        blrt_Unicode cp = blrt_Unicode_DecodeUTF8Sequence(&seq);
+        size_t cp_len = blrt_Unicode_UTF16LengthOfCodePoint(cp);
+        blrt_Unicode_EncodeCodePointUTF16(cp, buffer);
         for (size_t i = 0ULL; i < cp_len; i++)
-            sowr_Vector_Push(output, buffer + i);
+            blrt_Vector_Push(output, buffer + i);
         str += seq.length;
-        seq = sowr_Unicode_NextUTF8Sequence(str);
+        seq = blrt_Unicode_NextUTF8Sequence(str);
     }
     unsigned char c_0 = 0U;
-    sowr_Vector_Push(output, &c_0);
-    sowr_Vector_Push(output, &c_0);
+    blrt_Vector_Push(output, &c_0);
+    blrt_Vector_Push(output, &c_0);
 }
 
 void
-sowr_Unicode_UTF16ToUTF8( const unsigned char *str, sowr_Vector *output )
+blrt_Unicode_UTF16ToUTF8( const unsigned char *str, blrt_Vector *output )
 {
-    sowr_UTF16Sequence seq = sowr_Unicode_NextUTF16Sequence(str);
+    blrt_UTF16Sequence seq = blrt_Unicode_NextUTF16Sequence(str);
     unsigned char buffer[4] = { 0 };
     while (!seq.terminator)
     {
-        sowr_Unicode cp = sowr_Unicode_DecodeUTF16Sequence(&seq);
-        size_t cp_len = sowr_Unicode_UTF8LengthOfCodePoint(cp);
-        sowr_Unicode_EncodeCodePointUTF8(cp, buffer);
+        blrt_Unicode cp = blrt_Unicode_DecodeUTF16Sequence(&seq);
+        size_t cp_len = blrt_Unicode_UTF8LengthOfCodePoint(cp);
+        blrt_Unicode_EncodeCodePointUTF8(cp, buffer);
         for (size_t i = 0ULL; i < cp_len; i++)
-            sowr_Vector_Push(output, buffer + i);
+            blrt_Vector_Push(output, buffer + i);
         str += seq.length;
-        seq = sowr_Unicode_NextUTF16Sequence(str);
+        seq = blrt_Unicode_NextUTF16Sequence(str);
     }
     unsigned char c_0 = 0U;
-    sowr_Vector_Push(output, &c_0);
+    blrt_Vector_Push(output, &c_0);
 }

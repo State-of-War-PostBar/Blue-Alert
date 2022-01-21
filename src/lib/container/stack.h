@@ -19,10 +19,10 @@
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*              <https://github.com/State-of-War-PostBar/blrt/blob/master/LICENSE>.               *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                        <https://github.com/State-of-War-PostBar/blrt>.                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,18 +30,18 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_STACK_H
-#define SOWR_LIB_CONTAINER_STACK_H
+#ifndef BLRT_LIB_CONTAINER_STACK_H
+#define BLRT_LIB_CONTAINER_STACK_H
 
 #include <pch.h>
 
 #include "vector.h"
 
-typedef void (*sowr_StackFreeFunc)( void * );
-typedef void (*sowr_StackEatFunc)( void * );
-typedef bool (*sowr_StackCmpFunc)( const void *, const void * );
+typedef void (*blrt_StackFreeFunc)( void * );
+typedef void (*blrt_StackEatFunc)( void * );
+typedef bool (*blrt_StackCmpFunc)( const void *, const void * );
 
-typedef sowr_Vector sowr_Stack;
+typedef blrt_Vector blrt_Stack;
 
 ///
 /// \brief Create a stack
@@ -53,22 +53,22 @@ typedef sowr_Vector sowr_Stack;
 ///
 /// \return Created stack
 ///
-sowr_Stack *
-sowr_Stack_Create ( size_t elem_size, sowr_StackFreeFunc free_func );
+blrt_Stack *
+blrt_Stack_Create ( size_t elem_size, blrt_StackFreeFunc free_func );
 
 ///
 /// \brief Create a stack
 ///
 /// Create a stack by stack.<BR />
-/// <B>The created stack must be freed by \a sowr_Stack_DestroyS().</B>
+/// <B>The created stack must be freed by \a blrt_Stack_DestroyS().</B>
 ///
 /// \param elem_size Size of stack's elements
 /// \param free_func Function to call when the stack frees an element
 ///
 /// \return Created stack
 ///
-sowr_Stack
-sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func );
+blrt_Stack
+blrt_Stack_CreateS ( size_t elem_size, blrt_StackFreeFunc free_func );
 
 ///
 /// \brief Get the last element
@@ -80,7 +80,7 @@ sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func );
 /// \return Pointer to the last element
 ///
 void *
-sowr_Stack_Last( const sowr_Stack *stack );
+blrt_Stack_Last( const blrt_Stack *stack );
 
 ///
 /// \brief Find an element in the stack
@@ -94,7 +94,7 @@ sowr_Stack_Last( const sowr_Stack *stack );
 /// \return Pointer to the found element, NULL otherwise.
 ///
 void *
-sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cmp );
+blrt_Stack_Find( const blrt_Stack *stack, const void *data, blrt_StackCmpFunc cmp );
 
 ///
 /// \brief Expand the stack
@@ -104,7 +104,7 @@ sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cm
 /// \param stack Stack to expand
 ///
 void
-sowr_Stack_Expand( sowr_Stack *stack );
+blrt_Stack_Expand( blrt_Stack *stack );
 
 ///
 /// \brief Expand the stack
@@ -115,7 +115,7 @@ sowr_Stack_Expand( sowr_Stack *stack );
 /// \param size Target size for expanding
 ///
 void
-sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size );
+blrt_Stack_ExpandUntil( blrt_Stack *stack, size_t size );
 
 ///
 /// \brief Eat the stack
@@ -126,7 +126,7 @@ sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size );
 /// \param func Function for eating
 ///
 void
-sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func );
+blrt_Stack_Eat( blrt_Stack *stack, blrt_StackEatFunc func );
 
 ///
 /// \brief Clear out a stack
@@ -136,7 +136,7 @@ sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func );
 /// \param stack Stack to clear
 ///
 void
-sowr_Stack_Clear( sowr_Stack *stack );
+blrt_Stack_Clear( blrt_Stack *stack );
 
 ///
 /// \brief Shrink the stack
@@ -146,7 +146,7 @@ sowr_Stack_Clear( sowr_Stack *stack );
 /// \param stack Stack to shrink
 ///
 void
-sowr_Stack_ShrinkToFit( sowr_Stack *stack );
+blrt_Stack_ShrinkToFit( blrt_Stack *stack );
 
 ///
 /// \brief Push an element
@@ -157,7 +157,7 @@ sowr_Stack_ShrinkToFit( sowr_Stack *stack );
 /// \param elem Element to be pushed
 ///
 void
-sowr_Stack_Push( sowr_Stack *stack, const void *elem );
+blrt_Stack_Push( blrt_Stack *stack, const void *elem );
 
 ///
 /// \brief Pop the last element of stack
@@ -169,7 +169,7 @@ sowr_Stack_Push( sowr_Stack *stack, const void *elem );
 /// \param ptr_retrieve Pointer to retrieve the result
 ///
 void
-sowr_Stack_Pop( sowr_Stack *stack, void *ptr_retrieve );
+blrt_Stack_Pop( blrt_Stack *stack, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a stack
@@ -179,16 +179,16 @@ sowr_Stack_Pop( sowr_Stack *stack, void *ptr_retrieve );
 /// \param stack Stack to destroy
 ///
 void
-sowr_Stack_Destroy( sowr_Stack *stack );
+blrt_Stack_Destroy( blrt_Stack *stack );
 
 ///
 /// \brief Destroy a stack
 ///
-/// Destroy a stack created by \a sowr_Stack_CreateS(), freeing all its elements.
+/// Destroy a stack created by \a blrt_Stack_CreateS(), freeing all its elements.
 ///
 /// \param stack Stack to destroy
 ///
 void
-sowr_Stack_DestroyS( sowr_Stack *stack );
+blrt_Stack_DestroyS( blrt_Stack *stack );
 
-#endif //!SOWR_LIB_CONTAINER_STACK_H
+#endif //!BLRT_LIB_CONTAINER_STACK_H

@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_PROFILE_PROFILE_H
-#define SOWR_LIB_PROFILE_PROFILE_H
+#ifndef BLRT_LIB_PROFILE_PROFILE_H
+#define BLRT_LIB_PROFILE_PROFILE_H
 
 #include <pch.h>
 
@@ -44,7 +41,7 @@
 /// \note You do not have to call it for different threads, only one thread needs to do so.
 ///
 void
-sowr_InitProfiler( void );
+blrt_InitProfiler( void );
 
 ///
 /// \brief Profile a function
@@ -54,21 +51,21 @@ sowr_InitProfiler( void );
 /// The profile result is outputed as <I>[Logger debug prefix] Profiling "function name" ("start line" to "stop line" in "file name") took "time" ms.</I><BR />
 /// This function is thread-safe, every thread has their own profile record.
 ///
-/// \note It is recommanded to use the macros \a SOWR_START_PROFILE() and \a SOWR_STOP_PROFILE() instead.
+/// \note It is recommanded to use the macros \a BLRT_START_PROFILE() and \a BLRT_STOP_PROFILE() instead.
 ///
 /// \param caller_file File of the caller in.
 /// \param caller_func Function to profile.
 /// \param line The line when profiling starts or stops.
 ///
 void
-sowr_ProfileFunc( const char *caller_file, const char *caller_func, int line );
+blrt_ProfileFunc( const char *caller_file, const char *caller_func, int line );
 
-#ifdef SOWR_BUILD_DEBUG
-    #define SOWR_START_PROFILE() sowr_ProfileFunc(__FILE__, __func__, __LINE__)
-    #define SOWR_STOP_PROFILE()  sowr_ProfileFunc(__FILE__, __func__, __LINE__)
+#ifdef BLRT_BUILD_DEBUG
+    #define BLRT_START_PROFILE() blrt_ProfileFunc(__FILE__, __func__, __LINE__)
+    #define BLRT_STOP_PROFILE()  blrt_ProfileFunc(__FILE__, __func__, __LINE__)
 #else
-    #define SOWR_START_PROFILE()
-    #define SOWR_STOP_PROFILE()
+    #define BLRT_START_PROFILE()
+    #define BLRT_STOP_PROFILE()
 #endif
 
-#endif // !SOWR_LIB_PROFILE_PROFILE_H
+#endif // !BLRT_LIB_PROFILE_PROFILE_H

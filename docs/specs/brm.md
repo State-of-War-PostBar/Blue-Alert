@@ -1,9 +1,9 @@
 # SWM Format
 
-SWM stands for _**S**tate of **W**ar: Remastered **M**arking Language_.  
+BRM stands for _**B**lue Ale**R**t **M**arking Language_.  
 It's an easy-to-use string data format.  
 I said it's easy-to-use because it is easy-to-use(?)...  
-SWM is parsed in a top-to-bottom basis, latter values will override former ones.
+BRM is parsed in a top-to-bottom basis, latter values will override former ones.
 
 ## Identifier rules
 

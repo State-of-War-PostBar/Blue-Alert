@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -35,18 +32,18 @@
 #include "../memory/heap_memory.h"
 
 static
-sowr_RadixTreeNode *
-sowr_RadixTreeNode_Gen( void )
+blrt_RadixTreeNode *
+blrt_RadixTreeNode_Gen( void )
 {
-    sowr_RadixTreeNode *node = sowr_HeapZeroAlloc(sizeof(sowr_RadixTreeNode));
-    node->key = sowr_String_CreateS();
-    node->full_key = sowr_String_CreateS();
+    blrt_RadixTreeNode *node = blrt_HeapZeroAlloc(sizeof(blrt_RadixTreeNode));
+    node->key = blrt_String_CreateS();
+    node->full_key = blrt_String_CreateS();
     return node;
 }
 
 static
 void
-sowr_RadixTreeNode_DeleteAfter( sowr_RadixTreeNode *node, sowr_RadixTreeFreeFunc free_func )
+blrt_RadixTreeNode_DeleteAfter( blrt_RadixTreeNode *node, blrt_RadixTreeFreeFunc free_func )
 {
     if (!node)
         return;
@@ -55,7 +52,7 @@ sowr_RadixTreeNode_DeleteAfter( sowr_RadixTreeNode *node, sowr_RadixTreeFreeFunc
         for (size_t i = 0ULL; i < CHAR_MAX; i++)
             if (node->characters[i])
             {
-                sowr_RadixTreeNode_DeleteAfter(node->characters[i], free_func);
+                blrt_RadixTreeNode_DeleteAfter(node->characters[i], free_func);
                 node->characters[i] = NULL;
                 node->children--;
             }
@@ -64,16 +61,16 @@ sowr_RadixTreeNode_DeleteAfter( sowr_RadixTreeNode *node, sowr_RadixTreeFreeFunc
     {
         if (free_func)
             free_func(node->data);
-        sowr_HeapFree(node->data);
+        blrt_HeapFree(node->data);
     }
-    sowr_String_DestroyS(&(node->key));
-    sowr_String_DestroyS(&(node->full_key));
-    sowr_HeapFree(node);
+    blrt_String_DestroyS(&(node->key));
+    blrt_String_DestroyS(&(node->full_key));
+    blrt_HeapFree(node);
 }
 
 static
 void
-sowr_RadixTreeNode_TransferChildren( sowr_RadixTreeNode *target, sowr_RadixTreeNode *origin )
+blrt_RadixTreeNode_TransferChildren( blrt_RadixTreeNode *target, blrt_RadixTreeNode *origin )
 {
     if (!target || !origin)
         return;
@@ -88,10 +85,10 @@ sowr_RadixTreeNode_TransferChildren( sowr_RadixTreeNode *target, sowr_RadixTreeN
     }
 }
 
-sowr_RadixTree *
-sowr_RadixTree_Create( sowr_RadixTreeFreeFunc free_func )
+blrt_RadixTree *
+blrt_RadixTree_Create( blrt_RadixTreeFreeFunc free_func )
 {
-    sowr_RadixTreeNode head =
+    blrt_RadixTreeNode head =
     {
         .children = 0ULL,
         .data_size = 0ULL,
@@ -100,16 +97,16 @@ sowr_RadixTree_Create( sowr_RadixTreeFreeFunc free_func )
         .full_key = {},
         .characters = { NULL }
     };
-    sowr_RadixTree *tree = sowr_HeapAlloc(sizeof(sowr_RadixTree));
+    blrt_RadixTree *tree = blrt_HeapAlloc(sizeof(blrt_RadixTree));
     tree->free_func = free_func;
     tree->head = head;
     return tree;
 }
 
-sowr_RadixTree
-sowr_RadixTree_CreateS( sowr_RadixTreeFreeFunc free_func )
+blrt_RadixTree
+blrt_RadixTree_CreateS( blrt_RadixTreeFreeFunc free_func )
 {
-    sowr_RadixTreeNode head =
+    blrt_RadixTreeNode head =
     {
         .children = 0ULL,
         .data_size = 0ULL,
@@ -118,7 +115,7 @@ sowr_RadixTree_CreateS( sowr_RadixTreeFreeFunc free_func )
         .full_key = {},
         .characters = { NULL }
     };
-    sowr_RadixTree tree =
+    blrt_RadixTree tree =
     {
         .free_func = free_func,
         .head = head
@@ -127,35 +124,35 @@ sowr_RadixTree_CreateS( sowr_RadixTreeFreeFunc free_func )
 }
 
 void
-sowr_RadixTree_Clear( sowr_RadixTree *tree )
+blrt_RadixTree_Clear( blrt_RadixTree *tree )
 {
     if (!tree)
         return;
 
     if (tree->head.children)
         for (size_t i = 0ULL; i < CHAR_MAX; i++)
-            sowr_RadixTreeNode_DeleteAfter(tree->head.characters[i], tree->free_func);
+            blrt_RadixTreeNode_DeleteAfter(tree->head.characters[i], tree->free_func);
     tree->head.children = 0ULL;
 }
 
 void
-sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size, const void *data )
+blrt_RadixTree_Insert( blrt_RadixTree *tree, const char *index, size_t data_size, const void *data )
 {
     if (!tree)
         return;
 
     const char *index_o = index;
-    sowr_RadixTreeNode *iter = &(tree->head);
+    blrt_RadixTreeNode *iter = &(tree->head);
     size_t ch = (size_t)*index_o;
     while (ch)
     {
         if (!iter->characters[ch])
         {
-            sowr_RadixTreeNode *node = sowr_RadixTreeNode_Gen();
-            sowr_String_PushS(&(node->key), index_o);
-            sowr_String_PushS(&(node->full_key), index);
+            blrt_RadixTreeNode *node = blrt_RadixTreeNode_Gen();
+            blrt_String_PushS(&(node->key), index_o);
+            blrt_String_PushS(&(node->full_key), index);
             node->data_size = data_size;
-            node->data = sowr_HeapAlloc(data_size);
+            node->data = blrt_HeapAlloc(data_size);
             memcpy(node->data, data, data_size);
             iter->characters[ch] = node;
             iter->children++;
@@ -163,7 +160,7 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
         }
         else
         {
-            sowr_RadixTreeNode *current = iter->characters[ch];
+            blrt_RadixTreeNode *current = iter->characters[ch];
             size_t compared = 0ULL;
             const char *index_r = index_o;
             const char *target = current->key.ptr;
@@ -175,26 +172,26 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
             // If the target string eat up the index string, split target string and get its content to a new lower node
             if (*target && !*index_r)
             {
-                sowr_RadixTreeNode *new_node = sowr_RadixTreeNode_Gen();
-                sowr_String_PushS(&(new_node->key), target);
+                blrt_RadixTreeNode *new_node = blrt_RadixTreeNode_Gen();
+                blrt_String_PushS(&(new_node->key), target);
                 if (current->data)
                 {
                     new_node->data_size = current->data_size;
-                    new_node->data = sowr_HeapAlloc(new_node->data_size);
+                    new_node->data = blrt_HeapAlloc(new_node->data_size);
                     memcpy(new_node->data, current->data, new_node->data_size);
                 }
-                sowr_RadixTreeNode_TransferChildren(new_node, current);
+                blrt_RadixTreeNode_TransferChildren(new_node, current);
 
                 if (current->data_size != data_size)
                 {
                     current->data_size = data_size;
-                    current->data = current->data ? sowr_ReAlloc(data_size, current->data) : sowr_HeapAlloc(data_size);
+                    current->data = current->data ? blrt_ReAlloc(data_size, current->data) : blrt_HeapAlloc(data_size);
                 }
                 memcpy(current->data, data, data_size);
                 current->characters[(size_t)*target] = new_node;
                 current->children++;
-                sowr_String_Res(&(current->key), compared);
-                sowr_String_ShrinkToFit(&(current->key));
+                blrt_String_Res(&(current->key), compared);
+                blrt_String_ShrinkToFit(&(current->key));
                 return;
             }
 
@@ -217,14 +214,14 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
                     if (current->data_size != data_size)
                     {
                         current->data_size = data_size;
-                        current->data = sowr_ReAlloc(data_size, current->data);
+                        current->data = blrt_ReAlloc(data_size, current->data);
                     }
                     memcpy(current->data, data, data_size);
                 }
                 else
                 {
                     current->data_size = data_size;
-                    current->data = sowr_HeapAlloc(data_size);
+                    current->data = blrt_HeapAlloc(data_size);
                     memcpy(current->data, data, data_size);
                 }
                 return;
@@ -234,22 +231,22 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
             else/* if (*target && *index_r) */
             {
                 // Create new node to hold the remaining key of the target node
-                sowr_RadixTreeNode *new_node = sowr_RadixTreeNode_Gen();
-                sowr_String_PushS(&(new_node->key), target);
-                sowr_String_PushS(&(new_node->full_key), current->full_key.ptr);
+                blrt_RadixTreeNode *new_node = blrt_RadixTreeNode_Gen();
+                blrt_String_PushS(&(new_node->key), target);
+                blrt_String_PushS(&(new_node->full_key), current->full_key.ptr);
                 if (current->data)
                 {
                     new_node->data_size = current->data_size;
-                    new_node->data = sowr_HeapAlloc(current->data_size);
+                    new_node->data = blrt_HeapAlloc(current->data_size);
                     memcpy(new_node->data, current->data, current->data_size);
-                    sowr_HeapFree(current->data);
+                    blrt_HeapFree(current->data);
                     current->data = NULL;
                     current->data_size = 0ULL;
                 }
-                sowr_RadixTreeNode_TransferChildren(new_node, current);
+                blrt_RadixTreeNode_TransferChildren(new_node, current);
                 current->characters[(size_t)*target] = new_node;
                 current->children++;
-                sowr_String_Res(&(current->key), compared);
+                blrt_String_Res(&(current->key), compared);
 
                 ch = (size_t)*index_r;
                 index_o = index_r;
@@ -261,18 +258,18 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
 
 inline
 void
-sowr_RadixTree_InsertS( sowr_RadixTree *tree, const sowr_String *index, size_t data_size, const void *data )
+blrt_RadixTree_InsertS( blrt_RadixTree *tree, const blrt_String *index, size_t data_size, const void *data )
 {
-    sowr_RadixTree_Insert(tree, index->ptr, data_size, data);
+    blrt_RadixTree_Insert(tree, index->ptr, data_size, data);
 }
 
-sowr_RadixTreeNode *
-sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
+blrt_RadixTreeNode *
+blrt_RadixTree_Get( const blrt_RadixTree *tree, const char *index )
 {
     if (!tree)
         return NULL;
 
-    const sowr_RadixTreeNode *iter = &(tree->head);
+    const blrt_RadixTreeNode *iter = &(tree->head);
     size_t ch = (size_t)*index;
     while (ch)
     {
@@ -280,7 +277,7 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
             return NULL;
         else
         {
-            const sowr_RadixTreeNode *current = iter->characters[ch];
+            const blrt_RadixTreeNode *current = iter->characters[ch];
             const char *index_r = index;
             const char *target = current->key.ptr;
 
@@ -288,7 +285,7 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
                 index_r++, target++;
 
             if (!*target && !*index_r)
-                return (sowr_RadixTreeNode *)current;
+                return (blrt_RadixTreeNode *)current;
             else if (!*target && *index_r)
             {
                 ch = (size_t)*index_r;
@@ -305,27 +302,27 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index )
 }
 
 inline
-sowr_RadixTreeNode *
-sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index )
+blrt_RadixTreeNode *
+blrt_RadixTree_GetS( const blrt_RadixTree *tree, const blrt_String *index )
 {
-    return sowr_RadixTree_Get(tree, index->ptr);
+    return blrt_RadixTree_Get(tree, index->ptr);
 }
 
 void
-sowr_RadixTree_Walk( const sowr_RadixTreeNode *node, sowr_RadixTreeWalkFunc func )
+blrt_RadixTree_Walk( const blrt_RadixTreeNode *node, blrt_RadixTreeWalkFunc func )
 {
     if (!node)
         return;
 
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
-        sowr_RadixTree_Walk(node->characters[i], func);
+        blrt_RadixTree_Walk(node->characters[i], func);
 
     if (node->data)
         func((void *)node);
 }
 
 size_t
-sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *output )
+blrt_RadixTree_ListAllChildren( const blrt_RadixTreeNode *node, blrt_HashMap *output )
 {
     if (!node)
         return 0ULL;
@@ -333,12 +330,12 @@ sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *ou
     size_t children = 0ULL;
 
     for (size_t i = 0ULL; i < CHAR_MAX; i++)
-        children += sowr_RadixTree_ListAllChildren(node->characters[i], output);
+        children += blrt_RadixTree_ListAllChildren(node->characters[i], output);
 
     if (node->data)
     {
         if (output)
-            sowr_HashMap_InsertCV(output, node->full_key.ptr, node->data_size, node->data);
+            blrt_HashMap_InsertCV(output, node->full_key.ptr, node->data_size, node->data);
         children++;
     }
 
@@ -346,12 +343,12 @@ sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *ou
 }
 
 bool
-sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index )
+blrt_RadixTree_Delete( blrt_RadixTree *tree, const char *index )
 {
     if (!tree)
         return false;
 
-    sowr_RadixTreeNode *iter = &(tree->head);
+    blrt_RadixTreeNode *iter = &(tree->head);
     size_t ch = (size_t)*index;
     while (ch)
     {
@@ -360,7 +357,7 @@ sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index )
 
         else
         {
-            sowr_RadixTreeNode *current = iter->characters[ch];
+            blrt_RadixTreeNode *current = iter->characters[ch];
             const char *index_r = index;
             const char *target = current->key.ptr;
 
@@ -372,7 +369,7 @@ sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index )
                 if (current->data)
                 {
                     current->data_size = 0ULL;
-                    sowr_HeapFree(current->data);
+                    blrt_HeapFree(current->data);
                     current->data = NULL;
                 }
                 return true;
@@ -394,20 +391,20 @@ sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index )
 
 inline
 bool
-sowr_RadixTree_DeleteS( sowr_RadixTree *tree, const sowr_String *index )
+blrt_RadixTree_DeleteS( blrt_RadixTree *tree, const blrt_String *index )
 {
-    return sowr_RadixTree_Delete(tree, index->ptr);
+    return blrt_RadixTree_Delete(tree, index->ptr);
 }
 
 void
-sowr_RadixTree_Destroy( sowr_RadixTree *tree )
+blrt_RadixTree_Destroy( blrt_RadixTree *tree )
 {
-    sowr_RadixTree_Clear(tree);
-    sowr_HeapFree(tree);
+    blrt_RadixTree_Clear(tree);
+    blrt_HeapFree(tree);
 }
 
 void
-sowr_RadixTree_DestroyS( sowr_RadixTree *tree )
+blrt_RadixTree_DestroyS( blrt_RadixTree *tree )
 {
-    sowr_RadixTree_Clear(tree);
+    blrt_RadixTree_Clear(tree);
 }

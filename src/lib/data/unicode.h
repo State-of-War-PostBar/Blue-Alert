@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,27 +27,27 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_DATA_UNICODE_H
-#define SOWR_LIB_DATA_UNICODE_H
+#ifndef BLRT_LIB_DATA_UNICODE_H
+#define BLRT_LIB_DATA_UNICODE_H
 
 #include <pch.h>
 
 #include "../container/vector.h"
 
-typedef uint32_t sowr_Unicode;
+typedef uint32_t blrt_Unicode;
 
-typedef struct sowr_UTF8Sequence
+typedef struct blrt_UTF8Sequence
 {
     size_t length;
     const unsigned char *ptr;
-} sowr_UTF8Sequence;
+} blrt_UTF8Sequence;
 
-typedef struct sowr_UTF16Sequence
+typedef struct blrt_UTF16Sequence
 {
     size_t length;
     const unsigned char *ptr;
     bool terminator;
-} sowr_UTF16Sequence;
+} blrt_UTF16Sequence;
 
 ///
 /// \brief Count utf-8 code points
@@ -63,7 +60,7 @@ typedef struct sowr_UTF16Sequence
 /// \return Number of unicode code points
 ///
 size_t
-sowr_Unicode_CountUTF8CodePoints( const unsigned char *str );
+blrt_Unicode_CountUTF8CodePoints( const unsigned char *str );
 
 ///
 /// \brief Count utf-16 code points
@@ -76,7 +73,7 @@ sowr_Unicode_CountUTF8CodePoints( const unsigned char *str );
 /// \return Number of unicode code points
 ///
 size_t
-sowr_Unicode_CountUTF16CodePoints( const unsigned char *str );
+blrt_Unicode_CountUTF16CodePoints( const unsigned char *str );
 
 ///
 /// \brief Get the next utf-8 sequence
@@ -88,8 +85,8 @@ sowr_Unicode_CountUTF16CodePoints( const unsigned char *str );
 ///
 /// \return Utf-8 sequence information
 ///
-sowr_UTF8Sequence
-sowr_Unicode_NextUTF8Sequence( const unsigned char *str );
+blrt_UTF8Sequence
+blrt_Unicode_NextUTF8Sequence( const unsigned char *str );
 
 ///
 /// \brief Get the next utf-16 sequence
@@ -101,8 +98,8 @@ sowr_Unicode_NextUTF8Sequence( const unsigned char *str );
 ///
 /// \return Utf-16 sequence information
 ///
-sowr_UTF16Sequence
-sowr_Unicode_NextUTF16Sequence( const unsigned char *str );
+blrt_UTF16Sequence
+blrt_Unicode_NextUTF16Sequence( const unsigned char *str );
 
 ///
 /// \brief Decode a utf-8 sequence
@@ -113,8 +110,8 @@ sowr_Unicode_NextUTF16Sequence( const unsigned char *str );
 ///
 /// \return Unicode code point of the sequence
 ///
-sowr_Unicode
-sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq );
+blrt_Unicode
+blrt_Unicode_DecodeUTF8Sequence( const blrt_UTF8Sequence *seq );
 
 ///
 /// \brief Decode a utf-16 sequence
@@ -125,8 +122,8 @@ sowr_Unicode_DecodeUTF8Sequence( const sowr_UTF8Sequence *seq );
 ///
 /// \return Unicode code point of the sequence
 ///
-sowr_Unicode
-sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq );
+blrt_Unicode
+blrt_Unicode_DecodeUTF16Sequence( const blrt_UTF16Sequence *seq );
 
 ///
 /// \brief Length of unicode code point
@@ -138,7 +135,7 @@ sowr_Unicode_DecodeUTF16Sequence( const sowr_UTF16Sequence *seq );
 /// \return Length of utf-8 sequence
 ///
 size_t
-sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp );
+blrt_Unicode_UTF8LengthOfCodePoint( blrt_Unicode cp );
 
 ///
 /// \brief Length of unicode code point
@@ -150,7 +147,7 @@ sowr_Unicode_UTF8LengthOfCodePoint( sowr_Unicode cp );
 /// \return Length of utf-16 sequence
 ///
 size_t
-sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp );
+blrt_Unicode_UTF16LengthOfCodePoint( blrt_Unicode cp );
 
 ///
 /// \brief Encode an unicode code point
@@ -163,7 +160,7 @@ sowr_Unicode_UTF16LengthOfCodePoint( sowr_Unicode cp );
 /// \param output Buffer for output
 ///
 void
-sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output );
+blrt_Unicode_EncodeCodePointUTF8( blrt_Unicode cp, unsigned char *output );
 
 ///
 /// \brief Encode an unicode code point
@@ -176,7 +173,7 @@ sowr_Unicode_EncodeCodePointUTF8( sowr_Unicode cp, unsigned char *output );
 /// \param output Buffer for output
 ///
 void
-sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output );
+blrt_Unicode_EncodeCodePointUTF16( blrt_Unicode cp, unsigned char *output );
 
 ///
 /// \brief Decode an utf-8 string
@@ -185,10 +182,10 @@ sowr_Unicode_EncodeCodePointUTF16( sowr_Unicode cp, unsigned char *output );
 /// <I>The string is assumed to be properly utf-8 encoded.</I>
 ///
 /// \param str Utf-8 string
-/// \param output Vector for output, it should be of sowr_Unicode type
+/// \param output Vector for output, it should be of blrt_Unicode type
 ///
 void
-sowr_Unicode_DecodeUTF8String( const unsigned char *str, sowr_Vector *output );
+blrt_Unicode_DecodeUTF8String( const unsigned char *str, blrt_Vector *output );
 
 ///
 /// \brief Decode an utf-16 string
@@ -197,10 +194,10 @@ sowr_Unicode_DecodeUTF8String( const unsigned char *str, sowr_Vector *output );
 /// <I>The string is assumed to be properly utf-16 encoded.</I>
 ///
 /// \param str Utf-16 string
-/// \param output Vector for output, it should be of sowr_Unicode type
+/// \param output Vector for output, it should be of blrt_Unicode type
 ///
 void
-sowr_Unicode_DecodeUTF16String( const unsigned char *str, sowr_Vector *output );
+blrt_Unicode_DecodeUTF16String( const unsigned char *str, blrt_Vector *output );
 
 ///
 /// \brief Convert utf-8 to utf-16
@@ -212,7 +209,7 @@ sowr_Unicode_DecodeUTF16String( const unsigned char *str, sowr_Vector *output );
 /// \param output Vector for output, it should be of unsigned char type
 ///
 void
-sowr_Unicode_UTF8ToUTF16( const unsigned char *str, sowr_Vector *output );
+blrt_Unicode_UTF8ToUTF16( const unsigned char *str, blrt_Vector *output );
 
 ///
 /// \brief Convert utf-16 to utf-8
@@ -224,6 +221,6 @@ sowr_Unicode_UTF8ToUTF16( const unsigned char *str, sowr_Vector *output );
 /// \param output Vector for output, it should be of unsigned char type
 ///
 void
-sowr_Unicode_UTF16ToUTF8( const unsigned char *str, sowr_Vector *output );
+blrt_Unicode_UTF16ToUTF8( const unsigned char *str, blrt_Vector *output );
 
-#endif // !SOWR_LIB_DATA_UNICODE_H
+#endif // !BLRT_LIB_DATA_UNICODE_H

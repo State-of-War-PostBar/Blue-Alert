@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -37,59 +34,59 @@
 #include "../../memory/heap_memory.h"
 #include "../../type/generic.h"
 
-sowr_File
-sowr_File_OpenR( const char *path )
+blrt_File
+blrt_File_OpenR( const char *path )
 {
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
-    sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
-    sowr_File hdl = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    sowr_Vector_DestroyS(&utf16);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector utf16 = blrt_Vector_CreateS(sizeof(unsigned char), NULL);
+    blrt_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+    blrt_File hdl = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    blrt_Vector_DestroyS(&utf16);
     return hdl;
 #else
     return open(path, O_RDONLY);
 #endif
 }
 
-sowr_File
-sowr_File_OpenW( const char *path, sowr_FileWriteMode mode )
+blrt_File
+blrt_File_OpenW( const char *path, blrt_FileWriteMode mode )
 {
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
-    sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
-    sowr_File hdl = CreateFileW((wchar_t *)(utf16.ptr),
-                        GENERIC_READ | (mode == SOWR_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector utf16 = blrt_Vector_CreateS(sizeof(unsigned char), NULL);
+    blrt_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+    blrt_File hdl = CreateFileW((wchar_t *)(utf16.ptr),
+                        GENERIC_READ | (mode == BLRT_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
                         0, NULL,
-                        mode == SOWR_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
+                        mode == BLRT_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL, NULL);
-    sowr_Vector_DestroyS(&utf16);
+    blrt_Vector_DestroyS(&utf16);
     return hdl;
 #else
-    return open(path, O_RDWR | (mode == SOWR_FIO_WRITE_APPEND ? O_APPEND :
-                              (mode == SOWR_FIO_WRITE_TRUNCATE ? O_TRUNC : O_RDWR)));
+    return open(path, O_RDWR | (mode == BLRT_FIO_WRITE_APPEND ? O_APPEND :
+                              (mode == BLRT_FIO_WRITE_TRUNCATE ? O_TRUNC : O_RDWR)));
 #endif
 }
 
-sowr_File
-sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
+blrt_File
+blrt_File_OpenOrCreate( const char *path, blrt_FileWriteMode mode )
 {
-    sowr_File file = sowr_File_OpenW(path, mode);
-    if (file != SOWR_INVALID_FILE_DESCRIPTOR)
+    blrt_File file = blrt_File_OpenW(path, mode);
+    if (file != BLRT_INVALID_FILE_DESCRIPTOR)
         return file;
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector utf16 = blrt_Vector_CreateS(sizeof(unsigned char), NULL);
 #endif
 
     char *last_dir = strrchr(path, '/');
     if (!last_dir)
     {
     // If path doesn't have the / sign, create the file directly.
-#ifdef SOWR_TARGET_WINDOWS
-        sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+#ifdef BLRT_TARGET_WINDOWS
+        blrt_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
         file = CreateFileW((wchar_t *)(utf16.ptr),
-                        GENERIC_READ | (mode == SOWR_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
+                        GENERIC_READ | (mode == BLRT_FIO_WRITE_APPEND ? FILE_APPEND_DATA : GENERIC_WRITE),
                         0, NULL,
-                        mode == SOWR_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
+                        mode == BLRT_FIO_WRITE_TRUNCATE ? TRUNCATE_EXISTING : OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL, NULL);
 #else
         file = open(path, O_RDWR | O_CREAT, S_IRWXU);
@@ -97,20 +94,20 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
     }
     else
     {
-        sowr_String str = sowr_String_CreateS();
+        blrt_String str = blrt_String_CreateS();
         const char *path_r = path;
         while (*path_r)
         {
             while (*path_r != '/')
             {
-                sowr_String_PushC(&str, *path_r);
+                blrt_String_PushC(&str, *path_r);
                 path_r++;
             }
             if (strcmp(str.ptr, "."))
             {
-#ifdef SOWR_TARGET_WINDOWS
-                sowr_Vector_Clear(&utf16);
-                sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+#ifdef BLRT_TARGET_WINDOWS
+                blrt_Vector_Clear(&utf16);
+                blrt_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
                 CreateDirectoryW((wchar_t *)(utf16.ptr), NULL);
 #else
                 mkdir(str.ptr, S_IRWXU);
@@ -118,29 +115,29 @@ sowr_File_OpenOrCreate( const char *path, sowr_FileWriteMode mode )
             }
             if (path_r == last_dir)
                 break;
-            sowr_String_PushC(&str, '/');
+            blrt_String_PushC(&str, '/');
             path_r++;
         }
-#ifdef SOWR_TARGET_WINDOWS
-        sowr_Vector_Clear(&utf16);
-        sowr_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
+#ifdef BLRT_TARGET_WINDOWS
+        blrt_Vector_Clear(&utf16);
+        blrt_Unicode_UTF8ToUTF16((unsigned char *)path, &utf16);
         file = CreateFileW((wchar_t *)(utf16.ptr), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
 #else
         file = open(path, O_RDWR | O_CREAT, S_IRWXU);
 #endif
-        sowr_String_DestroyS(&str);
+        blrt_String_DestroyS(&str);
     }
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector_DestroyS(&utf16);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector_DestroyS(&utf16);
 #endif
     return file;
 }
 
 void
-sowr_File_Close( sowr_File file )
+blrt_File_Close( blrt_File file )
 {
-    if (file != SOWR_INVALID_FILE_DESCRIPTOR)
-#ifdef SOWR_TARGET_WINDOWS
+    if (file != BLRT_INVALID_FILE_DESCRIPTOR)
+#ifdef BLRT_TARGET_WINDOWS
         CloseHandle(file);
 #else
         close(file);
@@ -148,74 +145,74 @@ sowr_File_Close( sowr_File file )
 }
 
 void
-sowr_File_Mkdir( const char *path )
+blrt_File_Mkdir( const char *path )
 {
-    sowr_String str = sowr_String_CreateS();
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
+    blrt_String str = blrt_String_CreateS();
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector utf16 = blrt_Vector_CreateS(sizeof(unsigned char), NULL);
 #endif
     while (*path)
     {
         while (*path != '/')
         {
-            sowr_String_PushC(&str, *path);
+            blrt_String_PushC(&str, *path);
             path++;
         }
-#ifdef SOWR_TARGET_WINDOWS
-        sowr_Vector_Clear(&utf16);
-        sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+#ifdef BLRT_TARGET_WINDOWS
+        blrt_Vector_Clear(&utf16);
+        blrt_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
         CreateDirectoryW((wchar_t *)(utf16.ptr), NULL);
 #else
         mkdir(str.ptr, S_IRWXU);
 #endif
-        sowr_String_PushC(&str, '/');
+        blrt_String_PushC(&str, '/');
         path++;
     }
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector_DestroyS(&utf16);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector_DestroyS(&utf16);
 #endif
-    sowr_String_DestroyS(&str);
+    blrt_String_DestroyS(&str);
 }
 
 void
-sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
+blrt_File_WalkDir( const char *path, blrt_DirWalkFunc func )
 {
-    sowr_String str = sowr_String_FromS(path);
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_String_PushS(&str, "/*");
-    sowr_Vector utf8 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
-    sowr_Vector utf16 = sowr_Vector_CreateS(sizeof(unsigned char), NULL);
-    sowr_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
+    blrt_String str = blrt_String_FromS(path);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_String_PushS(&str, "/*");
+    blrt_Vector utf8 = blrt_Vector_CreateS(sizeof(unsigned char), NULL);
+    blrt_Vector utf16 = blrt_Vector_CreateS(sizeof(unsigned char), NULL);
+    blrt_Unicode_UTF8ToUTF16((unsigned char *)str.ptr, &utf16);
 
     WIN32_FIND_DATAW find_data;
     HANDLE f_entry = FindFirstFileW(utf16.ptr, &find_data);
     if (f_entry == INVALID_HANDLE_VALUE)
     {
-        sowr_String_DestroyS(&str);
-        sowr_Vector_DestroyS(&utf8);
-        sowr_Vector_DestroyS(&utf16);
+        blrt_String_DestroyS(&str);
+        blrt_Vector_DestroyS(&utf8);
+        blrt_Vector_DestroyS(&utf16);
         return;
     }
 
     do
     {
-        sowr_Unicode_UTF16ToUTF8((unsigned char *)find_data.cFileName, &utf8);
+        blrt_Unicode_UTF16ToUTF8((unsigned char *)find_data.cFileName, &utf8);
         if (!strcmp(utf8.ptr, ".") || !strcmp(utf8.ptr, ".."))
         {
-            sowr_Vector_Clear(&utf8);
+            blrt_Vector_Clear(&utf8);
             continue;
         }
 
-        sowr_String_Clear(&str);
-        sowr_String_PushS(&str, path);
-        sowr_String_PushC(&str, '/');
-        sowr_String_PushS(&str, utf8.ptr);
+        blrt_String_Clear(&str);
+        blrt_String_PushS(&str, path);
+        blrt_String_PushC(&str, '/');
+        blrt_String_PushS(&str, utf8.ptr);
         if (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-            sowr_File_WalkDir(str.ptr, func);
+            blrt_File_WalkDir(str.ptr, func);
         else
             func(str.ptr);
 
-        sowr_Vector_Clear(&utf8);
+        blrt_Vector_Clear(&utf8);
     } while (FindNextFileW(f_entry, &find_data));
 
     FindClose(f_entry);
@@ -224,7 +221,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
 
     if (!dir)
     {
-        sowr_String_DestroyS(&str);
+        blrt_String_DestroyS(&str);
         return;
     }
 
@@ -233,7 +230,7 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
 
     if (!f_entry)
     {
-        sowr_String_DestroyS(&str);
+        blrt_String_DestroyS(&str);
         return;
     }
 
@@ -242,29 +239,29 @@ sowr_File_WalkDir( const char *path, sowr_DirWalkFunc func )
         if (!strcmp(f_entry->d_name, ".") || !strcmp(f_entry->d_name, ".."))
             continue;
 
-        sowr_String_Clear(&str);
-        sowr_String_PushS(&str, path);
-        sowr_String_PushC(&str, '/');
-        sowr_String_PushS(&str, f_entry->d_name);
+        blrt_String_Clear(&str);
+        blrt_String_PushS(&str, path);
+        blrt_String_PushC(&str, '/');
+        blrt_String_PushS(&str, f_entry->d_name);
         if (!stat(str.ptr, &f_stat) && S_ISDIR(f_stat.st_mode))
-            sowr_File_WalkDir(str.ptr, func);
+            blrt_File_WalkDir(str.ptr, func);
         else
             func(str.ptr);
     } while ((f_entry = readdir(dir)));
 
     closedir(dir);
 #endif
-#ifdef SOWR_TARGET_WINDOWS
-    sowr_Vector_DestroyS(&utf16);
-    sowr_Vector_DestroyS(&utf8);
+#ifdef BLRT_TARGET_WINDOWS
+    blrt_Vector_DestroyS(&utf16);
+    blrt_Vector_DestroyS(&utf8);
 #endif
-    sowr_String_DestroyS(&str);
+    blrt_String_DestroyS(&str);
 }
 
 size_t
-sowr_File_GetSize( sowr_File file )
+blrt_File_GetSize( blrt_File file )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     LARGE_INTEGER sz;
     GetFileSizeEx(file, &sz);
     return sz.QuadPart;
@@ -276,9 +273,9 @@ sowr_File_GetSize( sowr_File file )
 }
 
 bool
-sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz )
+blrt_File_ReadContent( blrt_File file, void *buffer, size_t sz )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     return ReadFile(file, buffer, sz, NULL, NULL);
 #else
     return read(file, buffer, sz);
@@ -286,9 +283,9 @@ sowr_File_ReadContent( sowr_File file, void *buffer, size_t sz )
 }
 
 bool
-sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz )
+blrt_File_WriteContent( blrt_File file, const void *buffer, size_t sz )
 {
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     return WriteFile(file, buffer, sz, NULL, NULL);
 #else
     return write(file, buffer, sz);
@@ -296,271 +293,271 @@ sowr_File_WriteContent( sowr_File file, const void *buffer, size_t sz )
 }
 
 void
-sowr_File_WriteContents( sowr_File file, size_t count, ... )
+blrt_File_WriteContents( blrt_File file, size_t count, ... )
 {
     va_list args;
     va_start(args, count);
-    sowr_File_WriteContentsV(file, count, &args);
+    blrt_File_WriteContentsV(file, count, &args);
     va_end(args);
 }
 
 void
-sowr_File_WriteContentsV( sowr_File file, size_t count, va_list *args )
+blrt_File_WriteContentsV( blrt_File file, size_t count, va_list *args )
 {
     va_list args_cpy;
     va_copy(args_cpy, *args);
     for (size_t i = 0ULL; i < count; i++)
     {
-        sowr_GenericType data = va_arg(args_cpy, sowr_GenericType);
+        blrt_GenericType data = va_arg(args_cpy, blrt_GenericType);
         switch (data.type)
         {
-            case SOWR_TYPE_BOOL:
+            case BLRT_TYPE_BOOL:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_bool), sizeof(bool));
+                blrt_File_WriteContent(file, &(data.data.reg.as_bool), sizeof(bool));
                 break;
             }
-            case SOWR_TYPE_CHAR:
+            case BLRT_TYPE_CHAR:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_char), sizeof(char));
+                blrt_File_WriteContent(file, &(data.data.reg.as_char), sizeof(char));
                 break;
             }
-            case SOWR_TYPE_UCHAR:
+            case BLRT_TYPE_UCHAR:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uchar), sizeof(unsigned char));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uchar), sizeof(unsigned char));
                 break;
             }
-            case SOWR_TYPE_SHORT:
+            case BLRT_TYPE_SHORT:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_short), sizeof(short));
+                blrt_File_WriteContent(file, &(data.data.reg.as_short), sizeof(short));
                 break;
             }
-            case SOWR_TYPE_USHORT:
+            case BLRT_TYPE_USHORT:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_ushort), sizeof(unsigned short));
+                blrt_File_WriteContent(file, &(data.data.reg.as_ushort), sizeof(unsigned short));
                 break;
             }
-            case SOWR_TYPE_INT:
+            case BLRT_TYPE_INT:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int), sizeof(int));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int), sizeof(int));
                 break;
             }
-            case SOWR_TYPE_UINT:
+            case BLRT_TYPE_UINT:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint), sizeof(unsigned int));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint), sizeof(unsigned int));
                 break;
             }
-            case SOWR_TYPE_LONG:
+            case BLRT_TYPE_LONG:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_long), sizeof(long));
+                blrt_File_WriteContent(file, &(data.data.reg.as_long), sizeof(long));
                 break;
             }
-            case SOWR_TYPE_ULONG:
+            case BLRT_TYPE_ULONG:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_ulong), sizeof(unsigned long));
+                blrt_File_WriteContent(file, &(data.data.reg.as_ulong), sizeof(unsigned long));
                 break;
             }
-            case SOWR_TYPE_LONGLONG:
+            case BLRT_TYPE_LONGLONG:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_long_long), sizeof(long long));
+                blrt_File_WriteContent(file, &(data.data.reg.as_long_long), sizeof(long long));
                 break;
             }
-            case SOWR_TYPE_ULONGLONG:
+            case BLRT_TYPE_ULONGLONG:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_ulong_long), sizeof(unsigned long long));
+                blrt_File_WriteContent(file, &(data.data.reg.as_ulong_long), sizeof(unsigned long long));
                 break;
             }
-            case SOWR_TYPE_CHAR16:
+            case BLRT_TYPE_CHAR16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_char16), sizeof(char16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_char16), sizeof(char16_t));
                 break;
             }
-            case SOWR_TYPE_CHAR32:
+            case BLRT_TYPE_CHAR32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_char32), sizeof(char32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_char32), sizeof(char32_t));
                 break;
             }
-            case SOWR_TYPE_INT_8:
+            case BLRT_TYPE_INT_8:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_8), sizeof(int8_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_8), sizeof(int8_t));
                 break;
             }
-            case SOWR_TYPE_UINT_8:
+            case BLRT_TYPE_UINT_8:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_8), sizeof(uint8_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_8), sizeof(uint8_t));
                 break;
             }
-            case SOWR_TYPE_INT_16:
+            case BLRT_TYPE_INT_16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_16), sizeof(int16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_16), sizeof(int16_t));
                 break;
             }
-            case SOWR_TYPE_UINT_16:
+            case BLRT_TYPE_UINT_16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_16), sizeof(uint16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_16), sizeof(uint16_t));
                 break;
             }
-            case SOWR_TYPE_INT_32:
+            case BLRT_TYPE_INT_32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_32), sizeof(int32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_32), sizeof(int32_t));
                 break;
             }
-            case SOWR_TYPE_UINT_32:
+            case BLRT_TYPE_UINT_32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_32), sizeof(uint32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_32), sizeof(uint32_t));
                 break;
             }
-            case SOWR_TYPE_INT_64:
+            case BLRT_TYPE_INT_64:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_64), sizeof(int64_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_64), sizeof(int64_t));
                 break;
             }
-            case SOWR_TYPE_UINT_64:
+            case BLRT_TYPE_UINT_64:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_64), sizeof(uint64_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_64), sizeof(uint64_t));
                 break;
             }
-            case SOWR_TYPE_INT_LEAST_8:
+            case BLRT_TYPE_INT_LEAST_8:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_least8), sizeof(int_least8_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_least8), sizeof(int_least8_t));
                 break;
             }
-            case SOWR_TYPE_UINT_LEAST_8:
+            case BLRT_TYPE_UINT_LEAST_8:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least8), sizeof(uint_least8_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_least8), sizeof(uint_least8_t));
                 break;
             }
-            case SOWR_TYPE_INT_LEAST_16:
+            case BLRT_TYPE_INT_LEAST_16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_least16), sizeof(int_least16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_least16), sizeof(int_least16_t));
                 break;
             }
-            case SOWR_TYPE_UINT_LEAST_16:
+            case BLRT_TYPE_UINT_LEAST_16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least16), sizeof(uint_least16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_least16), sizeof(uint_least16_t));
                 break;
             }
-            case SOWR_TYPE_INT_LEAST_32:
+            case BLRT_TYPE_INT_LEAST_32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_least32), sizeof(int_least32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_least32), sizeof(int_least32_t));
                 break;
             }
-            case SOWR_TYPE_UINT_LEAST_32:
+            case BLRT_TYPE_UINT_LEAST_32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least32), sizeof(uint_least32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_least32), sizeof(uint_least32_t));
                 break;
             }
-            case SOWR_TYPE_INT_LEAST_64:
+            case BLRT_TYPE_INT_LEAST_64:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_least64), sizeof(int_least64_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_least64), sizeof(int_least64_t));
                 break;
             }
-            case SOWR_TYPE_UINT_LEAST_64:
+            case BLRT_TYPE_UINT_LEAST_64:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_least64), sizeof(uint_least64_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_least64), sizeof(uint_least64_t));
                 break;
             }
-            case SOWR_TYPE_INT_FAST_8:
+            case BLRT_TYPE_INT_FAST_8:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast8), sizeof(int_fast8_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_fast8), sizeof(int_fast8_t));
                 break;
             }
-            case SOWR_TYPE_UINT_FAST_8:
+            case BLRT_TYPE_UINT_FAST_8:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast8), sizeof(uint_fast8_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_fast8), sizeof(uint_fast8_t));
                 break;
             }
-            case SOWR_TYPE_INT_FAST_16:
+            case BLRT_TYPE_INT_FAST_16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast16), sizeof(int_fast16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_fast16), sizeof(int_fast16_t));
                 break;
             }
-            case SOWR_TYPE_UINT_FAST_16:
+            case BLRT_TYPE_UINT_FAST_16:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast16), sizeof(uint_fast16_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_fast16), sizeof(uint_fast16_t));
                 break;
             }
-            case SOWR_TYPE_INT_FAST_32:
+            case BLRT_TYPE_INT_FAST_32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast32), sizeof(int_fast32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_fast32), sizeof(int_fast32_t));
                 break;
             }
-            case SOWR_TYPE_UINT_FAST_32:
+            case BLRT_TYPE_UINT_FAST_32:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast32), sizeof(uint_fast32_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_fast32), sizeof(uint_fast32_t));
                 break;
             }
-            case SOWR_TYPE_INT_FAST_64:
+            case BLRT_TYPE_INT_FAST_64:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_fast64), sizeof(int_fast64_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_fast64), sizeof(int_fast64_t));
                 break;
             }
-            case SOWR_TYPE_UINT_FAST_64:
+            case BLRT_TYPE_UINT_FAST_64:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_fast64), sizeof(uint_fast64_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_fast64), sizeof(uint_fast64_t));
                 break;
             }
-            case SOWR_TYPE_SIZE:
+            case BLRT_TYPE_SIZE:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_size), sizeof(size_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_size), sizeof(size_t));
                 break;
             }
-            case SOWR_TYPE_PTR_DIFF:
+            case BLRT_TYPE_PTR_DIFF:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_ptr_diff), sizeof(ptrdiff_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_ptr_diff), sizeof(ptrdiff_t));
                 break;
             }
-            case SOWR_TYPE_INT_MAX:
+            case BLRT_TYPE_INT_MAX:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_int_max), sizeof(intmax_t));
+                blrt_File_WriteContent(file, &(data.data.reg.as_int_max), sizeof(intmax_t));
                 break;
             }
-            case SOWR_TYPE_UINT_MAX:
+            case BLRT_TYPE_UINT_MAX:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_uint_max), sizeof(uintmax_t));
-                break;
-            }
-
-            case SOWR_TYPE_FLOAT:
-            {
-                sowr_File_WriteContent(file, &(data.data.flt.as_float), sizeof(float));
-                break;
-            }
-            case SOWR_TYPE_DOUBLE:
-            {
-                sowr_File_WriteContent(file, &(data.data.flt.as_double), sizeof(double));
-                break;
-            }
-            case SOWR_TYPE_LDOUBLE:
-            {
-                sowr_File_WriteContent(file, &(data.data.flt.as_ldouble), sizeof(long double));
+                blrt_File_WriteContent(file, &(data.data.reg.as_uint_max), sizeof(uintmax_t));
                 break;
             }
 
-            case SOWR_TYPE_STRING:
+            case BLRT_TYPE_FLOAT:
+            {
+                blrt_File_WriteContent(file, &(data.data.flt.as_float), sizeof(float));
+                break;
+            }
+            case BLRT_TYPE_DOUBLE:
+            {
+                blrt_File_WriteContent(file, &(data.data.flt.as_double), sizeof(double));
+                break;
+            }
+            case BLRT_TYPE_LDOUBLE:
+            {
+                blrt_File_WriteContent(file, &(data.data.flt.as_ldouble), sizeof(long double));
+                break;
+            }
+
+            case BLRT_TYPE_STRING:
             {
                 const char *str = data.data.reg.as_string;
                 size_t len = strlen(str);
-                sowr_File_WriteContent(file, str, len);
+                blrt_File_WriteContent(file, str, len);
                 break;
             }
-            case SOWR_TYPE_FUNC_PTR:
-            case SOWR_TYPE_VOID_PTR:
+            case BLRT_TYPE_FUNC_PTR:
+            case BLRT_TYPE_VOID_PTR:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_void_ptr), sizeof(void *));
+                blrt_File_WriteContent(file, &(data.data.reg.as_void_ptr), sizeof(void *));
                 break;
             }
-            case SOWR_TYPE_PTR:
+            case BLRT_TYPE_PTR:
             {
-                sowr_File_WriteContent(file, &(data.data.reg.as_ptr), sizeof(sowr_Ptr));
+                blrt_File_WriteContent(file, &(data.data.reg.as_ptr), sizeof(blrt_Ptr));
                 break;
             }
-            case SOWR_TYPE_ARRAY:
+            case BLRT_TYPE_ARRAY:
             {
-                sowr_File_WriteContent(file, data.data.reg.as_arr, data.data_size);
+                blrt_File_WriteContent(file, data.data.reg.as_arr, data.data_size);
                 break;
             }
             default:
-                sowr_File_WriteContent(file, &(data.data), sizeof(sowr_GenericTypeData));
+                blrt_File_WriteContent(file, &(data.data), sizeof(blrt_GenericTypeData));
         }
     }
     va_end(args_cpy);

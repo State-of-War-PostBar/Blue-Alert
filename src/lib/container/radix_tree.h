@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,32 +27,32 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_RADIX_TREE_H
-#define SOWR_LIB_CONTAINER_RADIX_TREE_H
+#ifndef BLRT_LIB_CONTAINER_RADIX_TREE_H
+#define BLRT_LIB_CONTAINER_RADIX_TREE_H
 
 #include <pch.h>
 
 #include "hash_map.h"
 #include "string.h"
 
-typedef void (*sowr_RadixTreeFreeFunc)( void * );
-typedef void (*sowr_RadixTreeWalkFunc)( void * );
+typedef void (*blrt_RadixTreeFreeFunc)( void * );
+typedef void (*blrt_RadixTreeWalkFunc)( void * );
 
-typedef struct sowr_RadixTreeNode
+typedef struct blrt_RadixTreeNode
 {
     size_t children;
     size_t data_size;
     void *data;
-    sowr_String key;
-    sowr_String full_key;
-    struct sowr_RadixTreeNode *characters[CHAR_MAX];
-} sowr_RadixTreeNode;
+    blrt_String key;
+    blrt_String full_key;
+    struct blrt_RadixTreeNode *characters[CHAR_MAX];
+} blrt_RadixTreeNode;
 
-typedef struct sowr_RadixTree
+typedef struct blrt_RadixTree
 {
-    sowr_RadixTreeFreeFunc free_func;
-    sowr_RadixTreeNode head;
-} sowr_RadixTree;
+    blrt_RadixTreeFreeFunc free_func;
+    blrt_RadixTreeNode head;
+} blrt_RadixTree;
 
 ///
 /// \brief Create a radix tree
@@ -66,21 +63,21 @@ typedef struct sowr_RadixTree
 ///
 /// \return Created radix tree
 ///
-sowr_RadixTree *
-sowr_RadixTree_Create( sowr_RadixTreeFreeFunc free_func );
+blrt_RadixTree *
+blrt_RadixTree_Create( blrt_RadixTreeFreeFunc free_func );
 
 ///
 /// \brief Create a radix tree
 ///
 /// Create a radix tree by stack ready to use.<BR />
-/// <B>The created radix tree must be destroyed with \a sowr_RadixTree_DestroyS().</B>
+/// <B>The created radix tree must be destroyed with \a blrt_RadixTree_DestroyS().</B>
 ///
 /// \param free_func Function to call when freeing elements
 ///
 /// \return Created radix tree
 ///
-sowr_RadixTree
-sowr_RadixTree_CreateS( sowr_RadixTreeFreeFunc free_func );
+blrt_RadixTree
+blrt_RadixTree_CreateS( blrt_RadixTreeFreeFunc free_func );
 
 ///
 /// \brief Clear the radix tree
@@ -90,7 +87,7 @@ sowr_RadixTree_CreateS( sowr_RadixTreeFreeFunc free_func );
 /// \param tree Radix tree to clear
 ///
 void
-sowr_RadixTree_Clear( sowr_RadixTree *tree );
+blrt_RadixTree_Clear( blrt_RadixTree *tree );
 
 ///
 /// \brief Insert an element to radix tree
@@ -103,7 +100,7 @@ sowr_RadixTree_Clear( sowr_RadixTree *tree );
 /// \param data Data to insert
 ///
 void
-sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size, const void *data );
+blrt_RadixTree_Insert( blrt_RadixTree *tree, const char *index, size_t data_size, const void *data );
 
 ///
 /// \brief Insert an element to radix tree
@@ -116,7 +113,7 @@ sowr_RadixTree_Insert( sowr_RadixTree *tree, const char *index, size_t data_size
 /// \param data Data to insert
 ///
 void
-sowr_RadixTree_InsertS( sowr_RadixTree *tree, const sowr_String *index, size_t data_size, const void *data );
+blrt_RadixTree_InsertS( blrt_RadixTree *tree, const blrt_String *index, size_t data_size, const void *data );
 
 ///
 /// \brief Get an element from radix tree
@@ -128,8 +125,8 @@ sowr_RadixTree_InsertS( sowr_RadixTree *tree, const sowr_String *index, size_t d
 ///
 /// \return The trie node containing data if found, NULL otherwise
 ///
-sowr_RadixTreeNode *
-sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index );
+blrt_RadixTreeNode *
+blrt_RadixTree_Get( const blrt_RadixTree *tree, const char *index );
 
 ///
 /// \brief Get an element from radix tree
@@ -141,8 +138,8 @@ sowr_RadixTree_Get( const sowr_RadixTree *tree, const char *index );
 ///
 /// \return The trie node containing data if found, NULL otherwise
 ///
-sowr_RadixTreeNode *
-sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index );
+blrt_RadixTreeNode *
+blrt_RadixTree_GetS( const blrt_RadixTree *tree, const blrt_String *index );
 
 ///
 /// Walk the radix tree
@@ -153,7 +150,7 @@ sowr_RadixTree_GetS( const sowr_RadixTree *tree, const sowr_String *index );
 /// \param func Function for walking
 ///
 void
-sowr_RadixTree_Walk( const sowr_RadixTreeNode *node, sowr_RadixTreeWalkFunc func );
+blrt_RadixTree_Walk( const blrt_RadixTreeNode *node, blrt_RadixTreeWalkFunc func );
 
 ///
 /// \brief List all the children of a node
@@ -166,7 +163,7 @@ sowr_RadixTree_Walk( const sowr_RadixTreeNode *node, sowr_RadixTreeWalkFunc func
 /// \return The number of children listed
 ///
 size_t
-sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *output );
+blrt_RadixTree_ListAllChildren( const blrt_RadixTreeNode *node, blrt_HashMap *output );
 
 ///
 /// \brief Delete an element from radix tree
@@ -179,7 +176,7 @@ sowr_RadixTree_ListAllChildren( const sowr_RadixTreeNode *node, sowr_HashMap *ou
 /// \return If anything is deleted
 ///
 bool
-sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index );
+blrt_RadixTree_Delete( blrt_RadixTree *tree, const char *index );
 
 ///
 /// \brief Delete an element from radix tree
@@ -192,7 +189,7 @@ sowr_RadixTree_Delete( sowr_RadixTree *tree, const char *index );
 /// \return If anything is deleted
 ///
 bool
-sowr_RadixTree_DeleteS( sowr_RadixTree *tree, const sowr_String *index );
+blrt_RadixTree_DeleteS( blrt_RadixTree *tree, const blrt_String *index );
 
 ///
 /// \brief Destroy the radix tree
@@ -202,16 +199,16 @@ sowr_RadixTree_DeleteS( sowr_RadixTree *tree, const sowr_String *index );
 /// \param tree Radix tree to destroy
 ///
 void
-sowr_RadixTree_Destroy( sowr_RadixTree *tree );
+blrt_RadixTree_Destroy( blrt_RadixTree *tree );
 
 ///
 /// \brief Destroy the radix tree
 ///
-/// Destroy the radix tree created by \a sowr_RadixTree_CreateS().
+/// Destroy the radix tree created by \a blrt_RadixTree_CreateS().
 ///
 /// \param tree Radix tree to destroy
 ///
 void
-sowr_RadixTree_DestroyS( sowr_RadixTree *tree );
+blrt_RadixTree_DestroyS( blrt_RadixTree *tree );
 
-#endif // !SOWR_LIB_CONTAINER_RADIX_TREE_H
+#endif // !BLRT_LIB_CONTAINER_RADIX_TREE_H

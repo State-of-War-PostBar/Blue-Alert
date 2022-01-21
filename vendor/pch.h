@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_PCH_H
-#define SOWR_PCH_H
+#ifndef BLRT_PCH_H
+#define BLRT_PCH_H
 
 #include <assert.h>
 #include <complex.h>
@@ -68,25 +65,25 @@
 #include <wctype.h>
 
 #ifdef _WIN32
-    #define SOWR_TARGET_WINDOWS
+    #define BLRT_TARGET_WINDOWS
 #elif defined __MACH__ && defined __APPLE__
-    #define SOWR_TARGET_MACOS
-    #define SOWR_TARGET_POSIX
+    #define BLRT_TARGET_MACOS
+    #define BLRT_TARGET_POSIX
 #else
-    #define SOWR_TARGET_POSIX
+    #define BLRT_TARGET_POSIX
 #endif
 
 #ifdef _DEBUG
-    #define SOWR_BUILD_DEBUG
+    #define BLRT_BUILD_DEBUG
 #else
-    #define SOWR_BUILD_RELEASE
+    #define BLRT_BUILD_RELEASE
 #endif
 
-#ifdef SOWR_TARGET_WINDOWS
+#ifdef BLRT_TARGET_WINDOWS
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #endif
 
-#define SOWR_STRINGIFY(s) #s
+#define BLRT_STRINGIFY(s) #s
 
-#endif // !SOWR_PCH_H
+#endif // !BLRT_PCH_H

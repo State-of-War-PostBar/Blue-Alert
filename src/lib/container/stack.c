@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -33,97 +30,97 @@
 #include "stack.h"
 
 inline
-sowr_Stack *
-sowr_Stack_Create ( size_t elem_size, sowr_StackFreeFunc free_func )
+blrt_Stack *
+blrt_Stack_Create ( size_t elem_size, blrt_StackFreeFunc free_func )
 {
-    return sowr_Vector_Create(elem_size, free_func);
+    return blrt_Vector_Create(elem_size, free_func);
 }
 
 inline
-sowr_Stack
-sowr_Stack_CreateS ( size_t elem_size, sowr_StackFreeFunc free_func )
+blrt_Stack
+blrt_Stack_CreateS ( size_t elem_size, blrt_StackFreeFunc free_func )
 {
-    return sowr_Vector_CreateS(elem_size, free_func);
-}
-
-inline
-void *
-sowr_Stack_Last( const sowr_Stack *stack )
-{
-    return sowr_Vector_Last(stack);
+    return blrt_Vector_CreateS(elem_size, free_func);
 }
 
 inline
 void *
-sowr_Stack_Find( const sowr_Stack *stack, const void *data, sowr_StackCmpFunc cmp )
+blrt_Stack_Last( const blrt_Stack *stack )
 {
-    return sowr_Vector_Find(stack, data, cmp);
+    return blrt_Vector_Last(stack);
+}
+
+inline
+void *
+blrt_Stack_Find( const blrt_Stack *stack, const void *data, blrt_StackCmpFunc cmp )
+{
+    return blrt_Vector_Find(stack, data, cmp);
 }
 
 inline
 void
-sowr_Stack_Expand( sowr_Stack *stack )
+blrt_Stack_Expand( blrt_Stack *stack )
 {
-    sowr_Vector_Expand(stack);
+    blrt_Vector_Expand(stack);
 }
 
 inline
 void
-sowr_Stack_ExpandUntil( sowr_Stack *stack, size_t size )
+blrt_Stack_ExpandUntil( blrt_Stack *stack, size_t size )
 {
-    sowr_Vector_ExpandUntil(stack, size);
+    blrt_Vector_ExpandUntil(stack, size);
 }
 
 void
-sowr_Stack_Eat( sowr_Stack *stack, sowr_StackEatFunc func )
+blrt_Stack_Eat( blrt_Stack *stack, blrt_StackEatFunc func )
 {
     if (!stack->length)
         return;
 
     for (size_t i = stack->length - 1ULL; i > 0ULL; i--)
-        func(sowr_Vector_PtrAt(stack, i));
-    func(sowr_Vector_First(stack));
-    sowr_Stack_Clear(stack);
+        func(blrt_Vector_PtrAt(stack, i));
+    func(blrt_Vector_First(stack));
+    blrt_Stack_Clear(stack);
 }
 
 inline
 void
-sowr_Stack_Clear( sowr_Stack *stack )
+blrt_Stack_Clear( blrt_Stack *stack )
 {
-    sowr_Vector_Clear(stack);
+    blrt_Vector_Clear(stack);
 }
 
 inline
 void
-sowr_Stack_ShrinkToFit( sowr_Stack *stack )
+blrt_Stack_ShrinkToFit( blrt_Stack *stack )
 {
-    sowr_Vector_ShrinkToFit(stack);
+    blrt_Vector_ShrinkToFit(stack);
 }
 
 inline
 void
-sowr_Stack_Push( sowr_Stack *stack, const void *elem )
+blrt_Stack_Push( blrt_Stack *stack, const void *elem )
 {
-    sowr_Vector_Push(stack, elem);
+    blrt_Vector_Push(stack, elem);
 }
 
 inline
 void
-sowr_Stack_Pop( sowr_Stack *stack, void *ptr_retrieve )
+blrt_Stack_Pop( blrt_Stack *stack, void *ptr_retrieve )
 {
-    sowr_Vector_Pop(stack, ptr_retrieve);
+    blrt_Vector_Pop(stack, ptr_retrieve);
 }
 
 inline
 void
-sowr_Stack_Destroy( sowr_Stack *stack )
+blrt_Stack_Destroy( blrt_Stack *stack )
 {
-    sowr_Vector_Destroy(stack);
+    blrt_Vector_Destroy(stack);
 }
 
 inline
 void
-sowr_Stack_DestroyS( sowr_Stack *stack )
+blrt_Stack_DestroyS( blrt_Stack *stack )
 {
-    sowr_Vector_DestroyS(stack);
+    blrt_Vector_DestroyS(stack);
 }

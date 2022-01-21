@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -33,7 +30,7 @@
 #include "bytes.h"
 
 bool
-sowr_IsLittleEndian( void )
+blrt_IsLittleEndian( void )
 {
     const short num = 1;
     const signed char *const ptr = (const signed char *const) &num;
@@ -42,7 +39,7 @@ sowr_IsLittleEndian( void )
 
 inline
 void
-sowr_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r )
+blrt_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r )
 {
     if (!sz)
         return;
@@ -54,8 +51,9 @@ sowr_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r )
     memcpy(b_r, b_lr, sz);
 }
 
+inline
 void
-sowr_SwapEndian( size_t length, unsigned char *bytes )
+blrt_SwapEndian( size_t length, unsigned char *bytes )
 {
     unsigned char byte1 = 0, byte2 = 0;
     for (size_t i = 0ULL, j = length - 1ULL; i < j; i++, j--)
@@ -69,14 +67,14 @@ sowr_SwapEndian( size_t length, unsigned char *bytes )
 
 inline
 uint16_t
-sowr_SwapEndian16( uint16_t val )
+blrt_SwapEndian16( uint16_t val )
 {
     return (val << 010U) | (val >> 010U);
 }
 
 inline
 uint32_t
-sowr_SwapEndian32( uint32_t val )
+blrt_SwapEndian32( uint32_t val )
 {
     return (val & 0xff000000U) >>  030U |
             (val & 0x00ff0000U) >> 010U |
@@ -86,7 +84,7 @@ sowr_SwapEndian32( uint32_t val )
 
 inline
 uint64_t
-sowr_SwapEndian64( uint64_t val )
+blrt_SwapEndian64( uint64_t val )
 {
     return (val & 0xff00000000000000ULL) >>  070U |
             (val & 0x00ff000000000000ULL) >> 050U |
@@ -100,7 +98,7 @@ sowr_SwapEndian64( uint64_t val )
 
 inline
 void
-sowr_FlipAtomicBool( atomic_bool *val )
+blrt_FlipAtomicBool( atomic_bool *val )
 {
     bool old = false;
     do
@@ -111,28 +109,28 @@ sowr_FlipAtomicBool( atomic_bool *val )
 
 inline
 uint32_t
-sowr_RotateLeft32( uint32_t x, unsigned int n )
+blrt_RotateLeft32( uint32_t x, unsigned int n )
 {
     return (x << n) | (x >> (32 - n));
 }
 
 inline
 uint32_t
-sowr_RotateRight32( uint32_t x, unsigned int n )
+blrt_RotateRight32( uint32_t x, unsigned int n )
 {
     return (x >> n) | (x << (32 - n));
 }
 
 inline
 uint64_t
-sowr_RotateLeft64( uint64_t x, unsigned int n )
+blrt_RotateLeft64( uint64_t x, unsigned int n )
 {
     return (x << n) | (x >> (64 - n));
 }
 
 inline
 uint64_t
-sowr_RotateRight64( uint64_t x, unsigned int n )
+blrt_RotateRight64( uint64_t x, unsigned int n )
 {
     return (x >> n) | (x << (64 - n));
 }

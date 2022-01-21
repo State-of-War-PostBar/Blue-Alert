@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,28 +27,28 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_LINKED_LIST_H
-#define SOWR_LIB_CONTAINER_LINKED_LIST_H
+#ifndef BLRT_LIB_CONTAINER_LINKED_LIST_H
+#define BLRT_LIB_CONTAINER_LINKED_LIST_H
 
 #include <pch.h>
 
-typedef void (*sowr_LinkedListFreeFunc)( void * );
-typedef void (*sowr_LinkedListWalkFunc)( void * );
-typedef bool (*sowr_LinkedListCmpFunc)( const void *, const void * );
+typedef void (*blrt_LinkedListFreeFunc)( void * );
+typedef void (*blrt_LinkedListWalkFunc)( void * );
+typedef bool (*blrt_LinkedListCmpFunc)( const void *, const void * );
 
-typedef struct sowr_LinkedListNode
+typedef struct blrt_LinkedListNode
 {
     size_t data_size;
     void *data;
-    struct sowr_LinkedListNode *next;
-} sowr_LinkedListNode;
+    struct blrt_LinkedListNode *next;
+} blrt_LinkedListNode;
 
-typedef struct sowr_LinkedList
+typedef struct blrt_LinkedList
 {
     size_t length;
-    sowr_LinkedListFreeFunc free_func;
-    sowr_LinkedListNode head;
-} sowr_LinkedList;
+    blrt_LinkedListFreeFunc free_func;
+    blrt_LinkedListNode head;
+} blrt_LinkedList;
 
 ///
 /// \brief Create a linked list
@@ -62,21 +59,21 @@ typedef struct sowr_LinkedList
 ///
 /// \return Created linked list
 ///
-sowr_LinkedList *
-sowr_LinkedList_Create( sowr_LinkedListFreeFunc free_func );
+blrt_LinkedList *
+blrt_LinkedList_Create( blrt_LinkedListFreeFunc free_func );
 
 ///
 /// \brief Create a linked list
 ///
 /// Create a linked list ready to use by stack.<BR />
-/// <B>The created list must be destroyed by \a sowr_LinkedList_DestroyS().</B>
+/// <B>The created list must be destroyed by \a blrt_LinkedList_DestroyS().</B>
 ///
 /// \param free_func Function to call when freeing an element
 ///
 /// \return Created linked list
 ///
-sowr_LinkedList
-sowr_LinkedList_CreateS( sowr_LinkedListFreeFunc free_func );
+blrt_LinkedList
+blrt_LinkedList_CreateS( blrt_LinkedListFreeFunc free_func );
 
 ///
 /// \brief Walk a linked list
@@ -87,7 +84,7 @@ sowr_LinkedList_CreateS( sowr_LinkedListFreeFunc free_func );
 /// \param func Function for walking
 ///
 void
-sowr_LinkedList_Walk( sowr_LinkedList *list, sowr_LinkedListWalkFunc func );
+blrt_LinkedList_Walk( blrt_LinkedList *list, blrt_LinkedListWalkFunc func );
 
 ///
 /// \brief Clear a linked list
@@ -97,7 +94,7 @@ sowr_LinkedList_Walk( sowr_LinkedList *list, sowr_LinkedListWalkFunc func );
 /// \param list List to clear
 ///
 void
-sowr_LinkedList_Clear( sowr_LinkedList *list );
+blrt_LinkedList_Clear( blrt_LinkedList *list );
 
 ///
 /// \brief Insert data to list
@@ -109,7 +106,7 @@ sowr_LinkedList_Clear( sowr_LinkedList *list );
 /// \param data Data to insert
 ///
 void
-sowr_LinkedList_Insert( sowr_LinkedList *list, size_t data_size, const void *data );
+blrt_LinkedList_Insert( blrt_LinkedList *list, size_t data_size, const void *data );
 
 ///
 /// \brief Pop the first element
@@ -121,7 +118,7 @@ sowr_LinkedList_Insert( sowr_LinkedList *list, size_t data_size, const void *dat
 /// \param ptr_retrieve Pointer to retrieve the element if needed
 ///
 void
-sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve );
+blrt_LinkedList_Pop( blrt_LinkedList *list, void *ptr_retrieve );
 
 ///
 /// \brief Find an element
@@ -134,8 +131,8 @@ sowr_LinkedList_Pop( sowr_LinkedList *list, void *ptr_retrieve );
 ///
 /// \return The node containing the element if found, NULL otherwise.
 ///
-sowr_LinkedListNode *
-sowr_LinkedList_Find( const sowr_LinkedList *list, const void *data, sowr_LinkedListCmpFunc func );
+blrt_LinkedListNode *
+blrt_LinkedList_Find( const blrt_LinkedList *list, const void *data, blrt_LinkedListCmpFunc func );
 
 ///
 /// \brief Extract elements
@@ -152,7 +149,7 @@ sowr_LinkedList_Find( const sowr_LinkedList *list, const void *data, sowr_Linked
 /// \return Successfully extracted elements count
 ///
 size_t
-sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCmpFunc func, void *ptr_retrieve );
+blrt_LinkedList_Take( blrt_LinkedList *list, const void *data, blrt_LinkedListCmpFunc func, void *ptr_retrieve );
 
 ///
 /// \brief Destroy a linked list
@@ -162,16 +159,16 @@ sowr_LinkedList_Take( sowr_LinkedList *list, const void *data, sowr_LinkedListCm
 /// \param list List to destroy
 ///
 void
-sowr_LinkedList_Destroy( sowr_LinkedList *list );
+blrt_LinkedList_Destroy( blrt_LinkedList *list );
 
 ///
 /// \brief Destroy a linked list
 ///
-/// Destroy a linked list created by \a sowr_LinkedList_CreateS().
+/// Destroy a linked list created by \a blrt_LinkedList_CreateS().
 ///
 /// \param list List to destroy
 ///
 void
-sowr_LinkedList_DestroyS( sowr_LinkedList *list );
+blrt_LinkedList_DestroyS( blrt_LinkedList *list );
 
-#endif //!SOWR_LIB_CONTAINER_LINKED_LIST_H
+#endif //!BLRT_LIB_CONTAINER_LINKED_LIST_H

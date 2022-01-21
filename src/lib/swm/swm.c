@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -37,63 +34,63 @@
 
 static
 void
-sowr_FreeSwmData( void *data )
+blrt_FreeSwmData( void *data )
 {
-    sowr_String_DestroyS(&(((sowr_SwmData *)data)->data));
+    blrt_String_DestroyS(&(((blrt_SwmData *)data)->data));
 }
 
 static
 inline
-sowr_SwmData
-sowr_SwmData_Gen( void )
+blrt_SwmData
+blrt_SwmData_Gen( void )
 {
-    return (sowr_SwmData)
+    return (blrt_SwmData)
     {
-        .data = sowr_String_CreateS()
+        .data = blrt_String_CreateS()
     };
 }
 
-typedef enum sowr_Swm_ParsingState
+typedef enum blrt_Swm_ParsingState
 {
     /// Ready to read a token.
-    SOWR_SWM_READY            = 1,
+    BLRT_SWM_READY            = 1,
     /// Currently in a token.
-    SOWR_SWM_IN_TOKEN         = 1 << 1,
+    BLRT_SWM_IN_TOKEN         = 1 << 1,
     /// Ate a token and currently looking for next identifier.
-    SOWR_SWM_TOKEN_EATEN      = 1 << 2,
+    BLRT_SWM_TOKEN_EATEN      = 1 << 2,
     /// Ate a token and a = and currently looking for value for the pair.
-    SOWR_SWM_AWAIT_ASSIGNMENT = 1 << 3,
+    BLRT_SWM_AWAIT_ASSIGNMENT = 1 << 3,
     /// In comment section, everything is ignored.
-    SOWR_SWM_COMMENT          = 1 << 4,
+    BLRT_SWM_COMMENT          = 1 << 4,
     /// A starting /, maybe a comment section later on.
-    SOWR_SWM_POSSIBLE_COMMENT = 1 << 5,
+    BLRT_SWM_POSSIBLE_COMMENT = 1 << 5,
     /// A [ passed through, loading block name for the block.
-    SOWR_SWM_IN_BLOCK_NAME    = 1 << 6,
+    BLRT_SWM_IN_BLOCK_NAME    = 1 << 6,
     /// In raw string section.
-    SOWR_SWM_RAW_STRING       = 1 << 7,
+    BLRT_SWM_RAW_STRING       = 1 << 7,
     /// Invalid syntax in block name, everything is discarded.
-    SOWR_SWM_DISCARD          = 1 << 8,
+    BLRT_SWM_DISCARD          = 1 << 8,
     /// After = and possible spaces, start assigning process.
-    SOWR_SWM_ASSIGNING        = 1 << 9,
-} sowr_Swm_ParsingState;
+    BLRT_SWM_ASSIGNING        = 1 << 9,
+} blrt_Swm_ParsingState;
 
-sowr_Swm
-sowr_Swm_Load( const char *str )
+blrt_Swm
+blrt_Swm_Load( const char *str )
 {
-    sowr_Swm swm =
+    blrt_Swm swm =
     {
-        .contents = sowr_RadixTree_CreateS(sowr_FreeSwmData)
+        .contents = blrt_RadixTree_CreateS(blrt_FreeSwmData)
     };
     if (!str)
         return swm;
 
-    sowr_Swm_ParsingState state = SOWR_SWM_READY;
-    sowr_String token = sowr_String_CreateS(),
-                buffer_key = sowr_String_CreateS(),
-                buffer_block_name = sowr_String_CreateS();
-    sowr_String_ExpandUntilOnce(&token, 16ULL);
-    sowr_String_ExpandUntilOnce(&buffer_key, 16ULL);
-    sowr_String_ExpandUntilOnce(&buffer_block_name, 8ULL);
+    blrt_Swm_ParsingState state = BLRT_SWM_READY;
+    blrt_String token = blrt_String_CreateS(),
+                buffer_key = blrt_String_CreateS(),
+                buffer_block_name = blrt_String_CreateS();
+    blrt_String_ExpandUntilOnce(&token, 16ULL);
+    blrt_String_ExpandUntilOnce(&buffer_key, 16ULL);
+    blrt_String_ExpandUntilOnce(&buffer_block_name, 8ULL);
     char ch = *str;
 
     while (ch)
@@ -102,59 +99,59 @@ sowr_Swm_Load( const char *str )
         {
             case ('\r'):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
                 // Carriage return is always ignored.
                 break;
             }
             case ('\"'):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if ((state & BLRT_SWM_COMMENT) || (state & BLRT_SWM_DISCARD))
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
                     // End of raw string section.
-                    state &= ~SOWR_SWM_RAW_STRING;
+                    state &= ~BLRT_SWM_RAW_STRING;
                     break;
                 }
                 // Start of raw string section.
-                state |= SOWR_SWM_RAW_STRING;
-                if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
+                state |= BLRT_SWM_RAW_STRING;
+                if (state & BLRT_SWM_AWAIT_ASSIGNMENT)
                 {
                     // If it's waiting for assignment, start the assignment.
-                    state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
-                    state |= SOWR_SWM_ASSIGNING;
+                    state &= ~BLRT_SWM_AWAIT_ASSIGNMENT;
+                    state |= BLRT_SWM_ASSIGNING;
                     break;
                 }
-                if (state & SOWR_SWM_TOKEN_EATEN)
+                if (state & BLRT_SWM_TOKEN_EATEN)
                 {
                     // Raw string after eaten token and a space means that last token is a flag.
-                    state &= ~SOWR_SWM_TOKEN_EATEN;
-                    state |= SOWR_SWM_IN_TOKEN;
-                    sowr_SwmData node = sowr_SwmData_Gen();
-                    node.data_type = SOWR_SWM_FLAG;
+                    state &= ~BLRT_SWM_TOKEN_EATEN;
+                    state |= BLRT_SWM_IN_TOKEN;
+                    blrt_SwmData node = blrt_SwmData_Gen();
+                    node.data_type = BLRT_SWM_FLAG;
                     if (buffer_block_name.length)
-                        sowr_String_PushFrontS(&token, buffer_block_name.ptr);
-                    sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
-                    sowr_String_Clear(&token);
+                        blrt_String_PushFrontS(&token, buffer_block_name.ptr);
+                    blrt_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(blrt_SwmData), &node);
+                    blrt_String_Clear(&token);
                     break;
                 }
-                if (state & SOWR_SWM_IN_BLOCK_NAME)
+                if (state & BLRT_SWM_IN_BLOCK_NAME)
                 {
                     // WTF? Raw string in block names?
                     // Well, it's allowed anyways as long as there are no spaces.
                     break;
                 }
-                if ((state & SOWR_SWM_IN_TOKEN) || (state & SOWR_SWM_ASSIGNING))
+                if ((state & BLRT_SWM_IN_TOKEN) || (state & BLRT_SWM_ASSIGNING))
                 {
                     // Conjunction with raw string is allowed.
                     break;
                 }
-                if (state & SOWR_SWM_READY)
+                if (state & BLRT_SWM_READY)
                 {
                     // Cancel ready state.
-                    state &= ~SOWR_SWM_READY;
-                    state |= SOWR_SWM_IN_TOKEN;
+                    state &= ~BLRT_SWM_READY;
+                    state |= BLRT_SWM_IN_TOKEN;
                     break;
                 }
                 break;
@@ -162,50 +159,50 @@ sowr_Swm_Load( const char *str )
             case (' '):
             case ('\t'):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if ((state & BLRT_SWM_COMMENT) || (state & BLRT_SWM_DISCARD))
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if (state & SOWR_SWM_IN_BLOCK_NAME)
+                if (state & BLRT_SWM_IN_BLOCK_NAME)
                 {
                     // Weird syntax like [abc.e      fdvnj]
                     // Everything after e and before ] will be discarded.
-                    state |= SOWR_SWM_DISCARD;
+                    state |= BLRT_SWM_DISCARD;
                     break;
                 }
-                if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
+                if (state & BLRT_SWM_AWAIT_ASSIGNMENT)
                 {
                     // Space after =, ignored.
                     break;
                 }
-                if (state & SOWR_SWM_ASSIGNING)
+                if (state & BLRT_SWM_ASSIGNING)
                 {
                     // Assignment finished, write values.
-                    state &= ~SOWR_SWM_ASSIGNING;
-                    state |= SOWR_SWM_READY;
-                    sowr_SwmData node = sowr_SwmData_Gen();
-                    node.data_type = SOWR_SWM_PAIR;
-                    sowr_String_PushS(&(node.data), token.ptr);
+                    state &= ~BLRT_SWM_ASSIGNING;
+                    state |= BLRT_SWM_READY;
+                    blrt_SwmData node = blrt_SwmData_Gen();
+                    node.data_type = BLRT_SWM_PAIR;
+                    blrt_String_PushS(&(node.data), token.ptr);
                     if (buffer_block_name.length)
-                        sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-                    sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+                        blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                    blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
 
-                    sowr_String_Clear(&buffer_key);
-                    sowr_String_Clear(&token);
+                    blrt_String_Clear(&buffer_key);
+                    blrt_String_Clear(&token);
                     break;
                 }
-                if (state & SOWR_SWM_IN_TOKEN)
+                if (state & BLRT_SWM_IN_TOKEN)
                 {
                     // Token awaits assignment.
-                    state &= ~SOWR_SWM_IN_TOKEN;
-                    state |= SOWR_SWM_TOKEN_EATEN;
+                    state &= ~BLRT_SWM_IN_TOKEN;
+                    state |= BLRT_SWM_TOKEN_EATEN;
                     break;
                 }
-                if (state & SOWR_SWM_READY)
+                if (state & BLRT_SWM_READY)
                 {
                     // Do nothing.
                     break;
@@ -214,59 +211,59 @@ sowr_Swm_Load( const char *str )
             }
             case ('\n'):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & SOWR_SWM_RAW_STRING)
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if (state & SOWR_SWM_DISCARD)
+                if (state & BLRT_SWM_DISCARD)
                 {
                     break;
                 }
-                if (state & SOWR_SWM_COMMENT)
+                if (state & BLRT_SWM_COMMENT)
                 {
                     // Stop the line of comment.
-                    state &= ~SOWR_SWM_COMMENT;
+                    state &= ~BLRT_SWM_COMMENT;
                     break;
                 }
-                if (state & SOWR_SWM_IN_BLOCK_NAME)
+                if (state & BLRT_SWM_IN_BLOCK_NAME)
                 {
                     // Weird syntax like [abc.e     
                     //                      fdvnj]
                     // Everything after e and before ] will be ignored.
-                    state |= SOWR_SWM_DISCARD;
+                    state |= BLRT_SWM_DISCARD;
                     break;
                 }
-                if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
+                if (state & BLRT_SWM_AWAIT_ASSIGNMENT)
                 {
                     // Space after =. ignored.
                     break;
                 }
-                if (state & SOWR_SWM_ASSIGNING)
+                if (state & BLRT_SWM_ASSIGNING)
                 {
                     // Assignment finished, write values.
-                    sowr_SwmData node = sowr_SwmData_Gen();
-                    node.data_type = SOWR_SWM_PAIR;
-                    sowr_String_PushS(&(node.data), token.ptr);
+                    blrt_SwmData node = blrt_SwmData_Gen();
+                    node.data_type = BLRT_SWM_PAIR;
+                    blrt_String_PushS(&(node.data), token.ptr);
                     if (buffer_block_name.length)
-                        sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-                    sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+                        blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                    blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
 
-                    sowr_String_Clear(&buffer_key);
-                    sowr_String_Clear(&token);
-                    state &= ~SOWR_SWM_ASSIGNING;
-                    state |= SOWR_SWM_READY;
+                    blrt_String_Clear(&buffer_key);
+                    blrt_String_Clear(&token);
+                    state &= ~BLRT_SWM_ASSIGNING;
+                    state |= BLRT_SWM_READY;
                     break;
                 }
-                if (state & SOWR_SWM_IN_TOKEN)
+                if (state & BLRT_SWM_IN_TOKEN)
                 {
                     // Token eaten.
-                    state &= ~SOWR_SWM_IN_TOKEN;
-                    state |= SOWR_SWM_TOKEN_EATEN;
+                    state &= ~BLRT_SWM_IN_TOKEN;
+                    state |= BLRT_SWM_TOKEN_EATEN;
                     break;
                 }
-                if (state & SOWR_SWM_READY)
+                if (state & BLRT_SWM_READY)
                 {
                     // Do nothing.
                     break;
@@ -275,102 +272,102 @@ sowr_Swm_Load( const char *str )
             }
             case ('#'):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & SOWR_SWM_COMMENT)
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if (state & BLRT_SWM_COMMENT)
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
                 // Start comment section immediately.
-                state |= SOWR_SWM_COMMENT;
+                state |= BLRT_SWM_COMMENT;
                 break;
             }
             case ('/'):
             {
-                if (state & SOWR_SWM_COMMENT)
+                if (state & BLRT_SWM_COMMENT)
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if (state & SOWR_SWM_POSSIBLE_COMMENT)
+                if (state & BLRT_SWM_POSSIBLE_COMMENT)
                 {
                     // If the possible comment flag is set, clear out all flags.
                     // and begin comment section.
-                    state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                    state |= SOWR_SWM_COMMENT;
+                    state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                    state |= BLRT_SWM_COMMENT;
                     break;
                 }
                 else
                 {
                     // Otherwise, mark a possible comment flag.
-                    state |= SOWR_SWM_POSSIBLE_COMMENT;
+                    state |= BLRT_SWM_POSSIBLE_COMMENT;
                     break;
                 }
                 break;
             }
             case ('['):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if ((state & BLRT_SWM_COMMENT) || (state & BLRT_SWM_DISCARD))
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                state |= SOWR_SWM_IN_BLOCK_NAME;
-                if ((state & SOWR_SWM_READY) ||
-                    (state & SOWR_SWM_IN_TOKEN) ||
-                    (state & SOWR_SWM_TOKEN_EATEN) ||
-                    (state & SOWR_SWM_AWAIT_ASSIGNMENT) ||
-                    (state & SOWR_SWM_ASSIGNING))
+                state |= BLRT_SWM_IN_BLOCK_NAME;
+                if ((state & BLRT_SWM_READY) ||
+                    (state & BLRT_SWM_IN_TOKEN) ||
+                    (state & BLRT_SWM_TOKEN_EATEN) ||
+                    (state & BLRT_SWM_AWAIT_ASSIGNMENT) ||
+                    (state & BLRT_SWM_ASSIGNING))
                 {
                     // Block starting. Process previous flag/assignment.
-                    if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
+                    if (state & BLRT_SWM_AWAIT_ASSIGNMENT)
                     {
                         // Block start after a = without value, treat the key as flag.
-                        sowr_SwmData node = sowr_SwmData_Gen();
-                        node.data_type = SOWR_SWM_FLAG;
+                        blrt_SwmData node = blrt_SwmData_Gen();
+                        node.data_type = BLRT_SWM_FLAG;
                         if (buffer_block_name.length)
-                            sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-                        sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
-                        sowr_String_Clear(&token);
-                        sowr_String_Clear(&buffer_block_name);
-                        state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
+                            blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                        blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
+                        blrt_String_Clear(&token);
+                        blrt_String_Clear(&buffer_block_name);
+                        state &= ~BLRT_SWM_AWAIT_ASSIGNMENT;
                         break;
                     }
-                    if (state & SOWR_SWM_ASSIGNING)
+                    if (state & BLRT_SWM_ASSIGNING)
                     {
                         // End current assigning.
-                        sowr_SwmData node = sowr_SwmData_Gen();
-                        node.data_type = SOWR_SWM_PAIR;
-                        sowr_String_PushS(&(node.data), token.ptr);
+                        blrt_SwmData node = blrt_SwmData_Gen();
+                        node.data_type = BLRT_SWM_PAIR;
+                        blrt_String_PushS(&(node.data), token.ptr);
                         if (buffer_block_name.length)
-                            sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-                        sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
-                        sowr_String_Clear(&buffer_key);
-                        sowr_String_Clear(&token);
-                        sowr_String_Clear(&buffer_block_name);
-                        state &= ~SOWR_SWM_ASSIGNING;
-                        state &= ~SOWR_SWM_IN_TOKEN;
+                            blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                        blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
+                        blrt_String_Clear(&buffer_key);
+                        blrt_String_Clear(&token);
+                        blrt_String_Clear(&buffer_block_name);
+                        state &= ~BLRT_SWM_ASSIGNING;
+                        state &= ~BLRT_SWM_IN_TOKEN;
                         break;
                     }
-                    if ((state & SOWR_SWM_IN_TOKEN) || (state & SOWR_SWM_TOKEN_EATEN))
+                    if ((state & BLRT_SWM_IN_TOKEN) || (state & BLRT_SWM_TOKEN_EATEN))
                     {
                         // Block start right after previous token, treat it as flag.
-                        sowr_SwmData node = sowr_SwmData_Gen();
-                        node.data_type = SOWR_SWM_FLAG;
+                        blrt_SwmData node = blrt_SwmData_Gen();
+                        node.data_type = BLRT_SWM_FLAG;
                         if (buffer_block_name.length)
-                            sowr_String_PushFrontS(&token, buffer_block_name.ptr);
-                        sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
-                        sowr_String_Clear(&token);
-                        sowr_String_Clear(&buffer_block_name);
-                        state &= ~SOWR_SWM_IN_TOKEN;
-                        state &= ~SOWR_SWM_TOKEN_EATEN;
+                            blrt_String_PushFrontS(&token, buffer_block_name.ptr);
+                        blrt_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(blrt_SwmData), &node);
+                        blrt_String_Clear(&token);
+                        blrt_String_Clear(&buffer_block_name);
+                        state &= ~BLRT_SWM_IN_TOKEN;
+                        state &= ~BLRT_SWM_TOKEN_EATEN;
                         break;
                     }
                 }
@@ -378,79 +375,79 @@ sowr_Swm_Load( const char *str )
             }
             case (']'):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if (state & SOWR_SWM_COMMENT)
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if (state & BLRT_SWM_COMMENT)
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if ((state & SOWR_SWM_IN_BLOCK_NAME) || (state & SOWR_SWM_DISCARD))
+                if ((state & BLRT_SWM_IN_BLOCK_NAME) || (state & BLRT_SWM_DISCARD))
                 {
                     // End of block, record block name.
-                    sowr_String_Clear(&buffer_block_name);
+                    blrt_String_Clear(&buffer_block_name);
                     if (token.length)
                     {
-                        sowr_String_PushS(&buffer_block_name, token.ptr);
-                        sowr_String_PushC(&buffer_block_name, '.');
+                        blrt_String_PushS(&buffer_block_name, token.ptr);
+                        blrt_String_PushC(&buffer_block_name, '.');
                     }
 
                     // Clear current token, and ready to record next token.
-                    sowr_String_Clear(&token);
-                    state = SOWR_SWM_READY;
+                    blrt_String_Clear(&token);
+                    state = BLRT_SWM_READY;
                     break;
                 }
                 break;
             }
             case ('='):
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if ((state & BLRT_SWM_COMMENT) || (state & BLRT_SWM_DISCARD))
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if ((state & SOWR_SWM_TOKEN_EATEN) || (state & SOWR_SWM_IN_TOKEN))
+                if ((state & BLRT_SWM_TOKEN_EATEN) || (state & BLRT_SWM_IN_TOKEN))
                 {
                     // Token waiting for assignment, start assigning process.
-                    state &= ~(SOWR_SWM_TOKEN_EATEN | SOWR_SWM_IN_TOKEN);
-                    state |= SOWR_SWM_AWAIT_ASSIGNMENT;
-                    sowr_String_PushS(&buffer_key, token.ptr);
-                    sowr_String_Clear(&token);
+                    state &= ~(BLRT_SWM_TOKEN_EATEN | BLRT_SWM_IN_TOKEN);
+                    state |= BLRT_SWM_AWAIT_ASSIGNMENT;
+                    blrt_String_PushS(&buffer_key, token.ptr);
+                    blrt_String_Clear(&token);
                     break;
                 }
-                if (state & SOWR_SWM_ASSIGNING)
+                if (state & BLRT_SWM_ASSIGNING)
                 {
                     // Syntax error, = sign within assignment.
                     // Assignment ends, and start record new token.
                     if (!token.length)
                     {
                         // Token is empty, treat token before = as flag.
-                        sowr_SwmData node = sowr_SwmData_Gen();
-                        node.data_type = SOWR_SWM_FLAG;
+                        blrt_SwmData node = blrt_SwmData_Gen();
+                        node.data_type = BLRT_SWM_FLAG;
                         if (buffer_block_name.length)
-                            sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-                        sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+                            blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                        blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
                     }
                     else
                     {
-                        sowr_SwmData node = sowr_SwmData_Gen();
-                        node.data_type = SOWR_SWM_PAIR;
-                        sowr_String_PushS(&(node.data), token.ptr);
+                        blrt_SwmData node = blrt_SwmData_Gen();
+                        node.data_type = BLRT_SWM_PAIR;
+                        blrt_String_PushS(&(node.data), token.ptr);
                         if (buffer_block_name.length)
-                            sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-                        sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+                            blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+                        blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
                     }
-                    state &= ~SOWR_SWM_ASSIGNING;
-                    state |= SOWR_SWM_READY;
-                    sowr_String_Clear(&buffer_key);
-                    sowr_String_Clear(&token);
+                    state &= ~BLRT_SWM_ASSIGNING;
+                    state |= BLRT_SWM_READY;
+                    blrt_String_Clear(&buffer_key);
+                    blrt_String_Clear(&token);
                     break;
                 }
-                if (state & SOWR_SWM_READY)
+                if (state & BLRT_SWM_READY)
                 {
                     // = without key, ignored.
                     break;
@@ -459,54 +456,54 @@ sowr_Swm_Load( const char *str )
             }
             default:
             {
-                state &= ~SOWR_SWM_POSSIBLE_COMMENT;
-                if ((state & SOWR_SWM_COMMENT) || (state & SOWR_SWM_DISCARD))
+                state &= ~BLRT_SWM_POSSIBLE_COMMENT;
+                if ((state & BLRT_SWM_COMMENT) || (state & BLRT_SWM_DISCARD))
                     break;
-                if (state & SOWR_SWM_RAW_STRING)
+                if (state & BLRT_SWM_RAW_STRING)
                 {
-                    sowr_String_PushC(&token, ch);
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if (state & SOWR_SWM_IN_BLOCK_NAME)
+                if (state & BLRT_SWM_IN_BLOCK_NAME)
                 {
-                    sowr_String_PushC(&token, ch);
-                    state &= ~SOWR_SWM_TOKEN_EATEN;
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_SWM_TOKEN_EATEN;
                     break;
                 }
-                if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
+                if (state & BLRT_SWM_AWAIT_ASSIGNMENT)
                 {
                     // Start the assignment.
-                    state &= ~SOWR_SWM_AWAIT_ASSIGNMENT;
-                    state |= SOWR_SWM_ASSIGNING;
-                    sowr_String_PushC(&token, ch);
+                    state &= ~BLRT_SWM_AWAIT_ASSIGNMENT;
+                    state |= BLRT_SWM_ASSIGNING;
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                if (state & SOWR_SWM_TOKEN_EATEN)
+                if (state & BLRT_SWM_TOKEN_EATEN)
                 {
                     // An eaten token means that the previous token is a flag.
 
                     // Record the flag
-                    sowr_SwmData node = sowr_SwmData_Gen();
-                    node.data_type = SOWR_SWM_FLAG;
+                    blrt_SwmData node = blrt_SwmData_Gen();
+                    node.data_type = BLRT_SWM_FLAG;
                     if (buffer_block_name.length)
-                        sowr_String_PushFrontS(&token, buffer_block_name.ptr);
-                    sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
+                        blrt_String_PushFrontS(&token, buffer_block_name.ptr);
+                    blrt_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(blrt_SwmData), &node);
 
                     // Clear current token and start a new recording.
-                    sowr_String_Clear(&token);
-                    sowr_String_PushC(&token, ch);
-                    state &= ~SOWR_SWM_TOKEN_EATEN;
-                    state |= SOWR_SWM_IN_TOKEN;
+                    blrt_String_Clear(&token);
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_SWM_TOKEN_EATEN;
+                    state |= BLRT_SWM_IN_TOKEN;
                     break;
                 }
-                if (state & SOWR_SWM_READY)
+                if (state & BLRT_SWM_READY)
                 {
-                    state &= ~SOWR_SWM_READY;
-                    state |= SOWR_SWM_IN_TOKEN;
-                    sowr_String_PushC(&token, ch);
+                    state &= ~BLRT_SWM_READY;
+                    state |= BLRT_SWM_IN_TOKEN;
+                    blrt_String_PushC(&token, ch);
                     break;
                 }
-                sowr_String_PushC(&token, ch);
+                blrt_String_PushC(&token, ch);
                 break;
             }
         }
@@ -514,64 +511,64 @@ sowr_Swm_Load( const char *str )
     }
 
     // Loading got shut down by EOF, evaluate left over tokens
-    if (state & SOWR_SWM_RAW_STRING)
+    if (state & BLRT_SWM_RAW_STRING)
         // Unresolved raw string, discard everything.
         ;
-    else if (state & SOWR_SWM_AWAIT_ASSIGNMENT)
+    else if (state & BLRT_SWM_AWAIT_ASSIGNMENT)
     {
         // Left over =, treat its key as flag.
-        sowr_SwmData node = sowr_SwmData_Gen();
-        node.data_type = SOWR_SWM_FLAG;
+        blrt_SwmData node = blrt_SwmData_Gen();
+        node.data_type = BLRT_SWM_FLAG;
         if (buffer_block_name.length)
-            sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-        sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+            blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+        blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
     }
-    else if (state & SOWR_SWM_ASSIGNING)
+    else if (state & BLRT_SWM_ASSIGNING)
     {
         // Finish the assignment.
-        sowr_SwmData node = sowr_SwmData_Gen();
-        node.data_type = SOWR_SWM_PAIR;
-        sowr_String_PushS(&(node.data), token.ptr);
+        blrt_SwmData node = blrt_SwmData_Gen();
+        node.data_type = BLRT_SWM_PAIR;
+        blrt_String_PushS(&(node.data), token.ptr);
         if (buffer_block_name.length)
-            sowr_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
-        sowr_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(sowr_SwmData), &node);
+            blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
+        blrt_RadixTree_Insert(&(swm.contents), buffer_key.ptr, sizeof(blrt_SwmData), &node);
     }
-    else if ((state & SOWR_SWM_IN_TOKEN) || (state & SOWR_SWM_TOKEN_EATEN))
+    else if ((state & BLRT_SWM_IN_TOKEN) || (state & BLRT_SWM_TOKEN_EATEN))
     {
         // Left over token, treat as flag.
-        sowr_SwmData node = sowr_SwmData_Gen();
-        node.data_type = SOWR_SWM_FLAG;
+        blrt_SwmData node = blrt_SwmData_Gen();
+        node.data_type = BLRT_SWM_FLAG;
         if (buffer_block_name.length)
-            sowr_String_PushFrontS(&token, buffer_block_name.ptr);
-        sowr_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(sowr_SwmData), &node);
+            blrt_String_PushFrontS(&token, buffer_block_name.ptr);
+        blrt_RadixTree_Insert(&(swm.contents), token.ptr, sizeof(blrt_SwmData), &node);
     }
 
-    sowr_String_DestroyS(&token);
-    sowr_String_DestroyS(&buffer_key),
-    sowr_String_DestroyS(&buffer_block_name);
+    blrt_String_DestroyS(&token);
+    blrt_String_DestroyS(&buffer_key),
+    blrt_String_DestroyS(&buffer_block_name);
     return swm;
 }
 
 void
-sowr_Swm_Destroy( sowr_Swm *swm )
+blrt_Swm_Destroy( blrt_Swm *swm )
 {
-    sowr_RadixTree_DestroyS(&(swm->contents));
+    blrt_RadixTree_DestroyS(&(swm->contents));
 }
 
 bool
-sowr_Swm_HasFlag( const sowr_Swm *swm, const char *flag )
+blrt_Swm_HasFlag( const blrt_Swm *swm, const char *flag )
 {
-    sowr_RadixTreeNode *node = sowr_RadixTree_Get(&(swm->contents), flag);
+    blrt_RadixTreeNode *node = blrt_RadixTree_Get(&(swm->contents), flag);
     if (!node || !node->data)
         return false;
-    return ((sowr_SwmData *)(node->data))->data_type == SOWR_SWM_FLAG;
+    return ((blrt_SwmData *)(node->data))->data_type == BLRT_SWM_FLAG;
 }
 
 char *
-sowr_Swm_GetValue( const sowr_Swm *swm, const char *key )
+blrt_Swm_GetValue( const blrt_Swm *swm, const char *key )
 {
-    sowr_RadixTreeNode *node = sowr_RadixTree_Get(&(swm->contents), key);
+    blrt_RadixTreeNode *node = blrt_RadixTree_Get(&(swm->contents), key);
     if (!node || !node->data)
         return NULL;
-    return ((sowr_SwmData *)(node->data))->data.ptr;
+    return ((blrt_SwmData *)(node->data))->data.ptr;
 }

@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,77 +27,81 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_TYPE_GENERIC_H
-#define SOWR_LIB_TYPE_GENERIC_H
+#ifndef BLRT_LIB_TYPE_GENERIC_H
+#define BLRT_LIB_TYPE_GENERIC_H
 
 #include <pch.h>
 
-typedef uintptr_t sowr_Ptr;
+#ifdef _UINTPTR_T_DEFINED
+    typedef uintptr_t blrt_Ptr;
+#else
+    typedef void *blrt_Ptr;
+#endif
 
-typedef enum sowr_Type
+typedef enum blrt_Type
 {
-    SOWR_TYPE_BOOL = 1,
-    SOWR_TYPE_CHAR,
-    SOWR_TYPE_UCHAR,
-    SOWR_TYPE_SHORT,
-    SOWR_TYPE_USHORT,
-    SOWR_TYPE_INT,
-    SOWR_TYPE_UINT,
-    SOWR_TYPE_LONG,
-    SOWR_TYPE_ULONG,
-    SOWR_TYPE_LONGLONG,
-    SOWR_TYPE_ULONGLONG,
-    SOWR_TYPE_FLOAT,
-    SOWR_TYPE_DOUBLE,
-    SOWR_TYPE_LDOUBLE,
-//  SOWR_TYPE_CHAR8,
-    SOWR_TYPE_CHAR16,
-    SOWR_TYPE_CHAR32,
-    SOWR_TYPE_INT_8,
-    SOWR_TYPE_UINT_8,
-    SOWR_TYPE_INT_16,
-    SOWR_TYPE_UINT_16,
-    SOWR_TYPE_INT_32,
-    SOWR_TYPE_UINT_32,
-    SOWR_TYPE_INT_64,
-    SOWR_TYPE_UINT_64,
-    SOWR_TYPE_INT_LEAST_8,
-    SOWR_TYPE_UINT_LEAST_8,
-    SOWR_TYPE_INT_LEAST_16,
-    SOWR_TYPE_UINT_LEAST_16,
-    SOWR_TYPE_INT_LEAST_32,
-    SOWR_TYPE_UINT_LEAST_32,
-    SOWR_TYPE_INT_LEAST_64,
-    SOWR_TYPE_UINT_LEAST_64,
-    SOWR_TYPE_INT_FAST_8,
-    SOWR_TYPE_UINT_FAST_8,
-    SOWR_TYPE_INT_FAST_16,
-    SOWR_TYPE_UINT_FAST_16,
-    SOWR_TYPE_INT_FAST_32,
-    SOWR_TYPE_UINT_FAST_32,
-    SOWR_TYPE_INT_FAST_64,
-    SOWR_TYPE_UINT_FAST_64,
-    SOWR_TYPE_STRING,
-    SOWR_TYPE_FUNC_PTR,
-    SOWR_TYPE_VOID_PTR,
-    SOWR_TYPE_PTR,
-    SOWR_TYPE_ARRAY,
-    SOWR_TYPE_SIZE,
-    SOWR_TYPE_PTR_DIFF,
-    SOWR_TYPE_INT_MAX,
-    SOWR_TYPE_UINT_MAX,
-    SOWR_TYPE_STRUCT,
-    SOWR_TYPE_UNION,
-    SOWR_TYPE_FUNCTION,
-    SOWR_TYPE_VOID,
+    BLRT_TYPE_BOOL = 1,
+    BLRT_TYPE_CHAR,
+    BLRT_TYPE_UCHAR,
+    BLRT_TYPE_SHORT,
+    BLRT_TYPE_USHORT,
+    BLRT_TYPE_INT,
+    BLRT_TYPE_UINT,
+    BLRT_TYPE_LONG,
+    BLRT_TYPE_ULONG,
+    BLRT_TYPE_LONGLONG,
+    BLRT_TYPE_ULONGLONG,
+    BLRT_TYPE_FLOAT,
+    BLRT_TYPE_DOUBLE,
+    BLRT_TYPE_LDOUBLE,
+//  BLRT_TYPE_CHAR8,
+    BLRT_TYPE_CHAR16,
+    BLRT_TYPE_CHAR32,
+    BLRT_TYPE_INT_8,
+    BLRT_TYPE_UINT_8,
+    BLRT_TYPE_INT_16,
+    BLRT_TYPE_UINT_16,
+    BLRT_TYPE_INT_32,
+    BLRT_TYPE_UINT_32,
+    BLRT_TYPE_INT_64,
+    BLRT_TYPE_UINT_64,
+    BLRT_TYPE_INT_LEAST_8,
+    BLRT_TYPE_UINT_LEAST_8,
+    BLRT_TYPE_INT_LEAST_16,
+    BLRT_TYPE_UINT_LEAST_16,
+    BLRT_TYPE_INT_LEAST_32,
+    BLRT_TYPE_UINT_LEAST_32,
+    BLRT_TYPE_INT_LEAST_64,
+    BLRT_TYPE_UINT_LEAST_64,
+    BLRT_TYPE_INT_FAST_8,
+    BLRT_TYPE_UINT_FAST_8,
+    BLRT_TYPE_INT_FAST_16,
+    BLRT_TYPE_UINT_FAST_16,
+    BLRT_TYPE_INT_FAST_32,
+    BLRT_TYPE_UINT_FAST_32,
+    BLRT_TYPE_INT_FAST_64,
+    BLRT_TYPE_UINT_FAST_64,
+    BLRT_TYPE_STRING,
+    BLRT_TYPE_FUNC_PTR,
+    BLRT_TYPE_VOID_PTR,
+    BLRT_TYPE_PTR,
+    BLRT_TYPE_ARRAY,
+    BLRT_TYPE_SIZE,
+    BLRT_TYPE_PTR_DIFF,
+    BLRT_TYPE_INT_MAX,
+    BLRT_TYPE_UINT_MAX,
+    BLRT_TYPE_STRUCT,
+    BLRT_TYPE_UNION,
+    BLRT_TYPE_FUNCTION,
+    BLRT_TYPE_VOID,
 
-    SOWR_TYPE_UNKNOWN = 0
-} sowr_Type;
+    BLRT_TYPE_UNKNOWN = 0
+} blrt_Type;
 
-extern const char *const SOWR_TYPENAMES[];
-#define SOWR_TYPENAME(T) SOWR_TYPENAMES[(T)]
+extern const char *const BLRT_TYPENAMES[];
+#define BLRT_TYPENAME(T) BLRT_TYPENAMES[(T)]
 
-typedef union sowr_GenericDataRegular
+typedef union blrt_GenericDataRegular
 {
     bool as_bool;
     char as_char;
@@ -143,96 +144,96 @@ typedef union sowr_GenericDataRegular
     char *as_string;
     void *as_func_ptr;
     void *as_void_ptr;
-    sowr_Ptr as_ptr;
+    blrt_Ptr as_ptr;
     void *as_arr;
     size_t as_size;
     ptrdiff_t as_ptr_diff;
     intmax_t as_int_max;
     uintmax_t as_uint_max;
-    sowr_Ptr unknown;
-} sowr_GenericDataRegular;
+    blrt_Ptr unknown;
+} blrt_GenericDataRegular;
 
-typedef union sowr_GenericDataFloat
+typedef union blrt_GenericDataFloat
 {
     float as_float;
     double as_double;
     long double as_ldouble;
-} sowr_GenericDataFloat;
+} blrt_GenericDataFloat;
 
-typedef union sowr_GenericTypeData
+typedef union blrt_GenericTypeData
 {
-    sowr_GenericDataRegular reg;
-    sowr_GenericDataFloat flt;
-} sowr_GenericTypeData;
+    blrt_GenericDataRegular reg;
+    blrt_GenericDataFloat flt;
+} blrt_GenericTypeData;
 
-typedef struct sowr_GenericType
+typedef struct blrt_GenericType
 {
-    sowr_Type type;
+    blrt_Type type;
     size_t data_size;
-    sowr_GenericTypeData data;
-} sowr_GenericType;
+    blrt_GenericTypeData data;
+} blrt_GenericType;
 
-#define SOWR_MAKE_GENERIC(var) (sowr_GenericType)                                             \
+#define BLRT_MAKE_GENERIC(var) (blrt_GenericType)                                             \
                                {                                                              \
                                     .type = _Generic((var),                                   \
-                                                     bool: SOWR_TYPE_BOOL,                    \
-                                                     char: SOWR_TYPE_CHAR,                    \
-                                                     unsigned char: SOWR_TYPE_UCHAR,          \
-                                                     short: SOWR_TYPE_SHORT,                  \
-                                                     unsigned short: SOWR_TYPE_USHORT,        \
-                                                     int: SOWR_TYPE_INT,                      \
-                                                     unsigned int: SOWR_TYPE_UINT,            \
-                                                     long: SOWR_TYPE_LONG,                    \
-                                                     unsigned long: SOWR_TYPE_ULONG,          \
-                                                     long long: SOWR_TYPE_LONGLONG,           \
-                                                     unsigned long long: SOWR_TYPE_ULONGLONG, \
-                                                     char *: SOWR_TYPE_STRING,                \
-                                                     const char *: SOWR_TYPE_STRING,          \
-                                                     void *: SOWR_TYPE_VOID_PTR,              \
-                                                     const void *: SOWR_TYPE_VOID_PTR,        \
-                                                     default: SOWR_TYPE_UNKNOWN               \
+                                                     bool: BLRT_TYPE_BOOL,                    \
+                                                     char: BLRT_TYPE_CHAR,                    \
+                                                     unsigned char: BLRT_TYPE_UCHAR,          \
+                                                     short: BLRT_TYPE_SHORT,                  \
+                                                     unsigned short: BLRT_TYPE_USHORT,        \
+                                                     int: BLRT_TYPE_INT,                      \
+                                                     unsigned int: BLRT_TYPE_UINT,            \
+                                                     long: BLRT_TYPE_LONG,                    \
+                                                     unsigned long: BLRT_TYPE_ULONG,          \
+                                                     long long: BLRT_TYPE_LONGLONG,           \
+                                                     unsigned long long: BLRT_TYPE_ULONGLONG, \
+                                                     char *: BLRT_TYPE_STRING,                \
+                                                     const char *: BLRT_TYPE_STRING,          \
+                                                     void *: BLRT_TYPE_VOID_PTR,              \
+                                                     const void *: BLRT_TYPE_VOID_PTR,        \
+                                                     default: BLRT_TYPE_UNKNOWN               \
                                                     ),                                        \
                                     .data_size = sizeof((var)),                               \
-                                    .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  (sowr_Ptr)(var) } } \
+                                    .data = (blrt_GenericTypeData){ .reg = (blrt_GenericDataRegular) { .unknown =  (blrt_Ptr)(var) } } \
                                }
 
-#define SOWR_MAKE_GENERIC_T(var, T) (sowr_GenericType)              \
+#define BLRT_MAKE_GENERIC_T(var, T) (blrt_GenericType)              \
                                     {                               \
                                         .type = (T),                \
                                         .data_size = sizeof((var)), \
-                                        .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .unknown =  (sowr_Ptr)(var) } } \
+                                        .data = (blrt_GenericTypeData){ .reg = (blrt_GenericDataRegular) { .unknown =  (blrt_Ptr)(var) } } \
                                     }
 
-#define SOWR_MAKE_GENERIC_F(varf) (sowr_GenericType)                                 \
+#define BLRT_MAKE_GENERIC_F(varf) (blrt_GenericType)                                 \
                                   {                                                  \
                                     .type = _Generic((varf),                         \
-                                                     float: SOWR_TYPE_FLOAT,         \
-                                                     double: SOWR_TYPE_DOUBLE,       \
-                                                     long double: SOWR_TYPE_LDOUBLE, \
-                                                     default: SOWR_TYPE_UNKNOWN      \
+                                                     float: BLRT_TYPE_FLOAT,         \
+                                                     double: BLRT_TYPE_DOUBLE,       \
+                                                     long double: BLRT_TYPE_LDOUBLE, \
+                                                     default: BLRT_TYPE_UNKNOWN      \
                                                     ),                               \
                                     .data_size = sizeof((varf)),                     \
-                                    .data = (sowr_GenericTypeData){ .flt = _Generic((varf),                                                       \
-                                                                                    float: (sowr_GenericDataFloat){ .as_float = (varf) },         \
-                                                                                    double: (sowr_GenericDataFloat){ .as_double = (varf) },       \
-                                                                                    long double: (sowr_GenericDataFloat){ .as_ldouble = (varf) }, \
-                                                                                    default: (sowr_GenericDataFloat){ .as_float = (varf) }        \
+                                    .data = (blrt_GenericTypeData){ .flt = _Generic((varf),                                                       \
+                                                                                    float: (blrt_GenericDataFloat){ .as_float = (varf) },         \
+                                                                                    double: (blrt_GenericDataFloat){ .as_double = (varf) },       \
+                                                                                    long double: (blrt_GenericDataFloat){ .as_ldouble = (varf) }, \
+                                                                                    default: (blrt_GenericDataFloat){ .as_float = (varf) }        \
                                                                                    )                                                              \
                                                                   }                  \
                                   }
 
-#define SOWR_MAKE_GENERIC_P(var) (sowr_GenericType)          \
+#define BLRT_MAKE_GENERIC_P(var) (blrt_GenericType)          \
                                  {                           \
-                                    .type = SOWR_TYPE_PTR,   \
+                                    .type = BLRT_TYPE_PTR,   \
                                     .data_size = sizeof(var) \
-                                    .data = (sowr_GenericTypeData) { .reg = (sowr_GenericDataRegular) { .as_ptr = (sowr_Ptr)(var) } } \
+                                    .data = (blrt_GenericTypeData) { .reg = (blrt_GenericDataRegular) { .as_ptr = (blrt_Ptr)(var) } } \
                                  }
 
-#define SOWR_MAKE_GENERIC_A(var, len) (sowr_GenericType)         \
+#define BLRT_MAKE_GENERIC_A(var, len) (blrt_GenericType)         \
                                       {                          \
-                                        .type = SOWR_TYPE_ARRAY, \
+                                        .type = BLRT_TYPE_ARRAY, \
                                         .data_size = len,        \
-                                        .data = (sowr_GenericTypeData){ .reg = (sowr_GenericDataRegular) { .as_arr =  (void *)(var) } } \
+                                        .data = (blrt_GenericTypeData){ .reg = (blrt_GenericDataRegular) { .as_arr =  (void *)(var) } } \
                                       }
 
-#endif // !SOWR_LIB_TYPE_GENERIC_H
+#endif // !BLRT_LIB_TYPE_GENERIC_H

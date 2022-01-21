@@ -1,28 +1,25 @@
 /*************************************************************************************************
 *                                                                                                *
-*                                  [ State of War: Remastered ]                                  *
+*                                         [ Blue Alert ]                                         *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
-*                  A free, open-source software project recreating an old game.                  *
+*                              A free, open-source indie RTS game.                               *
 *               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
-*    State of War: Remastered is a free software. You can freely do whatever you want with it    *
+*           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
 *                  published by mhtvsSFrpHdE <https://github.com/mhtvsSFrpHdE>.                  *
 *                                                                                                *
-*  By the time this line is written, the version of the license document is 1, but you may use   *
-*                  any later version of the document released by mhtvsSFrpHdE.                   *
-*                                                                                                *
-*     State of War: Remastered is created, intended to be useful, but without any warranty.      *
+*            Blue Alert is created, intended to be useful, but without any warranty.             *
 *                      For more information, please forward to the license.                      *
 *                                                                                                *
 *                 You should have received a copy of the license along with the                  *
 *                        source code of this program. If not, please see                         *
-*              <https://github.com/State-of-War-PostBar/sowr/blob/master/LICENSE>.               *
+*           <https://github.com/State-of-War-PostBar/Blue-Alert/blob/master/LICENSE>.            *
 *                                                                                                *
 *      For more information about the project and us, please visit our Github repository at      *
-*                        <https://github.com/State-of-War-PostBar/sowr>.                         *
+*                     <https://github.com/State-of-War-PostBar/Blue-Alert>.                      *
 *                                                                                                *
 **************************************************************************************************
 *                                                                                                *
@@ -30,28 +27,28 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef SOWR_LIB_CONTAINER_TRIE_H
-#define SOWR_LIB_CONTAINER_TRIE_H
+#ifndef BLRT_LIB_CONTAINER_TRIE_H
+#define BLRT_LIB_CONTAINER_TRIE_H
 
 #include <pch.h>
 
 #include "string.h"
 
-typedef void (*sowr_TrieFreeFunc)( void * );
+typedef void (*blrt_TrieFreeFunc)( void * );
 
-typedef struct sowr_TrieNode
+typedef struct blrt_TrieNode
 {
     size_t children;
     size_t data_size;
     void *data;
-    struct sowr_TrieNode *characters[CHAR_MAX];
-} sowr_TrieNode;
+    struct blrt_TrieNode *characters[CHAR_MAX];
+} blrt_TrieNode;
 
-typedef struct sowr_Trie
+typedef struct blrt_Trie
 {
-    sowr_TrieFreeFunc free_func;
-    sowr_TrieNode head;
-} sowr_Trie;
+    blrt_TrieFreeFunc free_func;
+    blrt_TrieNode head;
+} blrt_Trie;
 
 ///
 /// \brief Create a trie
@@ -62,21 +59,21 @@ typedef struct sowr_Trie
 ///
 /// \return Created trie
 ///
-sowr_Trie *
-sowr_Trie_Create( sowr_TrieFreeFunc free_func );
+blrt_Trie *
+blrt_Trie_Create( blrt_TrieFreeFunc free_func );
 
 ///
 /// \brief Create a trie
 ///
 /// Create a trie by stack ready to use.<BR />
-/// <B>The created trie must be destroyed with \a sowr_Trie_DestroyS().</B>
+/// <B>The created trie must be destroyed with \a blrt_Trie_DestroyS().</B>
 ///
 /// \param free_func Function to call when the trie frees an element
 ///
 /// \return Created trie
 ///
-sowr_Trie
-sowr_Trie_CreateS( sowr_TrieFreeFunc free_func );
+blrt_Trie
+blrt_Trie_CreateS( blrt_TrieFreeFunc free_func );
 
 ///
 /// \brief Clear the trie
@@ -86,7 +83,7 @@ sowr_Trie_CreateS( sowr_TrieFreeFunc free_func );
 /// \param trie Trie to clear
 ///
 void
-sowr_Trie_Clear( sowr_Trie *trie );
+blrt_Trie_Clear( blrt_Trie *trie );
 
 ///
 /// \brief Insert an element to trie
@@ -99,7 +96,7 @@ sowr_Trie_Clear( sowr_Trie *trie );
 /// \param data Data to insert
 ///
 void
-sowr_Trie_Insert( sowr_Trie *trie, const char *index, size_t data_size, const void *data );
+blrt_Trie_Insert( blrt_Trie *trie, const char *index, size_t data_size, const void *data );
 
 ///
 /// \brief Insert an element to trie
@@ -112,7 +109,7 @@ sowr_Trie_Insert( sowr_Trie *trie, const char *index, size_t data_size, const vo
 /// \param data Data to insert
 ///
 void
-sowr_Trie_InsertS( sowr_Trie *trie, const sowr_String *index, size_t data_size, const void *data );
+blrt_Trie_InsertS( blrt_Trie *trie, const blrt_String *index, size_t data_size, const void *data );
 
 ///
 /// \brief Get an element from trie
@@ -124,8 +121,8 @@ sowr_Trie_InsertS( sowr_Trie *trie, const sowr_String *index, size_t data_size, 
 ///
 /// \return The trie node containing data if found, NULL otherwise
 ///
-sowr_TrieNode *
-sowr_Trie_Get( sowr_Trie *trie, const char *index );
+blrt_TrieNode *
+blrt_Trie_Get( blrt_Trie *trie, const char *index );
 
 ///
 /// \brief Get an element from trie
@@ -137,8 +134,8 @@ sowr_Trie_Get( sowr_Trie *trie, const char *index );
 ///
 /// \return The trie node containing data if found, NULL otherwise
 ///
-sowr_TrieNode *
-sowr_Trie_GetS( sowr_Trie *trie, const sowr_String *index );
+blrt_TrieNode *
+blrt_Trie_GetS( blrt_Trie *trie, const blrt_String *index );
 
 ///
 /// \brief Delete an element from trie
@@ -151,7 +148,7 @@ sowr_Trie_GetS( sowr_Trie *trie, const sowr_String *index );
 /// \return If anything is deleted
 ///
 bool
-sowr_Trie_Delete( sowr_Trie *trie, const char *index );
+blrt_Trie_Delete( blrt_Trie *trie, const char *index );
 
 ///
 /// \brief Delete an element from trie
@@ -164,7 +161,7 @@ sowr_Trie_Delete( sowr_Trie *trie, const char *index );
 /// \return If anything is deleted
 ///
 bool
-sowr_Trie_DeleteS( sowr_Trie *trie, const sowr_String *index );
+blrt_Trie_DeleteS( blrt_Trie *trie, const blrt_String *index );
 
 ///
 /// \brief Destroy the trie
@@ -174,16 +171,16 @@ sowr_Trie_DeleteS( sowr_Trie *trie, const sowr_String *index );
 /// \param trie Trie to destroy
 ///
 void
-sowr_Trie_Destroy( sowr_Trie *trie );
+blrt_Trie_Destroy( blrt_Trie *trie );
 
 ///
 /// \brief Destroy the trie
 ///
-/// Destroy the trie created by \a sowr_Trie_CreateS().
+/// Destroy the trie created by \a blrt_Trie_CreateS().
 ///
 /// \param trie Trie to destroy
 ///
 void
-sowr_Trie_DestroyS( sowr_Trie *trie );
+blrt_Trie_DestroyS( blrt_Trie *trie );
 
-#endif //!SOWR_LIB_CONTAINER_TRIE_H
+#endif //!BLRT_LIB_CONTAINER_TRIE_H
