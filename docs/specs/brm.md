@@ -1,4 +1,4 @@
-# SWM Format
+# BRM Format
 
 BRM stands for _**B**lue Ale**R**t **M**arking Language_.  
 It's an easy-to-use string data format.  
