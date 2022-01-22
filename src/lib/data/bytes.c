@@ -32,8 +32,8 @@
 bool
 blrt_IsLittleEndian( void )
 {
-    const short num = 1;
-    const signed char *const ptr = (const signed char *const) &num;
+    static const short num = 1;
+    static const signed char *const ptr = (const signed char *const) &num;
     return ptr[0] == 1;
 }
 
