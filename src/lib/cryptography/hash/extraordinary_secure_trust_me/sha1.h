@@ -34,7 +34,7 @@
 
 typedef union blrt_SHA1
 {
-    uint32_t dword[5];
+    uint32_t word[5];
     uint8_t byte[20];
 } blrt_SHA1;
 

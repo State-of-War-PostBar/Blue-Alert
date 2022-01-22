@@ -35,7 +35,7 @@ static
 uint32_t
 blrt_SHA1_Ch( uint32_t x, uint32_t y, uint32_t z )
 {
-    return (x & y) ^ ((~x) & z);
+    return (x & y) ^ (~x & z);
 }
 
 static
@@ -53,7 +53,7 @@ blrt_SHA1_Maj( uint32_t x, uint32_t y, uint32_t z )
 }
 
 static
-const uint32_t (*BLRT_SHA1_CYCLE_FUNC[])(uint32_t, uint32_t, uint32_t) =
+const uint32_t (*BLRT_SHA1_CYCLE_FUNC[])( uint32_t, uint32_t, uint32_t ) =
 {
     blrt_SHA1_Ch,
     blrt_SHA1_Parity,
@@ -72,21 +72,21 @@ const uint32_t BLRT_SHA1_CYCLE_CONSTANT[] =
 
 static
 void
-blrt_SHA1_MainCycle( uint32_t (*hash_value)[5], const uint32_t (*data_block)[16] )
+blrt_SHA1_MainCycle( uint32_t hash_value[5], const uint32_t data_block[16] )
 {
     bool little_endian = blrt_IsLittleEndian();
     uint32_t window[80];
 
     for (int i = 0; i < 16; i++)
-        window[i] = little_endian ? blrt_SwapEndian32((*data_block)[i]): (*data_block)[i];
+        window[i] = little_endian ? blrt_SwapEndian32(data_block[i]): data_block[i];
     for (int j = 16; j < 80; j++)
         window[j] = blrt_RotateLeft32(window[j - 3] ^ window[j - 8] ^ window[j - 14] ^ window[j - 16], 1);
 
-    uint32_t a = (*hash_value)[0],
-             b = (*hash_value)[1],
-             c = (*hash_value)[2],
-             d = (*hash_value)[3],
-             e = (*hash_value)[4];
+    uint32_t a = hash_value[0],
+             b = hash_value[1],
+             c = hash_value[2],
+             d = hash_value[3],
+             e = hash_value[4];
     uint32_t t = 0;
 
     for (int p = 0; p < 80; p++)
@@ -102,11 +102,11 @@ blrt_SHA1_MainCycle( uint32_t (*hash_value)[5], const uint32_t (*data_block)[16]
         a = t;
     }
 
-    (*hash_value)[0] += a;
-    (*hash_value)[1] += b;
-    (*hash_value)[2] += c;
-    (*hash_value)[3] += d;
-    (*hash_value)[4] += e;
+    hash_value[0] += a;
+    hash_value[1] += b;
+    hash_value[2] += c;
+    hash_value[3] += d;
+    hash_value[4] += e;
 }
 
 blrt_SHA1
@@ -133,7 +133,7 @@ blrt_SHA1_Generate( uint64_t length, const unsigned char *data )
     const unsigned char *data_ptr = data;
     for (size_t i = 0; i < nonfill_cycles; i++)
     {
-        blrt_SHA1_MainCycle(&hash_value, (uint32_t (*)[16]) data_ptr);
+        blrt_SHA1_MainCycle(hash_value, (uint32_t *) data_ptr);
         data_ptr += 64 * sizeof(char);
     }
 
@@ -144,12 +144,12 @@ blrt_SHA1_Generate( uint64_t length, const unsigned char *data )
         memcpy(data_block_ptr, data_ptr, leftover_size);
         data_block_ptr[leftover_size] = 0x80;
 
-        blrt_SHA1_MainCycle(&hash_value, &data_block);
+        blrt_SHA1_MainCycle(hash_value, data_block);
 
         memset(data_block_ptr, 0, 56 * sizeof(char));
         memcpy(data_block_ptr + 56 * sizeof(char), &length_bit, sizeof(uint64_t));
 
-        blrt_SHA1_MainCycle(&hash_value, &data_block);
+        blrt_SHA1_MainCycle(hash_value, data_block);
     }
     else
     {
@@ -157,11 +157,11 @@ blrt_SHA1_Generate( uint64_t length, const unsigned char *data )
         data_block_ptr[leftover_size] = 0x80;
         memcpy(data_block_ptr + 56 * sizeof(char), &length_bit, sizeof(uint64_t));
 
-        blrt_SHA1_MainCycle(&hash_value, &data_block);
+        blrt_SHA1_MainCycle(hash_value, data_block);
     }
 
     for (unsigned int i = 0; i < 5; i++)
-        result.dword[i] = little_endian ? blrt_SwapEndian32(hash_value[i]) : hash_value[i];
+        result.word[i] = little_endian ? blrt_SwapEndian32(hash_value[i]) : hash_value[i];
 
     return result;
 }

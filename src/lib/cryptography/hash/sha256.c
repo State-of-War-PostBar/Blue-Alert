@@ -30,7 +30,6 @@
 #include "sha256.h"
 
 #include "../../data/bytes.h"
-#include "../../memory/heap_memory.h"
 
 static
 const uint32_t BLRT_SHA256_K[] =
@@ -58,7 +57,7 @@ inline
 uint32_t
 blrt_SHA256_Ch( uint32_t x, uint32_t y, uint32_t z )
 {
-    return (x & y) ^ ((~x) & z);
+    return (x & y) ^ (~x & z);
 }
 
 static
@@ -103,24 +102,24 @@ blrt_SHA256_sig1( uint32_t x )
 
 static
 void
-blrt_SHA256_MainCycle( uint32_t (*hash_value)[8], uint32_t (*data_block)[16] )
+blrt_SHA256_MainCycle( uint32_t hash_value[8], const uint32_t data_block[16] )
 {
     bool little_endian = blrt_IsLittleEndian();
     uint32_t window[64];
 
     for (int i = 0; i < 16; i++)
-        window[i] = little_endian ? blrt_SwapEndian32((*data_block)[i]) : (*data_block)[i];
+        window[i] = little_endian ? blrt_SwapEndian32(data_block[i]) : data_block[i];
     for (int j = 16; j < 64; j++)
         window[j] = blrt_SHA256_sig1(window[j - 2]) + window[j - 7] + blrt_SHA256_sig0(window[j - 15]) + window[j - 16];
 
-    uint32_t a = (*hash_value)[0],
-             b = (*hash_value)[1],
-             c = (*hash_value)[2],
-             d = (*hash_value)[3],
-             e = (*hash_value)[4],
-             f = (*hash_value)[5],
-             g = (*hash_value)[6],
-             h = (*hash_value)[7];
+    uint32_t a = hash_value[0],
+             b = hash_value[1],
+             c = hash_value[2],
+             d = hash_value[3],
+             e = hash_value[4],
+             f = hash_value[5],
+             g = hash_value[6],
+             h = hash_value[7];
     uint32_t t1 = 0, t2 = 0;
 
     for (int k = 0; k < 64; k++)
@@ -137,14 +136,14 @@ blrt_SHA256_MainCycle( uint32_t (*hash_value)[8], uint32_t (*data_block)[16] )
         a = t1 + t2;
     }
 
-    (*hash_value)[0] += a;
-    (*hash_value)[1] += b;
-    (*hash_value)[2] += c;
-    (*hash_value)[3] += d;
-    (*hash_value)[4] += e;
-    (*hash_value)[5] += f;
-    (*hash_value)[6] += g;
-    (*hash_value)[7] += h;
+    hash_value[0] += a;
+    hash_value[1] += b;
+    hash_value[2] += c;
+    hash_value[3] += d;
+    hash_value[4] += e;
+    hash_value[5] += f;
+    hash_value[6] += g;
+    hash_value[7] += h;
 }
 
 blrt_SHA256
@@ -174,7 +173,7 @@ blrt_SHA256_Generate( uint64_t length, const unsigned char *data )
     const unsigned char *data_ptr = data;
     for (size_t i = 0; i < nonfill_cycles; i++)
     {
-        blrt_SHA256_MainCycle(&hash_value, (uint32_t (*)[16]) data_ptr);
+        blrt_SHA256_MainCycle(hash_value, (uint32_t *) data_ptr);
         data_ptr += 64 * sizeof(char);
     }
 
@@ -185,12 +184,12 @@ blrt_SHA256_Generate( uint64_t length, const unsigned char *data )
         memcpy(data_block_ptr, data_ptr, leftover_size);
         data_block_ptr[leftover_size] = 0x80;
 
-        blrt_SHA256_MainCycle(&hash_value, &data_block);
+        blrt_SHA256_MainCycle(hash_value, data_block);
 
         memset(data_block_ptr, 0, 56 * sizeof(char));
         memcpy(data_block_ptr + 56 * sizeof(char), &length_bit, sizeof(uint64_t));
 
-        blrt_SHA256_MainCycle(&hash_value, &data_block);
+        blrt_SHA256_MainCycle(hash_value, data_block);
     }
     else
     {
@@ -198,11 +197,11 @@ blrt_SHA256_Generate( uint64_t length, const unsigned char *data )
         data_block_ptr[leftover_size] = 0x80;
         memcpy(data_block_ptr + 56 * sizeof(char), &length_bit, sizeof(uint64_t));
 
-        blrt_SHA256_MainCycle(&hash_value, &data_block);
+        blrt_SHA256_MainCycle(hash_value, data_block);
     }
 
     for (int i = 0; i < 8; i++)
-        result.dword[i] = little_endian ? blrt_SwapEndian32(hash_value[i]) : hash_value[i];
+        result.word[i] = little_endian ? blrt_SwapEndian32(hash_value[i]) : hash_value[i];
 
     return result;
 }
