@@ -141,13 +141,6 @@ blrt_AES256_GFMul( uint8_t a, uint8_t b )
 }
 
 static
-uint8_t
-blrt_AES256_SubByte( uint8_t data )
-{
-    return BLRT_AES256_S[(data & 0xf0) >> 4][data & 0x0f];
-}
-
-static
 uint32_t
 blrt_AES256_SubWord( uint32_t data )
 {
@@ -157,14 +150,7 @@ blrt_AES256_SubWord( uint32_t data )
            BLRT_AES256_S[(data & 0x000000f0) >> 4][(data & 0x0000000f)];
 }
 
-static
-uint8_t
-blrt_AES256_InverseSubByte( uint8_t data )
-{
-    return BLRT_AES256_IS[(data & 0xf0) >> 4][data & 0x0f];
-}
 
-/*
 static
 uint32_t
 blrt_AES256_InverseSubWord( uint32_t data )
@@ -174,7 +160,6 @@ blrt_AES256_InverseSubWord( uint32_t data )
            (uint16_t) BLRT_AES256_IS[(data & 0x0000f000) >> 12][(data & 0x00000f00) >> 8] << 8 |
            BLRT_AES256_IS[(data & 0x000000f0) >> 4][(data & 0x0000000f)];
 }
-*/
 
 static
 void
@@ -332,15 +317,15 @@ blrt_AES256_EncryptBlock( const unsigned char raw_data[16], const blrt_AES256_Ex
 
     for (int i = 1; i < 14; i++)
     {
-        for (int j = 0; j < 16; j++)
-            output_ptr->vec[j] = blrt_AES256_SubByte(output_ptr->vec[j]);
+        for (int j = 0; j < 4; j++)
+            output_ptr->word[j] = blrt_AES256_SubWord(output_ptr->word[j]);
         blrt_AES256_ShiftRows(output_ptr, output_ptr);
         blrt_AES256_MixColumns(output_ptr, output_ptr);
         blrt_AES256_AddRoundKey(output_ptr, &(expanded_key->block[i]), output_ptr);
     }
 
-    for (int i = 0; i < 16; i++)
-        output_ptr->vec[i] = blrt_AES256_SubByte(output_ptr->vec[i]);
+    for (int i = 0; i < 4; i++)
+        output_ptr->word[i] = blrt_AES256_SubWord(output_ptr->word[i]);
     blrt_AES256_ShiftRows(output_ptr, output_ptr);
     blrt_AES256_AddRoundKey(output_ptr, &(expanded_key->block[14]), output_ptr);
 }
@@ -357,15 +342,15 @@ blrt_AES256_DecryptBlock( const unsigned char encrypted_data[16], const blrt_AES
     for (int i = 13; i > 0; i--)
     {
         blrt_AES256_InverseShiftRows(output_ptr, output_ptr);
-        for (int j = 0; j < 16; j++)
-            output_ptr->vec[j] = blrt_AES256_InverseSubByte(output_ptr->vec[j]);
+        for (int j = 0; j < 4; j++)
+            output_ptr->word[j] = blrt_AES256_InverseSubWord(output_ptr->word[j]);
         blrt_AES256_AddRoundKey(output_ptr, &(expanded_key->block[i]), output_ptr);
         blrt_AES256_InverseMixColumns(output_ptr, output_ptr);
     }
 
     blrt_AES256_InverseShiftRows(output_ptr, output_ptr);
-    for (int j = 0; j < 16; j++)
-        output_ptr->vec[j] = blrt_AES256_InverseSubByte(output_ptr->vec[j]);
+    for (int j = 0; j < 4; j++)
+        output_ptr->word[j] = blrt_AES256_InverseSubWord(output_ptr->word[j]);
     blrt_AES256_AddRoundKey(output_ptr, &(expanded_key->block[0]), output_ptr);
 }
 
@@ -382,6 +367,7 @@ blrt_AES256_Encrypt( size_t length, const unsigned char *raw_data, const unsigne
     size_t nonfill_cycles = length / 16;
     size_t leftover_size = length % 16;
     size_t real_length = length;
+    uint8_t padding_size = 16 - leftover_size;
 
     blrt_AES256_ExpandedKey expanded_key = blrt_AES256_ExpandKey(key);
 
@@ -394,11 +380,12 @@ blrt_AES256_Encrypt( size_t length, const unsigned char *raw_data, const unsigne
         output_ptr += 16;
     }
 
-    unsigned char window[16] = { 0 };
+    unsigned char window[16];
     if (leftover_size)
     {
         memcpy(window, data_ptr, leftover_size);
-        window[leftover_size] = 0x80;
+        for (int i = leftover_size; i < 16; i++)
+            window[i] = padding_size;
 
         blrt_AES256_EncryptBlock(window, &expanded_key, output_ptr);
 
@@ -406,7 +393,8 @@ blrt_AES256_Encrypt( size_t length, const unsigned char *raw_data, const unsigne
     }
     else
     {
-        window[0] = 0x80;
+        for (int i = 0; i < 16; i++)
+            window[i] = padding_size;
         blrt_AES256_EncryptBlock(window, &expanded_key, output_ptr);
 
         real_length += 16;
@@ -418,15 +406,15 @@ blrt_AES256_Encrypt( size_t length, const unsigned char *raw_data, const unsigne
 size_t
 blrt_AES256_Decrypt( size_t length, const unsigned char *encryted_data, const unsigned char key[32], unsigned char *decrypted_output )
 {
+    if (length < 16)
+        return 0;
+
     size_t cycles = length / 16;
-    size_t real_length = length;
 
     blrt_AES256_ExpandedKey expanded_key = blrt_AES256_ExpandKey(key);
 
     for (size_t i = 0; i < cycles; i++)
         blrt_AES256_DecryptBlock(encryted_data + i * 16, &expanded_key, decrypted_output + i * 16);
-    for (size_t j = length - 1; decrypted_output[j] != 0x80; j--)
-        real_length--;
 
-    return real_length - 1;
+    return 16 * (cycles - 1) + (16 - decrypted_output[length - 1]);
 }
