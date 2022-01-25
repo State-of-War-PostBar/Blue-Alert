@@ -27,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef BLRT_LIB_CRYPTOGRAPHY_SYN_CIPHER_ARS256_H
-#define BLRT_LIB_CRYPTOGRAPHY_SYN_CIPHER_ARS256_H
+#ifndef BLRT_LIB_CRYPTOGRAPHY_CIPHER_ARS256_H
+#define BLRT_LIB_CRYPTOGRAPHY_CIPHER_ARS256_H
 
 #include <pch.h>
 
@@ -74,4 +74,4 @@ blrt_AES256_Encrypt( size_t length, const unsigned char *raw_data, const unsigne
 size_t
 blrt_AES256_Decrypt( size_t length, const unsigned char *encryted_data, const unsigned char key[32], unsigned char *decrypted_output );
 
-#endif // !BLRT_LIB_CRYPTOGRAPHY_SYN_CIPHER_ARS256_H
+#endif // !BLRT_LIB_CRYPTOGRAPHY_CIPHER_ARS256_H
