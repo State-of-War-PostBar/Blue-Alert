@@ -1,6 +1,6 @@
 # BluE AlerT
 
-An indie RTS game!
+An indie RTS game!  
 Also a programming experiment of [Taxerap](https://github.com/Taxerap).
 
 ## ~~Quick Start~~

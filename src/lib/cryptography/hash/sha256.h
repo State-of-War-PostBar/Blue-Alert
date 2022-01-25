@@ -38,6 +38,16 @@ typedef union blrt_SHA256
     uint8_t byte[32];
 } blrt_SHA256;
 
+///
+/// \brief Get SHA-256
+///
+/// Get SHA-256 digest of a message.
+///
+/// \param length Length of the message
+/// \param data Data to digest
+///
+/// \return SHA-256 hash of the message
+///
 blrt_SHA256
 blrt_SHA256_Generate( uint64_t length, const unsigned char *data );
 

@@ -27,76 +27,76 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef BLRT_LIB_SWM_SWM_H
-#define BLRT_LIB_SWM_SWM_H
+#ifndef BLRT_LIB_BRM_BRM_H
+#define BLRT_LIB_BRM_BRM_H
 
 #include <pch.h>
 
 #include "../container/radix_tree.h"
 
-typedef struct blrt_Swm
+typedef struct blrt_Brm
 {
     blrt_RadixTree contents;
-} blrt_Swm;
+} blrt_Brm;
 
-typedef enum blrt_Swm_DataType
+typedef enum blrt_Brm_DataType
 {
-    BLRT_SWM_FLAG,
-    BLRT_SWM_PAIR
-} blrt_Swm_DataType;
+    BLRT_BRM_FLAG,
+    BLRT_BRM_PAIR
+} blrt_Brm_DataType;
 
-typedef struct blrt_SwmData
+typedef struct blrt_BrmData
 {
-    blrt_Swm_DataType data_type;
+    blrt_Brm_DataType data_type;
     blrt_String data;
-} blrt_SwmData;
+} blrt_BrmData;
 
 ///
-/// \brief Load a swm
+/// \brief Load a brm
 ///
-/// Load a swm from source.
+/// Load a brm from source.
 ///
-/// \param str Source of the swm
+/// \param str Source of the brm
 ///
-/// \return Loaded swm
+/// \return Loaded brm
 ///
-blrt_Swm
-blrt_Swm_Load( const char *str );
+blrt_Brm
+blrt_Brm_Load( const char *str );
 
 ///
-/// \brief Destroy a swm
+/// \brief Destroy a brm
 ///
-/// Destroy a swm, releasing resources.
+/// Destroy a brm, releasing resources.
 ///
-/// \param swm Swm to destroy
+/// \param brm Brm to destroy
 ///
 void
-blrt_Swm_Destroy( blrt_Swm *swm );
+blrt_Brm_Destroy( blrt_Brm *brm );
 
 ///
-/// \brief Check a flag in swm
+/// \brief Check a flag in brm
 ///
-/// Check if a swm contains a flag.
+/// Check if a brm contains a flag.
 ///
-/// \param swm Swm to check
+/// \param brm Brm to check
 /// \param flag Flag to check
 ///
 /// \return If the flag exists
 ///
 bool
-blrt_Swm_HasFlag( const blrt_Swm *swm, const char *flag );
+blrt_Brm_HasFlag( const blrt_Brm *brm, const char *flag );
 
 ///
-/// \brief Get a value from swm
+/// \brief Get a value from brm
 ///
-/// Get a value from swm.
+/// Get a value from brm.
 ///
-/// \param swm Swm to check
+/// \param brm Brm to check
 /// \param key Key for retrieving
 ///
 /// \return Value if exists, NULL otherwise
 ///
 char *
-blrt_Swm_GetValue( const blrt_Swm *swm, const char *key );
+blrt_Brm_GetValue( const blrt_Brm *brm, const char *key );
 
-#endif // !BLRT_LIB_SWM_SWM_H
+#endif // !BLRT_LIB_BRM_BRM_H

@@ -113,15 +113,55 @@ blrt_SwapEndian64( uint64_t val );
 void
 blrt_FlipAtomicBool( atomic_bool *val );
 
+///
+/// \brief Rotate to left
+///
+/// Rotate a 32-bit value toward left (leftmost bits reserved to right).
+///
+/// \param x Value to rotate
+/// \param n Number of bits to rotate
+///
+/// \return Rotation result
+///
 uint32_t
 blrt_RotateLeft32( uint32_t x, unsigned int n );
 
+///
+/// \brief Rotate to right
+///
+/// Rotate a 32-bit value toward right (rightmost bits reserved to left).
+///
+/// \param x Value to rotate
+/// \param n Number of bits to rotate
+///
+/// \return Rotation result
+///
 uint32_t
 blrt_RotateRight32( uint32_t x, unsigned int n );
 
+///
+/// \brief Rotate to left
+///
+/// Rotate a 64-bit value toward left (leftmost bits reserved to right).
+///
+/// \param x Value to rotate
+/// \param n Number of bits to rotate
+///
+/// \return Rotation result
+///
 uint64_t
 blrt_RotateLeft64( uint64_t x, unsigned int n );
 
+///
+/// \brief Rotate to right
+///
+/// Rotate a 64-bit value toward right (rightmost bits reserved to left).
+///
+/// \param x Value to rotate
+/// \param n Number of bits to rotate
+///
+/// \return Rotation result
+///
 uint64_t
 blrt_RotateRight64( uint64_t x, unsigned int n );
 

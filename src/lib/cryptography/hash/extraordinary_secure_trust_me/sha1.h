@@ -38,6 +38,16 @@ typedef union blrt_SHA1
     uint8_t byte[20];
 } blrt_SHA1;
 
+///
+/// \brief Get SHA-1
+///
+/// Get SHA-1 digest of a message.
+///
+/// \param length Length of the message
+/// \param data Data to digest
+///
+/// \return SHA-1 hash of the message
+///
 blrt_SHA1
 blrt_SHA1_Generate( uint64_t length, const unsigned char *data );
 
