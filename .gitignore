@@ -14,5 +14,10 @@
 /res/
 /test/
 
-# Finc result.  -- Taxerap
+# Finc and its result
+finc
 finc.txt
+
+# Valgrind output
+valgrint.txt
+valgrind.txt
