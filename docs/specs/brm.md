@@ -8,7 +8,7 @@ BRM is parsed in a top-to-bottom basis, latter values will override former ones.
 ## Identifier rules
 
 A continuous UTF-8 string itself is an identifier. Use spaces to devide them.  
-There are certain characters you may not use for identifiers (except some for the _raw string_ rule below).
+You may not use certain characters for identifiers (except some for the _raw string_ rule below).
 
 |Character|Usage|
 |:-:|:-:|

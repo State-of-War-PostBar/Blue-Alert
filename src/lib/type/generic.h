@@ -153,17 +153,17 @@ typedef union blrt_GenericDataRegular
     blrt_Ptr unknown;
 } blrt_GenericDataRegular;
 
-typedef union blrt_GenericDataFloat
+typedef union blrt_GenericDataFloating
 {
     float as_float;
     double as_double;
     long double as_ldouble;
-} blrt_GenericDataFloat;
+} blrt_GenericDataFloating;
 
 typedef union blrt_GenericTypeData
 {
     blrt_GenericDataRegular reg;
-    blrt_GenericDataFloat flt;
+    blrt_GenericDataFloating flt;
 } blrt_GenericTypeData;
 
 typedef struct blrt_GenericType
@@ -214,10 +214,10 @@ typedef struct blrt_GenericType
                                                     ),                               \
                                     .data_size = sizeof((varf)),                     \
                                     .data = (blrt_GenericTypeData){ .flt = _Generic((varf),                                                       \
-                                                                                    float: (blrt_GenericDataFloat){ .as_float = (varf) },         \
-                                                                                    double: (blrt_GenericDataFloat){ .as_double = (varf) },       \
-                                                                                    long double: (blrt_GenericDataFloat){ .as_ldouble = (varf) }, \
-                                                                                    default: (blrt_GenericDataFloat){ .as_float = (varf) }        \
+                                                                                    float: (blrt_GenericDataFloating){ .as_float = (varf) },         \
+                                                                                    double: (blrt_GenericDataFloating){ .as_double = (varf) },       \
+                                                                                    long double: (blrt_GenericDataFloating){ .as_ldouble = (varf) }, \
+                                                                                    default: (blrt_GenericDataFloating){ .as_float = (varf) }        \
                                                                                    )                                                              \
                                                                   }                  \
                                   }

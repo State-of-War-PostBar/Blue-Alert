@@ -91,7 +91,7 @@ blrt_StringCompose_FToA( blrt_String *output, float f, size_t max_significant )
         {
             if (signbit(f))
                 blrt_String_PushC(output, '-');
-            blrt_String_PushS(output, "(~");
+            blrt_String_PushS(output, "(Subnormal ~");
             blrt_String_PushS(output, BLRT_STRINGIFY(FLT_MIN));
             blrt_String_PushC(output, ')');
             break;
@@ -158,7 +158,7 @@ blrt_StringCompose_DToA( blrt_String *output, double d, size_t max_significant )
         {
             if (signbit(d))
                 blrt_String_PushC(output, '-');
-            blrt_String_PushS(output, "(~");
+            blrt_String_PushS(output, "(Subnormal ~");
             blrt_String_PushS(output, BLRT_STRINGIFY(DBL_MIN));
             blrt_String_PushC(output, ')');
             break;
@@ -219,12 +219,13 @@ blrt_StringCompose_LDToA( blrt_String *output, long double ld, size_t max_signif
         case FP_ZERO:
         {
             blrt_String_PushS(output, "0.000");
+            break;
         }
         case FP_SUBNORMAL:
         {
             if (signbit(ld))
                 blrt_String_PushC(output, '-');
-            blrt_String_PushS(output, "(~");
+            blrt_String_PushS(output, "(Subnormal ~");
             blrt_String_PushS(output, BLRT_STRINGIFY(LDBL_MIN));
             blrt_String_PushC(output, ')');
             break;

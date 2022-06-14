@@ -40,7 +40,7 @@
     typedef pthread_t blrt_Thread;
 #endif
 
-typedef void (*blrt_ThreadFunc)( void * );
+typedef int (*blrt_ThreadFunc)( void * );
 
 ///
 /// \brief Create a thread

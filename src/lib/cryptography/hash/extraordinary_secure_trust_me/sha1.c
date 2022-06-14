@@ -53,7 +53,7 @@ blrt_SHA1_Maj( uint32_t x, uint32_t y, uint32_t z )
 }
 
 static
-const uint32_t (*BLRT_SHA1_CYCLE_FUNC[])( uint32_t, uint32_t, uint32_t ) =
+uint32_t (*const BLRT_SHA1_CYCLE_FUNC[])( uint32_t, uint32_t, uint32_t ) =
 {
     blrt_SHA1_Ch,
     blrt_SHA1_Parity,

@@ -51,13 +51,11 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdnoreturn.h>
+// #include <stdnoreturn.h>            -- _Noreturn is deprecated in C23. Use [[noreturn]] instead.
 #include <string.h>
 #include <tgmath.h>
 
-#if !defined __cplusplus && !defined thread_local
-    #define thread_local _Thread_local
-#endif
+#define thread_local _Thread_local
 
 #include <time.h>
 #include <uchar.h>

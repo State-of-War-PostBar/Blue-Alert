@@ -97,7 +97,7 @@ blrt_Unicode_NextUTF16Sequence( const unsigned char *str )
 {
     uint16_t *first_two = (uint16_t *)str;
 
-    if (*first_two <= 0xd7ff || (*first_two >= 0xe000 && *first_two <= 0xffff))
+    if (*first_two <= 0xd7ff || *first_two >= 0xe000)
     {
         // Two bytes utf-16
         return (blrt_UTF16Sequence)
