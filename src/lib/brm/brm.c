@@ -66,12 +66,14 @@ typedef enum blrt_Brm_ParsingState
     BLRT_BRM_POSSIBLE_COMMENT = 1 << 5,
     /// A [ passed through, loading block name for the block.
     BLRT_BRM_IN_BLOCK_NAME    = 1 << 6,
+    /// A @ escape character.
+    BLRT_BRM_ESCAPE = 1 << 7,
     /// In raw string section.
-    BLRT_BRM_RAW_STRING       = 1 << 7,
+    BLRT_BRM_RAW_STRING       = 1 << 8,
     /// Invalid syntax in block name, everything is discarded.
-    BLRT_BRM_DISCARD          = 1 << 8,
+    BLRT_BRM_DISCARD          = 1 << 9,
     /// After = and possible spaces, start assigning process.
-    BLRT_BRM_ASSIGNING        = 1 << 9,
+    BLRT_BRM_ASSIGNING        = 1 << 10,
 } blrt_Brm_ParsingState;
 
 blrt_Brm
@@ -91,16 +93,15 @@ blrt_Brm_Load( const char *str )
     blrt_String_ExpandUntilOnce(&token, 16ULL);
     blrt_String_ExpandUntilOnce(&buffer_key, 16ULL);
     blrt_String_ExpandUntilOnce(&buffer_block_name, 8ULL);
-    char ch = *str;
 
-    while (ch)
+    for (char ch = *str; ch; ch = *++str)
     {
         switch (ch)
         {
             case ('\r'):
             {
-                state &= ~BLRT_BRM_POSSIBLE_COMMENT;
                 // Carriage return is always ignored.
+                state &= ~BLRT_BRM_POSSIBLE_COMMENT;
                 break;
             }
             case ('\"'):
@@ -112,6 +113,12 @@ blrt_Brm_Load( const char *str )
                 {
                     // End of raw string section.
                     state &= ~BLRT_BRM_RAW_STRING;
+                    break;
+                }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
                     break;
                 }
                 // Start of raw string section.
@@ -126,14 +133,14 @@ blrt_Brm_Load( const char *str )
                 if (state & BLRT_BRM_TOKEN_EATEN)
                 {
                     // Raw string after eaten token and a space means that last token is a flag.
-                    state &= ~BLRT_BRM_TOKEN_EATEN;
-                    state |= BLRT_BRM_IN_TOKEN;
                     blrt_BrmData node = blrt_BrmData_Gen();
                     node.data_type = BLRT_BRM_FLAG;
                     if (buffer_block_name.length)
                         blrt_String_PushFrontS(&token, buffer_block_name.ptr);
                     blrt_RadixTree_Insert(&(brm.contents), token.ptr, sizeof(blrt_BrmData), &node);
                     blrt_String_Clear(&token);
+                    state &= ~BLRT_BRM_TOKEN_EATEN;
+                    state |= BLRT_BRM_IN_TOKEN;
                     break;
                 }
                 if (state & BLRT_BRM_IN_BLOCK_NAME)
@@ -156,6 +163,61 @@ blrt_Brm_Load( const char *str )
                 }
                 break;
             }
+            case ('@'):
+            {
+                state &= ~BLRT_BRM_POSSIBLE_COMMENT;
+                if ((state & BLRT_BRM_COMMENT) || (state & BLRT_BRM_DISCARD))
+                    break;
+                if (state & BLRT_BRM_RAW_STRING)
+                {
+                    blrt_String_PushC(&token, ch);
+                    break;
+                }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
+                    break;
+                }
+                // Mark next character as escaped.
+                state |= BLRT_BRM_ESCAPE;
+                if (state & BLRT_BRM_AWAIT_ASSIGNMENT)
+                {
+                    // If it's waiting for assignment, start the assignment.
+                    state &= ~BLRT_BRM_AWAIT_ASSIGNMENT;
+                    state |= BLRT_BRM_ASSIGNING;
+                    break;
+                }
+                if (state & BLRT_BRM_TOKEN_EATEN)
+                {
+                    // @ after eaten token and a space means that last token is a flag.
+                    blrt_BrmData node = blrt_BrmData_Gen();
+                    node.data_type = BLRT_BRM_FLAG;
+                    if (buffer_block_name.length)
+                        blrt_String_PushFrontS(&token, buffer_block_name.ptr);
+                    blrt_RadixTree_Insert(&(brm.contents), token.ptr, sizeof(blrt_BrmData), &node);
+                    blrt_String_Clear(&token);
+                    state &= ~BLRT_BRM_TOKEN_EATEN;
+                    state |= BLRT_BRM_IN_TOKEN;
+                    break;
+                }
+                if (state & BLRT_BRM_IN_BLOCK_NAME)
+                {
+                    break;
+                }
+                if ((state & BLRT_BRM_IN_TOKEN) || (state & BLRT_BRM_ASSIGNING))
+                {
+                    break;
+                }
+                if (state & BLRT_BRM_READY)
+                {
+                    // Cancel ready state.
+                    state &= ~BLRT_BRM_READY;
+                    state |= BLRT_BRM_IN_TOKEN;
+                    break;
+                }
+                break;
+            }
             case (' '):
             case ('\t'):
             {
@@ -165,6 +227,12 @@ blrt_Brm_Load( const char *str )
                 if (state & BLRT_BRM_RAW_STRING)
                 {
                     blrt_String_PushC(&token, ch);
+                    break;
+                }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
                     break;
                 }
                 if (state & BLRT_BRM_IN_BLOCK_NAME)
@@ -182,8 +250,6 @@ blrt_Brm_Load( const char *str )
                 if (state & BLRT_BRM_ASSIGNING)
                 {
                     // Assignment finished, write values.
-                    state &= ~BLRT_BRM_ASSIGNING;
-                    state |= BLRT_BRM_READY;
                     blrt_BrmData node = blrt_BrmData_Gen();
                     node.data_type = BLRT_BRM_PAIR;
                     blrt_String_PushS(&(node.data), token.ptr);
@@ -193,6 +259,8 @@ blrt_Brm_Load( const char *str )
 
                     blrt_String_Clear(&buffer_key);
                     blrt_String_Clear(&token);
+                    state &= ~BLRT_BRM_ASSIGNING;
+                    state |= BLRT_BRM_READY;
                     break;
                 }
                 if (state & BLRT_BRM_IN_TOKEN)
@@ -212,7 +280,7 @@ blrt_Brm_Load( const char *str )
             case ('\n'):
             {
                 state &= ~BLRT_BRM_POSSIBLE_COMMENT;
-                if (state & BLRT_BRM_RAW_STRING)
+                if ((state & BLRT_BRM_RAW_STRING) || (state & BLRT_BRM_ESCAPE))
                 {
                     blrt_String_PushC(&token, ch);
                     break;
@@ -225,6 +293,13 @@ blrt_Brm_Load( const char *str )
                 {
                     // Stop the line of comment.
                     state &= ~BLRT_BRM_COMMENT;
+                    break;
+                }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    // Still escape the character.
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
                     break;
                 }
                 if (state & BLRT_BRM_IN_BLOCK_NAME)
@@ -280,6 +355,12 @@ blrt_Brm_Load( const char *str )
                     blrt_String_PushC(&token, ch);
                     break;
                 }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
+                    break;
+                }
                 // Start comment section immediately.
                 state |= BLRT_BRM_COMMENT;
                 break;
@@ -291,6 +372,12 @@ blrt_Brm_Load( const char *str )
                 if (state & BLRT_BRM_RAW_STRING)
                 {
                     blrt_String_PushC(&token, ch);
+                    break;
+                }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
                     break;
                 }
                 if (state & BLRT_BRM_POSSIBLE_COMMENT)
@@ -317,6 +404,12 @@ blrt_Brm_Load( const char *str )
                 if (state & BLRT_BRM_RAW_STRING)
                 {
                     blrt_String_PushC(&token, ch);
+                    break;
+                }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
                     break;
                 }
                 state |= BLRT_BRM_IN_BLOCK_NAME;
@@ -383,6 +476,12 @@ blrt_Brm_Load( const char *str )
                     blrt_String_PushC(&token, ch);
                     break;
                 }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
+                    break;
+                }
                 if ((state & BLRT_BRM_IN_BLOCK_NAME) || (state & BLRT_BRM_DISCARD))
                 {
                     // End of block, record block name.
@@ -410,13 +509,19 @@ blrt_Brm_Load( const char *str )
                     blrt_String_PushC(&token, ch);
                     break;
                 }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
+                    break;
+                }
                 if ((state & BLRT_BRM_TOKEN_EATEN) || (state & BLRT_BRM_IN_TOKEN))
                 {
                     // Token waiting for assignment, start assigning process.
-                    state &= ~(BLRT_BRM_TOKEN_EATEN | BLRT_BRM_IN_TOKEN);
-                    state |= BLRT_BRM_AWAIT_ASSIGNMENT;
                     blrt_String_PushS(&buffer_key, token.ptr);
                     blrt_String_Clear(&token);
+                    state &= ~(BLRT_BRM_TOKEN_EATEN | BLRT_BRM_IN_TOKEN);
+                    state |= BLRT_BRM_AWAIT_ASSIGNMENT;
                     break;
                 }
                 if (state & BLRT_BRM_ASSIGNING)
@@ -441,10 +546,10 @@ blrt_Brm_Load( const char *str )
                             blrt_String_PushFrontS(&buffer_key, buffer_block_name.ptr);
                         blrt_RadixTree_Insert(&(brm.contents), buffer_key.ptr, sizeof(blrt_BrmData), &node);
                     }
-                    state &= ~BLRT_BRM_ASSIGNING;
-                    state |= BLRT_BRM_READY;
                     blrt_String_Clear(&buffer_key);
                     blrt_String_Clear(&token);
+                    state &= ~BLRT_BRM_ASSIGNING;
+                    state |= BLRT_BRM_READY;
                     break;
                 }
                 if (state & BLRT_BRM_READY)
@@ -464,6 +569,12 @@ blrt_Brm_Load( const char *str )
                     blrt_String_PushC(&token, ch);
                     break;
                 }
+                if (state & BLRT_BRM_ESCAPE)
+                {
+                    blrt_String_PushC(&token, ch);
+                    state &= ~BLRT_BRM_ESCAPE;
+                    break;
+                }
                 if (state & BLRT_BRM_IN_BLOCK_NAME)
                 {
                     blrt_String_PushC(&token, ch);
@@ -473,9 +584,9 @@ blrt_Brm_Load( const char *str )
                 if (state & BLRT_BRM_AWAIT_ASSIGNMENT)
                 {
                     // Start the assignment.
+                    blrt_String_PushC(&token, ch);
                     state &= ~BLRT_BRM_AWAIT_ASSIGNMENT;
                     state |= BLRT_BRM_ASSIGNING;
-                    blrt_String_PushC(&token, ch);
                     break;
                 }
                 if (state & BLRT_BRM_TOKEN_EATEN)
@@ -498,21 +609,23 @@ blrt_Brm_Load( const char *str )
                 }
                 if (state & BLRT_BRM_READY)
                 {
+                    blrt_String_PushC(&token, ch);
                     state &= ~BLRT_BRM_READY;
                     state |= BLRT_BRM_IN_TOKEN;
-                    blrt_String_PushC(&token, ch);
                     break;
                 }
                 blrt_String_PushC(&token, ch);
                 break;
             }
         }
-        ch = *++str;
     }
 
-    // Loading got shut down by EOF, evaluate left over tokens
+    // Loading ends, evaluate left over tokens
     if (state & BLRT_BRM_RAW_STRING)
         // Unresolved raw string, discard everything.
+        ;
+    else if (state & BLRT_BRM_ESCAPE)
+        // Unresolved escaping, discard it.
         ;
     else if (state & BLRT_BRM_AWAIT_ASSIGNMENT)
     {

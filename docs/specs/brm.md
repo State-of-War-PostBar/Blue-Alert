@@ -15,13 +15,14 @@ You may not use certain characters for identifiers (except some for the _raw str
 |=|Assignment|
 |[|Block identifier left|
 |]|Block identifier right|
+|@|_See **Escape characters**_|
 |"|_See **Raw Strings**_|
 |#|Comment|
 |/|Comment|
 
-## Escape characters
+## \r
 
-Do not exist.
+`\r` is always ignored under any circumstance.
 
 ## Comments
 
@@ -86,13 +87,20 @@ Sublayer of blocks are allowed.
     [block.return]
     ok
 
-If you want to end a region of a block to enter global field again, use
+If you want to end a region of a block and enter global field again, use
 
     []
 
+## Escape characters
+
+Use @ to escape a single character.  
+This is the only way to use `"`(double quote) for values.  
+
+    dj.speech = "He said"@ @""number of varaibles...
+    is very interesting"@"
+
 ## Raw Strings
 
-_You cannot use `"` itself as a part of some value._  
 Use `"` to group a raw string. Anything, including line separators and comment characters will be
 treated as part of the raw string.
 
