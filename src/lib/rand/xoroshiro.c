@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -31,7 +31,7 @@
 
 #include "../data/bytes.h"
 
-static const uint64_t BLRT_RNG_XOROSHIRO_SEED_SALT = 0x4296826e393bULL;
+static const uint64_t BLRT_RNG_XOROSHIRO_SEED_SALT = 0x1070601686ULL;
 
 thread_local static uint64_t blrt_rng_xoroshiro_space[4];
 
@@ -66,7 +66,6 @@ blrt_Rng_Xoroshiro_Next( void )
     return result;
 }
 
-inline
 uint64_t
 blrt_Rng_Xoroshiro_Ranged( uint64_t limit )
 {

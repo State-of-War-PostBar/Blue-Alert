@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -84,7 +84,7 @@ blrt_Logger_Init( void )
     log_console = (blrt_File) BLRT_FILE_STDOUT;
     log_file = blrt_File_OpenOrCreate(BLRT_LOG_FILE_NAME, BLRT_FIO_WRITE_TRUNCATE);
     if (!log_file)
-        perror("Failed to create a log file, logging will not be available");
+        perror("Failed to create a log file, log to file will not be available");
     else
     {
         log_available = true;
@@ -181,6 +181,14 @@ blrt_Logger_LogG( blrt_LogLevel level, const char *file, int line, size_t count,
 }
 
 void
+blrt_Logger_ThrdDestroy( void )
+{
+#ifdef BLRT_BUILD_DEBUG
+    blrt_String_DestroyS(&log_message_buffer);
+#endif
+}
+
+void
 blrt_Logger_Destroy( void )
 {
 #ifdef BLRT_BUILD_DEBUG
@@ -191,13 +199,5 @@ blrt_Logger_Destroy( void )
         log_file = BLRT_INVALID_FILE_DESCRIPTOR;
         log_available = false;
     }
-#endif
-}
-
-void
-blrt_Logger_ThrdDestroy( void )
-{
-#ifdef BLRT_BUILD_DEBUG
-    blrt_String_DestroyS(&log_message_buffer);
 #endif
 }

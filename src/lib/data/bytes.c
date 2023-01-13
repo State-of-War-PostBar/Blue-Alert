@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -37,7 +37,6 @@ blrt_IsLittleEndian( void )
     return ptr[0] == 1;
 }
 
-inline
 void
 blrt_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r )
 {
@@ -51,7 +50,6 @@ blrt_Swap( size_t sz, unsigned char *b_l, unsigned char *b_r )
     memcpy(b_r, b_lr, sz);
 }
 
-inline
 void
 blrt_SwapEndian( size_t length, unsigned char *bytes )
 {
@@ -65,14 +63,12 @@ blrt_SwapEndian( size_t length, unsigned char *bytes )
     }
 }
 
-inline
 uint16_t
 blrt_SwapEndian16( uint16_t val )
 {
     return (val << 010U) | (val >> 010U);
 }
 
-inline
 uint32_t
 blrt_SwapEndian32( uint32_t val )
 {
@@ -82,7 +78,6 @@ blrt_SwapEndian32( uint32_t val )
             (val & 0x000000ffU) << 030U;
 }
 
-inline
 uint64_t
 blrt_SwapEndian64( uint64_t val )
 {
@@ -96,7 +91,6 @@ blrt_SwapEndian64( uint64_t val )
             (val & 0x00000000000000ffULL) << 070U;
 }
 
-inline
 void
 blrt_FlipAtomicBool( atomic_bool *val )
 {
@@ -107,28 +101,24 @@ blrt_FlipAtomicBool( atomic_bool *val )
     } while (!atomic_compare_exchange_strong(val, &old, !old));
 }
 
-inline
 uint32_t
 blrt_RotateLeft32( uint32_t x, unsigned int n )
 {
     return (x << n) | (x >> (32 - n));
 }
 
-inline
 uint32_t
 blrt_RotateRight32( uint32_t x, unsigned int n )
 {
     return (x >> n) | (x << (32 - n));
 }
 
-inline
 uint64_t
 blrt_RotateLeft64( uint64_t x, unsigned int n )
 {
     return (x << n) | (x >> (64 - n));
 }
 
-inline
 uint64_t
 blrt_RotateRight64( uint64_t x, unsigned int n )
 {

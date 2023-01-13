@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -27,8 +27,8 @@
 *                                                                                                *
 **************************************************************************************************/
 
-#ifndef BLRT_LIB_PROFILE_PROFILE_H
-#define BLRT_LIB_PROFILE_PROFILE_H
+#ifndef BLRT_LOG_PROFILE_H
+#define BLRT_LOG_PROFILE_H
 
 #include <pch.h>
 
@@ -68,4 +68,4 @@ blrt_ProfileFunc( const char *caller_file, const char *caller_func, int line );
     #define BLRT_STOP_PROFILE()
 #endif
 
-#endif // !BLRT_LIB_PROFILE_PROFILE_H
+#endif // !BLRT_LOG_PROFILE_H

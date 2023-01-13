@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -213,12 +213,12 @@ typedef struct blrt_GenericType
                                                      default: BLRT_TYPE_UNKNOWN      \
                                                     ),                               \
                                     .data_size = sizeof((varf)),                     \
-                                    .data = (blrt_GenericTypeData){ .flt = _Generic((varf),                                                       \
+                                    .data = (blrt_GenericTypeData){ .flt = _Generic((varf),                                                          \
                                                                                     float: (blrt_GenericDataFloating){ .as_float = (varf) },         \
                                                                                     double: (blrt_GenericDataFloating){ .as_double = (varf) },       \
                                                                                     long double: (blrt_GenericDataFloating){ .as_ldouble = (varf) }, \
                                                                                     default: (blrt_GenericDataFloating){ .as_float = (varf) }        \
-                                                                                   )                                                              \
+                                                                                   )                                                                 \
                                                                   }                  \
                                   }
 

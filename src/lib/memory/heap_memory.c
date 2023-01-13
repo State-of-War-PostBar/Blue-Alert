@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -29,7 +29,6 @@
 
 #include "heap_memory.h"
 
-inline
 void *
 blrt_HeapAlloc( size_t size )
 {
@@ -42,7 +41,6 @@ blrt_HeapAlloc( size_t size )
     return ptr;
 }
 
-inline
 void *
 blrt_HeapAlignedAlloc( size_t alignment, size_t size )
 {
@@ -59,7 +57,6 @@ blrt_HeapAlignedAlloc( size_t alignment, size_t size )
     return ptr;
 }
 
-inline
 void *
 blrt_HeapZeroAlloc( size_t size )
 {
@@ -72,14 +69,12 @@ blrt_HeapZeroAlloc( size_t size )
     return ptr;
 }
 
-inline
 void
 blrt_HeapFree( void *ptr )
 {
     free(ptr);
 }
 
-inline
 void *
 blrt_ReAlloc( size_t size, void *ptr )
 {

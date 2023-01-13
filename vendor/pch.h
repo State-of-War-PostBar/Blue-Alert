@@ -5,7 +5,7 @@
 **************************************************************************************************
 *                                                                                                *
 *                              A free, open-source indie RTS game.                               *
-*               (ɔ) 2017 - 2022 State of War Baidu Postbar, some rights reserved.                *
+*               (ɔ) 2017 - 2023 State of War Baidu Postbar, some rights reserved.                *
 *                                                                                                *
 *           Blue Alert is a free software. You can freely do whatever you want with it           *
 *     under the JUST DON'T BOTHER ME PUBLIC LICENSE (hereinafter referred to as the license)     *
@@ -43,18 +43,19 @@
 #include <math.h>
 #include <setjmp.h>
 #include <signal.h>
-#include <stdalign.h>
 #include <stdarg.h>
 #include <stdatomic.h>
+// #include <stdbit.h>                 -- Not yet available on most platforms.
 #include <stdbool.h>
+// #include <stdckdint.h>              -- Not yet available on most platforms.
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #include <stdnoreturn.h>            -- _Noreturn is deprecated in C23. Use [[noreturn]] instead.
 #include <string.h>
 #include <tgmath.h>
 
+// #include <threads.h>                -- Not yet available on most platforms.
 #define thread_local _Thread_local
 
 #include <time.h>

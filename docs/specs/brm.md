@@ -7,7 +7,7 @@ BRM is parsed in a top-to-bottom basis, latter values will override former ones.
 
 ## Identifier rules
 
-A continuous UTF-8 string itself is an identifier. Use spaces to devide them.  
+Any continuous UTF-8 string is an identifier. Use spaces to devide them.  
 You may not use certain characters for identifiers (except some for the _raw string_ rule below).
 
 |Character|Usage|
@@ -55,7 +55,7 @@ will be parsed as
 
 Sublayers are provided.
 
-    world.seed = 12c329dd19f
+    world.seed = 12c329dd
     world.seed.use = less
 
 Do not use names like
@@ -69,7 +69,7 @@ Sublayer mark in value of pairs is allowed.
 
 ## Blocks
 
-A support for sublayers, helps gathering.
+A support for sublayers, helps gathering information in the same category.
 
     [unit_1345]
     hp = 555

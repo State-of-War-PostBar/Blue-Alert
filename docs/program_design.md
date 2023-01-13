@@ -16,4 +16,4 @@ No object oriented trash. Objects are allowed, do not orient the design with the
 The core program will provide an essential game engine for logic, rendering, plugin processing etc.
 It will also provide a C plugin interface for modders.  
 The elements of game is provided by plugins, such as game logics, units and buildings.  
-A custom map can also consists of its own script, which is written in the [brs](specs/brs.md) language.
+A custom map can also consists of its own script, which can also be written in the [brs](specs/brs.md) language.
